@@ -3,6 +3,12 @@ export default {
     org_name: "Keyman24 Business",
     navbar: {
       logout: "Выход"
+    },
+    services: {
+      header: 'Login'
+    },
+    sidebar: {
+
     }
   },
   uz: {},

@@ -8,9 +8,9 @@
 </template>
 
 <script>
-
-import SideBarItem from "@/components/SideBarItem";
+import SideBarItem from "@/components/SideBarItem.vue";
 import {useI18n} from "vue-i18n";
+import store from "@/store";
 
 export default {
   name: "SideBar",
@@ -19,45 +19,12 @@ export default {
     return {t}
   },
   components: {SideBarItem},
+  async mounted() {
+    await store.dispatch('fetch_sidebar')
+  },
   computed: {
-    get_sidebar() {
-      return [
-        // {
-        //   label: this.$t('sidebar.home'),
-        //   items: [{label: this.$t('sidebar.dashboard'), icon: 'pi pi-fw pi-home', to: '/'}]
-        // },
-        //
-        // {
-        //   label: this.$t('sidebar.main'),
-        //   items: [
-        //     {
-        //       label: this.$t('sidebar.orders'),
-        //       icon: 'pi pi-fw pi-home',
-        //       to: '/orders'
-        //     },
-        //     {
-        //       label: this.$t('sidebar.supplies'),
-        //       icon: 'pi pi-fw pi-home',
-        //       to: '/supply'
-        //     },
-        //   ]
-        // },
-        // {
-        //   label: this.$t('sidebar.users_and_groups'),
-        //   items: [
-        //     {
-        //       label: this.$t('sidebar.users'),
-        //       icon: 'pi pi-fw pi-home',
-        //       to: '/users'
-        //     },
-        //     {
-        //       label: this.$t('sidebar.groups'),
-        //       icon: 'pi pi-fw pi-home',
-        //       to: '/groups'
-        //     },
-        //   ]
-        // },
-      ]
+    get_sidebar: () => {
+      return store.getters.get_sidebar
     }
   }
 }

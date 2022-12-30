@@ -13,14 +13,10 @@
     </button>
 
     <div class="layout-topbar-menu" :class="topbarMenuClasses">
-<!--      <Dropdown class="ml-3" :options="language_menu_items" optionLabel="lang"-->
-<!--                optionValue="code" :model-value="selected_lang"-->
-<!--                @change="language_change"-->
-<!--      />-->
-      <button @click="onNavbarProfileButton()" class="p-link layout-topbar-button">
-        <i class="pi pi-user"></i>
-        <span>{{ t("navbar.profile") }}</span>
-      </button>
+      <Dropdown class="ml-3" :options="organizations" optionLabel="name"
+                optionValue="id" :model="selected_org"
+                @change="org_change"
+      />
 
       <button @click="onNavbarLogoutButton()" class="p-link layout-topbar-button">
         <i class="pi pi-sign-out"></i>
@@ -34,6 +30,7 @@
 import {useI18n} from "vue-i18n/dist/vue-i18n.esm-bundler";
 import {useLayout} from "@/layout";
 import store from "@/store";
+import Dropdown from "primevue/dropdown";
 
 const {onMenuToggle} = useLayout()
 export default {
@@ -48,9 +45,10 @@ export default {
       topbarMenuActive: false,
     }
   },
-  components: {},
-  mounted() {
+  components: {Dropdown},
+  async mounted() {
     this.bindOutsideClickListener()
+    await store.dispatch('fetch_orgs')
   },
   beforeUnmount() {
     this.unbindOutsideClickListener()
@@ -82,14 +80,16 @@ export default {
     onTopBarMenuButton() {
       this.topbarMenuActive = !this.topbarMenuActive;
     },
-    language_change(e) {
-      store.commit('select_lang', {lang: e.value, i18n: this.$i18n})
+    org_change(e) {
+      store.commit('basic', {key: 'selected_org', value: e.value})
+      localStorage.setItem('org', e.value)
+      window.location.reload()
     },
     onNavbarProfileButton() {
       console.log('')
     },
     async onNavbarLogoutButton() {
-      await this.$router.push({"name": "login"})
+      window.location.replace(process.env.VUE_APP_PUBLIC_HOST)
     }
   },
   computed: {
@@ -98,8 +98,8 @@ export default {
         'layout-topbar-menu-mobile-active': this.topbarMenuActive
       };
     },
-    language_menu_items: () => store.getters.get_languages,
-    selected_lang: () => store.getters.get_selected_lang
+    organizations: () => store.state.my_orgs,
+    selected_org: () => store.getters.get_selected_org,
   }
 }
 </script>
