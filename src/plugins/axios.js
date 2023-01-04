@@ -18,7 +18,6 @@ export default {
         if (response.status === 401) {
             if (localStorage.getItem('refresh')) {
                 await store.dispatch('refresh_token', localStorage.getItem('refresh'))
-                window.location.reload()
                 return
             }
             window.location.replace(process.env.VUE_APP_PUBLIC_HOST)
