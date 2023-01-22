@@ -18,6 +18,21 @@ const router = createRouter({
                     name: 'inventory-list',
                     component: () => import('@/views/main/InventoryView.vue')
                 },
+                {
+                    path: '/device',
+                    name: 'device-list',
+                    component: () => import('@/views/main/Device.vue')
+                },
+                {
+                    path: '/group',
+                    name: 'group-list',
+                    component: () => import('@/views/admin/Group')
+                },
+                {
+                    path: '/worker',
+                    name: 'worker-list',
+                    component: () => import('@/views/admin/User')
+                },
                 // {
                 //     path: '/uikit/input',
                 //     name: 'input',

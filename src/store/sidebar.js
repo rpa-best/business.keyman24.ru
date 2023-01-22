@@ -15,25 +15,25 @@ const menu = [
             {
                 label: 'sidebar.location_dashboard',
                 icon: 'pi pi-fw pi-map-marker',
-                to: '/uikit/formlayout',
+                to: '/',
                 check_url: `/api/v1.1/business/${org}/location/`
             },
             {
                 label: 'sidebar.working_area_dashboard',
                 icon: 'pi pi-fw pi-building',
-                to: '/uikit/formlayout',
+                to: '/',
                 check_url: `/api/v1.1/business/${org}/working_area/`
             },
             {
                 label: 'sidebar.inventory_dashboard',
                 icon: 'pi pi-fw pi-th-large',
-                to: '/uikit/formlayout',
+                to: '/',
                 check_url: `/api/v1.1/business/${org}/inventory/`
             },
             {
                 label: 'sidebar.device_dashboard',
                 icon: 'pi pi-fw pi-bolt',
-                to: '/uikit/formlayout',
+                to: '/',
                 check_url: `/api/v1.1/business/${org}/device/`
             },
             {
@@ -50,13 +50,13 @@ const menu = [
             {
                 label: 'sidebar.location',
                 icon: 'pi pi-fw pi-map-marker',
-                to: '/uikit/formlayout',
+                to: '/',
                 check_url: `/api/v1.1/business/${org}/location/`
             },
             {
                 label: 'sidebar.working_area',
                 icon: 'pi pi-fw pi-building',
-                to: '/uikit/formlayout',
+                to: '/',
                 check_url: `/api/v1.1/business/${org}/working_area/`
             },
             {
@@ -68,7 +68,7 @@ const menu = [
             {
                 label: 'sidebar.device',
                 icon: 'pi pi-fw pi-bolt',
-                to: '/uikit/formlayout',
+                to: {name: 'device-list'},
                 check_url: `/api/v1.1/business/${org}/device/`
             },
         ]
@@ -79,13 +79,13 @@ const menu = [
             {
                 label: 'sidebar.workers',
                 icon: 'pi pi-fw pi-user',
-                to: '/',
+                to: {name: 'worker-list'},
                 check_url: `/api/v1.1/business/${org}/worker/`
             },
             {
                 label: 'sidebar.groups',
                 icon: 'pi pi-fw pi-users',
-                to: '/',
+                to: {name: 'group-list'},
                 check_url: `/api/v1.1/business/${org}/permission/group/`
             }
         ],
