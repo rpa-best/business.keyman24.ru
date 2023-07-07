@@ -1,0 +1,52 @@
+@import 'default';
+
+.card-wrapper {
+    display: inline-flex;
+    position: relative;
+    width: 32%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: var(--background-login-color);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    min-height: 141px;
+}
+
+.description-wrapper {
+    display: flex;
+    position: relative;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.card-title {
+    color: var(--text-color-my);
+    font-family: 'Montserrat-SemiBold';
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 25px;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 29px;
+}
+
+.card-number {
+    color: var(--text-color-my);
+    font-family: 'Montserrat-Bold';
+    font-weight: 700;
+    font-size: 32px;
+    width: 100%;
+    line-height: 39px;
+    margin: 0;
+}
+
+.card-ico {
+    width: 70px;
+    svg {
+        height: 70px;
+        width: 70px;
+    }
+}

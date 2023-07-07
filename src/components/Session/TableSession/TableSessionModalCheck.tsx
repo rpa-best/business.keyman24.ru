@@ -1,0 +1,345 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/require-default-props */
+import React, { FC, useEffect, useState } from 'react'
+import { Link, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
+import { Row, useTable } from 'react-table'
+import '../../../assets/styles/scss/table.scss'
+import {
+    currentOffset,
+    currentPageByOffset,
+    pagesLength,
+} from '../../../helpers/tablePaginationHelper'
+import { useAppDispatch, useAppSelector } from '../../../hooks/useReduxHooks'
+import { ReactComponent as SVGDelete } from '../../../assets/img/table/delete.svg'
+import { ReactComponent as SVGPlay } from '../../../assets/img/table/play.svg'
+import getEntity from '../../../helpers/fixMe'
+import { sessionNestedWorkingAreaReducer } from '../../../store'
+import TablePagination from '../../Table/TablePagination'
+import Spinner from '../../Spinner/Spinner'
+import ModalSocketCheck from '../../Modals/ModalSocketCheck'
+import usePlay from '../../../hooks/usePlay'
+import { StatusEnum } from '../../../models/primitives'
+import getTableRowId from '../../../helpers/getTableRowId'
+import validateButtons from '../../../helpers/validateButtons'
+import $api from '../../../http'
+
+interface TableProps {
+    endpoint?: string
+    id?: number
+    sessionType: string
+    useModal?: boolean | undefined
+}
+
+const TableSessionModalCheck: FC<TableProps> = props => {
+    const location = useLocation()
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const handlePlayClick = usePlay()
+    const loaderData: any = useLoaderData()
+    const { id, endpoint } = loaderData
+    const { sessionType, useModal } = props
+    const {
+        reducer,
+        callSelector,
+        columns,
+        endpointOriginal,
+        endpointNested,
+        showButtons: tempButtons,
+        title,
+        tableInitialState,
+    } = getEntity(endpoint)
+
+    const showButtons = validateButtons(tempButtons, callSelector().permissions)
+
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+        useTable({
+            columns: columns.default,
+            data: JSON.parse(JSON.stringify(callSelector().list)),
+            initialState: tableInitialState,
+        })
+    // dispatch(reducer.changeOrdering('status'))
+
+    const { currentOrg } = useAppSelector(state => state.org)
+
+    const pagesCount = pagesLength(callSelector().count)
+    const offsetValue = callSelector().offset
+    const currentOrderBy = callSelector().orderBy
+    const [show, setShow] = useState(false)
+    const [currSession, setCurrSession] = useState<string | null>(null)
+
+    useEffect(() => {
+        const dispatchedThunk =
+            id !== 0 &&
+            dispatch(
+                reducer.fetchWithParamsNested({
+                    offset: offsetValue,
+                    orderBy: currentOrderBy,
+                    id,
+                    endpoint: String(endpointNested),
+                    filter: 'limit=10',
+                }),
+            )
+
+        return () => {
+            // eslint-disable-next-line no-unused-expressions
+            id !== 0 && dispatchedThunk && dispatchedThunk.abort()
+        }
+    }, [offsetValue, currentOrderBy, endpoint, id])
+
+    const handleOrderBy = (field: string) => {
+        dispatch(
+            reducer.changeOrdering(
+                currentOrderBy === field ? `-${field}` : field,
+            ),
+        )
+    }
+
+    if (callSelector().isLoading === 'list') {
+        return <Spinner />
+    }
+
+    const handlePaginationClick = (page: number) => {
+        dispatch(reducer.changeOffset(currentOffset(page)))
+    }
+
+    const onSocketSuccess = async (
+        areaId: number,
+        sessionId: number,
+        username: string,
+        type: string,
+    ) => {
+        const result = await $api.patch(
+            `business/${currentOrg.id}/working_area/${areaId}/session/${sessionId}/check/`,
+            {
+                session: sessionId,
+                user: username,
+            },
+        )
+
+        if (result.status === 200) {
+            navigate(
+                `/${currentOrg.id}/working-area/${areaId}/edit/session/${type}/${sessionId}/element/`,
+            )
+        } else {
+            console.log(result)
+        }
+    }
+
+    const handlePlay = (
+        status: StatusEnum,
+        sessionId: string,
+        callback: () => void,
+    ) => {
+        handlePlayClick({
+            callback,
+            params: {
+                orgId: currentOrg.id || 0,
+                areaId: id,
+                sessionId: Number(sessionId),
+                status,
+            },
+        })
+    }
+
+    const onPlayClick = (row: Row) => {
+        const callback = () => {
+            if (useModal) {
+                setCurrSession(String(getTableRowId(row, 'id')))
+                setShow(true)
+            } else {
+                onSocketSuccess(
+                    id,
+                    Number(getTableRowId(row, 'id')),
+                    (row.cells?.[0] as any).row.original.user?.username,
+                    'register',
+                )
+            }
+        }
+
+        handlePlay(
+            Number(getTableRowId(row, 'status')),
+            String(getTableRowId(row, 'id')),
+            callback,
+        )
+    }
+
+    const handleAddClick = () => {
+        dispatch(
+            sessionNestedWorkingAreaReducer.createNested({} as any, {
+                id,
+                endpoint: String(endpointNested),
+            }),
+        ).then(data => {
+            dispatch(
+                reducer.fetchWithParamsNested({
+                    offset: offsetValue,
+                    orderBy: currentOrderBy,
+                    id,
+                    endpoint: String(endpointNested),
+                    filter: 'limit=10',
+                }),
+            )
+
+            const callback = () => {
+                if (useModal) {
+                    setCurrSession(String(data.payload.id))
+                    setShow(true)
+                } else {
+                    onSocketSuccess(
+                        id,
+                        Number(data.payload.id),
+                        data.payload.user,
+                        'register',
+                    )
+                }
+            }
+
+            handlePlay(StatusEnum.valid, String(data.payload.id), callback)
+        })
+    }
+
+    const handleDeleteClick = (row: Row) => {
+        dispatch(
+            reducer.deleteNested(getTableRowId(row, 'id'), {
+                id,
+                endpoint: String(endpointNested),
+            }),
+        ).then(() =>
+            dispatch(
+                reducer.fetchWithParamsNested({
+                    offset: offsetValue,
+                    orderBy: currentOrderBy,
+                    id,
+                    endpoint: String(endpointNested),
+                }),
+            ),
+        )
+    }
+
+    const checkModal = (row: Row) => {
+        return (
+            useModal && show && String(getTableRowId(row, 'id')) === currSession
+        )
+    }
+
+    const modal = (row: Row) => {
+        return (
+            <ModalSocketCheck
+                areaId={id}
+                sessionId={Number(getTableRowId(row, 'id'))}
+                username={(row.cells?.[0] as any).row.original.user?.username}
+                type={sessionType}
+                handleClose={() => setShow(false)}
+            />
+        )
+    }
+
+    return (
+        <>
+            <h1 className='section-header'>{`${title} / Список`}</h1>
+            <div className='table-wrapper'>
+                <div className='table-content'>
+                    <table className='table' {...getTableProps()}>
+                        <thead>
+                            {headerGroups.map(headerGroup => (
+                                <tr
+                                    {...headerGroup.getHeaderGroupProps()}
+                                    key={headerGroup.getHeaderGroupProps().key}
+                                >
+                                    {headerGroup.headers.map(column => (
+                                        <th {...column.getHeaderProps()}>
+                                            <button
+                                                type='button'
+                                                onClick={() => {
+                                                    handleOrderBy(column.id)
+                                                }}
+                                            >
+                                                {column.render('Header')}
+                                            </button>
+                                        </th>
+                                    ))}
+                                    <th>
+                                        <button
+                                            type='button'
+                                            className='table-main-action'
+                                            onClick={() => handleAddClick()}
+                                        >
+                                            Добавить
+                                        </button>
+                                    </th>
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map(row => {
+                                prepareRow(row)
+                                return (
+                                    <tr
+                                        {...row.getRowProps()}
+                                        key={row.getRowProps().key}
+                                    >
+                                        {row.cells.map(cell => {
+                                            return (
+                                                <td
+                                                    {...cell.getCellProps()}
+                                                    key={
+                                                        cell.getCellProps().key
+                                                    }
+                                                >
+                                                    {cell.render('Cell')}
+                                                </td>
+                                            )
+                                        })}
+
+                                        <td>
+                                            <div className='actions-wrapper'>
+                                                <div>
+                                                    <div
+                                                        className='dropdown-arr tools-icon'
+                                                        onClick={() =>
+                                                            onPlayClick(row)
+                                                        }
+                                                    >
+                                                        <SVGPlay stroke='#A1A1A1' />
+                                                    </div>
+                                                    {checkModal(row) &&
+                                                        modal(row)}
+                                                </div>
+                                                {showButtons.delete && (
+                                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                                                    <a
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        onClick={() =>
+                                                            handleDeleteClick(
+                                                                row,
+                                                            )
+                                                        }
+                                                    >
+                                                        <span>
+                                                            <SVGDelete fill='#A1A1A1' />
+                                                        </span>
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+                <TablePagination
+                    pagesCount={pagesCount}
+                    currentPage={currentPageByOffset(offsetValue)}
+                    handleClick={handlePaginationClick}
+                />
+            </div>
+        </>
+    )
+}
+
+export default TableSessionModalCheck

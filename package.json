@@ -1,63 +1,55 @@
 {
-  "name": "business",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve --port 8081",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "@vuelidate/core": "^2.0.0",
-    "@vuelidate/validators": "^2.0.0",
-    "axios": "^1.2.1",
-    "chart.js": "^4.1.1",
-    "core-js": "^3.8.3",
-    "primeflex": "^3.3.0",
-    "primeicons": "^6.0.1",
-    "primevue": "^3.21.0",
-    "register-service-worker": "^1.7.2",
-    "vue": "^3.2.13",
-    "vue-i18n": "^9.2.2",
-    "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-pwa": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "prettier": "^2.4.1",
-    "sass": "^1.32.7",
-    "sass-loader": "^12.0.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "business.keyman24",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite --host",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "eslint -c .eslintrc --ext .js,.jsx,.ts,.tsx .",
+        "lint:fix": "yarn run lint --fix",
+        "clean": "rm -R dist"
     },
-    "extends": [
-      "plugin:vue/vue3-essential"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.9.3",
+        "axios": "^1.3.4",
+        "bootstrap": "^5.2.3",
+        "classnames": "^2.3.2",
+        "formik": "^2.2.9",
+        "framer-motion": "^10.0.2",
+        "react": "^18.2.0",
+        "react-bootstrap": "^2.7.2",
+        "react-dom": "^18.2.0",
+        "react-dropzone": "^14.2.3",
+        "react-loading-skeleton": "^3.2.0",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.8.2",
+        "react-select": "^5.7.0",
+        "react-table": "^7.8.0",
+        "react-toastify": "^9.1.1",
+        "use-scan-detection": "^0.2.3",
+        "vite-plugin-svgr": "^2.4.0",
+        "zod": "^3.21.2"
     },
-    "rules": {
-      "vue/multi-word-component-names": 0
+    "devDependencies": {
+        "@popperjs/core": "^2.11.6",
+        "@types/bootstrap": "^5.2.6",
+        "@types/node": "^18.14.6",
+        "@types/react": "^18.0.27",
+        "@types/react-dom": "^18.0.10",
+        "@types/react-router-dom": "^5.3.3",
+        "@types/react-table": "^7.7.14",
+        "@typescript-eslint/parser": "^5.54.0",
+        "@vitejs/plugin-react": "^3.1.0",
+        "eslint": "^8.35.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-jsx-a11y": "^6.7.1",
+        "eslint-plugin-react": "^7.32.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "sass": "^1.58.3",
+        "typescript": "^4.9.3",
+        "vite": "^4.1.0"
     }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
 }

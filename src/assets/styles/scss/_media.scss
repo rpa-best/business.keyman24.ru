@@ -1,0 +1,148 @@
+@media (max-width: 1680px) {
+    
+}
+@media (max-width: 1500px) {
+
+}
+@media (max-width: 1400px) {
+
+}
+
+@media (max-width: 1350px) {
+    .preview-content {
+        padding: 0px 50px;
+        width: 100%;
+    }
+    .form-content-wrapper {
+        padding: 0px 50px;
+    }
+
+}
+@media (max-width: 1280px) {
+
+}
+@media (max-width: 1240px) {
+    .preview-content {
+        h1 {
+            font-size: 64px;
+        }
+        span {
+            font-size: 18px;
+        }
+    }
+}
+@media (max-width: 1200px) {
+
+}
+@media (max-width: 1080px) {
+
+}
+@media (max-width: 1050px) {
+
+}
+@media (max-width: 1024px) {
+
+}
+@media (max-width: 1000px) {
+
+}
+@media (max-width: 960px) {
+    .form-content {
+        width: 430px;
+    }
+}
+@media (max-width: 850px) {
+    .preview-wrapper {
+        display: none;
+        // visibility: hidden;
+    }
+    .form-wrapper {
+        align-items: flex-start;
+        justify-content: flex-start;
+        .logo {
+            display: flex;
+        }
+    }
+}
+@media (max-width: 768px) {
+
+}
+@media (max-width: 690px) {
+
+}
+@media (max-width: 640px) {
+
+}
+@media (max-width: 575px) {
+
+}
+@media (max-width: 560px) {
+    .form-wrapper {
+        .logo {
+            margin: 20px 0px 0px 23px;
+        }
+    }
+    .form-content-wrapper {
+        padding: 0px 23px;
+    }
+    .form-content {
+        width: 100%;
+    }
+}
+@media (max-width: 540px) {
+
+}
+@media (max-width: 500px) {
+    .form-content {
+        padding: 35px;
+        h1 {
+            font-size: 24px;
+        }
+        input {
+            font-size: 12px;
+            padding: 12px 0px 17px 15px;
+        }
+        span {
+            font-size: 12px;
+        }
+        button {
+            font-size: 16px;
+            padding: 11px 0px;
+        }
+    }
+    .login-wrapper {
+        .c-1 {
+            width: 134px;
+            height: 134px;
+            left: 6%;
+            top: unset;
+            bottom: 20px;
+        }
+        .c-2 {
+            display: none;
+        }
+        .c-3 {
+            width: 71px;
+            height: 71px;
+            left: unset;
+            right: 5px;
+            top: 21%;
+        }
+        .c-4 {
+            width: 106px;
+            height: 106px;
+            left: 46%;
+            top: -6%;
+        }
+    }
+    
+}
+@media (max-width: 480px) {
+
+}
+@media (max-width: 455px) {
+
+}
+@media (max-width: 360px) {
+
+}

@@ -1,0 +1,94 @@
+@import "colors";
+@import "keyframes";
+
+
+/* zeroing */
+* {padding: 0; margin: 0; border: 0;}
+*, *:before, *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+:focus, :active {outline: none;}
+a:focus, a:active {outline: none;}
+nav, footer, header, aside {display: block;}
+html, body {height: 100%; width: 100%; font-size: 100%; line-height: 1; font-size: 14px; -ms-text-size-adjust: 100%;}
+input, button, textarea {font-family: inherit;}
+input::-ms-clear {display: none;}
+button {cursor: pointer;}
+button::-moz-focus-inner {padding: 0; border: 0;}
+a, a:visited {text-decoration: none; padding: 0; margin: 0;}
+a:hover {text-decoration: none;}
+ul li {list-style: none;}
+img {vertical-align: top;}
+h1, h2, h3, h4, h5, h6 {font-size: inherit; font-weight: inherit;}
+/* end zeroing */
+
+
+/* --- Default styles */
+@font-face {
+    font-family: 'Montserrat-Bold';
+    src: local('Montserrat-Bold'), url('../../fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Montserrat-SemiBold';
+    src: local('Montserrat-SemiBold'), url('../../fonts/Montserrat/Montserrat-SemiBold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Montserrat-Medium';
+    src: local('Montserrat-Medium'), url('../../fonts/Montserrat/Montserrat-Medium.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Montserrat-Regular';
+    src: local('Montserrat-Regular'), url('../../fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+}
+
+* {
+    font-family: 'Montserrat-Regular';
+}
+
+h1, h2, h3, h4, h5, p, ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    &:hover {
+        color: black;
+    }
+}
+
+.nav-tabs {
+    margin-top: 52px;
+    padding-left: 87px;
+    padding-right: 120px;
+    width: 100%;
+    display: flex;
+}
+
+.tab-content {
+    width: 100%;
+}
+
+:root {  
+    --toastify-toast-width: 500px;
+}
+
+.form-check-input {
+    margin: 10px!important;
+    height: 40px;
+    width: 80px!important;
+    border: 0px;
+    box-shadow: none;
+    background-color: var(--checkbox-background-color);
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e")!important;
+}
+
+.form-check-input:checked {
+    background-color: var(--checkbox-checked-background-color);
+    background-image: var(--checkbox-checked-circle-url)!important;
+}
+
+.form-switch .form-check-input:focus {
+    box-shadow: none;
+}
+
+@import "media";
