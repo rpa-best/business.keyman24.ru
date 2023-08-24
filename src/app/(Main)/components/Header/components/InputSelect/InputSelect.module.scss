@@ -1,0 +1,73 @@
+@import "scss/utils";
+
+.input_layout {
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}
+
+
+.input_wrapper {
+  position: relative;
+  height: 40px;
+  width: 250px;
+  border-radius: 12px;
+  @include thousendWidth {
+    width: 180px;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}
+
+.input {
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  padding: 5px 42px 5px 10px;
+  @include MontserratRegular(16px);
+  @include thousendWidth {
+    font-size: 13px;
+  }
+}
+
+.input_arrow_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  border-radius: 12px;
+  top: calc(50% - 17px);
+  right: 10px;
+  background: $accent-color;
+  cursor: pointer;
+  transition: .3s all ease-in-out;
+  padding: 8px 12px;
+  &:hover {
+    background: $accent-color-darker;
+  }
+  @include thousendWidth {
+    padding: 8px 10px;
+    top: calc(50% - 15px);
+  }
+}
+
+.input_arrow {
+  height: 16px;
+  width: 11px;
+  display: inline-block;
+  transform: rotate(0);
+  transition: .2s all ease-in-out;
+  will-change: transform;
+  @include thousendWidth {
+    height: 14px;
+    width: 10px;
+  }
+}
+
+.input_arrow_open {
+  @extend .input_arrow;
+  transform: rotate(180deg);
+}

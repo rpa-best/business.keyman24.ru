@@ -1,0 +1,83 @@
+@import "scss/utils";
+
+.link_wrapper {
+  position: relative;
+  &:before {
+    opacity: .99;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -24%;
+    width: 0;
+    height: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: $accent-color;
+    transition: .3s height ease-in-out, .3s opacity ease-in-out;
+  }
+}
+
+.link_wrapper_active {
+  @extend .link_wrapper;
+  &:before {
+    opacity: 1;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -50%;
+    width: 5px;
+    height: 200%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: $accent-color;
+    @include thousendWidth {
+      height: 180%;
+      top: -40%;
+    }
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: $gray;
+  padding-left: 10px;
+  margin: 32px 38px 0 28px;
+  transition: .2s all ease-in-out;
+  &:hover {
+    color: white;
+  }
+  @include thousendWidth {
+    margin: 25px 20px 0 18px;
+  }
+}
+
+.link_active {
+  @extend .link;
+  position: relative;
+}
+
+.link_icon {
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+}
+
+.link_icon_active {
+  @extend .link_icon;
+  color: $accent-color;
+}
+
+.link_description {
+  @include MontserratRegular(16px);
+  white-space: nowrap;
+  margin-left: 20px;
+  @include thousendWidth {
+    font-size: 14px;
+  }
+  @include phoneOrTablet {
+    font-size: 16px;
+  }
+}

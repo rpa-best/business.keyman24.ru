@@ -1,0 +1,283 @@
+@import "scss/utils";
+
+.table_layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+
+
+.table_scrollbar_layout {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: $dark-main;
+  border-radius: 40px;
+  border: 1px solid $gray;
+  @include phoneOrTablet {
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+
+.table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $accent-color;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: rgba(0, 0, 0, 0);
+  }
+
+}
+
+.table_body {
+  height: 400px;
+  width: 100%;
+
+  @include laptopWidth {
+    height: 300px;
+  }
+
+  @include phoneOrTablet {
+    height: 250px;
+  }
+
+}
+
+.table_headers {
+  min-height: 70px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  &:last-child {
+    max-width: 100%;
+    flex-grow: 1;
+  }
+}
+
+.table_header_less_3 {
+  @extend .table_td_less_3
+}
+
+.table_header {
+  @extend .table_td;
+  width: 30%;
+  font-size: 20px!important;
+  min-width: 250px;
+  &:first-child {
+    padding-left: 46px;
+    @include thousendWidth {
+      padding-left: 38px;
+    }
+  }
+  &:last-child {
+    max-width: 100%;
+    flex-grow: 1;
+  }
+
+  &:hover {
+    .table_td_header_arrow {
+      opacity: 1;
+    }
+  }
+
+  @include phoneOrTablet {
+    min-width: 200px;
+    font-size: 16px!important;
+  }
+
+}
+
+.table_row_clickable {
+  transition: .2s all ease-in-out;
+  cursor: pointer;
+
+  &:hover .table_td {
+    background-color: $additional-dark;
+  }
+}
+
+.table_row {
+  width: 100%;
+  display: flex;
+
+  &:hover .actions_wrapper {
+    opacity: 1;
+  }
+}
+
+.table_td_less_3 {
+  width: 50%!important;
+  @include thousendWidth {
+    min-width: 250px!important;
+  }
+}
+
+.table_td {
+  transition: .25s all ease-in-out;
+  @include MontserratMediumBold(18px);
+  min-height: 70px;
+  width: 30%;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $gray;
+  @include laptopWidth {
+    min-height: 65px;
+  }
+  @include thousendWidth {
+    min-width: 200px;
+    min-height: 60px;
+    font-size: 14px;
+  }
+  &:first-child {
+    padding-left: 46px;
+    @include thousendWidth {
+      padding-left: 38px;
+    }
+  }
+  &:nth-child(2) {
+    padding-left: 46px;
+    @include thousendWidth {
+      padding-left: 38px;
+    }
+  }
+
+  &:last-child {
+    min-width: 250px;
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    flex-grow: 1;
+  }
+}
+
+.table_td_img {
+  min-height: 70px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $gray;
+  @include laptopWidth {
+    min-height: 65px;
+  }
+  @include thousendWidth {
+    min-height: 60px;
+  }
+}
+
+.table_td_header {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: $dark-main;
+  @extend .table_td;
+
+
+  & h2 {
+    @include MontserratBold(20px);
+    @include thousendWidth {
+      font-size: 18px;
+    }
+  }
+}
+
+.table_td_header_arrow {
+  opacity: 0;
+  width: 13px;
+  height: 13px;
+  margin-left: 10px;
+  transition: .2s all ease-in-out;
+  transform: rotate(0);
+}
+
+.table_td_header_arrow_active {
+  @extend .table_td_header_arrow;
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+.table_td_header_arrow_active_desc {
+  @extend .table_td_header_arrow;
+  opacity: 1;
+}
+
+.paginator_container {
+  display: flex;
+  padding: 10px 31px;
+  column-gap: 10px;
+  @include phoneOrTablet {
+    padding: 30px 0;
+  }
+}
+
+.paginator_item {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+
+  &:first-child {
+    padding: 12px 19px;
+  }
+
+  &:hover {
+    border: 1px solid $accent-color;
+  }
+}
+
+.paginator_item_active {
+  @extend .paginator_item;
+  border: 1px solid $accent-color;
+
+  &:hover {
+    border-color: #2BBB86;
+  }
+}
+
+
+.actions_wrapper {
+  margin-right: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 20px;
+  opacity: 0;
+  transition: .2s opacity ease-in-out;
+  padding-left: 20px;
+  @include phoneOrTablet {
+    height: 100%;
+    width: 100%;
+  }
+  @include phone {
+    column-gap: 10px;
+  }
+}
+
+.headers_button_wrapper {
+  margin-right: 5%;
+}

@@ -1,0 +1,99 @@
+@import "scss/utils";
+
+.form_wrapper {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  padding: 0 15px;
+  @include thousendWidth {
+    width: 100%;
+  }
+  @include tablet {
+    padding: 0 20px;
+  }
+  @include phone {
+    padding: 0 25px;
+  }
+}
+
+
+.form_content {
+  padding: 55px;
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  width: 510px;
+  background:rgba(0, 0, 0, 0.30);
+  @include phone {
+    padding: 35px;
+  }
+}
+
+.form_forgot_password {
+  margin-top: 9px;
+  color: $gray;
+  text-decoration: underline;
+  cursor: pointer;
+  @include phone {
+    margin-top: 18px;
+  }
+}
+
+.text_green {
+  color: $accent-color;
+  cursor: pointer;
+}
+
+.form_header {
+  @include MontserratMediumBold(30px);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  @include phone {
+    font-size: 24px;
+  }
+}
+
+
+.form_button {
+  width: 100%;
+  background: $accent-color;
+  color: #fff;
+  position: relative;
+  @include MontserratBold(20px);
+  letter-spacing: -0.03em;
+  margin: 29px 0 10px;
+  padding: 19px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  @include phone {
+    height: 50px;
+    margin: 21px 0 10px;
+    padding: 12px 0;
+  }
+  &:hover {
+    background: $accent-color-darker;
+  }
+  &:focus {
+    background: $accent-color-darker;
+  }
+  &:active {
+    background: #277175;
+  }
+  &:disabled {
+    background: gray;
+    pointer-events: none;
+  }
+}
+
+
+.accept_description {
+  @include MontserratRegular(14px);
+  color: $gray;
+  letter-spacing: -0.14px;
+  @include phone {
+    font-size: 11px;
+  }
+}

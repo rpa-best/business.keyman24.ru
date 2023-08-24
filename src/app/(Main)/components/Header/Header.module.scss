@@ -1,0 +1,165 @@
+@import "scss/utils";
+
+.header_layout {
+  position: sticky;
+  top: 0;
+  left: 0;
+  display: flex;
+  padding: 20px 30px;
+  background: $dark-main;
+  z-index: 500;
+  @include phoneOrTablet {
+    padding: 25px 20px 17px;
+  }
+}
+
+.header_nav {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  @include phoneOrTablet {
+    display: none;
+  }
+}
+
+.header_nav_tablet {
+  display: none;
+  @include phoneOrTablet {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.header_nav_icons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.title_wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.separator {
+  height: 100%;
+  width: 1px;
+  margin: 0 24px;
+  background-color: $gray;
+  @include thousendWidth {
+    margin: 0 15px;
+  }
+}
+
+.title {
+  @include MontserratBold(24px);
+  color: white;
+  @include thousendWidth {
+    font-size: 20px;
+  }
+}
+
+.title_second {
+  @include MontserratRegular(22px);
+  color: $gray;
+  @include thousendWidth {
+    font-size: 18px;
+  }
+}
+
+.tools_wrapper {
+  display: flex;
+  align-items: center;
+  @include phoneOrTablet {
+    display: none;
+  }
+}
+
+.settings_svg_wrapper {
+  height: 30px;
+  width: 30px;
+  margin-right: 15px;
+  @include thousendWidth {
+    margin-right: 10px;
+  }
+  @include phoneOrTablet {
+    margin-right: 15px;
+  }
+}
+
+.settings_svg {
+  color: $gray;
+  will-change: transform;
+  transition: .3s all ease-in-out;
+  &:hover {
+    transform: rotate(90deg);
+    color: $gray-semi;
+  }
+}
+
+.settings_svg_active {
+  @extend .settings_svg;
+  color: $accent-color;
+  &:hover {
+    color: $accent-color-darker;
+  }
+}
+
+.svg_icon {
+  height: 24px;
+  width: 24px;
+  color: $gray;
+  transition: .2s all ease-in-out;
+  &:hover {
+    color: $gray-semi;
+  }
+}
+
+.notifications_wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 24px;
+  padding: 0 24px;
+  border-right: 1px solid $gray;
+  border-left: 1px solid $gray;
+  @include thousendWidth {
+    margin: 0 19px;
+    padding: 0 17px;
+  }
+  @include phoneOrTablet {
+    border: none;
+    margin: 2px 16px 0 0;
+    padding: 0;
+  }
+}
+
+.first_icon {
+  margin-right: 24px;
+  @include thousendWidth {
+    margin-right: 0
+  }
+}
+
+.second_icon {
+
+  @include thousendWidth {
+    display: none;
+  }
+}
+
+.header_select {
+  width: 300px;
+}
+
+
+.dropdown-arr {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+

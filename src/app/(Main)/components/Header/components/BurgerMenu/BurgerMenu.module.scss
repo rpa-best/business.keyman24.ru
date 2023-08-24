@@ -1,0 +1,65 @@
+@import "scss/utils";
+
+.menu_outer {
+  width: 100%;
+  height: 100%;
+  background: transparentize(black, .5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.menu_exit {
+  @extend .svg;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition: .2s all;
+  cursor: pointer;
+  color: #666c77;
+  &:hover {
+    color: $gray;
+    transition: .2s all;
+  }
+}
+
+.menu_listItem_header {
+  @include MontserratSemiBold(24px);
+  color: $gray;
+  margin-bottom: 10px;
+  transition: .2s all ease-in-out;
+  &:hover {
+    color: white;
+  }
+}
+
+.menu_item_content {
+  display: flex;
+  align-items: center;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: max-content;
+  min-width: 450px;
+  height: 100%;
+  overflow-y: auto;
+  background: $dark-main;
+  border-top-left-radius: 5%;
+  border-bottom-left-radius: 5%;
+  z-index: 9999;
+  @include phoneOrTablet {
+    width: 55%;
+    min-width: 0;
+  }
+  @include phone {
+    width: 65%;
+  }
+}
+
+.organization_wrapper {
+  padding: 40px 27px 10px;
+}

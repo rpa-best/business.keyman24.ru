@@ -1,0 +1,11 @@
+@import "scss/utils";
+
+
+.keys_children {
+  @extend .children;
+  @include phoneOrTablet {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}

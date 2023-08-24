@@ -1,0 +1,1 @@
+export { AreasTableWrapper } from './AreasTableWrapper';

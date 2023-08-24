@@ -1,0 +1,35 @@
+@import "scss/utils";
+
+.keys {
+  padding-bottom: 20px;
+}
+
+
+.actions_wrapper {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 20px;
+  @include thousendWidth {
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 20px;
+  }
+  @include phoneOrTablet {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    row-gap: 10px;
+  }
+}
+
+.button_wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin: 19px 35px;
+}
+
+.download_button_wrapper {
+  margin: 0 0 10px 20px;
+  @include phoneOrTablet {
+    margin: 19px 35px;
+  }
+}

@@ -1,0 +1,84 @@
+@import "scss/utils";
+
+.empty {
+  height: 354px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $dark-main;
+  border-radius: 30px;
+  color: white;
+  @include MontserratSemiBold(24px);
+  @include thousendWidth {
+    width: 100%;
+  }
+  @include phone {
+    font-size: 18px;
+  }
+}
+
+.scrollbar_layout {
+  height: 274px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: auto;
+  row-gap: 20px;
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $accent-color;
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
+}
+
+.preview_wrapper {
+  width: 50%;
+  align-items: center;
+  overflow: auto;
+  background-color: $dark-main;
+  padding: 40px 24px 40px 32px;
+  border-radius: 30px;
+  @include laptopWidth {
+    padding: 35px 30px 40px;
+  }
+  @include thousendWidth {
+    width: 100%;
+  }
+  @include phoneOrTablet {
+    padding: 30px 20px 30px 30px;
+  }
+}
+
+.preview_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 20px;
+  padding-right: 20px;
+  @include phone {
+    column-gap: 10px;
+  }
+}
+
+.preview_item_count {
+  width: 30%;
+  @include phone{
+    width: 35%;
+  }
+}
+.preview_item_category {
+  width: 65%;
+}

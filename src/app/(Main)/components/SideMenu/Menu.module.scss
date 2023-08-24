@@ -1,0 +1,25 @@
+@import "scss/utils";
+
+.sidebar_wrapper {
+  height: calc(100vh - 90px);
+  position: sticky;
+  top: 90px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+  @include phoneOrTablet {
+    display: none;
+  }
+}
+
+.sidebar {
+  height: 100%;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  @include thousendWidth {
+    width: 70px;
+  }
+}
+

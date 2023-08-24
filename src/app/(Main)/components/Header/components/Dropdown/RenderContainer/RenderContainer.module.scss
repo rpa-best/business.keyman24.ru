@@ -1,0 +1,57 @@
+@import "scss/utils";
+
+.dropdown_menu {
+  margin-top: 14px;
+  max-width: 245px;
+  min-width: 220px;
+  background: $dark-main;
+  border-top: 1px solid $additional-dark;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  @include thousendWidth {
+    min-width: 200px;
+  }
+  @include phoneOrTablet {
+    margin-top: 7px;
+  }
+}
+
+.dropdown_item {
+  padding: 0 15px;
+  transition: .2s all ease-in-out;
+  &:hover {
+    .dropdown_button {
+      color: white;
+      border-bottom-color: white;
+      .svg {
+        color: white;
+      }
+    }
+  }
+  &:last-child {
+    .dropdown_button {
+      border-bottom: none;
+      border-radius: 0 0 10px 10px;
+    }
+  }
+}
+
+.dropdown_button {
+  height: 45px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+  color: $gray-semi;
+  cursor: pointer;
+  background: $dark-main;
+  transition: .2s all ease-in-out;
+  border-bottom: 1px solid $additional-dark;
+}
+
+.svg {
+  margin-right: 11px;
+  transition: .2s all ease-in-out;
+  color: $gray-semi;
+}

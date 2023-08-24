@@ -1,0 +1,24 @@
+
+.list_item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list_item_description {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.barcode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.list_item_field {
+  font-size: 26px;
+}

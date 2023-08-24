@@ -1,0 +1,150 @@
+@import "scss/utils";
+
+.card_layout {
+  height: 141px;
+  width: 100%;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient($dark-main, $gray);
+  border-radius: 25px;
+  @include thousendTwoWidth {
+    height: 100px;
+  }
+  @include thousendWidth {
+    min-width: 100px;
+  }
+  @include phoneOrTablet {
+    height: 100%;
+  }
+}
+
+.card_wrapper {
+  height: calc(100% - 1px);
+  width: calc(100% - 2px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  background: $dark-main;
+  border-radius: 25px;
+  color: white;
+  z-index: 100;
+  &:nth-child(1) {
+    .card_ico {
+      color: $accent-color;
+    }
+  }
+  &:nth-child(2) {
+    .card_ico {
+      color: $accent-color-blue;
+    }
+  }
+  &:nth-child(3) {
+    .card_ico {
+      color: $accent-color-darker;
+    }
+  }
+/*  &:before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    bottom: -5px;
+    left: -5px;
+    background: linear-gradient($dark-main, $gray);
+    border-radius: inherit;
+  }*/
+  @include thousendTwoWidth {
+    padding: 20px 32px;
+  }
+  @include thousendWidth {
+    padding: 15px 24px;
+  }
+  @include phoneOrTablet {
+    flex-direction: row-reverse;
+  }
+  @include phone {
+    padding: 12px 24px;
+  }
+}
+
+.description_wrapper {
+  height: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 200;
+  @include phoneOrTablet {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.card_title {
+  @include MontserratSemiBold(24px);
+  margin-bottom: 25px;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 29px;
+  @include thousendTwoWidth {
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+  @include thousendWidth {
+    margin-bottom: 16px;
+  }
+  @include thousendWidth {
+    font-size: 18px;
+  }
+  @include phoneOrTablet {
+    margin: 0 0 0 15px;
+  }
+}
+
+.card_number {
+  @include MontserratSemiBold(32px);
+  width: 100%;
+  line-height: 39px;
+  margin: 0;
+  @include thousendTwoWidth {
+    font-size: 26px;
+  }
+  @include thousendWidth {
+    font-size: 22px;
+  }
+  @include phoneOrTablet {
+    text-align: right;
+    font-size: 24px;
+  }
+}
+
+.card_ico {
+  max-height: 70px;
+  max-width: 70px;
+  min-height: 70px;
+  min-width: 70px;
+  z-index: 200;
+  @include thousendTwoWidth {
+    max-height: 50px;
+    max-width: 50%;
+    min-height: 50px;
+    min-width: 50px;
+  }
+  @include thousendWidth {
+    max-height: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    min-width: 40px;
+  }
+  @include phone {
+    max-height: 32px;
+    max-width: 32px;
+    min-height: 32px;
+    min-width: 32px;
+  }
+}

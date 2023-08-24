@@ -1,0 +1,32 @@
+.spinner_wrapper {
+  position: fixed;
+  top: 91vh;
+  left: 91vw;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.spinner {
+  animation: RotateSpinner .7s infinite linear;
+}
+
+@keyframes RotateSpinner {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

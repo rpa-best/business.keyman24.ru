@@ -1,0 +1,89 @@
+@import "scss/utils";
+
+.dropdown {}
+
+.btn {
+  padding: 0;
+  border-color: transparent;
+
+  &.show {
+    border-color: transparent;
+  }
+}
+
+.user_wrapper {
+  display: flex;
+  align-items: center;
+  max-width: 245px;
+  min-width: 190px;
+  cursor: pointer;
+  @include thousendWidth {
+    min-width: 150px;
+  }
+  @include phoneOrTablet {
+    min-width: 190px;
+  }
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  @include thousendWidth {
+    padding: 0 15px;
+  }
+  @include phoneOrTablet {
+    padding: 0 20px;
+  }
+}
+
+.user_name {
+  max-width: 150px;
+  @include MontserratSemiBold(16px);
+  line-height: 20px;
+  color: #fff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  @include thousendWidth {
+    font-size: 14px;
+  }
+  @include phoneOrTablet {
+    font-size: 16px;
+  }
+}
+
+.user_role {
+  @include MontserratRegular(14px);
+  line-height: 17px;
+  color: rgba(255, 255, 255, 0.8);
+  @include thousendWidth {
+    font-size: 12px;
+  }
+  @include phoneOrTablet {
+    font-size: 14px;
+  }
+}
+
+.user_avatar_wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.arrow {
+  height: 15px;
+  width: 15px;
+  color: rgba(161, 161, 161, 1);
+  transition: .2s all ease-in-out;
+  transform: rotate(180deg);
+}
+
+.arrow_hidden {
+  @extend .arrow;
+  transform: rotate(0deg);
+}
+

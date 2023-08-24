@@ -1,0 +1,33 @@
+@import "scss/utils";
+
+.list_wrapper {
+  background: white;
+  width: 250px;
+  border-radius: 7px;
+  padding: 3px 0;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  @include thousendWidth {
+    width: 180px;
+  }
+  @include phoneOrTablet {
+    width: 37vw;
+  }
+  @include phone {
+    width: 40vw;
+  }
+}
+
+.list_item {
+  padding: 10px;
+  transition: .2s all ease-in-out;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  &:hover {
+    background: $gray;
+    cursor: pointer;
+  }
+  @include thousendWidth {
+    font-size: 13px;
+  }
+}

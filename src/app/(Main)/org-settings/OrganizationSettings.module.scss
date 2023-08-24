@@ -1,0 +1,32 @@
+@import "scss/utils";
+
+.settings_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: $additional-dark;
+  padding-bottom: 30px;
+  @include phoneOrTablet {
+    padding-bottom: 15px;
+  }
+}
+
+.default_wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  margin: 50px auto 20px auto;
+  color: white;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  @include thousendWidth {
+    margin: 30px auto 10px;
+  }
+}
+
+.title {
+  text-align: center;
+  @include MontserratSemiBold(24px);
+}

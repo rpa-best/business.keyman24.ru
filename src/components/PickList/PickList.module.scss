@@ -1,0 +1,134 @@
+@import "scss/utils";
+
+.picklist_title {
+  color: white;
+  @include MontserratSemiBold(24px);
+  margin: 30px 0;
+}
+
+.picklist_wrapper {
+  width: 80%;
+  height: max-content;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  background: $dark-main;
+  border: 1px solid $border-gray;
+  border-radius: 40px;
+  align-items: center;
+  overflow: hidden;
+  @include thousendTwoWidth {
+    width: 90%;
+  }
+  @include phoneOrTablet {
+    flex-direction: column;
+    width: calc(100% - 20px);
+    height: max-content;
+  }
+}
+
+.list_view_wrapper {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 45%;
+  margin-top: 10px;
+  @include thousendWidth {
+    width: 100%;
+  }
+}
+
+.header_wrapper {
+  width: 100%;
+  padding: 15px 15px;
+  border-radius: 12px;
+  color: white;
+  @include MontserratSemiBold(20px);
+
+  @include thousendWidth {
+    font-size: 16px;
+  }
+  @include phoneOrTablet {
+    font-size: 18px;
+  }
+  @include phone {
+    font-size: 16px;
+  }
+}
+
+.list_view_content {
+  height: 450px;
+  position: relative;
+  background-color: $dark-main;
+  padding: 10px;
+  border: 1px solid $border-gray;
+  border-radius: 15px;
+  overflow: hidden;
+
+  @include phoneOrTablet {
+    height: 300px;
+    padding: 5px;
+  }
+}
+
+.actions_separator_wrapper {
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  @include phoneOrTablet {
+    flex-direction: row;
+  }
+}
+
+
+.arrow {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $accent-color-darker;
+  border-radius: 10px;
+  margin: 5px 5px;
+  color: $accent-color;
+  transition: .2s all ease-in-out;
+  cursor: pointer;
+  &:hover {
+    background: $accent-color;
+    color: white;
+  }
+  @include thousendWidth {
+    height: 45px;
+    width: 45px;
+  }
+}
+
+.arrow_settings {
+  width: 20px;
+  height: 20px;
+}
+
+.arrow_left{
+ @extend .arrow_settings;
+  transform: rotate(90deg);
+  margin: 2px 5px 0 2px;
+  @include phoneOrTablet {
+    transform: rotate(180deg);
+    margin: 0 5px 5px 2px;
+  }
+}
+
+.arrow_right {
+  @extend .arrow_settings;
+  margin-left: 5px;
+  transform: rotate(-90deg);
+  @include phoneOrTablet {
+    transform: rotate(0);
+    margin: 5px 0 5px 2px;
+  }
+}

@@ -1,0 +1,94 @@
+@import "scss/utils";
+
+.input_big {
+  @extend .input;
+  height: 70px!important;
+}
+
+.input {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  outline: none;
+  border: 2px solid transparent;
+  @include MontserratRegular(16px);
+  letter-spacing: 1px;
+  padding: 0 20px;
+  background-color: #f5f6f7;
+  transition: .2s all ease-in-out;
+
+  @include phone {
+    height: 40px;
+    width: 100%;
+    border-radius: 7px;
+    font-size: 14px;
+  }
+  &:hover {
+    border: 2px solid $gray;
+    transition: .1s all ease-in-out;
+  }
+  &:focus {
+    border: 2px solid $accent-color;
+    transition: .1s all ease-in-out;
+  }
+  &:disabled {
+    background-color: rgb(234, 236, 239);
+    pointer-events: none;
+  }
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+}
+
+.input_wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.input_error {
+  background: rgba(0, 0, 0, 0.30);
+  color: red;
+  border: 2px solid $error-color;
+  &:focus {
+    border: 2px solid $error-color;
+  }
+}
+
+.field_noneed {
+  height: max-content!important;
+  margin-top: 0!important;
+}
+
+.field_big {
+  @extend .field;
+  height: 80px!important;
+  margin-top: 25px;
+}
+
+.field {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 80px;
+  width: 100%;
+  margin-top: 15px;
+  @include phone {
+    height: 50px;
+    margin-top: 15px;
+  }
+}
+
+.input_error_label {
+  width: 100%;
+  color: $error-color;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.input_error_label_hidden {
+  @extend .input_error_label
+}
+

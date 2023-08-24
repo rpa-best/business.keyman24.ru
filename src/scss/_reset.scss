@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: FavoritPro, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+
+}
+img {
+  max-width: 100%;
+}
+
+button {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+  font: inherit;
+  color: inherit;
+}
+
+
+li {
+  list-style: none;
+}
