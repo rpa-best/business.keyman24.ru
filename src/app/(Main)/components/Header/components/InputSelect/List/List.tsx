@@ -1,16 +1,15 @@
 import React from 'react';
 
 import { motion, MotionValue } from 'framer-motion';
+import { ListProps } from 'components/UI/Inputs/types';
 
 import scss from './List.module.scss';
 
-interface ListProps {
-    list: { id: number; name: string }[];
-    handleSetData: (id: number, name: string) => void;
-    opacity: MotionValue<string>;
-}
-
-export const List: React.FC<ListProps> = ({ list, handleSetData, opacity }) => {
+export const SelectList: React.FC<ListProps> = ({
+    list,
+    handleSetData,
+    opacity,
+}) => {
     const handleClick = (id: number, name: string) => {
         handleSetData(id, name);
     };

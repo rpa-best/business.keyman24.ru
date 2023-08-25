@@ -47,7 +47,7 @@ export const sidebarData: SidebarLinkProps[] = [
     },
     {
         title: 'Рабочее место',
-        href: `/working-area`,
+        href: `/working-areas`,
         Icon: ComputerSvg,
     },
 ];

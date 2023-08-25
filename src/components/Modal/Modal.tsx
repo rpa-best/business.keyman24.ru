@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { shallow } from 'zustand/shallow';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import ExitSvg from '/public/svg/x.svg';
@@ -14,10 +13,8 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ children }) => {
-    const [visible, setVisible] = useModalStore(
-        (state) => [state.visible, state.setVisible],
-        shallow
-    );
+    const [visible] = useModalStore((state) => [state.visible]);
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     return (
         <AnimatePresence>
@@ -33,6 +30,7 @@ export const Modal: React.FC<ModalProps> = ({ children }) => {
                         onClick={(e) => e.stopPropagation()}
                         initial={{ opacity: 0, transform: 'translateY(25%)' }}
                         animate={{ opacity: 1, transform: 'translateY(0)' }}
+                        exit={{ opacity: 0, transform: 'translateY(25%)' }}
                         className={scss.modal}
                     >
                         <ExitSvg

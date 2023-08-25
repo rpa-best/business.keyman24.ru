@@ -1,0 +1,26 @@
+@import "scss/utils";
+
+.spinner_header {
+  @include MontserratSemiBold(26px);
+  color: white;
+  text-align: center;
+  @include phoneOrTablet {
+    font-size: 24px;
+  }
+  @include phone {
+    font-size: 20px;
+  }
+}
+
+.spinner_layout {
+  width: 400px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include phoneOrTablet {
+    height: 300px;
+    width: 100%
+  }
+
+}

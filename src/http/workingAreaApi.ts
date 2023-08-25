@@ -1,6 +1,10 @@
 import * as T from './types';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
+import { $clientAuth } from 'http/clientIndex';
+import UniversalCookies from 'universal-cookie';
+
+const cookie = new UniversalCookies();
 
 export const getWorkingAreas: T.GetWorkingAreas = async (orgId) => {
     const res: AxiosResponse<T.IResponse<T.IWorkingArea>> =
@@ -23,4 +27,76 @@ export const getLocations: T.GetLocations = async (orgId) => {
         await $serverAuth.get(`business/${orgId}/location/?deleted=false`);
 
     return res.data;
+};
+
+export const createWorkingArea: T.CreateWorkingArea = async (body) => {
+    const orgId = cookie.get('orgId') ?? 1;
+    try {
+        await $clientAuth.post(`business/${orgId}/working_area/`, body);
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            throw new Error('Ошибка в создании рабочего места');
+        }
+    }
+};
+
+export const patchWorkingArea: T.PatchWorkingArea = async (body, areaId) => {
+    const orgId = cookie.get('orgId') ?? 1;
+    try {
+        await $clientAuth.patch(
+            `business/${orgId}/working_area/${areaId}/`,
+            body
+        );
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            throw new Error('Ошибка в обновлении рабочего места');
+        }
+    }
+};
+
+export const deleteWorkingArea: T.DeleteWorkingArea = async (id) => {
+    const orgId = cookie.get('orgId') ?? 1;
+    try {
+        await $clientAuth.delete(`business/${orgId}/working_area/${id}`);
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            throw new Error('Ошибка в удалении рабочего места');
+        }
+    }
+};
+
+export const getSessions: T.GetAreaSessions = async (orgId, areaId) => {
+    const res: AxiosResponse<ReturnType<T.GetAreaSessions>> =
+        await $serverAuth.get(
+            `business/${orgId}/working_area/${areaId}/session`
+        );
+
+    return res.data;
+};
+
+export const closeSession: T.CloseSession = async (areaId, sessionId) => {
+    const orgId = cookie.get('orgId') ?? 1;
+    try {
+        await $clientAuth.delete(
+            `business/${orgId}/working_area/${areaId}/session/${sessionId}/`
+        );
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            throw new Error('Ошибка в закрытии сессии');
+        }
+    }
+};
+
+export const createSession: T.CreateSession = async (areaId, body) => {
+    const orgId = cookie.get('orgId') ?? 1;
+    try {
+        await $clientAuth.post(
+            `business/${orgId}/working_area/${areaId}/session/`,
+            body
+        );
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            throw new Error('Ошибка в создании рабочей сессии');
+        }
+    }
 };

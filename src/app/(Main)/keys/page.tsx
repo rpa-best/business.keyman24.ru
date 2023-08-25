@@ -4,7 +4,7 @@ import scss from './keys.module.scss';
 
 const KeysPage = () => {
     return (
-        <div className={scss.keys_children}>
+        <div className={scss.children_with_table}>
             <h2 className={scss.page_title_with_table}>Добавить новые ключи</h2>
             <KeysWrapper />
         </div>

@@ -1,0 +1,1 @@
+export { RegisterInventory } from './RegisterInventory';

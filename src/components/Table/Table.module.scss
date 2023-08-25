@@ -27,6 +27,13 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+}
+
+.table_body {
+  height: 400px;
+  width: 100%;
+
   overflow-y: auto;
   scrollbar-width: thin;
 
@@ -49,12 +56,6 @@
     background: rgba(0, 0, 0, 0);
   }
 
-}
-
-.table_body {
-  height: 400px;
-  width: 100%;
-
   @include laptopWidth {
     height: 300px;
   }
@@ -70,9 +71,9 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  &:last-child {
-    max-width: 100%;
-    flex-grow: 1;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+      display: none;
   }
 }
 
@@ -89,6 +90,12 @@
     padding-left: 46px;
     @include thousendWidth {
       padding-left: 38px;
+    }
+  }
+  &:not(:first-child) {
+    padding-left: 20px;
+    @include thousendWidth {
+      padding-left: 15px;
     }
   }
   &:last-child {
@@ -157,10 +164,10 @@
       padding-left: 38px;
     }
   }
-  &:nth-child(2) {
-    padding-left: 46px;
+  &:not(:first-child) {
+    padding-left: 20px;
     @include thousendWidth {
-      padding-left: 38px;
+      padding-left: 15px;
     }
   }
 
@@ -279,5 +286,6 @@
 }
 
 .headers_button_wrapper {
+  margin-left: 5%;
   margin-right: 5%;
 }

@@ -28,11 +28,13 @@ export const Table: React.FC<TableProps> = ({
     handleEditClick,
     handleDeleteClick,
 }) => {
-    const headerClickCount = useRef<number>(1);
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
     const [tableData, setTableData] = useState(tableRows);
+
+    const headerClickCount = useRef<number>(1);
+    const headerRef = useRef<HTMLDivElement>(null);
 
     const memoizedHeaders = useMemo(() => headers, [headers]);
     const memoizedTableData = useMemo(() => tableData, [tableData]);
@@ -58,6 +60,12 @@ export const Table: React.FC<TableProps> = ({
         setSortedData('DESC', field, setTableData);
     };
 
+    const handleBodyScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        headerRef.current
+            ? (headerRef.current.scrollLeft = e.currentTarget.scrollLeft)
+            : undefined;
+    };
+
     const onRowClick = (id: number) => {
         handleRowClick ? handleRowClick(id) : null;
     };
@@ -77,7 +85,7 @@ export const Table: React.FC<TableProps> = ({
         <div className={scss.table_layout}>
             <div className={tableClassName}>
                 <div className={scss.table}>
-                    <div className={scss.table_headers}>
+                    <div ref={headerRef} className={scss.table_headers}>
                         {memoizedHeaders.map((head, index) => {
                             const lastChild = headers.length === index + 1;
                             return (
@@ -98,7 +106,10 @@ export const Table: React.FC<TableProps> = ({
                             setHeaders,
                         }}
                     >
-                        <div className={scss.table_body}>
+                        <div
+                            onScroll={handleBodyScroll}
+                            className={scss.table_body}
+                        >
                             {memoizedTableData.map((item, index) => (
                                 <div
                                     onClick={() => onRowClick(item.id)}

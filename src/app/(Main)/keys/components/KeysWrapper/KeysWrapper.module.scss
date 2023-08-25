@@ -22,14 +22,23 @@
 }
 
 .button_wrapper {
+  width: max-content;
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}
+
+.button_layout {
   display: flex;
   justify-content: flex-end;
   margin: 19px 35px;
 }
 
 .download_button_wrapper {
+  width: max-content;
   margin: 0 0 10px 20px;
   @include phoneOrTablet {
+    width: calc(100% - 70px);
     margin: 19px 35px;
   }
 }

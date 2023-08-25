@@ -55,8 +55,8 @@ export default function InventoryPage() {
     };
 
     return (
-        <div className={scss.children}>
-            <h2 className={scss.inventory_title}>Устройство / Список</h2>
+        <div className={scss.children_with_table}>
+            <h2 className={scss.page_title_with_table}>Устройство / Список</h2>
             <Table
                 buttonData={{
                     onClick: handleTableButtonClick,

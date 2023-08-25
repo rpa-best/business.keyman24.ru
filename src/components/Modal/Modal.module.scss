@@ -20,6 +20,16 @@
   background: $dark-main;
   padding: 50px 100px;
   border-radius: 40px;
+  border: 1px solid #414141;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.10);
+  @include phoneOrTablet {
+    padding: 50px 50px;
+  }
+  @include phone {
+    width: calc(100% - 30px);
+    margin: 0 auto;
+    padding: 40px 20px 30px;
+  }
 }
 
 .exit_svg {

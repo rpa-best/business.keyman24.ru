@@ -72,6 +72,13 @@ export interface IType {
     name: string;
 }
 
+export interface ISessionUser extends Pick<IUser, 'avatar' | 'username'> {
+    id: number;
+    fullname: string;
+    dateJoined: string;
+    isOfficial: boolean;
+}
+
 export interface ILocation {
     id: number;
     deleted: boolean;
@@ -83,8 +90,57 @@ export interface IWorkingArea {
     id: number;
     location: ILocation;
     deleted: boolean;
+    desc: string;
     name: string;
     type: IType;
+}
+
+export interface CreateWorkingAreaProp {
+    deleted: boolean;
+    location: number;
+    name: string;
+    type: string;
+    desc: string;
+}
+
+export interface ISession {
+    id: number;
+    number: number;
+    startDate: string;
+    endDate: string;
+    status: number;
+    isActive: boolean;
+    user: ISessionUser;
+}
+
+export interface IWorker {
+    id: number;
+    user: {
+        id: number;
+        fullname: string;
+        avatar: string;
+        username: string;
+        dateJoined: string;
+        isOfficial: string;
+    };
+    org: IOrganization;
+    inventories: string;
+    lc_id: number;
+    name: string;
+    user_lc_id: number;
+    image: string;
+}
+
+export interface ICreateSessionBody
+    extends Pick<ISession, 'id' | 'number' | 'status'> {
+    start_date: string;
+    end_date: string | null;
+    user: string;
+    is_active: boolean;
+}
+
+export interface IModifiedSession extends Omit<ISession, 'status'> {
+    status: string;
 }
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
@@ -124,3 +180,26 @@ export type GetWorkingAreas = (
 export type GetLocations = (orgId: number) => Promise<IResponse<ILocation>>;
 
 export type GetWorkingAreaTypes = (orgId: number) => Promise<IResponse<IType>>;
+
+export type GetAreaSessions = (
+    orgId: number,
+    areaId: number
+) => Promise<IResponse<ISession>>;
+
+export type CreateWorkingArea = (data: CreateWorkingAreaProp) => Promise<void>;
+
+export type PatchWorkingArea = (
+    data: CreateWorkingAreaProp,
+    id: number
+) => Promise<void>;
+
+export type DeleteWorkingArea = (id: number) => Promise<void>;
+
+export type CloseSession = (areaId: number, sessionId: number) => Promise<void>;
+
+export type CreateSession = (
+    areaId: number,
+    body: ICreateSessionBody
+) => Promise<void>;
+
+export type GetWorkers = (orgId: number) => Promise<IResponse<IWorker>>;

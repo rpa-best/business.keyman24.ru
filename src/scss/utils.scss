@@ -1,6 +1,7 @@
 $error-color: #C24040;
 $gray: #A1A1A1;
 $gray-semi: #C5C5C5;
+$white-semi: #E9E9E9;
 $dark-main: #2D2D2D;
 $additional-dark: #414141;
 $border-gray: #5e5e5e;
@@ -151,6 +152,20 @@ $accent-color-blue: #516FA5;
   @include phoneOrTablet {
     width: calc(100% - 40px);
     margin-top: 20px;
+  }
+}
+
+.children_with_table {
+  width: calc(100% - 90px);
+  margin: 40px auto 0 auto;
+  @include thousendWidth {
+    width: calc(100% - 50px);
+    margin-top: 30px;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 

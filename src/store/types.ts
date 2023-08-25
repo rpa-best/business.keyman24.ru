@@ -11,7 +11,7 @@ export interface IUser {
     avatar: string;
     qrcode: string;
     isActiveuser: boolean;
-    has_business: boolean;
+    hasBusiness: boolean;
     isAuth: boolean;
 }
 

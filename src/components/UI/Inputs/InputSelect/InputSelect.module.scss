@@ -1,0 +1,39 @@
+@import "components/UI/Inputs/Input/Input.module.scss";
+
+.list_wrapper {
+  background: white;
+  width: 500px;
+  border-radius: 7px;
+  padding: 3px 0;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  @include thousendWidth {
+    width: 400px;
+  }
+  @include phoneOrTablet {
+    width: 375px;
+  }
+  @include phone {
+    width: 100%;
+  }
+}
+
+.list_item {
+  padding: 10px;
+  transition: .2s all ease-in-out;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  &:hover {
+    background: $gray-semi;
+    cursor: pointer;
+  }
+  @include thousendWidth {
+    font-size: 13px;
+  }
+}
+
+.list_empty {
+  @include MontserratRegular(16px);
+  padding: 10px;
+  text-align: center;
+}

@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState } from 'react';
 import EditSvg from '/public/svg/edit.svg';
 import DeleteSvg from '/public/svg/delete.svg';
 import CompleteSvg from '/public/svg/done.svg';
-import { Input } from 'UI/Inputs/Input';
+import { Input } from 'components/UI/Inputs/Input';
 import { PreviewListItemProps } from 'app/(Main)/keys/types';
 
 import scss from 'app/(Main)/keys/components/PreviewRowsList/PreviewRowsList.module.scss';

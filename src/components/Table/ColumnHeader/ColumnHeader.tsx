@@ -5,7 +5,7 @@ import { ColumnHeaderProps } from 'components/Table/types';
 import ArrowSvg from '/public/svg/arrow.svg';
 
 import scss from 'components/Table/Table.module.scss';
-import { Button } from 'UI/Buttons/Button';
+import { Button } from 'components/UI/Buttons/Button';
 
 export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
     sortable,
@@ -56,6 +56,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
             {lastChild && buttonData?.text && (
                 <div className={scss.headers_button_wrapper}>
                     <Button
+                        nowrap={true}
                         onClick={
                             ((e: MouseEvent) =>
                                 handleClick(e, buttonData?.onClick)) as any

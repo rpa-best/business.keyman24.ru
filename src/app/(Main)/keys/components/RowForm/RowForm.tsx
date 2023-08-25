@@ -6,7 +6,7 @@ import ArrowSvg from '/public/svg/arrow.svg';
 import { RowFormValidate } from './RowForm.utils';
 import { RowFormProps } from 'app/(Main)/keys/types';
 import { FormValues } from './types';
-import { Input } from 'UI/Inputs/Input';
+import { Input } from 'components/UI/Inputs/Input';
 
 import scss from './RowForm.module.scss';
 

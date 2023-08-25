@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { Button } from 'UI/Buttons/Button';
+import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { generateRandomITF14Code } from 'helpers/generateITF-14Code';
@@ -106,10 +106,15 @@ export const KeysWrapper = () => {
                         data={data}
                     />
                 </div>
-                <div className={scss.button_wrapper}>
-                    <Button type="button" onClick={() => handleGenerateClick()}>
-                        Сгенерировать ключи
-                    </Button>
+                <div className={scss.button_layout}>
+                    <div className={scss.button_wrapper}>
+                        <Button
+                            type="button"
+                            onClick={() => handleGenerateClick()}
+                        >
+                            Сгенерировать ключи
+                        </Button>
+                    </div>
                 </div>
                 {generatedData.length !== 0 && (
                     <>

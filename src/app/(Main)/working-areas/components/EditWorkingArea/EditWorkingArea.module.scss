@@ -1,0 +1,38 @@
+@import "scss/utils";
+
+.edit_form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  @include thousendWidth {
+    width: 400px;
+  }
+  @include phoneOrTablet {
+    width: 375px;
+  }
+  @include phone {
+    width: 100%;
+  }
+}
+
+.form_title {
+  text-align: center;
+  @include MontserratSemiBold(24px);
+  color: white;
+  margin-bottom: 20px;
+  @include phoneOrTablet {
+    margin-bottom: 10px;
+    font-size: 20px;
+    text-align: left;
+  }
+}
+
+.button_wrapper {
+  margin-top: 25px;
+  width: 50%;
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}

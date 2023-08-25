@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { useSpring } from 'framer-motion';
 
@@ -8,11 +8,11 @@ import { onHide, onMount } from 'utils/TippyHelper';
 import Arrow from '/public/svg/arrow.svg';
 import { useOrganizationStore } from 'store/organizationStore';
 import { IOrganization } from 'store/types';
-import { List } from './List';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 
 import scss from './InputSelect.module.scss';
+import { SelectList } from 'app/(Main)/components/Header/components/InputSelect/List';
 
 const cookie = new Cookies();
 
@@ -92,7 +92,7 @@ export const HeaderInputSelect: React.FC<{
                 placement="bottom"
                 onClickOutside={onClickOutside}
                 render={(attrs) => (
-                    <List
+                    <SelectList
                         {...attrs}
                         opacity={opacity}
                         handleSetData={handleSetData}

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { motion } from 'framer-motion';
 
-import { Input } from 'UI/Inputs/Input';
+import { Input } from 'components/UI/Inputs/Input';
 import { IFormTypes } from 'app/(Authorization)/login/components/Form/Form.types';
 import { FormValidate } from 'app/(Authorization)/login/components/Form/Form.utils';
 import { userAuth, getUser } from 'http/userApi';
