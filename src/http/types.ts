@@ -83,6 +83,7 @@ export interface ILocation {
     id: number;
     deleted: boolean;
     isActive: boolean;
+    desc: string;
     name: string;
 }
 
@@ -143,6 +144,23 @@ export interface IModifiedSession extends Omit<ISession, 'status'> {
     status: string;
 }
 
+export interface IWorkerDocs {
+    id: number;
+    lcId: number;
+    name: string;
+    userLcId: number;
+    activeFrom: string;
+    activeTo: string;
+    zp: string;
+    orgLcId: number;
+    worker: number;
+}
+
+export interface KeyBody {
+    count: number;
+    name: string;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
 export type GetAdminOrgPermissions = (
@@ -179,6 +197,17 @@ export type GetWorkingAreas = (
 
 export type GetLocations = (orgId: number) => Promise<IResponse<ILocation>>;
 
+export type GetLocationObjects = (
+    orgId: number,
+    locationId: number
+) => Promise<IResponse<Omit<ILocation, 'isActive'>>>;
+
+export type GenerateKeys = (
+    locId: number,
+    objId: number,
+    body: KeyBody[]
+) => Promise<IResponse<KeyBody>>;
+
 export type GetWorkingAreaTypes = (orgId: number) => Promise<IResponse<IType>>;
 
 export type GetAreaSessions = (
@@ -203,3 +232,8 @@ export type CreateSession = (
 ) => Promise<void>;
 
 export type GetWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
+
+export type GetWorkerDocs = (
+    workerId: number,
+    orgId: number
+) => Promise<IResponse<IWorkerDocs>>;

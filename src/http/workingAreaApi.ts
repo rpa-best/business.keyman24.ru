@@ -22,13 +22,6 @@ export const getWorkingAreaTypes: T.GetWorkingAreaTypes = async (orgId) => {
     return res.data;
 };
 
-export const getLocations: T.GetLocations = async (orgId) => {
-    const res: AxiosResponse<ReturnType<T.GetLocations>> =
-        await $serverAuth.get(`business/${orgId}/location/?deleted=false`);
-
-    return res.data;
-};
-
 export const createWorkingArea: T.CreateWorkingArea = async (body) => {
     const orgId = cookie.get('orgId') ?? 1;
     try {
@@ -68,7 +61,7 @@ export const deleteWorkingArea: T.DeleteWorkingArea = async (id) => {
 export const getSessions: T.GetAreaSessions = async (orgId, areaId) => {
     const res: AxiosResponse<ReturnType<T.GetAreaSessions>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/${areaId}/session`
+            `business/${orgId}/working_area/${areaId}/session/?ordering=status`
         );
 
     return res.data;

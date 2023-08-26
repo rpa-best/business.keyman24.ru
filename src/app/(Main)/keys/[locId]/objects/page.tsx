@@ -1,29 +1,34 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 
-import { Table } from 'components/Table';
+import { getLocationObjects } from 'http/locationsApi';
 import { Column } from 'components/Table/Column';
-import { getLocations } from 'http/locationsApi';
+import { Table } from 'components/Table';
 
-import scss from './keys.module.scss';
-import { useRouter } from 'next/navigation';
+import scss from 'app/(Main)/keys/keys.module.scss';
 import { TableWrapper } from 'app/(Main)/keys/components/TableWrapper';
 
-const KeysPage = async () => {
+interface LocationObjectsPageProps {
+    params: { locId: string };
+}
+
+const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
+    params: { locId },
+}) => {
     const cookieStore = cookies();
 
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const locations = await getLocations(+orgId);
+    const objects = await getLocationObjects(+orgId, +locId);
 
-    const modifiedLocations = locations.results.map((l) => {
+    const modifiedObjects = objects.results.map((l) => {
         return { ...l, desc: l.desc ?? '-' };
     });
 
     return (
         <div className={scss.children_with_table}>
             <h2 className={scss.page_title_with_table}>Локации</h2>
-            <TableWrapper path={'objects'} tableRows={modifiedLocations}>
+            <TableWrapper tableRows={modifiedObjects}>
                 <Column header="Наименование" field="name" />
                 <Column header="Описание" field="desc" />
             </TableWrapper>
@@ -31,4 +36,4 @@ const KeysPage = async () => {
     );
 };
 
-export default KeysPage;
+export default LocationObjectsPage;

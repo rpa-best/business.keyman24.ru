@@ -1,11 +1,8 @@
 import React from 'react';
 
 import { AreasTableWrapper } from 'app/(Main)/working-areas/components/AreasTableWrapper';
-import {
-    getLocations,
-    getWorkingAreas,
-    getWorkingAreaTypes,
-} from 'http/workingAreaApi';
+import { getWorkingAreas, getWorkingAreaTypes } from 'http/workingAreaApi';
+import { getLocations } from 'http/locationsApi';
 import { IModfiedWorkingArea } from 'app/(Main)/working-areas/types';
 import { cookies } from 'next/headers';
 

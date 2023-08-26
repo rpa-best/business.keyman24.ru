@@ -1,1 +1,25 @@
 @import "scss/utils";
+
+.inputs_wrapper {
+  display: flex;
+  column-gap: 20px;
+  margin-bottom: 30px;
+  @include thousendWidth {
+    flex-direction: column;
+      width: calc(100% - 40px);
+      margin: 0 auto 30px;
+  }
+}
+
+.inputs_wrapper > div {
+  position: relative;
+  width: 49%;
+  @include thousendWidth {
+    width: 100%;
+  }
+}
+
+.button_wrapper {
+  width: max-content;
+  margin-left: auto;
+}

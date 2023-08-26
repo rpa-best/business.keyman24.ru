@@ -31,7 +31,12 @@
     display: flex;
     justify-content: space-between;
   }
+
+  & [ data-tippy-root ] {
+    width: max-content;
+  }
 }
+
 
 .header_nav_icons {
   display: flex;
@@ -76,6 +81,9 @@
   @include phoneOrTablet {
     display: none;
   }
+  & [ data-tippy-root ] {
+    width: max-content;
+  }
 }
 
 .settings_svg_wrapper {
@@ -94,6 +102,7 @@
   color: $gray;
   will-change: transform;
   transition: .3s all ease-in-out;
+
   &:hover {
     transform: rotate(90deg);
     color: $gray-semi;
@@ -103,6 +112,7 @@
 .settings_svg_active {
   @extend .settings_svg;
   color: $accent-color;
+
   &:hover {
     color: $accent-color-darker;
   }
@@ -113,6 +123,7 @@
   width: 24px;
   color: $gray;
   transition: .2s all ease-in-out;
+
   &:hover {
     color: $gray-semi;
   }

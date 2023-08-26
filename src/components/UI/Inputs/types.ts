@@ -8,6 +8,7 @@ export interface IInputProps {
     handleError?: string | undefined | boolean;
     type?: HTMLInputElement['type'];
     size?: 'big' | 'medium';
+    errorFontColor?: string;
     onBlur?: (
         event: FocusEvent<HTMLInputElement> | FocusEvent<HTMLTextAreaElement>
     ) => void;
@@ -19,6 +20,7 @@ export interface IInputProps {
     autoComplete?: 'on' | 'off';
     disabled?: boolean;
     tabIndex?: number;
+    label?: string;
     needErrorLabel?: boolean;
 }
 

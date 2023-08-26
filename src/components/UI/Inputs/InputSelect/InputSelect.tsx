@@ -3,11 +3,13 @@ import clsx from 'clsx';
 import Tippy from '@tippyjs/react/headless';
 import { useSpring } from 'framer-motion';
 
+import ArrowSvg from '/public/svg/arrow.svg';
 import * as T from 'components/UI/Inputs/types';
 import { onHide, onMount } from 'utils/TippyHelper';
 import { InputSelectList } from 'components/UI/Inputs/InputSelect/InputSelectList';
 
 import scss from 'components/UI/Inputs/InputSelect/InputSelect.module.scss';
+import Arrow from '/public/svg/arrow.svg';
 
 export const InputSelect: React.FC<T.IInputSelectProps> = ({
     type = 'text',
@@ -62,7 +64,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
 
     const handleSetData = (id: number) => {
         onChange(listValues.find((item) => item.id === id));
-        setVisible(false);
+        setVisible(!visible);
     };
 
     const onClickOutside = () => {
@@ -72,6 +74,11 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
             setFieldTouched(name, true);
         }
     };
+
+    const arrowClassname = clsx({
+        [scss.input_arrow_svg]: true,
+        [scss.input_arrow_svg_open]: visible,
+    });
 
     const labelClass = clsx({
         [scss.input_error_label]: handleError,
@@ -122,6 +129,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
                         placeholder={placeholder}
                         disabled={disabled}
                     />
+                    <Arrow className={arrowClassname} />
                 </div>
             </div>
         </Tippy>

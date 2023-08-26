@@ -34,8 +34,6 @@ li {
   list-style: none;
 }
 
-form [data-tippy-root] {
-  @include phone {
+[data-tippy-root] {
     width: 100%;
-  }
 }
