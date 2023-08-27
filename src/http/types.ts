@@ -190,6 +190,11 @@ export interface IInventoryImage {
     date: string;
 }
 
+export interface ICard {
+    id: number;
+    card: string;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
 export type GetAdminOrgPermissions = (
@@ -290,7 +295,16 @@ export type CreateSession = (
 
 export type GetWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 
+export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
+
+export type GetWorkerCard = (
+    orgId: number,
+    workerId: number
+) => Promise<IResponse<ICard>>;
+
 export type GetWorkerDocs = (
     workerId: number,
     orgId: number
 ) => Promise<IResponse<IWorkerDocs>>;
+
+export type DeleteWorker = (workerId: number) => Promise<void>;

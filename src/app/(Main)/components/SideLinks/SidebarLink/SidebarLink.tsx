@@ -13,7 +13,13 @@ interface ISidebarLinkProps extends SidebarLinkProps {
 export const SidebarLink = ({ Icon, title, href, open }: ISidebarLinkProps) => {
     const pathname = usePathname();
 
-    const currentPage = pathname.startsWith(href);
+    const pathString = pathname.replace(/^\/|\/(?=.*\/)/g, '');
+    const hrefString = href.replace(/^\/|\/(?=.*\/)/g, '');
+
+    const currentPage =
+        pathString === hrefString
+            ? true
+            : pathString.startsWith(hrefString) && href !== '/';
 
     return (
         <li

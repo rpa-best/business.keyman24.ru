@@ -1,0 +1,1 @@
+export { WorkersTableWrapper } from './WorkersTableWrapper';

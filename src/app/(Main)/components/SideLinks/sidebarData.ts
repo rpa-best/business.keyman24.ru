@@ -21,7 +21,7 @@ export const sidebarData: SidebarLinkProps[] = [
     },
     {
         title: 'Локация',
-        href: '/location',
+        href: '/locations',
         Icon: GlobeSvg,
     },
 
@@ -42,7 +42,7 @@ export const sidebarData: SidebarLinkProps[] = [
     },
     {
         title: 'Работники',
-        href: '/worker',
+        href: '/workers',
         Icon: WorkerSvg,
     },
     {

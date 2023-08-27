@@ -1,34 +1,17 @@
-import React from 'react';
-import Image from 'next/image';
+'use client';
 
+import React, { useState } from 'react';
+
+import { Spinner } from 'components/Spinner';
+import Image from 'next/image';
 import AvatarSvg from '/public/svg/avatar.svg';
 import { Input } from 'components/UI/Inputs/Input';
-import { IWorker, IWorkerDocs } from 'http/types';
-import { Spinner } from 'components/Spinner';
-import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
-import clsx from 'clsx';
+import { IWorkerEditFormProps } from 'app/(Main)/workers/types';
 
-import scss from './WorkerInfoCard.module.scss';
+import scss from './WorkerEditForm.module.scss';
 
-interface IWorkerInfoCardProps {
-    worker: IWorker;
-    workerDocs: IWorkerDocs[];
-    halfScreen?: boolean;
-}
-
-export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
-    workerDocs,
-    worker,
-    halfScreen,
-}) => {
-    if (!workerDocs) {
-        return <Spinner />;
-    }
-
-    const inputWrapperClass = clsx({
-        [scss.worker_card_input_wrapper]: !halfScreen,
-        [scss.worker_card_input_half]: halfScreen,
-    });
+export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({ worker }) => {
+    const [workerName, setWorkerName] = useState(worker.name);
 
     return (
         <div className={scss.worker_card_layout}>
@@ -46,17 +29,16 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                     )}
                 </div>
                 <div className={scss.worker_card_data}>
-                    <div className={inputWrapperClass}>
+                    <div className={scss.worker_card_input_wrapper}>
                         <Input
                             label="ФИО"
-                            disabled
                             placeholder="-"
-                            value={worker.name}
+                            value={workerName}
                             name="worker-name"
-                            onChange={() => {}}
+                            onChange={(e: any) => setWorkerName(e.target.value)}
                         />
                     </div>
-                    <div className={inputWrapperClass}>
+                    <div className={scss.worker_card_input_wrapper}>
                         <Input
                             placeholder="-"
                             label="Имя пользователя"
@@ -66,18 +48,18 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                             onChange={() => {}}
                         />
                     </div>
-                    <div className={inputWrapperClass}>
+                    <div className={scss.worker_card_input_wrapper}>
                         <Input
                             label="Организация"
                             disabled
-                            value={worker.org.name ?? ''}
+                            value={worker.org.phone ?? ''}
                             name="username"
                             onChange={() => {}}
                         />
                     </div>
                 </div>
             </div>
-            <div className={scss.worker_card_data_additional}>
+            {/* <div className={scss.worker_card_data_additional}>
                 {workerDocs?.map((doc, index) => {
                     return (
                         <div
@@ -97,7 +79,7 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                         </div>
                     );
                 })}
-            </div>
+            </div>*/}
         </div>
     );
 };
