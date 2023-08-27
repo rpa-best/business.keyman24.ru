@@ -50,6 +50,21 @@ export interface IAdminPermission {
     type: PermissionType;
 }
 
+export interface IInventory {
+    id: number;
+    type: IType;
+    comments: string;
+    notZone: boolean;
+    codeNumber: string;
+    number: string;
+    name: string;
+    desc: string;
+    codeImage: string;
+    is_active: boolean;
+    location: number;
+    object_area: number;
+}
+
 export interface IGroupPermission {
     id: number;
     level: ILevel;
@@ -64,12 +79,14 @@ export interface IAdminGroupPermission {
 
 export interface IResponse<T> {
     results: T[];
+    count: number;
 }
 
 export interface IType {
     id: number;
     slug: string;
     name: string;
+    desc: string;
 }
 
 export interface ISessionUser extends Pick<IUser, 'avatar' | 'username'> {
@@ -161,6 +178,18 @@ export interface KeyBody {
     name: string;
 }
 
+export interface ReqInventoryBody extends Omit<IType, 'slug' | 'id'> {
+    number: string;
+    type: string;
+}
+
+export interface IInventoryImage {
+    id: number;
+    image: string;
+    main: boolean;
+    date: string;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
 export type GetAdminOrgPermissions = (
@@ -176,6 +205,34 @@ export type DeleteOrgPermission = (obj: { id: number; orgId: number }) => void;
 export type GetGroupOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IGroupPermission>>;
+
+export type GetInventories = (
+    orgId: number,
+    offset?: number
+) => Promise<IResponse<IInventory>>;
+
+export type GetInventoryTypes = (orgId: number) => Promise<IResponse<IType>>;
+
+export type GetInventoryImage = (
+    inventoryId: number
+) => Promise<IResponse<IInventoryImage>>;
+
+export type CreateInventoryItem = (body: ReqInventoryBody) => Promise<void>;
+
+export type UpdateInventoryItem = (
+    inventoryId: number,
+    body: ReqInventoryBody
+) => Promise<void>;
+
+export type DeleteInventoryPhoto = (
+    itemId: number,
+    imageId: number
+) => Promise<void>;
+
+export type UploadInventoryPhoto = (
+    itemId: number,
+    photos: FileList
+) => Promise<IInventoryImage>;
 
 export type GetGroupAdminOrgPermissions = (
     orgId: number

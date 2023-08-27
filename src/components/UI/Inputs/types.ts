@@ -30,8 +30,7 @@ export interface ListProps {
     opacity: MotionValue<string>;
 }
 
-export interface IInputSelectProps
-    extends Omit<IInputProps, 'onChange' | 'onBlur'> {
+export interface IInputSelectProps extends Omit<IInputProps, 'onChange'> {
     listValues: { id: number; name: string }[];
     onChange: (item: any) => void;
     setFieldTouched?: (field: string, value: boolean) => void;

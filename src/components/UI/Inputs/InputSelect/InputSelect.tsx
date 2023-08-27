@@ -3,13 +3,12 @@ import clsx from 'clsx';
 import Tippy from '@tippyjs/react/headless';
 import { useSpring } from 'framer-motion';
 
-import ArrowSvg from '/public/svg/arrow.svg';
 import * as T from 'components/UI/Inputs/types';
 import { onHide, onMount } from 'utils/TippyHelper';
 import { InputSelectList } from 'components/UI/Inputs/InputSelect/InputSelectList';
+import Arrow from '/public/svg/arrow.svg';
 
 import scss from 'components/UI/Inputs/InputSelect/InputSelect.module.scss';
-import Arrow from '/public/svg/arrow.svg';
 
 export const InputSelect: React.FC<T.IInputSelectProps> = ({
     type = 'text',
@@ -17,7 +16,9 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     autoFocus,
     value,
     name,
+    label,
     handleError,
+    onBlur,
     onChange,
     style,
     autoComplete,
@@ -35,12 +36,6 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     const [modifiedListValues, setModifiedListValues] = useState(listValues);
 
     const prevValue = useRef(value);
-
-    const fieldClass = clsx({
-        [scss.field_noneed]: !needErrorLabel,
-        [scss.field]: size === 'medium',
-        [scss.field_big]: size === 'big',
-    });
 
     useEffect(() => {
         setModifiedListValues(
@@ -80,14 +75,28 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
         [scss.input_arrow_svg_open]: visible,
     });
 
-    const labelClass = clsx({
+    const fieldClass = clsx({
+        [scss.field_noneed]: !needErrorLabel,
+        [scss.field]: size === 'medium' && !label,
+        [scss.field_big]: size === 'big' && !label,
+        [scss.field_with_label_big]: size === 'big' && label,
+        [scss.field_with_label]: size === 'medium' && label,
+    });
+
+    const labelErrorClass = clsx({
         [scss.input_error_label]: handleError,
         [scss.input_error_label_hidden]: !handleError,
     });
 
+    const labelClass = clsx({
+        [scss.input_label]: true,
+    });
+
     const inputClass = clsx({
         [scss.input]: size === 'medium',
+
         [scss.input_big]: size === 'big',
+
         [scss.input_error]: handleError,
     });
 
@@ -110,7 +119,11 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
             )}
         >
             <div style={style} className={fieldClass}>
-                <label className={labelClass}>{handleError}</label>
+                {label ? (
+                    <label className={labelClass}>{label}</label>
+                ) : (
+                    <label className={labelErrorClass}>{handleError}</label>
+                )}
                 <div
                     onClick={() => setVisible(true)}
                     className={scss.input_wrapper}
@@ -120,6 +133,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
                         tabIndex={tabIndex}
                         autoComplete={autoComplete as string}
                         className={inputClass}
+                        onBlur={onBlur}
                         type={type}
                         onChange={handleInputChange}
                         value={inputValue}
@@ -131,6 +145,9 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
                     />
                     <Arrow className={arrowClassname} />
                 </div>
+                {label && (
+                    <label className={labelErrorClass}>{handleError}</label>
+                )}
             </div>
         </Tippy>
     );

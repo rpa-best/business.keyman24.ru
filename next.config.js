@@ -22,12 +22,21 @@ const nextConfig = {
                 use: ['@svgr/webpack'],
             }
         );
-
         // Modify the file loader rule to ignore *.svg, since we have it handled now.
         fileLoaderRule.exclude = /\.svg$/i;
 
         return config;
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'py.keyman24.ru',
+                pathname: '/api/v1.1/media/**',
+            },
+        ],
+    },
+
     experimental: {
         serverActions: true,
     },

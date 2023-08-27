@@ -7,6 +7,7 @@ import React, {
     useRef,
     useMemo,
 } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { IHeader, ITableContext, TableProps } from 'components/Table/types';
 import { Paginator } from 'components/Table/Paginator';
@@ -24,7 +25,7 @@ export const Table: React.FC<TableProps> = ({
     tableRows,
     handleRowClick,
     children,
-    paginator,
+    paginatorData,
     rowClickable = true,
     buttonData,
     handleEditClick,
@@ -34,6 +35,14 @@ export const Table: React.FC<TableProps> = ({
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
     const [tableData, setTableData] = useState(tableRows);
+
+    const router = useRouter();
+
+    const pathname = usePathname();
+
+    const totalPages = paginatorData
+        ? Math.ceil(paginatorData?.countItems / paginatorData.offset)
+        : null;
 
     const headerClickCount = useRef<number>(1);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -46,6 +55,14 @@ export const Table: React.FC<TableProps> = ({
     useEffect(() => {
         setTableData(tableRows);
     }, [tableRows]);
+
+    const handlePaginatorClick = (page: number) => {
+        setCurrentPage(page);
+        paginatorData &&
+            router.replace(
+                `${pathname}/?offset=${(page - 1) * paginatorData?.offset}`
+            );
+    };
 
     const sortTableData = (field: string) => {
         if (field === sortedField) {
@@ -131,23 +148,19 @@ export const Table: React.FC<TableProps> = ({
                         {children}
                     </TableContext.Provider>
                 </div>
-                {paginator && !tabletBreak && (
+                {paginatorData && !tabletBreak && (
                     <Paginator
-                        countPages={5}
+                        countPages={totalPages as number}
                         currentPage={currentPage}
-                        handlePaginatorClick={(page: number) =>
-                            setCurrentPage(page)
-                        }
+                        handlePaginatorClick={handlePaginatorClick}
                     />
                 )}
             </div>
-            {paginator && tabletBreak && (
+            {paginatorData && tabletBreak && (
                 <Paginator
-                    countPages={5}
+                    countPages={totalPages as number}
                     currentPage={currentPage}
-                    handlePaginatorClick={(page: number) =>
-                        setCurrentPage(page)
-                    }
+                    handlePaginatorClick={handlePaginatorClick}
                 />
             )}
         </div>

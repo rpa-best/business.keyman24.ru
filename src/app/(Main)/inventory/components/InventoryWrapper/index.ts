@@ -1,0 +1,1 @@
+export { InventoryWrapper } from './InventoryWrapper';
