@@ -3,9 +3,7 @@ version: '3.3'
 services:  
   business-keyman:
     container_name: business-keyman
-    build: 
-      context: ./
-      target: runner
+    build: .
     env_file:
       - ./.env
     volumes:
