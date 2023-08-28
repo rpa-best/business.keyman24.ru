@@ -49,7 +49,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
             style={{ cursor: `${sortable ? 'pointer' : 'initial'}` }}
             className={headerClassName}
         >
-            <div>
+            <div className={scss.header_name_wrapper}>
                 {name}
                 {sortable && <ArrowSvg className={arrowClassname} />}
             </div>

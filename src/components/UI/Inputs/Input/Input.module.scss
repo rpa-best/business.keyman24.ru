@@ -11,11 +11,15 @@
   border-radius: 10px;
   outline: none;
   border: 2px solid transparent;
-  @include MontserratRegular(16px);
+  @include MontserratRegular(19px);
   letter-spacing: 1px;
   padding: 0 20px;
   background-color: #f5f6f7;
   transition: .2s all ease-in-out;
+
+  @include laptopWidth {
+    font-size: 16px;
+  }
 
   @include phone {
     height: 40px;
@@ -32,7 +36,7 @@
     transition: .1s all ease-in-out;
   }
   &:disabled {
-    background-color: rgb(234, 236, 239);
+    color: black;
     pointer-events: none;
   }
   &::-webkit-inner-spin-button {
@@ -41,9 +45,26 @@
 }
 
 .input_wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
-  position: relative;
+}
+
+.input_arrow_svg {
+  position: absolute;
+  top: calc(50% - 8px);
+  right: 15px;
+  transition: .2s all ease-in-out;
+  @extend .svg;
+  &:hover {
+    color: $gray;
+  }
+}
+
+.input_arrow_svg_open {
+  transform: rotate(180deg);
+  top: calc(50% - 12px);
+  right: 18px;
 }
 
 .input_error {
@@ -60,10 +81,27 @@
   margin-top: 0!important;
 }
 
+.field_with_label_big {
+  @extend .field;
+  height: 115px!important;
+  margin-top: 0!important;
+  justify-content: flex-start!important;
+}
+
 .field_big {
   @extend .field;
-  height: 80px!important;
-  margin-top: 25px;
+  height: 95px!important;
+  margin-top: 15px;
+}
+
+.field_with_label {
+  @extend .field;
+  height: 95px!important;
+  margin-top: 0!important;
+  justify-content: flex-start!important;
+  @include phone {
+    height: 80px!important;
+  }
 }
 
 .field {
@@ -78,6 +116,15 @@
     height: 50px;
     margin-top: 15px;
   }
+}
+
+.input_label {
+  width: 100%;
+  color: $gray;
+  font-size: 16px;
+  margin-bottom: 5px;
+  line-height: 20px;
+  text-align: left;
 }
 
 .input_error_label {

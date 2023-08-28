@@ -50,6 +50,21 @@ export interface IAdminPermission {
     type: PermissionType;
 }
 
+export interface IInventory {
+    id: number;
+    type: IType;
+    comments: string;
+    notZone: boolean;
+    codeNumber: string;
+    number: string;
+    name: string;
+    desc: string;
+    codeImage: string;
+    is_active: boolean;
+    location: number;
+    object_area: number;
+}
+
 export interface IGroupPermission {
     id: number;
     level: ILevel;
@@ -64,12 +79,14 @@ export interface IAdminGroupPermission {
 
 export interface IResponse<T> {
     results: T[];
+    count: number;
 }
 
 export interface IType {
     id: number;
     slug: string;
     name: string;
+    desc: string;
 }
 
 export interface ISessionUser extends Pick<IUser, 'avatar' | 'username'> {
@@ -83,6 +100,7 @@ export interface ILocation {
     id: number;
     deleted: boolean;
     isActive: boolean;
+    desc: string;
     name: string;
 }
 
@@ -143,7 +161,57 @@ export interface IModifiedSession extends Omit<ISession, 'status'> {
     status: string;
 }
 
+export interface IWorkerDocs {
+    id: number;
+    lcId: number;
+    name: string;
+    userLcId: number;
+    activeFrom: string;
+    activeTo: string;
+    zp: string;
+    orgLcId: number;
+    worker: number;
+}
+
+export interface KeyBody {
+    count: number;
+    name: string;
+}
+
+export interface ReqInventoryBody extends Omit<IType, 'slug' | 'id'> {
+    number: string;
+    type: string;
+}
+
+export interface IInventoryImage {
+    id: number;
+    image: string;
+    main: boolean;
+    date: string;
+}
+
+export interface ICard {
+    id: number;
+    card: string;
+}
+
+export interface CreateGroupPermBody {
+    level: number;
+    name: string;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
+
+export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
+
+export type CreateGroupPerm = (body: CreateGroupPermBody) => Promise<void>;
+
+export type EditGroupPerm = (
+    permId: number,
+    body: CreateGroupPermBody
+) => Promise<void>;
+
+export type DeleteGroupPerm = (permId: number) => Promise<void>;
 
 export type GetAdminOrgPermissions = (
     orgId: number
@@ -158,6 +226,34 @@ export type DeleteOrgPermission = (obj: { id: number; orgId: number }) => void;
 export type GetGroupOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IGroupPermission>>;
+
+export type GetInventories = (
+    orgId: number,
+    offset?: number
+) => Promise<IResponse<IInventory>>;
+
+export type GetInventoryTypes = (orgId: number) => Promise<IResponse<IType>>;
+
+export type GetInventoryImage = (
+    inventoryId: number
+) => Promise<IResponse<IInventoryImage>>;
+
+export type CreateInventoryItem = (body: ReqInventoryBody) => Promise<void>;
+
+export type UpdateInventoryItem = (
+    inventoryId: number,
+    body: ReqInventoryBody
+) => Promise<void>;
+
+export type DeleteInventoryPhoto = (
+    itemId: number,
+    imageId: number
+) => Promise<void>;
+
+export type UploadInventoryPhoto = (
+    itemId: number,
+    photos: FileList
+) => Promise<IInventoryImage>;
 
 export type GetGroupAdminOrgPermissions = (
     orgId: number
@@ -178,6 +274,17 @@ export type GetWorkingAreas = (
 ) => Promise<IResponse<IWorkingArea>>;
 
 export type GetLocations = (orgId: number) => Promise<IResponse<ILocation>>;
+
+export type GetLocationObjects = (
+    orgId: number,
+    locationId: number
+) => Promise<IResponse<Omit<ILocation, 'isActive'>>>;
+
+export type GenerateKeys = (
+    locId: number,
+    objId: number,
+    body: KeyBody[]
+) => Promise<IResponse<KeyBody>>;
 
 export type GetWorkingAreaTypes = (orgId: number) => Promise<IResponse<IType>>;
 
@@ -203,3 +310,19 @@ export type CreateSession = (
 ) => Promise<void>;
 
 export type GetWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
+
+export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
+
+export type GetPermissions = (orgId: number) => Promise<IResponse<IPermission>>;
+
+export type GetWorkerCard = (
+    orgId: number,
+    workerId: number
+) => Promise<IResponse<ICard>>;
+
+export type GetWorkerDocs = (
+    workerId: number,
+    orgId: number
+) => Promise<IResponse<IWorkerDocs>>;
+
+export type DeleteWorker = (workerId: number) => Promise<void>;

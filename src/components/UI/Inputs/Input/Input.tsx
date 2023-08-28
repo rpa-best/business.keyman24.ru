@@ -18,18 +18,26 @@ export const Input: React.FC<T.IInputProps> = ({
     autoComplete,
     disabled,
     tabIndex,
+    errorFontColor,
+    label,
     size = 'medium',
     needErrorLabel = true,
 }) => {
     const fieldClass = clsx({
         [scss.field_noneed]: !needErrorLabel,
-        [scss.field]: size === 'medium',
-        [scss.field_big]: size === 'big',
+        [scss.field]: size === 'medium' && !label,
+        [scss.field_big]: size === 'big' && !label,
+        [scss.field_with_label_big]: size === 'big' && label,
+        [scss.field_with_label]: size === 'medium' && label,
+    });
+
+    const labelErrorClass = clsx({
+        [scss.input_error_label]: handleError,
+        [scss.input_error_label_hidden]: !handleError,
     });
 
     const labelClass = clsx({
-        [scss.input_error_label]: handleError,
-        [scss.input_error_label_hidden]: !handleError,
+        [scss.input_label]: true,
     });
 
     const inputClass = clsx({
@@ -42,9 +50,14 @@ export const Input: React.FC<T.IInputProps> = ({
 
     return (
         <div style={style} className={fieldClass}>
-            <label className={labelClass}>{handleError}</label>
+            {label ? (
+                <label className={labelClass}>{label}</label>
+            ) : (
+                <label className={labelErrorClass}>{handleError}</label>
+            )}
             <div className={scss.input_wrapper}>
                 <input
+                    style={handleError ? { color: errorFontColor } : undefined}
                     tabIndex={tabIndex}
                     autoComplete={autoComplete as string}
                     className={inputClass}
@@ -59,6 +72,7 @@ export const Input: React.FC<T.IInputProps> = ({
                     disabled={disabled}
                 />
             </div>
+            {label && <label className={labelErrorClass}>{handleError}</label>}
         </div>
     );
 };

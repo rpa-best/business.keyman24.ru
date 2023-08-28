@@ -11,10 +11,12 @@ import { RowForm } from 'app/(Main)/keys/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/keys/components/PreviewRowsList';
 import { IData, IGeneratedKeys } from 'app/(Main)/keys/types';
 import { PdfGenerator } from 'app/(Main)/keys/components/PdfGenerator';
+import { useParams } from 'next/navigation';
 
 import scss from './KeysWrapper.module.scss';
 
 export const KeysWrapper = () => {
+    const { locId, objId } = useParams();
     const [data, setData] = useState<IData[]>([]);
     const [generatedData, setGeneratedData] = useState<IGeneratedKeys[]>([]);
 

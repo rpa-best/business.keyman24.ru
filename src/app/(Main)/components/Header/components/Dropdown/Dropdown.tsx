@@ -5,7 +5,7 @@ import { useUserStore } from 'store/userStore';
 import { useSpring } from 'framer-motion';
 
 import ArrowSvg from '/public/svg/arrow.svg';
-import AvatarSvg from 'app/(Main)/components/Header/components/svg/avatar.svg';
+import AvatarSvg from '/public/svg/avatar.svg';
 import { RenderContainer } from 'app/(Main)/components/Header/components/Dropdown/RenderContainer';
 import { onHide, onMount } from 'utils/TippyHelper';
 import Tippy from '@tippyjs/react';

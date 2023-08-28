@@ -46,7 +46,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
     const onStartSessionClick = async () => {
         setLoading(true);
-        setVisible(true);
+        needAttach && setVisible(true);
 
         let maxNumber = Math.max(...sessions.map((s) => s.id));
         maxNumber === -Infinity ? (maxNumber = 1) : '';

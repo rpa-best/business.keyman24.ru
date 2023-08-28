@@ -1,0 +1,58 @@
+@import "scss/utils";
+
+.form {
+  width: 34%;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark-main;
+  border-radius: 40px;
+  padding: 20px 30px;
+  @include fullHd {
+    padding: 32px 42px;
+  }
+  @include thousendTwoWidth {
+    width: 100%;
+  }
+  @include phoneOrTablet {
+    border-radius: 0;
+  }
+}
+
+.form_title {
+  @include MontserratSemiBold(24px);
+  color: white;
+  margin-bottom: 30px;
+  @include fullHd {
+    margin-bottom: 45px;
+  }
+  @include laptopWidth {
+    font-size: 20px;
+  }
+  @include thousendTwoWidth {
+    font-size: 24px;
+  }
+  @include phoneOrTablet {
+    font-size: 20px;
+  }
+}
+
+.input_wrapper {
+  @include fullHd {
+    margin-bottom: 90px;
+  }
+  margin-bottom: 50px;
+}
+
+.button_wrapper {
+  @include fullHd {
+    width: 45%;
+  }
+  @include thousendTwoWidth {
+    width: 40%;
+  }
+  width: 50%;
+  margin: auto auto 0;
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}

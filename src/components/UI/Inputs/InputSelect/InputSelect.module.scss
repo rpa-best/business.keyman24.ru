@@ -2,19 +2,13 @@
 
 .list_wrapper {
   background: white;
-  width: 500px;
+  width: 100%;
   border-radius: 7px;
+  @include fullHd {
+    padding: 5px 0;
+  }
   padding: 3px 0;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-  @include thousendWidth {
-    width: 400px;
-  }
-  @include phoneOrTablet {
-    width: 375px;
-  }
-  @include phone {
-    width: 100%;
-  }
 }
 
 .list_item {
@@ -27,13 +21,21 @@
     background: $gray-semi;
     cursor: pointer;
   }
+  @include fullHd {
+    font-size: 20px;
+  }
   @include thousendWidth {
     font-size: 13px;
   }
 }
 
 .list_empty {
-  @include MontserratRegular(16px);
+  @include MontserratRegular(20px);
+
+  @include laptopWidth {
+    font-size: 16px;
+  }
+
   padding: 10px;
   text-align: center;
 }

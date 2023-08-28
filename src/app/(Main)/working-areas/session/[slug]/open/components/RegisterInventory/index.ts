@@ -1,1 +1,0 @@
-export { RegisterInventory } from './RegisterInventory';

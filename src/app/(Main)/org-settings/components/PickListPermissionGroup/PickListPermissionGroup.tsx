@@ -10,10 +10,7 @@ import {
     getListValues,
 } from 'components/PickList/helpers/getListValues';
 
-import {
-    createAdminGroupOrganizationPermission,
-    deleteAdminGroupOrganizationPermission,
-} from 'http/organizationApi';
+import {} from 'http/organizationApi';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 import { CustomGroupAdminPermission } from 'app/(Main)/org-settings/components/PickListPermissionGroup/types';
@@ -21,6 +18,10 @@ import {
     CustomAdminPermission,
     CustomPermission,
 } from 'app/(Main)/org-settings/components/PickListPermission/types';
+import {
+    createAdminGroupPermission,
+    deleteAdminGroupPermission,
+} from 'http/permissionsApi';
 
 interface PickListPermissionGroupProps {
     permissions: IGroupPermission[];
@@ -80,7 +81,7 @@ export const PickListPermissionGroup: React.FC<
         setLoading(true);
         Promise.all(
             elems.map(async (el) => {
-                await createAdminGroupOrganizationPermission({
+                await createAdminGroupPermission({
                     group: el.id,
                     org: orgId,
                 });
@@ -97,7 +98,7 @@ export const PickListPermissionGroup: React.FC<
         setLoading(true);
         Promise.all(
             elems.map((el) => {
-                deleteAdminGroupOrganizationPermission({
+                deleteAdminGroupPermission({
                     id: el.id,
                     orgId: orgId,
                 });

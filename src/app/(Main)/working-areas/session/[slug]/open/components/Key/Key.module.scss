@@ -1,0 +1,32 @@
+@import "scss/utils";
+
+.button_wrapper {
+  width: max-content;
+  margin-left: auto;
+}
+
+
+.key_content {
+  display: flex;
+  flex-direction: column;
+}
+
+.content_wrapper {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  @include thousendTwoWidth {
+    flex-direction: column;
+    row-gap: 30px;
+  }
+  @include phoneOrTablet {
+    margin-top: 20px;
+  }
+}
+
+.worker_info_wrapper {
+  width: 64%;
+  @include thousendTwoWidth {
+    width: 100%;
+  }
+}

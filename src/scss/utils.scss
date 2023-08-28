@@ -26,8 +26,14 @@ $accent-color-blue: #516FA5;
   @include center;
 }
 
+@mixin fullHd {
+  @media (min-width: 1440px) {
+    @content
+  }
+}
+
 @mixin laptopWidth {
-  @media (max-width: 1440px) {
+  @media (max-width: 1500px) {
     @content
   }
 }
@@ -179,8 +185,16 @@ $accent-color-blue: #516FA5;
   &:hover {
     color: white;
   }
-  @include phoneOrTablet {
+  @include thousendWidth {
     width: 22px;
     height: 22px;
+  }
+  @include phoneOrTablet {
+    width: 20px;
+    height: 20px;
+  }
+  @include phone {
+    height: 18px;
+    width: 18px;
   }
 }

@@ -8,6 +8,7 @@ export interface IInputProps {
     handleError?: string | undefined | boolean;
     type?: HTMLInputElement['type'];
     size?: 'big' | 'medium';
+    errorFontColor?: string;
     onBlur?: (
         event: FocusEvent<HTMLInputElement> | FocusEvent<HTMLTextAreaElement>
     ) => void;
@@ -19,6 +20,7 @@ export interface IInputProps {
     autoComplete?: 'on' | 'off';
     disabled?: boolean;
     tabIndex?: number;
+    label?: string;
     needErrorLabel?: boolean;
 }
 
@@ -28,8 +30,7 @@ export interface ListProps {
     opacity: MotionValue<string>;
 }
 
-export interface IInputSelectProps
-    extends Omit<IInputProps, 'onChange' | 'onBlur'> {
+export interface IInputSelectProps extends Omit<IInputProps, 'onChange'> {
     listValues: { id: number; name: string }[];
     onChange: (item: any) => void;
     setFieldTouched?: (field: string, value: boolean) => void;

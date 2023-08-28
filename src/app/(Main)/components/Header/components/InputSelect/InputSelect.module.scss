@@ -1,6 +1,7 @@
 @import "scss/utils";
 
 .input_layout {
+  position: relative;
   @include phoneOrTablet {
     width: 100%;
   }
@@ -54,20 +55,18 @@
   }
 }
 
-.input_arrow {
-  height: 16px;
-  width: 11px;
-  display: inline-block;
-  transform: rotate(0);
+.input_arrow_svg {
+  position: absolute;
+  top: calc(50% - 9px);
+  right: 15px;
   transition: .2s all ease-in-out;
-  will-change: transform;
-  @include thousendWidth {
-    height: 14px;
-    width: 10px;
+  @extend .svg;
+  &:hover {
+    color: $gray;
   }
 }
 
-.input_arrow_open {
-  @extend .input_arrow;
+.input_arrow_svg_open {
   transform: rotate(180deg);
+  top: calc(50% - 12px);
 }

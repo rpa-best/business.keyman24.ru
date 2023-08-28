@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { useSpring } from 'framer-motion';
 
@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 
 import scss from './InputSelect.module.scss';
 import { SelectList } from 'app/(Main)/components/Header/components/InputSelect/List';
+import clsx from 'clsx';
 
 const cookie = new Cookies();
 
@@ -35,15 +36,18 @@ export const HeaderInputSelect: React.FC<{
 
     const [visible, setVisible] = useState(false);
     //Её id и наименование
-    const [id, setId] = useState<number>(cookie.get('orgId') ?? 1);
-    const [name, setName] = useState(
-        listValues?.find((v) => v.id === id)?.name
+    const [id, setId] = useState<number>(
+        cookie.get('orgId') ?? listValues[0].id
     );
+    const [name, setName] = useState<string>(listValues[0].name);
     const [setOrganization] = useOrganizationStore((state) => [
         state.setOrganization,
     ]);
 
-    const currentId = useRef(id);
+    const arrowClassname = clsx({
+        [scss.input_arrow_svg]: true,
+        [scss.input_arrow_svg_open]: visible,
+    });
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -69,16 +73,14 @@ export const HeaderInputSelect: React.FC<{
         );
         setName(name);
         setId(id);
-        currentId.current = id;
         cookie.set('orgId', id);
         setVisible(!visible);
         router.refresh();
     };
 
     const onClickOutside = () => {
-        setVisible(!visible);
-        setId(currentId.current);
-        setName(listValues?.find((v) => v.id === currentId.current)?.name);
+        setVisible(false);
+        setName(listValues?.find((v) => v.id === id)?.name as string);
     };
 
     return (
@@ -112,15 +114,7 @@ export const HeaderInputSelect: React.FC<{
                         value={name}
                         onChange={handleChange}
                     />
-                    <div className={scss.input_arrow_wrapper}>
-                        <Arrow
-                            className={
-                                visible
-                                    ? scss.input_arrow_open
-                                    : scss.input_arrow
-                            }
-                        />
-                    </div>
+                    <Arrow className={arrowClassname} />
                 </div>
             </Tippy>
         </div>

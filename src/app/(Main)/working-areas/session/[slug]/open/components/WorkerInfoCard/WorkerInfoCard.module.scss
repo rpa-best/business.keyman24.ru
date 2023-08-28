@@ -1,0 +1,90 @@
+@import "scss/utils";
+
+.worker_card_layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  background-color: $dark-main;
+  padding: 32px 60px;
+  @include laptopWidth {
+    padding: 24px 40px;
+  }
+  @include phoneOrTablet {
+    border-radius: 0;
+    padding: 20px 15px;
+  }
+}
+
+.worker_content {
+  display: flex;
+  column-gap: 20px;
+  @include phone {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.worker_card_title {
+  @include MontserratSemiBold(24px);
+  color: white;
+  margin-bottom: 24px;
+}
+
+.worker_card_image_wrapper {
+  @include fullHd {
+    max-width: 190px;
+    max-height: 190px;
+  }
+  @include phone {
+    max-width: 150px;
+  }
+  position: relative;
+}
+
+.worker_card_data {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  column-gap: 10px;
+}
+
+.worker_card_data_additional {
+  width: 100%;
+  column-gap: 20px ;
+  @extend .worker_card_data;
+}
+
+.worker_card_input_wrapper {
+  width: calc(50% - 10px);
+
+  &:last-child {
+    flex-grow: 1;
+  }
+
+  @include thousendWidth {
+    width: 100%;
+  }
+}
+
+.worker_card_input_half {
+  @include fullHd {
+    width: calc(50% - 10px);
+    &:last-child {
+      flex-grow: 1;
+    }
+  }
+  @include laptopWidth {
+    width: 100%;
+  }
+}
+
+
+.worker_card_input_additional {
+  flex-grow: 1;
+  @include phoneOrTablet {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

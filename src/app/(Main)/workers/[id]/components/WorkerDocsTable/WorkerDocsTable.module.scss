@@ -1,0 +1,38 @@
+@import "scss/utils";
+
+.info_wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+}
+
+.buttons_wrapper {
+  display: flex;
+  column-gap: 20px;
+  margin-bottom: 30px;
+}
+
+.button {
+  width: 25%;
+  padding: 13px 40px;
+  color: white;
+  border-radius: 12px;
+  background-color: $accent-color;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  &:hover {
+    background-color: #2BBB86;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+    padding: 8px 30px ;
+  }
+}
+
+.button_active {
+  @extend .button;
+  background-color: $accent-color-darker;
+  &:hover {
+    background-color: #2A7D81;
+  }
+}

@@ -1,77 +1,44 @@
-'use client';
-
 import React from 'react';
 
-import { Table } from 'components/Table';
-import { Column } from 'components/Table/Column';
-import { useRouter } from 'next/navigation';
+import { InventoryWrapper } from 'app/(Main)/inventory/components/InventoryWrapper';
+import { getInventories, getInventoryTypes } from 'http/inventoryApi';
+import { IModifiedInventory } from 'app/(Main)/inventory/types';
+import { cookies } from 'next/headers';
 
 import scss from './inventory.module.scss';
 
-const body = [
-    {
-        id: 1,
-        name: 'testiruem',
-    },
-    {
-        id: 2,
-        name: 'круто',
-    },
-    {
-        id: 3,
-        name: 'абвг',
-    },
-    {
-        id: 4,
-        name: 'пявпв',
-    },
-    {
-        id: 5,
-        name: 'мячмямс',
-    },
-    {
-        id: 6,
-        name: 'ияыаф',
-    },
-];
+interface InventoryPageProps {
+    searchParams: { offset: string };
+}
 
-export default function InventoryPage() {
-    const router = useRouter();
+const InventoryPage: React.FC<InventoryPageProps> = async ({
+    searchParams,
+}) => {
+    const offset = searchParams.offset ?? 0;
 
-    const handleRowClick = (id: number) => {
-        router.push(`inventory/${id}`);
-    };
+    const cookieStore = cookies();
+    const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const handleDeleteClick = (id: number) => {
-        alert('удаляем');
-    };
+    const inventories = await getInventories(+orgId, +offset);
 
-    const handleEditClick = (id: number) => {
-        alert('редачим');
-    };
+    const inventoryTypes = await getInventoryTypes(+orgId);
 
-    const handleTableButtonClick = () => {
-        alert('aue');
-    };
+    const modifiedInventory: IModifiedInventory[] = inventories.results.map(
+        (i) => {
+            return { ...i, type: i.type.name };
+        }
+    );
 
     return (
         <div className={scss.children_with_table}>
             <h2 className={scss.page_title_with_table}>Устройство / Список</h2>
-            <Table
-                buttonData={{
-                    onClick: handleTableButtonClick,
-                    text: 'Добавить',
-                }}
-                rowClickable={true}
-                handleDeleteClick={handleDeleteClick}
-                handleEditClick={handleEditClick}
-                handleRowClick={handleRowClick}
-                tableRows={body}
-                paginator
-            >
-                <Column sortable header="imya" field="name" />
-                <Column sortable header="айди" field="id" />
-            </Table>
+            <InventoryWrapper
+                inventoryTypes={inventoryTypes.results}
+                count={inventories.count}
+                inventory={modifiedInventory}
+            />
         </div>
     );
-}
+};
+
+export default InventoryPage;

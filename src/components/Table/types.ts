@@ -23,6 +23,11 @@ export interface ColumnHeaderProps extends IHeader {
     lastChild: boolean;
 }
 
+interface PaginatorData {
+    offset: number;
+    countItems: number;
+}
+
 export interface TableProps {
     tableRows: TableRows[];
     children: ReactElement<ColumnProps> | Array<ReactElement<ColumnProps>>;
@@ -30,7 +35,7 @@ export interface TableProps {
     handleRowClick?: (id: number) => void;
     handleEditClick?: (id: number) => void;
     handleDeleteClick?: (id: number) => void;
-    paginator?: boolean;
+    paginatorData?: PaginatorData;
     rowClickable?: boolean;
 }
 

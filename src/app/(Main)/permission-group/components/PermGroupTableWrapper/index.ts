@@ -1,0 +1,1 @@
+export { PermGroupTableWrapper } from './PermGroupTableWrapper';
