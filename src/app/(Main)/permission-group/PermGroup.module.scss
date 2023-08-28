@@ -1,0 +1,18 @@
+@import "scss/utils";
+
+.form_layout {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form_title {
+  @include MontserratSemiBold(24px);
+  color: white;
+  margin-bottom: 30px;
+}
+
+.select_wrapper {
+  position: relative;
+  margin-bottom:30px;
+}

@@ -195,7 +195,23 @@ export interface ICard {
     card: string;
 }
 
+export interface CreateGroupPermBody {
+    level: number;
+    name: string;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
+
+export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
+
+export type CreateGroupPerm = (body: CreateGroupPermBody) => Promise<void>;
+
+export type EditGroupPerm = (
+    permId: number,
+    body: CreateGroupPermBody
+) => Promise<void>;
+
+export type DeleteGroupPerm = (permId: number) => Promise<void>;
 
 export type GetAdminOrgPermissions = (
     orgId: number
@@ -296,6 +312,8 @@ export type CreateSession = (
 export type GetWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
+
+export type GetPermissions = (orgId: number) => Promise<IResponse<IPermission>>;
 
 export type GetWorkerCard = (
     orgId: number,

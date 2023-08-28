@@ -7,16 +7,17 @@ import { IAdminPermission, IPermission } from 'http/types';
 import { getModeName } from 'helpers/permTypeHelper';
 import { getListValues } from 'components/PickList/helpers/getListValues';
 
-import {
-    createAdminOrganizationPermission,
-    deleteAdminOrganizationPermission,
-} from 'http/organizationApi';
+import {} from 'http/organizationApi';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 import {
     CustomAdminPermission,
     CustomPermission,
 } from 'app/(Main)/org-settings/components/PickListPermission/types';
+import {
+    createAdminPermission,
+    deleteAdminPermission,
+} from 'http/permissionsApi';
 
 interface PickListPermissionProps {
     permissions: IPermission[];
@@ -78,7 +79,7 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
         setLoading(true);
         await Promise.all(
             elems.map(async (el) => {
-                await createAdminOrganizationPermission({
+                await createAdminPermission({
                     permission: el.id,
                     org: orgId,
                     type: el.type,
@@ -94,7 +95,7 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
         setLoading(true);
         await Promise.all(
             elems.map((el) => {
-                deleteAdminOrganizationPermission({
+                deleteAdminPermission({
                     id: el.id,
                     orgId: orgId,
                 });

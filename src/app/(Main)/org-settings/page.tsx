@@ -1,16 +1,16 @@
 import { cookies } from 'next/headers';
 
-import {
-    getAdminOrganizationPermissions,
-    getGroupAdminOrgPermissions,
-    getGroupOrgPermissions,
-    getOrganizationPermissions,
-    getOrgById,
-} from 'http/organizationApi';
+import { getOrgById } from 'http/organizationApi';
 import { PickListPermission } from 'app/(Main)/org-settings/components/PickListPermission';
 import { PickListPermissionGroup } from 'app/(Main)/org-settings/components/PickListPermissionGroup';
 
 import scss from './OrganizationSettings.module.scss';
+import {
+    getAdminPermissions,
+    getGroupAdminPermissions,
+    getGroupPermissions,
+    getPermissions,
+} from 'http/permissionsApi';
 
 const OrgSettingsPage = async () => {
     const cookieStore = cookies();
@@ -19,15 +19,13 @@ const OrgSettingsPage = async () => {
 
     const name = await getOrgById(+id).then((r) => r.name);
 
-    const allPermissions = await getOrganizationPermissions(+id as number);
+    const allPermissions = await getPermissions(+id as number);
 
-    const allAdminPermissions = await getAdminOrganizationPermissions(
-        +id as number
-    );
+    const allAdminPermissions = await getAdminPermissions(+id as number);
 
-    const allGroupPermissions = await getGroupOrgPermissions(+id as number);
+    const allGroupPermissions = await getGroupPermissions(+id as number);
 
-    const allGroupAdminPermissions = await getGroupAdminOrgPermissions(
+    const allGroupAdminPermissions = await getGroupAdminPermissions(
         +id as number
     );
 
