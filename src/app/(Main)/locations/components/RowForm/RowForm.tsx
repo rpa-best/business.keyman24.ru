@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import ArrowSvg from '/public/svg/arrow.svg';
 import { RowFormValidate } from './RowForm.utils';
-import { RowFormProps } from 'app/(Main)/keys/types';
 import { FormValues } from './types';
 import { Input } from 'components/UI/Inputs/Input';
+import { RowFormProps } from 'app/(Main)/locations/types';
 
 import scss from './RowForm.module.scss';
 

@@ -1,4 +1,4 @@
-import { FormValues } from 'app/(Main)/keys/components/RowForm/types';
+import { FormValues } from 'app/(Main)/locations/components/RowForm/types';
 
 export const RowFormValidate = (values: FormValues) => {
     const errors: Partial<FormValues> = {};

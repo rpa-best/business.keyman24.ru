@@ -110,15 +110,13 @@ export const PickListPermissionGroup: React.FC<
         <>
             <PickList
                 loading={loading}
-                selectedClicked={selectedClicked}
-                availableClicked={availableClicked}
-                setSelectedClicked={setSelectedClicked}
-                setAvailableClicked={setAvailableClicked}
+                selectedClicked={selectedClicked as any}
+                availableClicked={availableClicked as any}
                 title="Настройка доступа"
-                available={allPermissions}
-                selected={allAdminPermissions}
-                handleArrowLeft={handleArrowLeft}
-                handleArrowRight={handleArrowRight}
+                available={allPermissions as any}
+                selected={allAdminPermissions as any}
+                handleArrowLeft={handleArrowLeft as any}
+                handleArrowRight={handleArrowRight as any}
             />
             {loading && <Spinner />}
         </>
