@@ -31,8 +31,7 @@ export function getListValues(
                 return {
                     ...perm,
                     type: mode.mode,
-                    // content: `${perm.name} ${perm.slug} ${perm.level} ${mode.name}`,
-                    name: `${perm.name} (${perm.level.name})`,
+                    name: `${perm.name} `,
                     customDesc: mode.name,
                 };
             });

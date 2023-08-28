@@ -4,9 +4,9 @@ import EditSvg from '/public/svg/edit.svg';
 import DeleteSvg from '/public/svg/delete.svg';
 import CompleteSvg from '/public/svg/done.svg';
 import { Input } from 'components/UI/Inputs/Input';
-import { PreviewListItemProps } from 'app/(Main)/keys/types';
+import { PreviewListItemProps } from 'app/(Main)/locations/types';
 
-import scss from 'app/(Main)/keys/components/PreviewRowsList/PreviewRowsList.module.scss';
+import scss from 'app/(Main)/locations/components/PreviewRowsList/PreviewRowsList.module.scss';
 
 export const PreviewListItem: React.FC<PreviewListItemProps> = ({
     id,

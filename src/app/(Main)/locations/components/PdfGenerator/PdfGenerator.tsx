@@ -3,8 +3,8 @@
 import React from 'react';
 import { Document, Page, StyleSheet } from '@react-pdf/renderer';
 
-import { IGeneratedKeys } from 'app/(Main)/keys/types';
-import { SavePdfElement } from 'app/(Main)/keys/components/PdfGenerator/SavePdfElement/SavePdfElement';
+import { SavePdfElement } from 'app/(Main)/locations/components/PdfGenerator/SavePdfElement';
+import { IGeneratedKeys } from 'app/(Main)/locations/types';
 
 interface PdfGeneratorProps {
     data: IGeneratedKeys[];

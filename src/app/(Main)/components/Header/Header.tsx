@@ -15,7 +15,6 @@ import { redirect } from 'next/navigation';
 import { getUser } from 'http/userApi';
 
 import scss from './Header.module.scss';
-import { cookies } from 'next/headers';
 
 export const Header = async () => {
     const user = await getUser().catch((e: AxiosError) => {

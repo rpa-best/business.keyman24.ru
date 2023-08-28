@@ -1,7 +1,7 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 
-import { PreviewListItem } from 'app/(Main)/keys/components/PreviewRowsList/PreviewListItem';
-import { PreviewRowsListProps } from 'app/(Main)/keys/types';
+import { PreviewRowsListProps } from 'app/(Main)/locations/types';
+import { PreviewListItem } from 'app/(Main)/locations/components/PreviewRowsList/PreviewListItem';
 
 import scss from './PreviewRowsList.module.scss';
 

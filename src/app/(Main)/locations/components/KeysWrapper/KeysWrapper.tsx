@@ -7,16 +7,14 @@ import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { generateRandomITF14Code } from 'helpers/generateITF-14Code';
-import { RowForm } from 'app/(Main)/keys/components/RowForm';
-import { PreviewRowsList } from 'app/(Main)/keys/components/PreviewRowsList';
-import { IData, IGeneratedKeys } from 'app/(Main)/keys/types';
-import { PdfGenerator } from 'app/(Main)/keys/components/PdfGenerator';
-import { useParams } from 'next/navigation';
+import { IData, IGeneratedKeys } from 'app/(Main)/locations/types';
+import { RowForm } from 'app/(Main)/locations/components/RowForm';
+import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
+import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
 
 import scss from './KeysWrapper.module.scss';
 
 export const KeysWrapper = () => {
-    const { locId, objId } = useParams();
     const [data, setData] = useState<IData[]>([]);
     const [generatedData, setGeneratedData] = useState<IGeneratedKeys[]>([]);
 

@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-
 import ReactPDF, { View, StyleSheet, Text, Image } from '@react-pdf/renderer';
-import { IGeneratedKeys } from 'app/(Main)/keys/types';
-import Font = ReactPDF.Font;
+
 import { generateBarcodeDataURL } from 'helpers/generateBarCodeImage';
+import { IGeneratedKeys } from 'app/(Main)/locations/types';
+
+import Font = ReactPDF.Font;
 
 Font.register({
     family: 'Roboto',

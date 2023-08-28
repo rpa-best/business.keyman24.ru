@@ -3,10 +3,11 @@ import { cookies } from 'next/headers';
 
 import { getLocationObjects } from 'http/locationsApi';
 import { Column } from 'components/Table/Column';
-import { Table } from 'components/Table';
+import { TableWrapper } from 'app/(Main)/locations/components/TableWrapper';
+import { BackButton } from 'components/UI/Buttons/BackButton';
 
-import scss from 'app/(Main)/keys/keys.module.scss';
-import { TableWrapper } from 'app/(Main)/keys/components/TableWrapper';
+import scss from 'app/(Main)/locations/locations.module.scss';
+import { ObjectsTableWrapper } from 'app/(Main)/locations/[locId]/objects/components/ObjectsTableWrapper';
 
 interface LocationObjectsPageProps {
     params: { locId: string };
@@ -27,11 +28,11 @@ const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
 
     return (
         <div className={scss.children_with_table}>
+            <div className={scss.button_wrapper}>
+                <BackButton>Назад</BackButton>
+            </div>
             <h2 className={scss.page_title_with_table}>Локации</h2>
-            <TableWrapper tableRows={modifiedObjects}>
-                <Column header="Наименование" field="name" />
-                <Column header="Описание" field="desc" />
-            </TableWrapper>
+            <ObjectsTableWrapper modifiedObjects={modifiedObjects} />
         </div>
     );
 };

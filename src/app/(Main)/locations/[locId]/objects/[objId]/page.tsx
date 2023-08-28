@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { KeysWrapper } from 'app/(Main)/keys/components/KeysWrapper';
+import { KeysWrapper } from 'app/(Main)/locations/components/KeysWrapper';
 
-import scss from 'app/(Main)/keys/keys.module.scss';
+import scss from 'app/(Main)/locations/locations.module.scss';
 
 const KeyPage = async () => {
     return (

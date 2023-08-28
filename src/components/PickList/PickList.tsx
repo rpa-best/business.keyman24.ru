@@ -9,8 +9,10 @@ import {
     CustomAdminPermission,
     CustomPermission,
 } from 'app/(Main)/org-settings/components/PickListPermission/types';
+import { useEffect, useState } from 'react';
 
 export interface DefaultElem {
+    id: string;
     content?: string | null;
     name?: string | null;
     customDesc?: string | null;
@@ -18,15 +20,13 @@ export interface DefaultElem {
 
 interface PickListProps {
     title: string;
-    available?: CustomPermission[] | IGroupPermission[];
-    selected?: IAdminPermission[] | CustomGroupAdminPermission[];
-    handleArrowLeft: (arr: any) => void;
-    handleArrowRight: (arr: any) => void;
-    selectedClicked: CustomAdminPermission[] | CustomGroupAdminPermission[];
-    availableClicked: CustomPermission[] | IGroupPermission[];
+    available?: DefaultElem[];
+    selected?: DefaultElem[];
+    handleArrowLeft: (arr: DefaultElem[]) => void;
+    handleArrowRight: (arr: DefaultElem[]) => void;
+    selectedClicked: DefaultElem[];
+    availableClicked: DefaultElem[];
     loading: boolean;
-    setSelectedClicked: (v: any) => void;
-    setAvailableClicked: (v: any) => void;
 }
 
 export const PickList = ({
@@ -36,17 +36,28 @@ export const PickList = ({
     title,
     selected,
     selectedClicked,
-    setAvailableClicked,
-    setSelectedClicked,
     availableClicked,
     loading,
 }: PickListProps) => {
-    function handleClick<T extends { id: number; type: string }>(
-        elem: T,
-        arr: T[],
-        set: (arr: T[]) => void
+    const [source, setSource] = useState<DefaultElem[]>();
+    const [target, setTarget] = useState<DefaultElem[]>();
+
+    const [sourceSelected, setSourceSelected] = useState<DefaultElem[]>();
+    const [targetSelected, setTargetSelected] = useState<DefaultElem[]>();
+
+    useEffect(() => {
+        setSource(available);
+        setTarget(selected);
+        setSourceSelected(availableClicked);
+        setTargetSelected(selectedClicked);
+    }, [available, availableClicked, selected, selectedClicked]);
+
+    function handleClick(
+        elem: DefaultElem,
+        arr: DefaultElem[],
+        set: (arr: DefaultElem[]) => void
     ) {
-        const data = addSelected<T>(arr, elem);
+        const data = addSelected(arr, elem);
         set(data);
     }
 
@@ -58,13 +69,13 @@ export const PickList = ({
                     <span className={scss.header_wrapper}>Доступ запрещен</span>
                     <div className={scss.list_view_content}>
                         <List
-                            selected={availableClicked}
-                            items={available as IPermission[]}
-                            handleArrClick={(elem) =>
-                                handleClick<CustomPermission>(
-                                    elem as CustomPermission,
-                                    availableClicked as CustomPermission[],
-                                    setAvailableClicked
+                            selected={sourceSelected}
+                            items={source}
+                            handleItemClick={(elem) =>
+                                handleClick(
+                                    elem,
+                                    sourceSelected as DefaultElem[],
+                                    setSourceSelected
                                 )
                             }
                         />
@@ -74,14 +85,24 @@ export const PickList = ({
                     <li
                         style={loading ? { pointerEvents: 'none' } : undefined}
                         className={scss.arrow}
-                        onClick={() => handleArrowRight(availableClicked)}
+                        onClick={() => {
+                            if (sourceSelected?.length === 0) {
+                                return;
+                            }
+                            handleArrowRight(sourceSelected as DefaultElem[]);
+                        }}
                     >
                         <ArrowSvg className={scss.arrow_right} />
                     </li>
                     <li
                         style={loading ? { pointerEvents: 'none' } : undefined}
                         className={scss.arrow}
-                        onClick={() => handleArrowLeft(selectedClicked)}
+                        onClick={() => {
+                            if (targetSelected?.length === 0) {
+                                return;
+                            }
+                            handleArrowLeft(targetSelected as DefaultElem[]);
+                        }}
                     >
                         <ArrowSvg className={scss.arrow_left} />
                     </li>
@@ -90,13 +111,13 @@ export const PickList = ({
                     <span className={scss.header_wrapper}>Доступ разрешен</span>
                     <div className={scss.list_view_content}>
                         <List
-                            selected={selectedClicked}
-                            items={selected as DefaultElem[]}
-                            handleArrClick={(elem) =>
-                                handleClick<CustomAdminPermission>(
-                                    elem as CustomAdminPermission,
-                                    selectedClicked as CustomAdminPermission[],
-                                    setSelectedClicked
+                            selected={targetSelected}
+                            items={target as DefaultElem[]}
+                            handleItemClick={(elem) =>
+                                handleClick(
+                                    elem,
+                                    targetSelected as DefaultElem[],
+                                    setTargetSelected
                                 )
                             }
                         />

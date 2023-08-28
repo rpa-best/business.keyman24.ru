@@ -1,0 +1,8 @@
+@import "scss/utils";
+
+.button_wrapper {
+  margin-bottom: 10px;
+  @include laptopWidth {
+    margin-bottom: 20px;
+  }
+}

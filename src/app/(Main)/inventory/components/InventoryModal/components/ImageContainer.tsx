@@ -8,7 +8,6 @@ import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import DeleteSvg from '/public/svg/x.svg';
 
 import scss from 'app/(Main)/inventory/components/InventoryModal/InventoryModal.module.scss';
-import { IInventoryImage } from 'http/types';
 
 export const ImageContainer: React.FC<ImageContainerProps> = ({
     selectedImage,
@@ -32,7 +31,7 @@ export const ImageContainer: React.FC<ImageContainerProps> = ({
 
     return (
         <>
-            {selectedImage.length !== 0 ? (
+            {selectedImage && selectedImage.length !== 0 ? (
                 <>
                     <div className={scss.images_wrapper}>
                         <div
