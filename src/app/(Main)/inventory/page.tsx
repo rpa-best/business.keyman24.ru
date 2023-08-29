@@ -31,7 +31,7 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
 
     return (
         <div className={scss.children_with_table}>
-            <h2 className={scss.page_title_with_table}>Устройство / Список</h2>
+            <h2 className={scss.page_title_with_table}>Инвентарь / Список</h2>
             <InventoryWrapper
                 inventoryTypes={inventoryTypes.results}
                 count={inventories.count}

@@ -18,6 +18,7 @@ import {
     createAdminPermission,
     deleteAdminPermission,
 } from 'http/permissionsApi';
+import { DefaultElem } from 'components/PickList/PickList';
 
 interface PickListPermissionProps {
     permissions: IPermission[];
@@ -52,7 +53,7 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
         const selected = adminPermissions.map((perm) => {
             return {
                 ...perm,
-                name: `${perm?.permission?.name} (${perm?.permission?.level?.name})`,
+                name: `${perm?.permission?.name}`,
                 customDesc: getModeName(perm?.type),
             };
         });
@@ -73,9 +74,6 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
     }, [allAdminPermissions, allPermissions]);
 
     const handleArrowRight = async (elems: CustomPermission[]) => {
-        if (availableClicked.length === 0) {
-            return;
-        }
         setLoading(true);
         await Promise.all(
             elems.map(async (el) => {
@@ -89,9 +87,6 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
         router.refresh();
     };
     const handleArrowLeft = async (elems: CustomAdminPermission[]) => {
-        if (selectedClicked.length === 0) {
-            return;
-        }
         setLoading(true);
         await Promise.all(
             elems.map((el) => {
@@ -108,15 +103,13 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
         <>
             <PickList
                 loading={loading}
-                selectedClicked={selectedClicked}
-                availableClicked={availableClicked}
-                setSelectedClicked={setSelectedClicked}
-                setAvailableClicked={setAvailableClicked}
+                selectedClicked={selectedClicked as any}
+                availableClicked={availableClicked as any}
                 title="Настройка доступа"
-                available={allPermissions}
-                selected={allAdminPermissions}
-                handleArrowLeft={handleArrowLeft}
-                handleArrowRight={handleArrowRight}
+                available={allPermissions as any}
+                selected={allAdminPermissions as any}
+                handleArrowLeft={handleArrowLeft as any}
+                handleArrowRight={handleArrowRight as any}
             />
             {loading && <Spinner />}
         </>

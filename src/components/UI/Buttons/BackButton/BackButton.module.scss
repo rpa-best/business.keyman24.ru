@@ -1,0 +1,43 @@
+@import "scss/utils";
+
+.button_svg {
+  @extend .svg;
+  width: 16px;
+  height: 16px;
+  transform: rotate(90deg);
+  margin-right: 10px;
+  transition: .2s all ease-in-out;
+}
+
+.button_wrapper {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  padding: 8px 27px 8px 20px;
+  box-shadow: 0 0 0 0.2rem transparentize($accent-color, .5);
+  border-radius: 5px;
+  transition: .2s all ease-in-out;
+  &:hover {
+    box-shadow: 0 0 0 0.2rem $accent-color;
+    .link_button {
+      color: white;
+    }
+    .button_svg {
+      color: white;
+    }
+  }
+}
+
+.link_button {
+  position: relative;
+  @include MontserratSemiBold(17px);
+  color: $gray-semi;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  border-bottom: 1px solid transparent;
+}
+
+.link_button_absolute {
+  position: absolute;
+  @extend .link_button;
+}

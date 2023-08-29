@@ -200,6 +200,11 @@ export interface CreateGroupPermBody {
     name: string;
 }
 
+export interface CreateLocationBody {
+    name: string;
+    desc: string;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
 export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
@@ -274,6 +279,16 @@ export type GetWorkingAreas = (
 ) => Promise<IResponse<IWorkingArea>>;
 
 export type GetLocations = (orgId: number) => Promise<IResponse<ILocation>>;
+
+export type GetLocation = (orgId: number, locId: number) => Promise<ILocation>;
+
+export type CreateLocation = (body: CreateLocationBody) => Promise<void>;
+
+export type EditLocation = (
+    locId: number,
+    body: CreateLocationBody
+) => Promise<void>;
+export type DeleteLocation = (locId: number) => Promise<void>;
 
 export type GetLocationObjects = (
     orgId: number,

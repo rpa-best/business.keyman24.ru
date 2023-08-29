@@ -15,7 +15,7 @@ export const getInventories: T.GetInventories = async (orgId, offset) => {
     offset ? query.set('offset', offset.toString()) : '';
 
     const res: AxiosResponse<ReturnType<T.GetInventories>> =
-        await $serverAuth.get(`business/${orgId}/inventory/`, {
+        await $serverAuth.get(`business/${orgId}/inventory/?type=inventory`, {
             params: query,
         });
 

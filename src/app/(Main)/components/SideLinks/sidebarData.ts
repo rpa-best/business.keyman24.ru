@@ -31,11 +31,6 @@ export const sidebarData: SidebarLinkProps[] = [
         Icon: BriefCaseSvg,
     },
     {
-        title: 'Ключи',
-        href: '/keys',
-        Icon: KeySvg,
-    },
-    {
         title: 'Права доступа',
         href: `/permission-group`,
         Icon: UserLockSvg,
