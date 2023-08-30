@@ -21,9 +21,7 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params }) => {
     return (
         <div className={scss.children_with_table}>
             <div className={scss.title_wrapper}>
-                <h2 className={scss.page_title_with_table}>
-                    Сгенерировать ключи
-                </h2>
+                <h2 className={scss.page_title_with_table}>Ключи</h2>
                 <div>
                     <BackButton>Назад</BackButton>
                 </div>

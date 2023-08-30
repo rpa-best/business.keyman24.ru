@@ -2,11 +2,12 @@ import { useFormik } from 'formik';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import ArrowSvg from '/public/svg/arrow.svg';
 import { RowFormValidate } from './RowForm.utils';
 import { FormValues } from './types';
 import { Input } from 'components/UI/Inputs/Input';
 import { RowFormProps } from 'app/(Main)/locations/types';
+import { Button } from 'components/UI/Buttons/Button';
+import { useModalStore } from 'store/modalVisibleStore';
 
 import scss from './RowForm.module.scss';
 
@@ -81,13 +82,15 @@ export const RowForm: React.FC<RowFormProps> = ({ setData }) => {
                     />
                 </div>
             </div>
-            <button
-                disabled={!isValid}
-                type="submit"
-                className={scss.form_button}
-            >
-                <ArrowSvg className={scss.button_arrow} />
-            </button>
+            <div className={scss.form_button}>
+                <Button
+                    disabled={touched.count && touched.room && !isValid}
+                    onClick={() => {}}
+                    type="submit"
+                >
+                    Добавить
+                </Button>
+            </div>
         </form>
     );
 };

@@ -4,35 +4,28 @@
   padding-bottom: 20px;
 }
 
+.actions_data_title {
+  @include MontserratSemiBold(28px);
+  text-align: center;
+  color: white;
+  @include phoneOrTablet {
+    font-size: 20px;
+  }
+}
 
 .actions_wrapper {
   display: flex;
-  justify-content: space-between;
-  column-gap: 20px;
-  @include thousendWidth {
-    flex-direction: column;
-    justify-content: center;
-    row-gap: 20px;
-  }
-  @include phoneOrTablet {
-    width: calc(100% - 40px);
-    margin: 0 auto;
-    row-gap: 10px;
-  }
+  flex-direction: column;
+  row-gap: 20px;
+
 }
 
 .button_wrapper {
-  width: max-content;
-  @include phoneOrTablet {
-    width: 100%;
-  }
+  margin-top: 20px;
+
+  width: 100%;
 }
 
-.button_layout {
-  display: flex;
-  justify-content: flex-end;
-  margin: 19px 35px;
-}
 
 .download_button_wrapper {
   width: max-content;
