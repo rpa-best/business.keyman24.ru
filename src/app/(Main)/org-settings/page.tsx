@@ -11,6 +11,11 @@ import {
     getGroupPermissions,
     getPermissions,
 } from 'http/permissionsApi';
+import {
+    getGroupListValues,
+    getListValues,
+} from 'components/PickList/helpers/getListValues';
+import { getModeName } from 'helpers/permTypeHelper';
 
 const OrgSettingsPage = async () => {
     const cookieStore = cookies();
@@ -29,21 +34,47 @@ const OrgSettingsPage = async () => {
         +id as number
     );
 
+    const permissionSource = getListValues(
+        allPermissions,
+        allAdminPermissions.results
+    );
+    const permissionTarget = allAdminPermissions.results.map((perm) => {
+        return {
+            ...perm,
+            name: `${perm?.permission?.name}`,
+            customDesc: getModeName(perm?.type),
+        };
+    });
+
+    const groupPermissionSource = getGroupListValues(
+        allGroupPermissions.results,
+        allGroupAdminPermissions.results
+    );
+
+    const groupPermissionTarget = allGroupAdminPermissions.results.map(
+        (perm) => {
+            return {
+                ...perm,
+                content: `${perm?.group?.name}`,
+            };
+        }
+    );
+
     return (
-        <div className={scss.settings_wrapper}>
+        <div className={scss.children_with_table}>
             <div className={scss.default_wrapper}>
                 <h2 className={scss.title}>{name}</h2>
             </div>
 
             <PickListPermission
                 orgId={+id}
-                permissions={allPermissions}
-                adminPermissions={allAdminPermissions.results}
+                permissions={permissionSource}
+                adminPermissions={permissionTarget}
             />
 
             <PickListPermissionGroup
-                permissions={allGroupPermissions.results}
-                adminPermissions={allGroupAdminPermissions.results}
+                permissions={groupPermissionSource}
+                adminPermissions={groupPermissionTarget}
                 orgId={+id}
             />
         </div>

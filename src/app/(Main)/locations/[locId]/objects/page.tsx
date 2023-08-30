@@ -8,6 +8,8 @@ import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from 'app/(Main)/locations/locations.module.scss';
 import { ObjectsTableWrapper } from 'app/(Main)/locations/[locId]/objects/components/ObjectsTableWrapper';
+import { Modal } from 'components/Modal';
+import { ObjectFormModal } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/ObjectFromModal';
 
 interface LocationObjectsPageProps {
     params: { locId: string };
@@ -32,7 +34,10 @@ const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
                 <BackButton>Назад</BackButton>
             </div>
             <h2 className={scss.page_title_with_table}>Локации</h2>
-            <ObjectsTableWrapper modifiedObjects={modifiedObjects} />
+            <ObjectsTableWrapper
+                locId={+locId}
+                modifiedObjects={modifiedObjects}
+            />
         </div>
     );
 };

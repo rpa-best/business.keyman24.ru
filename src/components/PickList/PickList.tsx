@@ -1,33 +1,12 @@
-import ArrowSvg from '/public/svg/arrow.svg';
-import { List } from 'components/PickList/List';
-
-import { IAdminPermission, IGroupPermission, IPermission } from 'http/types';
-import { addSelected } from 'components/PickList/helpers/checkForInclusion';
-import scss from './PickList.module.scss';
-import { CustomGroupAdminPermission } from 'app/(Main)/org-settings/components/PickListPermissionGroup/types';
-import {
-    CustomAdminPermission,
-    CustomPermission,
-} from 'app/(Main)/org-settings/components/PickListPermission/types';
 import { useEffect, useState } from 'react';
 
-export interface DefaultElem {
-    id: string;
-    content?: string | null;
-    name?: string | null;
-    customDesc?: string | null;
-}
+import ArrowSvg from '/public/svg/arrow.svg';
+import { List } from 'components/PickList/List';
+import { addSelected } from 'components/PickList/helpers/checkForInclusion';
+import { DefaultElem, PickListProps } from 'components/PickList/types';
 
-interface PickListProps {
-    title: string;
-    available?: DefaultElem[];
-    selected?: DefaultElem[];
-    handleArrowLeft: (arr: DefaultElem[]) => void;
-    handleArrowRight: (arr: DefaultElem[]) => void;
-    selectedClicked: DefaultElem[];
-    availableClicked: DefaultElem[];
-    loading: boolean;
-}
+import scss from './PickList.module.scss';
+import clsx from 'clsx';
 
 export const PickList = ({
     available,
@@ -35,10 +14,11 @@ export const PickList = ({
     handleArrowLeft,
     title,
     selected,
-    selectedClicked,
-    availableClicked,
+    hidden = false,
     loading,
 }: PickListProps) => {
+    const [visibility, setVisibility] = useState(true);
+
     const [source, setSource] = useState<DefaultElem[]>();
     const [target, setTarget] = useState<DefaultElem[]>();
 
@@ -48,9 +28,7 @@ export const PickList = ({
     useEffect(() => {
         setSource(available);
         setTarget(selected);
-        setSourceSelected(availableClicked);
-        setTargetSelected(selectedClicked);
-    }, [available, availableClicked, selected, selectedClicked]);
+    }, [available, selected]);
 
     function handleClick(
         elem: DefaultElem,
@@ -61,10 +39,44 @@ export const PickList = ({
         set(data);
     }
 
+    const handleArrRight = () => {
+        if (sourceSelected?.length === 0) {
+            return;
+        }
+        handleArrowRight(sourceSelected as DefaultElem[]);
+    };
+
+    const handleArrLeft = () => {
+        if (targetSelected?.length === 0) {
+            return;
+        }
+        handleArrowLeft(targetSelected as DefaultElem[]);
+    };
+
+    const arrowClass = clsx({
+        [scss.picklist_header_svg]: true,
+        [scss.picklist_header_svg_active]: !visibility,
+    });
+
+    const pickListClass = clsx({
+        [scss.picklist_wrapper]: visibility,
+        [scss.picklist_wrapper_hidden]: !visibility,
+    });
+
     return (
         <>
-            <h3 className={scss.picklist_title}>{title}</h3>
-            <div className={scss.picklist_wrapper}>
+            <div className={scss.pick_list_header}>
+                <h3 className={scss.picklist_title}>{title}</h3>
+                {hidden && (
+                    <div
+                        onClick={() => setVisibility(!visibility)}
+                        className={scss.picklist_header_svg_wrapper}
+                    >
+                        <ArrowSvg className={arrowClass} />
+                    </div>
+                )}
+            </div>
+            <div className={pickListClass}>
                 <div className={scss.list_view_wrapper}>
                     <span className={scss.header_wrapper}>Доступ запрещен</span>
                     <div className={scss.list_view_content}>
@@ -85,24 +97,14 @@ export const PickList = ({
                     <li
                         style={loading ? { pointerEvents: 'none' } : undefined}
                         className={scss.arrow}
-                        onClick={() => {
-                            if (sourceSelected?.length === 0) {
-                                return;
-                            }
-                            handleArrowRight(sourceSelected as DefaultElem[]);
-                        }}
+                        onClick={() => handleArrRight()}
                     >
                         <ArrowSvg className={scss.arrow_right} />
                     </li>
                     <li
                         style={loading ? { pointerEvents: 'none' } : undefined}
                         className={scss.arrow}
-                        onClick={() => {
-                            if (targetSelected?.length === 0) {
-                                return;
-                            }
-                            handleArrowLeft(targetSelected as DefaultElem[]);
-                        }}
+                        onClick={() => handleArrLeft()}
                     >
                         <ArrowSvg className={scss.arrow_left} />
                     </li>

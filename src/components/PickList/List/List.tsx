@@ -1,16 +1,9 @@
 import React from 'react';
 
-import { DefaultElem } from 'components/PickList/PickList';
+import { ListItem } from 'components/PickList/List/ListItem';
+import { ListProps } from 'components/PickList/types';
 
 import scss from './List.module.scss';
-import clsx from 'clsx';
-import { ListItem } from 'components/PickList/List/ListItem';
-
-interface ListProps {
-    selected?: DefaultElem[];
-    items?: DefaultElem[];
-    handleItemClick: (elem: DefaultElem) => void;
-}
 
 export const List: React.FC<ListProps> = ({
     handleItemClick,

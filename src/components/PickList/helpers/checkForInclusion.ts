@@ -1,4 +1,4 @@
-import { DefaultElem } from 'components/PickList/PickList';
+import { DefaultElem } from 'components/PickList/types';
 
 export function addSelected(
     arr: DefaultElem[],

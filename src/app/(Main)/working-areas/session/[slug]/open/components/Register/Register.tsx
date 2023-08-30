@@ -34,7 +34,7 @@ export const Register: React.FC<RegisterProps> = ({
         setLoading(true);
         setSelectedOrg(org);
         const fetchData = async () => {
-            return await getWorkers(org.id);
+            return await getWorkers();
         };
         fetchData()
             .then((d) => setWorkers(d.results))

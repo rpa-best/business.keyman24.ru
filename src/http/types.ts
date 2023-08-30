@@ -104,6 +104,8 @@ export interface ILocation {
     name: string;
 }
 
+export interface IObject extends Omit<ILocation, 'isActive'> {}
+
 export interface IWorkingArea {
     id: number;
     location: ILocation;
@@ -205,6 +207,42 @@ export interface CreateLocationBody {
     desc: string;
 }
 
+export interface ILocationOrgResponse {
+    id: number;
+    org: number;
+    toOrg: {
+        id: number;
+        name: string;
+        desc: string;
+    };
+}
+
+export interface LocKeyBody {
+    count: number;
+    name: string;
+}
+
+export interface LocKeysResponse {
+    id: number;
+    type: IType;
+    comments: string;
+    notZone: boolean;
+    codeNumber: string;
+    number: string;
+    name: string;
+    desc: string;
+    codeImage: string;
+    isActive: boolean;
+    location: number;
+    objectArea: number;
+}
+
+export interface LocationWorkerResponse {
+    id: number;
+    org: number;
+    worker: IWorker;
+}
+
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
 export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
@@ -284,6 +322,34 @@ export type GetLocation = (orgId: number, locId: number) => Promise<ILocation>;
 
 export type CreateLocation = (body: CreateLocationBody) => Promise<void>;
 
+export type CreateLocationObject = (
+    locId: number,
+    body: CreateLocationBody
+) => Promise<void>;
+
+export type EditLocationObject = (
+    locId: number,
+    objId: number,
+    body: CreateLocationBody
+) => Promise<void>;
+
+export type DeleteLocationObject = (
+    locId: number,
+    objId: number
+) => Promise<void>;
+
+export type GetLocationKeys = (
+    orgId: number,
+    locId: number,
+    objId: number
+) => Promise<IResponse<LocKeysResponse>>;
+
+export type CreateLocationKeys = (
+    locId: number,
+    objId: number,
+    body: LocKeyBody[]
+) => Promise<void>;
+
 export type EditLocation = (
     locId: number,
     body: CreateLocationBody
@@ -293,7 +359,37 @@ export type DeleteLocation = (locId: number) => Promise<void>;
 export type GetLocationObjects = (
     orgId: number,
     locationId: number
-) => Promise<IResponse<Omit<ILocation, 'isActive'>>>;
+) => Promise<IResponse<IObject>>;
+
+export type GetLocationWorkers = (
+    orgId: number,
+    locationId: number
+) => Promise<IResponse<LocationWorkerResponse>>;
+
+export type GetLocationOrganizations = (
+    orgId: number,
+    locationId: number
+) => Promise<IResponse<ILocationOrgResponse>>;
+
+export type CreateLocationOrg = (body: {
+    location: number;
+    to_org: number;
+}) => Promise<void>;
+
+export type CreateLocationWorker = (body: {
+    location: number;
+    worker: number;
+}) => Promise<void>;
+
+export type DeleteLocationOrg = (
+    locationId: number,
+    organizationId: number
+) => Promise<void>;
+
+export type DeleteLocationWorker = (
+    locationId: number,
+    workerId: number
+) => Promise<void>;
 
 export type GenerateKeys = (
     locId: number,
@@ -324,7 +420,9 @@ export type CreateSession = (
     body: ICreateSessionBody
 ) => Promise<void>;
 
-export type GetWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
+export type GetWorkers = () => Promise<IResponse<IWorker>>;
+
+export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
 

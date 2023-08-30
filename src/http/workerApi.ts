@@ -1,6 +1,6 @@
 import * as T from './types';
 import { $clientAuth } from 'http/clientIndex';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
 import Cookies from 'universal-cookie';
 
@@ -8,8 +8,15 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async (orgId) => {
+export const getWorkers: T.GetWorkers = async () => {
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
+        `business/${orgId}/worker/`
+    );
+
+    return res.data;
+};
+export const getServerWorkers: T.GetServerWorkers = async (orgId) => {
+    const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`
     );
 
@@ -29,14 +36,6 @@ export const getWorkerCard: T.GetWorkerCard = async (orgId, workerId) => {
         await $serverAuth.get(
             `business/${orgId}/worker/${workerId}/card/?offset=0&ordering=id&limit=10`
         );
-
-    return res.data;
-};
-
-export const getServerSideWorkers: T.GetWorkers = async (orgId) => {
-    const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
-        `business/${orgId}/worker/`
-    );
 
     return res.data;
 };

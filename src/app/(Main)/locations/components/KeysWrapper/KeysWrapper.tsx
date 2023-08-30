@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Button } from 'components/UI/Buttons/Button';
@@ -13,12 +13,29 @@ import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList
 import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
 
 import scss from './KeysWrapper.module.scss';
+import { createLocationKeys } from 'http/locationsApi';
+import { LocKeyBody, LocKeysResponse } from 'http/types';
+import { useParams, useRouter } from 'next/navigation';
 
-export const KeysWrapper = () => {
+interface KeysWrapperProps {
+    keys: LocKeysResponse[];
+}
+
+export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
     const [data, setData] = useState<IData[]>([]);
-    const [generatedData, setGeneratedData] = useState<IGeneratedKeys[]>([]);
+    const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
+
+    const router = useRouter();
+
+    const params = useParams();
 
     useEffect(() => {
+        setGeneratedData(keys ?? []);
+    }, [keys]);
+
+    console.log(generatedData);
+
+    /*useEffect(() => {
         const localData = localStorage.getItem('data') as string;
         const parsedData: IData[] = JSON.parse(localData) ?? [];
 
@@ -34,9 +51,9 @@ export const KeysWrapper = () => {
         });
         setData(parsedData);
         setGeneratedData(arr);
-    }, []);
+    }, []);*/
 
-    const handleDeleteOne = (id: string) => {
+    /*    const handleDeleteOne = (id: string) => {
         const dataItem = data.find((dat) => dat.id === id);
         setData(data?.filter((d) => d.id !== id));
         setGeneratedData(
@@ -49,14 +66,14 @@ export const KeysWrapper = () => {
             (l) => l.category !== dataItem?.category
         );
         localStorage.setItem('data', JSON.stringify(newLocalData));
-    };
+    };*/
 
-    const handleDeleteAll = () => {
+    /*    const handleDeleteAll = () => {
         setData([]);
         localStorage.removeItem('data');
-    };
+    };*/
 
-    const handleChangeItem = (id: string, field: string, value: string) => {
+    /*    const handleChangeItem = (id: string, field: string, value: string) => {
         setData((prevValue) => {
             if (!prevValue) {
                 return prevValue;
@@ -69,11 +86,19 @@ export const KeysWrapper = () => {
                 return item;
             });
         });
-    };
+    };*/
 
     const handleGenerateClick = async () => {
+        const body: LocKeyBody[] = data.map((d) => {
+            return { name: d.category, count: d.count };
+        });
+
+        createLocationKeys(+params.locId, +params.objId, body);
+
+        router.refresh();
+
         const arr: IGeneratedKeys[] = [];
-        data.forEach((item) => {
+        /*data.forEach((item) => {
             for (let i = 1; i <= +item.count; i++) {
                 const newItem = {
                     id: i.toString(),
@@ -91,7 +116,7 @@ export const KeysWrapper = () => {
                 }
             }
         });
-        setGeneratedData((data) => [...data, ...arr]);
+        setGeneratedData((data) => [...data, ...arr]);*/
     };
 
     return (
@@ -99,12 +124,12 @@ export const KeysWrapper = () => {
             <div className={scss.keys}>
                 <div className={scss.actions_wrapper}>
                     <RowForm setData={setData} />
-                    <PreviewRowsList
+                    {/* <PreviewRowsList
                         handleChange={handleChangeItem}
                         deleteAll={handleDeleteAll}
                         deleteOne={handleDeleteOne}
                         data={data}
-                    />
+                    />*/}
                 </div>
                 <div className={scss.button_layout}>
                     <div className={scss.button_wrapper}>
@@ -119,14 +144,14 @@ export const KeysWrapper = () => {
                 {generatedData.length !== 0 && (
                     <>
                         <div className={scss.download_button_wrapper}>
-                            <PDFDownloadLink
+                            {/*<PDFDownloadLink
                                 document={<PdfGenerator data={generatedData} />}
                                 fileName="Наклейки ШК"
                             >
                                 <Button onClick={() => {}} type="button">
                                     Скачать наклейки ШК
                                 </Button>
-                            </PDFDownloadLink>
+                            </PDFDownloadLink>*/}
                         </div>
                         <div className={scss.keys_table_layout}>
                             <Table
@@ -136,10 +161,10 @@ export const KeysWrapper = () => {
                                 <Column header="id" field="id" />
                                 <Column
                                     header="Название"
-                                    field="category"
+                                    field="name"
                                     sortable
                                 />
-                                <Column header="Код" field="code" />
+                                <Column header="Код" field="codeNumber" />
                             </Table>
                         </div>
                     </>

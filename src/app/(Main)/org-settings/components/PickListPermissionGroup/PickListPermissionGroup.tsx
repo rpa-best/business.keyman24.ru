@@ -36,85 +36,43 @@ export const PickListPermissionGroup: React.FC<
 
     const [loading, setLoading] = useState(false);
 
-    //Левая колонка
-    const [allPermissions, setAllPermissions] = useState<IGroupPermission[]>();
-    //Правая колонка
-    const [allAdminPermissions, setAllAdminPermissions] =
-        useState<CustomGroupAdminPermission[]>();
-
-    const [selectedClicked, setSelectedClicked] = useState<
-        CustomGroupAdminPermission[]
-    >([]);
-    const [availableClicked, setAvailableClicked] = useState<
-        IGroupPermission[]
-    >([]);
-
-    //Конвертация для лучшего UI
-    useEffect(() => {
-        const available = getGroupListValues(permissions, adminPermissions);
-        const selected = adminPermissions.map((perm) => {
-            return {
-                ...perm,
-                content: `${perm?.group?.name}`,
-            };
-        });
-        setAllPermissions(available);
-        setAllAdminPermissions(selected);
-        setLoading(false);
-    }, [adminPermissions, permissions]);
-
-    //Очистка выбранного при кликах на стрелки
-    useEffect(() => {
-        setAvailableClicked((prev) =>
-            prev.filter((item) => allPermissions?.includes(item))
-        );
-
-        setSelectedClicked((prev) =>
-            prev.filter((item) => allAdminPermissions?.includes(item))
-        );
-    }, [allAdminPermissions, allPermissions]);
-
-    const handleArrowRight = (elems: CustomPermission[]) => {
-        if (availableClicked.length === 0) {
-            return;
-        }
+    const handleArrowRight = async (elems: CustomPermission[]) => {
         setLoading(true);
-        Promise.all(
+        await Promise.all(
             elems.map(async (el) => {
                 await createAdminGroupPermission({
                     group: el.id,
                     org: orgId,
                 });
             })
-        ).then(() => {
+        ).finally(() => {
             router.refresh();
+            setLoading(false);
         });
     };
 
-    const handleArrowLeft = (elems: CustomAdminPermission[]) => {
-        if (selectedClicked.length === 0) {
-            return;
-        }
+    const handleArrowLeft = async (elems: CustomAdminPermission[]) => {
         setLoading(true);
-        Promise.all(
+        await Promise.all(
             elems.map((el) => {
                 deleteAdminGroupPermission({
                     id: el.id,
                     orgId: orgId,
                 });
             })
-        ).then(() => router.refresh());
+        ).finally(() => {
+            router.refresh();
+            setLoading(false);
+        });
     };
 
     return (
         <>
             <PickList
                 loading={loading}
-                selectedClicked={selectedClicked as any}
-                availableClicked={availableClicked as any}
                 title="Настройка доступа"
-                available={allPermissions as any}
-                selected={allAdminPermissions as any}
+                available={permissions as []}
+                selected={adminPermissions as []}
                 handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}
             />

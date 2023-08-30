@@ -26,7 +26,7 @@ export const Key: React.FC<KeyProps> = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            return await getWorkers(1);
+            return await getWorkers();
         };
         fetchData().then(async (d) => {
             await getWorkerDocs(d.results[0].id, 1 as number).then((d) =>

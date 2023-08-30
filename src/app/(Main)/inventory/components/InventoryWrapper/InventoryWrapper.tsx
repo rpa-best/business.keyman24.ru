@@ -52,6 +52,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     const handleTableButtonClick = () => {
         setType('create');
         setSelectedItem(undefined);
+        setSelectedItemImage(undefined);
         setVisible(true);
     };
 
@@ -68,7 +69,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 paginatorData={{ offset: 10, countItems: count }}
             >
                 <Column sortable header="Наименование" field="name" />
-                <Column sortable header="Тип" field="type" />
                 <Column sortable header="номер" field="number" />
             </Table>
             <Modal>
