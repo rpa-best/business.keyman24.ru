@@ -7,8 +7,6 @@ import scss from './PreviewRowsList.module.scss';
 
 export const PreviewRowsList: React.FC<PreviewRowsListProps> = ({
     deleteOne,
-    deleteAll,
-    handleChange,
     data,
 }) => {
     if (data.length === 0) {
@@ -20,10 +18,8 @@ export const PreviewRowsList: React.FC<PreviewRowsListProps> = ({
                 {data?.map((item, index) => (
                     <PreviewListItem
                         key={index}
-                        data={data}
                         {...item}
                         deleteOne={deleteOne}
-                        handleChange={handleChange}
                     />
                 ))}
             </div>

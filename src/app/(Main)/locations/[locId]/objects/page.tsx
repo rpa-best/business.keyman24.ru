@@ -1,7 +1,11 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 
-import { getLocationObjects } from 'http/locationsApi';
+import {
+    getLocation,
+    getLocationObjects,
+    getLocations,
+} from 'http/locationsApi';
 import { Column } from 'components/Table/Column';
 import { TableWrapper } from 'app/(Main)/locations/components/TableWrapper';
 import { BackButton } from 'components/UI/Buttons/BackButton';
@@ -28,12 +32,18 @@ const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
         return { ...l, desc: l.desc ?? '-' };
     });
 
+    const location = await getLocation(+orgId, +locId);
+
+    const locationName = location.name;
+
     return (
         <div className={scss.children_with_table}>
             <div className={scss.button_wrapper}>
                 <BackButton>Назад</BackButton>
             </div>
-            <h2 className={scss.page_title_with_table}>Локации</h2>
+            <h2 className={scss.page_title_with_table}>
+                Объекты на локации: {locationName}
+            </h2>
             <ObjectsTableWrapper
                 locId={+locId}
                 modifiedObjects={modifiedObjects}

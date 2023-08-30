@@ -17,6 +17,7 @@
   box-shadow: 0 0 0 0.2rem transparentize($accent-color, .5);
   border-radius: 5px;
   transition: .2s all ease-in-out;
+  cursor: pointer;
   &:hover {
     box-shadow: 0 0 0 0.2rem $accent-color;
     .link_button {

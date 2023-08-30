@@ -350,6 +350,12 @@ export type CreateLocationKeys = (
     body: LocKeyBody[]
 ) => Promise<void>;
 
+export type DeleteLocationKey = (
+    locId: number,
+    objId: number,
+    invId: number
+) => Promise<void>;
+
 export type EditLocation = (
     locId: number,
     body: CreateLocationBody

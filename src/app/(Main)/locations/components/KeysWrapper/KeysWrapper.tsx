@@ -13,15 +13,17 @@ import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList
 import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
 
 import scss from './KeysWrapper.module.scss';
-import { createLocationKeys } from 'http/locationsApi';
+import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
 import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { useParams, useRouter } from 'next/navigation';
+import { Spinner } from 'components/Spinner';
 
 interface KeysWrapperProps {
     keys: LocKeysResponse[];
 }
 
 export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
     const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
 
@@ -30,10 +32,22 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
     const params = useParams();
 
     useEffect(() => {
+        const countName: Record<string, number> = keys.reduce((acc, item) => {
+            const { name } = item;
+            // @ts-ignore
+            acc[name] = (acc[name] ?? 0) + 1;
+            return acc;
+        }, {});
+
+        const resultArray: IData[] = Object.keys(countName).map((name) => ({
+            id: name,
+            count: countName[name],
+            category: name,
+        }));
+
+        setData(resultArray);
         setGeneratedData(keys ?? []);
     }, [keys]);
-
-    console.log(generatedData);
 
     /*useEffect(() => {
         const localData = localStorage.getItem('data') as string;
@@ -88,35 +102,26 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
         });
     };*/
 
+    const handleDeleteClick = async (id: number) => {
+        setLoading(true);
+        await deleteLocationKey(+params.locId, +params.objId, +id).finally(
+            () => {
+                router.refresh();
+            }
+        );
+        setLoading(false);
+    };
+
     const handleGenerateClick = async () => {
+        setLoading(true);
         const body: LocKeyBody[] = data.map((d) => {
             return { name: d.category, count: d.count };
         });
 
-        createLocationKeys(+params.locId, +params.objId, body);
-
-        router.refresh();
-
-        const arr: IGeneratedKeys[] = [];
-        /*data.forEach((item) => {
-            for (let i = 1; i <= +item.count; i++) {
-                const newItem = {
-                    id: i.toString(),
-                    code: generateRandomITF14Code(),
-                    category: item.category,
-                };
-                const isDuplicate = generatedData.some(
-                    (existingItem) =>
-                        existingItem.id === newItem.id &&
-                        existingItem.category === newItem.category
-                );
-
-                if (!isDuplicate) {
-                    arr.push(newItem);
-                }
-            }
+        createLocationKeys(+params.locId, +params.objId, body).finally(() => {
+            router.refresh();
+            setLoading(false);
         });
-        setGeneratedData((data) => [...data, ...arr]);*/
     };
 
     return (
@@ -124,12 +129,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
             <div className={scss.keys}>
                 <div className={scss.actions_wrapper}>
                     <RowForm setData={setData} />
-                    {/* <PreviewRowsList
-                        handleChange={handleChangeItem}
-                        deleteAll={handleDeleteAll}
-                        deleteOne={handleDeleteOne}
-                        data={data}
-                    />*/}
+                    <PreviewRowsList data={data} />
                 </div>
                 <div className={scss.button_layout}>
                     <div className={scss.button_wrapper}>
@@ -144,21 +144,21 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
                 {generatedData.length !== 0 && (
                     <>
                         <div className={scss.download_button_wrapper}>
-                            {/*<PDFDownloadLink
+                            <PDFDownloadLink
                                 document={<PdfGenerator data={generatedData} />}
                                 fileName="Наклейки ШК"
                             >
                                 <Button onClick={() => {}} type="button">
                                     Скачать наклейки ШК
                                 </Button>
-                            </PDFDownloadLink>*/}
+                            </PDFDownloadLink>
                         </div>
                         <div className={scss.keys_table_layout}>
                             <Table
+                                handleDeleteClick={handleDeleteClick}
                                 rowClickable={false}
                                 tableRows={generatedData.slice(0, 50) as any}
                             >
-                                <Column header="id" field="id" />
                                 <Column
                                     header="Название"
                                     field="name"
@@ -169,6 +169,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys }) => {
                         </div>
                     </>
                 )}
+                {loading && <Spinner />}
             </div>
         </>
     );

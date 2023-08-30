@@ -81,7 +81,7 @@ export const getLocationKeys: T.GetLocationKeys = async (
 ) => {
     const res: AxiosResponse<ReturnType<T.GetLocationKeys>> =
         await $serverAuth.get(
-            `business/${orgId}/location/${locId}/object/${objId}/inventory/`
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name`
         );
 
     return res.data;
@@ -95,6 +95,16 @@ export const createLocationKeys: T.CreateLocationKeys = async (
     await $clientAuth.post(
         `business/${orgId}/location/${locId}/object/${objId}/key-generate/`,
         body
+    );
+};
+
+export const deleteLocationKey: T.DeleteLocationKey = async (
+    locId,
+    objId,
+    invId
+) => {
+    await $clientAuth.delete(
+        `business/${orgId}/location/${locId}/object/${objId}/inventory/${invId}`
     );
 };
 

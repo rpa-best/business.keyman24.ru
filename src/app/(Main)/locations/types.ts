@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { IWorker } from 'http/types';
+import { IWorker, LocKeysResponse } from 'http/types';
 import { ModifiedWorker } from 'app/(Main)/locations/edit/[id]/types';
 
 export interface IData {
@@ -13,25 +13,17 @@ export interface WorkersPickListWrapperProps {
     target: ModifiedWorker[];
 }
 
-export interface IGeneratedKeys {
-    id: string;
-    category: string;
-    code: string;
-}
+export interface IGeneratedKeys extends LocKeysResponse {}
 
 export interface RowFormProps {
     setData: Dispatch<SetStateAction<IData[]>>;
 }
 
 export interface PreviewRowsListProps {
-    deleteOne: (id: string) => void;
+    deleteOne?: (id: string) => void;
     data: IData[];
-    deleteAll: () => void;
-    handleChange: (id: string, field: string, value: string) => void;
 }
 
 export interface PreviewListItemProps extends IData {
-    data: IData[];
-    handleChange: (id: string, field: string, value: string) => void;
-    deleteOne: (id: string) => void;
+    deleteOne?: (id: string) => void;
 }
