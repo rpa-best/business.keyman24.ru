@@ -71,6 +71,10 @@ export interface IGroupPermission {
     name: string;
 }
 
+export interface WorkerUserGroupPermission extends IGroupPermission {
+    group: IGroupPermission;
+}
+
 export interface IAdminGroupPermission {
     id: number;
     group: IGroupPermission;
@@ -237,6 +241,22 @@ export interface LocKeysResponse {
     objectArea: number;
 }
 
+export interface IWorkerUser {
+    username: string;
+    phone: string;
+    name: string;
+    lastname: string;
+    surname: string;
+    isActive: string;
+}
+
+export interface CreateWorkerUserBody {
+    username: string;
+    password1: string;
+    password2: string;
+    phone: string;
+}
+
 export interface LocationWorkerResponse {
     id: number;
     org: number;
@@ -263,6 +283,22 @@ export type GetAdminOrgPermissions = (
 export type CreateOrgPermission = (
     obj: Omit<IPermissionObject, 'id'>
 ) => Promise<IPermissionObject>;
+
+export type CreateWorkerPermission = (obj: {
+    permission: number;
+    type: string;
+    user: string;
+}) => Promise<void>;
+
+export type GetWorkerPermission = (
+    orgId: number,
+    username: string
+) => Promise<IAdminPermission[]>;
+
+export type DeleteWorkerPermission = (
+    user: string,
+    id: string
+) => Promise<void>;
 
 export type DeleteOrgPermission = (obj: { id: number; orgId: number }) => void;
 
@@ -434,6 +470,31 @@ export type GetWorkers = () => Promise<IResponse<IWorker>>;
 export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
+
+export type GetWorkerUser = (
+    orgId: number,
+    workerId: number
+) => Promise<IWorkerUser>;
+
+export type CreateWorkerUser = (
+    workerId: number,
+    body: CreateWorkerUserBody
+) => Promise<void>;
+
+export type GetWorkerGroupUserPerm = (
+    orgId: number,
+    workerName: string
+) => Promise<WorkerUserGroupPermission[]>;
+
+export type CreateWorkerGroupUser = (
+    workerName: string,
+    body: { group: number }
+) => Promise<void>;
+
+export type DeleteWorkerGroupUser = (
+    workerName: string,
+    groupId: number
+) => Promise<void>;
 
 export type GetPermissions = (orgId: number) => Promise<IResponse<IPermission>>;
 

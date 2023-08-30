@@ -1,4 +1,4 @@
-import { ICard, IWorker, IWorkerDocs } from 'http/types';
+import { ICard, IWorker, IWorkerDocs, IWorkerUser } from 'http/types';
 
 export interface WorkerTableWrapperProps {
     workers: ModifiedWorkers;
@@ -15,6 +15,7 @@ export interface ModifiedWorkers {
 
 export interface IWorkerEditFormProps {
     worker: IWorker;
+    workerUser: IWorkerUser;
 }
 
 export interface WorkerDocsTableProps {

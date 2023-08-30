@@ -3,29 +3,34 @@
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-import { createLocationWorker, deleteLocationWorker } from 'http/locationsApi';
 import { PickList } from 'components/PickList';
 import { Spinner } from 'components/Spinner';
-import { WorkersPickListWrapperProps } from 'app/(Main)/locations/types';
 import { DefaultElem } from 'components/PickList/types';
+import {
+    CustomDefaultElem,
+    WorkerPickListPermissionsWrapper,
+} from 'app/(Main)/workers/[id]/components/WorkerPickListWrapper/types';
+import {
+    createWorkerPermission,
+    deleteWorkerPermission,
+} from 'http/permissionsApi';
 
-export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
-    target,
-    source,
-}) => {
+export const WorkersPermissionsPickList: React.FC<
+    WorkerPickListPermissionsWrapper
+> = ({ target, source, workerUsername }) => {
     const [loading, setLoading] = useState(false);
-
-    const params = useParams();
 
     const router = useRouter();
 
-    const handleArrowRight = async (elems: DefaultElem[]) => {
+    const handleArrowRight = async (elems: CustomDefaultElem[]) => {
+        console.log(elems);
         setLoading(true);
         await Promise.all(
             elems.map(async (el) => {
-                await createLocationWorker({
-                    location: +params.id,
-                    worker: +el.id,
+                await createWorkerPermission({
+                    user: workerUsername,
+                    permission: +el.id,
+                    type: el.type,
                 });
             })
         ).finally(() => {
@@ -38,7 +43,7 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
         setLoading(true);
         await Promise.all(
             elems.map(async (el) => {
-                await deleteLocationWorker(+params.id, +el.id);
+                await deleteWorkerPermission(workerUsername, el.id);
             })
         ).finally(() => {
             router.refresh();
@@ -51,10 +56,10 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
             <PickList
                 hidden
                 handleArrowLeft={handleArrowLeft}
-                handleArrowRight={handleArrowRight}
-                available={source as []}
-                selected={target as []}
-                title="Настройки работников"
+                handleArrowRight={handleArrowRight as any}
+                available={source}
+                selected={target}
+                title="Настройки прав пользователя"
             />
             {loading && <Spinner />}
         </>

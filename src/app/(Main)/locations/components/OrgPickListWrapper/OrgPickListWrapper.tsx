@@ -58,7 +58,6 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
                 available={source as []}
                 selected={target as []}
                 title="Настройки организации"
-                loading={loading}
             />
             {loading && <Spinner />}
         </>

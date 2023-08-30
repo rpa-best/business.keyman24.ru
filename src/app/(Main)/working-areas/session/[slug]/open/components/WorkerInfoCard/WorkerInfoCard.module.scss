@@ -88,3 +88,19 @@
     margin-bottom: 10px;
   }
 }
+
+.worker_card_button_wrapper {
+  width: 25%;
+  margin-left: auto;
+  @include thousendTwoWidth {
+    width: 35%;
+  }
+  @include phoneOrTablet {
+    width: 250px;
+    margin: 0 auto;
+  }
+  @include phone {
+    margin-top: 10px;
+    width: 100%;
+  }
+}

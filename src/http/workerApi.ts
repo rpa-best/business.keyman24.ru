@@ -1,6 +1,6 @@
 import * as T from './types';
 import { $clientAuth } from 'http/clientIndex';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
 import Cookies from 'universal-cookie';
 
@@ -29,6 +29,28 @@ export const getWorker: T.GetWorker = async (orgId, workerId) => {
     );
 
     return res.data;
+};
+
+export const getWorkerUser: T.GetWorkerUser = async (orgId, workerId) => {
+    const res: AxiosResponse<ReturnType<T.GetWorkerUser>> =
+        await $serverAuth.get(`business/${orgId}/worker/${workerId}/user`);
+
+    return res.data;
+};
+
+export const createWorkerUser: T.CreateWorkerUser = async (workerId, body) => {
+    try {
+        await $clientAuth.post(
+            `business/${orgId}/worker/${workerId}/user/`,
+            body
+        );
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 400) {
+                throw e;
+            }
+        }
+    }
 };
 
 export const getWorkerCard: T.GetWorkerCard = async (orgId, workerId) => {

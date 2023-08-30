@@ -12,7 +12,6 @@ export interface PickListProps {
     selected: DefaultElem[];
     handleArrowLeft: (arr: DefaultElem[]) => Promise<void>;
     handleArrowRight: (arr: DefaultElem[]) => Promise<void>;
-    loading: boolean;
 }
 
 export interface ListProps {

@@ -58,7 +58,6 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
     return (
         <>
             <PickList
-                loading={loading}
                 title="Настройка доступа"
                 available={permissions as any}
                 selected={adminPermissions as any}

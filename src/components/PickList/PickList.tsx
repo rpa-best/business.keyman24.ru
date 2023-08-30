@@ -7,6 +7,7 @@ import { DefaultElem, PickListProps } from 'components/PickList/types';
 
 import scss from './PickList.module.scss';
 import clsx from 'clsx';
+import { Spinner } from 'components/Spinner';
 
 export const PickList = ({
     available,
@@ -15,15 +16,16 @@ export const PickList = ({
     title,
     selected,
     hidden = false,
-    loading,
 }: PickListProps) => {
     const [visibility, setVisibility] = useState(true);
+
+    const [loading, setLoading] = useState(false);
 
     const [source, setSource] = useState<DefaultElem[]>();
     const [target, setTarget] = useState<DefaultElem[]>();
 
-    const [sourceSelected, setSourceSelected] = useState<DefaultElem[]>();
-    const [targetSelected, setTargetSelected] = useState<DefaultElem[]>();
+    const [sourceSelected, setSourceSelected] = useState<DefaultElem[]>([]);
+    const [targetSelected, setTargetSelected] = useState<DefaultElem[]>([]);
 
     useEffect(() => {
         setSource(available);
@@ -43,14 +45,22 @@ export const PickList = ({
         if (sourceSelected?.length === 0) {
             return;
         }
-        handleArrowRight(sourceSelected as DefaultElem[]);
+        setLoading(true);
+        handleArrowRight(sourceSelected as DefaultElem[]).finally(() => {
+            setSourceSelected([]);
+            setLoading(false);
+        });
     };
 
     const handleArrLeft = () => {
         if (targetSelected?.length === 0) {
             return;
         }
-        handleArrowLeft(targetSelected as DefaultElem[]);
+        setLoading(true);
+        handleArrowLeft(targetSelected as DefaultElem[]).finally(() => {
+            setTargetSelected([]);
+            setLoading(false);
+        });
     };
 
     const arrowClass = clsx({
@@ -126,6 +136,7 @@ export const PickList = ({
                     </div>
                 </div>
             </div>
+            {loading && <Spinner />}
         </>
     );
 };
