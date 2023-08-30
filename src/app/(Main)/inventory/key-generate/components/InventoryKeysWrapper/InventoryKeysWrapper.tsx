@@ -1,47 +1,50 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-import { generateRandomITF14Code } from 'helpers/generateITF-14Code';
-import { IData, IGeneratedKeys } from 'app/(Main)/locations/types';
+import { IData } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
 import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
-import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
-import { LocKeyBody, LocKeysResponse } from 'http/types';
+import { IInventory, LocKeyBody } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
+import { createInventoryKeys } from 'http/inventoryApi';
 
-import scss from './KeysWrapper.module.scss';
+import scss from './InventoryKeys.module.scss';
 
 interface KeysWrapperProps {
     count: number;
-    keys: LocKeysResponse[];
+    inventories: IInventory[];
 }
 
-export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
+export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
+    inventories,
+    count,
+}) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
-    const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
+    const [generatedData, setGeneratedData] = useState<IInventory[]>([]);
 
     const router = useRouter();
 
-    const params = useParams();
-
     useEffect(() => {
-        /* const countName: Record<string, number> = keys.reduce((acc, item) => {
-            const { name } = item;
-            // @ts-ignore
-            acc[name] = (acc[name] ?? 0) + 1;
-            return acc;
-        }, {});
+        /*const countName: Record<string, number> = inventories.reduce(
+            (acc, item) => {
+                const { name } = item;
+                // @ts-ignore
+                acc[name] = (acc[name] ?? 0) + 1;
+                return acc;
+            },
+            {}
+        );
 
         const resultArray: IData[] = Object.keys(countName).map((name) => ({
             id: name,
@@ -50,25 +53,15 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         }));
 
         setData(resultArray);*/
-        setGeneratedData(keys ?? []);
-    }, [keys]);
+        setGeneratedData(inventories ?? []);
+    }, [inventories]);
 
     const handleTableButtonClick = () => {
         setVisible(true);
     };
 
-    const handleDeleteOneData = (id: string) => {
-        setData((d) => d.filter((dat) => dat.id !== id));
-    };
-
-    const handleDeleteClick = async (id: number) => {
-        setLoading(true);
-        await deleteLocationKey(+params.locId, +params.objId, +id).finally(
-            () => {
-                router.refresh();
-            }
-        );
-        setLoading(false);
+    const handleDeleteOne = (id: string) => {
+        setData(data.filter((d) => d.id !== id));
     };
 
     const handleGenerateClick = async () => {
@@ -77,7 +70,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
             return { name: d.category, count: d.count };
         });
 
-        createLocationKeys(+params.locId, +params.objId, body).finally(() => {
+        createInventoryKeys(body).finally(() => {
             router.refresh();
             setLoading(false);
             setVisible(false);
@@ -109,7 +102,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                                     offset: 25,
                                     countItems: count,
                                 }}
-                                handleDeleteClick={handleDeleteClick}
                                 rowClickable={false}
                                 tableRows={generatedData}
                             >
@@ -131,15 +123,14 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                         <div className={scss.actions_wrapper}>
                             <RowForm setData={setData} />
                             <PreviewRowsList
-                                deleteOne={handleDeleteOneData}
+                                deleteOne={handleDeleteOne}
                                 data={data}
                             />
                         </div>
                         <div className={scss.button_wrapper}>
                             <Button
-                                type="button"
                                 disabled={data.length === 0}
-                                nowrap
+                                type="button"
                                 onClick={() => handleGenerateClick()}
                             >
                                 Сгенерировать ключи

@@ -9,14 +9,22 @@ import scss from 'app/(Main)/locations/locations.module.scss';
 
 interface KeyPageProps {
     params: { locId: string; objId: string };
+    searchParams: { offset: string };
 }
 
-const KeyPage: React.FC<KeyPageProps> = async ({ params }) => {
+const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
     const cookieStore = cookies();
+
+    const offset = searchParams.offset ?? 0;
 
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const keys = await getLocationKeys(+orgId, +params.locId, +params.objId);
+    const keys = await getLocationKeys(
+        +orgId,
+        +params.locId,
+        +params.objId,
+        offset
+    );
 
     return (
         <div className={scss.children_with_table}>
@@ -26,7 +34,7 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params }) => {
                     <BackButton>Назад</BackButton>
                 </div>
             </div>
-            <KeysWrapper keys={keys.results} />
+            <KeysWrapper keys={keys.results} count={keys.count} />
         </div>
     );
 };

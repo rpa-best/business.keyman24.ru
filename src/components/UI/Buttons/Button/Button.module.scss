@@ -1,8 +1,9 @@
 @import "scss/utils";
 
 .button {
+  max-height: 100%;
   width: 100%;
-  padding: 13px 40px;
+  padding: 11px 40px;
   color: white;
   border-radius: 12px;
   background-color: $accent-color;
@@ -17,6 +18,9 @@
   &:disabled {
     background-color: gray;
     pointer-events: none;
+  }
+  @include thousendWidth {
+    padding: 10px 25px ;
   }
   @include phoneOrTablet {
     width: 100%;

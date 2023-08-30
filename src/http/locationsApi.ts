@@ -77,11 +77,19 @@ export const deleteLocationObject: T.DeleteLocationObject = async (
 export const getLocationKeys: T.GetLocationKeys = async (
     orgId,
     locId,
-    objId
+    objId,
+    offset
 ) => {
+    const query = new URLSearchParams();
+    query.set('limit', '25');
+    offset ? query.set('offset', offset) : '';
+
     const res: AxiosResponse<ReturnType<T.GetLocationKeys>> =
         await $serverAuth.get(
-            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name`
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name&limit=25&type=keys`,
+            {
+                params: query,
+            }
         );
 
     return res.data;

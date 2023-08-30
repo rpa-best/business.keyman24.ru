@@ -33,14 +33,7 @@ export const PreviewListItem: React.FC<PreviewListItemProps> = ({
                         onChange={() => {}}
                     />
                 </div>
-                <DeleteSvg
-                    onClick={
-                        () => {}
-
-                        /*() => deleteOne(id)*/
-                    }
-                    className={scss.svg}
-                />
+                <DeleteSvg onClick={() => deleteOne(id)} className={scss.svg} />
             </div>
         </>
     );

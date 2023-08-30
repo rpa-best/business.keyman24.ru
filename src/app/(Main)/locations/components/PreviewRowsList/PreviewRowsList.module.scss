@@ -1,20 +1,29 @@
 @import "scss/utils";
 
 .empty {
-  height: 200px;
-  width: 50%;
+  height: 186px;
+  width: 676px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: $dark-main;
-  border-radius: 30px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 1px solid $additional-dark;
   color: white;
   @include MontserratSemiBold(24px);
+  @include laptopWidth {
+    width: 600px;
+  }
   @include thousendWidth {
-    width: 100%;
+    width: 550px;
+  }
+  @include phoneOrTablet {
+    font-size: 18px;
+    width: 80vw;
   }
   @include phone {
-    font-size: 18px;
+    width: 100%;
   }
 }
 

@@ -21,9 +21,11 @@
 }
 
 .button_wrapper {
-  margin-top: 20px;
-
-  width: 100%;
+    width: 50%;
+    margin: 20px auto 0;
+  @include phoneOrTablet {
+    width: 100%;
+  }
 }
 
 
@@ -31,7 +33,6 @@
   width: max-content;
   margin: 0 0 10px 20px;
   @include phoneOrTablet {
-    width: calc(100% - 70px);
-    margin: 19px 35px;
+    margin: 15px 20px;
   }
 }

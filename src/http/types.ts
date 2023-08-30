@@ -281,6 +281,8 @@ export type GetInventoryImage = (
     inventoryId: number
 ) => Promise<IResponse<IInventoryImage>>;
 
+export type CreateInventoryCode = (body: LocKeyBody[]) => Promise<void>;
+
 export type CreateInventoryItem = (body: ReqInventoryBody) => Promise<void>;
 
 export type UpdateInventoryItem = (
@@ -341,7 +343,8 @@ export type DeleteLocationObject = (
 export type GetLocationKeys = (
     orgId: number,
     locId: number,
-    objId: number
+    objId: number,
+    offset?: string
 ) => Promise<IResponse<LocKeysResponse>>;
 
 export type CreateLocationKeys = (

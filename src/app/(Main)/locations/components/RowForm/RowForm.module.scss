@@ -64,6 +64,9 @@
 }
 
 .form_button {
-  width: 100%;
-  margin-top: 20px;
+  width: 50%;
+  margin: 20px auto 0;
+  @include phoneOrTablet {
+    width: 100%;
+  }
 }
