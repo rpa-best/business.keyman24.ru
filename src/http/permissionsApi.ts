@@ -26,6 +26,21 @@ export const getPermissions: T.GetOrgPermissions = async (orgId: number) => {
     return response.data;
 };
 
+export const getClientPermissions: T.GetClientOrgPermissions = async (
+    level
+) => {
+    const query = new URLSearchParams();
+    level ? query.set('level', level) : '';
+    const response: AxiosResponse<T.IPermission[]> = await $clientAuth.get(
+        `business/${orgId}/permission?ordering=id`,
+        {
+            params: query,
+        }
+    );
+
+    return response.data;
+};
+
 export const getAdminPermissions: T.GetAdminOrgPermissions = async (orgId) => {
     const response: AxiosResponse<T.IResponse<IAdminPermission>> =
         await $serverAuth.get(`business/${orgId}/permission/admin?ordering=id`);
@@ -158,6 +173,37 @@ export const getGroupPermissions: T.GetGroupOrgPermissions = async (orgId) => {
 
     return response.data;
 };
+
+export const getPermissionGroupPermission: T.GetPermGroupPermissions = async (
+    permGroup
+) => {
+    const response: AxiosResponse<ReturnType<T.GetPermGroupPermissions>> =
+        await $clientAuth.get(
+            `business/${orgId}/permission/group/${permGroup}/permission`
+        );
+
+    return response.data;
+};
+
+export const createPermissionGroupPermission: T.CreatePermGroupPermissions =
+    async (permGroup, permId, type) => {
+        const body = {
+            group: permGroup,
+            permission: permId,
+            type: type,
+        };
+        await $clientAuth.post(
+            `business/${orgId}/permission/group/${permGroup}/permission/`,
+            body
+        );
+    };
+
+export const deletePermissionGroupPermission: T.DeletePermGroupPermissions =
+    async (permGroup, permId) => {
+        await $clientAuth.delete(
+            `business/${orgId}/permission/group/${permGroup}/permission/${permId}/`
+        );
+    };
 
 export const getGroupAdminPermissions: T.GetGroupAdminOrgPermissions = async (
     orgId

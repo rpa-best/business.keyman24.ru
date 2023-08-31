@@ -44,7 +44,7 @@ export const PickListPermission: React.FC<PickListPermissionProps> = ({
         setLoading(true);
         await Promise.all(
             elems.map(async (el) => {
-                await deleteAdminPermission({
+                deleteAdminPermission({
                     id: el.id,
                     orgId: orgId,
                 });

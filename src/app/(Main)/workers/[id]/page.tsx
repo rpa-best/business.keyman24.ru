@@ -130,7 +130,7 @@ const WorkerPage: React.FC<WorkerPage> = async ({
                 worker={worker}
             />
             <WorkerDocsTable info={workerInfo.results} searchParams={which} />
-            {workerUser && (
+            {workerUser ? (
                 <>
                     <WorkersPermissionsPickList
                         workerUsername={workerUser.username}
@@ -143,6 +143,11 @@ const WorkerPage: React.FC<WorkerPage> = async ({
                         source={groupPermissionSource as any}
                     />
                 </>
+            ) : (
+                <h2 className={scss.tooltip}>
+                    Чтобы выбрать права для сотрудника, нужно заполнить карточку
+                    c данными!
+                </h2>
             )}
         </div>
     );

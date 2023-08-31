@@ -12,34 +12,44 @@ interface BackButtonProps {
     children: string;
     absolute?: boolean;
     skipNumber?: boolean;
+    skipWord?: boolean;
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({
     absolute,
     children,
     skipNumber = true,
+    skipWord = false,
 }) => {
     const router = useRouter();
 
     const pathName = usePathname();
 
-    const handleButtonClick = () => {
-        if (skipNumber) {
-            const slashIndex = pathName.lastIndexOf('/');
-            const routerWithoutSlash = pathName.slice(0, slashIndex);
+    const slashIndex = pathName.lastIndexOf('/');
 
+    const routeWithoutSlash = pathName.slice(0, slashIndex);
+    const handleButtonClick = () => {
+        if (skipNumber && skipWord) {
             // @ts-ignore
-            const itsNumber = !isNaN(routerWithoutSlash?.at(-1));
+            const itsNumber = !isNaN(pathName.at(-1));
+
+            if (itsNumber) {
+                const wordSlashIndex = routeWithoutSlash.lastIndexOf('/');
+                const routeWithoutWord = pathName.slice(0, wordSlashIndex);
+                router.push(
+                    routeWithoutWord.slice(0, routeWithoutSlash.length - 1)
+                );
+            }
+        } else if (skipNumber) {
+            // @ts-ignore
+            const itsNumber = !isNaN(routeWithoutSlash?.at(-1));
             if (itsNumber) {
                 router.push(
-                    routerWithoutSlash.slice(0, routerWithoutSlash.length - 1)
+                    routeWithoutSlash.slice(0, routeWithoutSlash.length - 1)
                 );
             } else {
-                router.push(routerWithoutSlash);
+                router.push(routeWithoutSlash);
             }
-        } else {
-            const slashIndex = pathName.lastIndexOf('/');
-            router.push(pathName.slice(0, slashIndex));
         }
     };
 

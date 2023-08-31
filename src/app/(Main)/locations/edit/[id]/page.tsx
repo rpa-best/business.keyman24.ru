@@ -74,7 +74,7 @@ const LocationEditPage: React.FC<LocationEditPage> = async ({
         <div className={scss.children_with_table}>
             <div className={scss.card_info_children}>
                 <div className={scss.button_wrapper}>
-                    <BackButton>Назад</BackButton>
+                    <BackButton skipWord>Назад</BackButton>
                 </div>
                 <LocationInfoWrapper type="edit" location={location} />
             </div>

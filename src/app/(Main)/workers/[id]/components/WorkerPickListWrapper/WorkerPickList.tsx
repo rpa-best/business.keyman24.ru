@@ -54,7 +54,8 @@ export const WorkersPermissionsPickList: React.FC<
     return (
         <>
             <PickList
-                hidden
+                hidden={true}
+                visibile={false}
                 handleArrowLeft={handleArrowLeft}
                 handleArrowRight={handleArrowRight as any}
                 available={source}

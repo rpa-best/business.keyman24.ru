@@ -71,6 +71,13 @@ export interface IGroupPermission {
     name: string;
 }
 
+export interface IGroupPermPermissions {
+    group: number;
+    id: number;
+    permission: IPermission;
+    type: string;
+}
+
 export interface WorkerUserGroupPermission extends IGroupPermission {
     group: IGroupPermission;
 }
@@ -265,6 +272,8 @@ export interface LocationWorkerResponse {
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
+export type GetClientOrgPermissions = (type?: string) => Promise<IPermission[]>;
+
 export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
 
 export type CreateGroupPerm = (body: CreateGroupPermBody) => Promise<void>;
@@ -305,6 +314,21 @@ export type DeleteOrgPermission = (obj: { id: number; orgId: number }) => void;
 export type GetGroupOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IGroupPermission>>;
+
+export type GetPermGroupPermissions = (
+    permGroup: number
+) => Promise<IGroupPermPermissions[]>;
+
+export type CreatePermGroupPermissions = (
+    permGroup: number,
+    permId: number,
+    type: string
+) => Promise<void>;
+
+export type DeletePermGroupPermissions = (
+    permGroup: number,
+    permId: number
+) => Promise<void>;
 
 export type GetInventories = (
     orgId: number,

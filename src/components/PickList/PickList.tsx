@@ -15,9 +15,10 @@ export const PickList = ({
     handleArrowLeft,
     title,
     selected,
+    visibile = true,
     hidden = false,
 }: PickListProps) => {
-    const [visibility, setVisibility] = useState(true);
+    const [visibility, setVisibility] = useState(visibile);
 
     const [loading, setLoading] = useState(false);
 
@@ -65,12 +66,12 @@ export const PickList = ({
 
     const arrowClass = clsx({
         [scss.picklist_header_svg]: true,
-        [scss.picklist_header_svg_active]: !visibility,
+        [scss.picklist_header_svg_active]: hidden && !visibility,
     });
 
     const pickListClass = clsx({
         [scss.picklist_wrapper]: visibility,
-        [scss.picklist_wrapper_hidden]: !visibility,
+        [scss.picklist_wrapper_hidden]: hidden && !visibility,
     });
 
     return (
