@@ -1,4 +1,5 @@
 import { IOrganization, IUser } from 'store/types';
+import { boolean } from 'zod';
 
 export interface IUserAuthRequest {
     username: string;
@@ -404,7 +405,15 @@ export type GetLocationKeys = (
     orgId: number,
     locId: number,
     objId: number,
-    offset?: string
+    params: {
+        offset?: string;
+        full?: boolean;
+    }
+) => Promise<IResponse<LocKeysResponse>>;
+
+export type GetLocationClientKeys = (
+    locId: number,
+    objId: number
 ) => Promise<IResponse<LocKeysResponse>>;
 
 export type CreateLocationKeys = (

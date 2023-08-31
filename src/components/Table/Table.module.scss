@@ -119,6 +119,11 @@
 
   &:hover {
     background-color: $additional-dark;
+    & .table_td{
+      @include phone {
+        background-color: inherit;
+      }
+    }
   }
 }
 
@@ -139,7 +144,6 @@
 }
 
 .table_td {
-  transition: .25s all ease-in-out;
   @include MontserratMediumBold(18px);
   min-height: 70px;
   width: 30%;
@@ -292,13 +296,14 @@
 
 
 .actions_wrapper {
-  margin-right: 5%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   column-gap: 20px;
+  transition: .2s all ease-in-out;
+  padding-right: 5%;
   opacity: 0;
-  transition: .2s opacity ease-in-out;
+  background-color: inherit;
   padding-left: 20px;
   @include phoneOrTablet {
     height: 100%;
