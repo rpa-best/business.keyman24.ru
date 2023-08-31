@@ -1,18 +1,23 @@
 @import "scss/utils";
 
+.key_layout {
+
+}
+
 .button_wrapper {
   width: max-content;
-  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
 }
 
 
 .key_content {
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 }
 
 .content_wrapper {
-  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   @include thousendTwoWidth {

@@ -6,9 +6,9 @@
   flex-direction: column;
   border-radius: 40px;
   background-color: $dark-main;
-  padding: 32px 60px;
+  padding: 22px 30px;
   @include laptopWidth {
-    padding: 24px 40px;
+    padding: 20px 25px;
   }
   @include phoneOrTablet {
     border-radius: 0;
@@ -37,7 +37,7 @@
     max-height: 190px;
   }
   @include phone {
-    max-width: 150px;
+    max-width: 140px;
   }
   position: relative;
 }
@@ -45,7 +45,7 @@
 .worker_card_data {
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: column;
   justify-content: space-between;
   column-gap: 10px;
 }
@@ -56,8 +56,23 @@
   @extend .worker_card_data;
 }
 
+.worker_card_empty {
+  height: 470px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $dark-main;
+  color: white;
+  border-radius: 40px;
+  @include MontserratSemiBold(26px);
+  @include laptopWidth {
+    height: 420px;
+  }
+}
+
 .worker_card_input_wrapper {
-  width: calc(50% - 10px);
+  width: 100%;
 
   &:last-child {
     flex-grow: 1;

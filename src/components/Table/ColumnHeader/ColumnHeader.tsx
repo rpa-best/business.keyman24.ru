@@ -28,6 +28,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
     const headerClassName = clsx({
         [scss.table_header]: true,
         [scss.table_header_less_3]: headersCount < 3,
+        [scss.table_headers_more_3]: headersCount > 3,
     });
 
     const arrowClassname = clsx({

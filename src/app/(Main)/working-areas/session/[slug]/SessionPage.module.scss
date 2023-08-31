@@ -1,1 +1,6 @@
 @import "scss/utils";
+
+.button_wrapper {
+  display: flex;
+  @extend .page_title_with_table_back_button
+}

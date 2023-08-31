@@ -37,6 +37,14 @@
   overflow-y: auto;
   scrollbar-width: thin;
 
+  @include laptopWidth {
+    height: 350px;
+  }
+
+  @include phoneOrTablet {
+    height: 250px;
+  }
+
   &::-webkit-scrollbar {
     position: absolute;
     width: 5px;
@@ -54,14 +62,6 @@
 
   &::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
-  }
-
-  @include laptopWidth {
-    height: 300px;
-  }
-
-  @include phoneOrTablet {
-    height: 250px;
   }
 
 }
@@ -140,6 +140,21 @@
   width: 50%!important;
   @include thousendWidth {
     min-width: 250px!important;
+  }
+}
+
+
+.table_headers_more_3 {
+  width: 25%!important;
+  @include thousendWidth {
+    min-width: 150px!important;
+  }
+}
+
+.table_td_more_3 {
+  width: 25%!important;
+  @include thousendWidth {
+    min-width: 150px!important;
   }
 }
 

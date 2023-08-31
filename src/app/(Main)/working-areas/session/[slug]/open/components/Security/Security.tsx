@@ -4,19 +4,21 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
-import { closeSession } from 'http/workingAreaApi';
 import { SecurityProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { Spinner } from 'components/Spinner';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
 import { getWorkerDocs, getWorkers } from 'http/workerApi';
 import { IWorker, IWorkerDocs } from 'http/types';
+import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
+import { Table } from 'components/Table';
+import { Column } from 'components/Table/Column';
 
 import scss from './Security.module.scss';
-import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
     currentAreaId,
+    sessionLog,
 }) => {
     const [worker, setWorker] = useState<IWorker>();
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
@@ -38,7 +40,7 @@ export const Security: React.FC<SecurityProps> = ({
             return await getWorkers();
         };
         fetchData().then(async (d) => {
-            await getWorkerDocs(d.results[0].id, 1 as number).then((d) =>
+            await getWorkerDocs(d.results[2].id, 1 as number).then((d) =>
                 setWorkerDocs(d.results)
             );
             setWorker(d.results[0]);
@@ -52,10 +54,21 @@ export const Security: React.FC<SecurityProps> = ({
                     Завершить сессию
                 </Button>
             </div>
-            <WorkerInfoCard
-                worker={worker as IWorker}
-                workerDocs={workerDocs as IWorkerDocs[]}
-            />
+            <div className={scss.working_view_wrapper}>
+                <div className={scss.working_view_card}>
+                    <WorkerInfoCard
+                        worker={worker as IWorker}
+                        workerDocs={workerDocs as IWorkerDocs[]}
+                    />
+                </div>
+                <div className={scss.working_view_table}>
+                    <Table tableRows={sessionLog}>
+                        <Column header="Работник" field="workerName" />
+                        <Column header="Дата" field="date" />
+                        <Column header="Тип" field="mode" />
+                    </Table>
+                </div>
+            </div>
             {loading && <Spinner />}
         </div>
     );

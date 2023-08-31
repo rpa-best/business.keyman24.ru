@@ -5,8 +5,13 @@ import { Inventory } from 'app/(Main)/working-areas/session/[slug]/open/componen
 import { Key } from 'app/(Main)/working-areas/session/[slug]/open/components/Key';
 import { Register } from 'app/(Main)/working-areas/session/[slug]/open/components/Register';
 import { Security } from 'app/(Main)/working-areas/session/[slug]/open/components/Security';
-import { getWorkingAreas } from 'http/workingAreaApi';
+import {
+    getSessionLog,
+    getSessions,
+    getWorkingAreas,
+} from 'http/workingAreaApi';
 import { getOrganizations } from 'http/organizationApi';
+import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './OpenSession.module.scss';
 
@@ -35,15 +40,42 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         (area) => area.type.slug === params.slug
     );
 
+    const sessionLog = await getSessionLog(
+        +orgId,
+        area?.id as number,
+        +params.id
+    );
+
+    const modifiedLog = sessionLog.results.map((s) => {
+        return { ...s, workerName: s.worker.name };
+    });
+
     switch (params.slug) {
         case 'inventory': {
-            return <Inventory />;
+            return (
+                <div className={scss.children_with_table}>
+                    <div className={scss.page_title_with_table_back_button}>
+                        <h1>{area?.name}</h1>
+                        <BackButton skipWord>Назад</BackButton>
+                    </div>
+                    <Key
+                        sessionLog={modifiedLog}
+                        currentSessionId={+params.id}
+                        currentAreaId={area?.id as number}
+                        organizations={organizations}
+                    />
+                </div>
+            );
         }
         case 'key': {
             return (
                 <div className={scss.children_with_table}>
-                    <h1 className={scss.page_title_with_table}>{area?.name}</h1>
+                    <div className={scss.page_title_with_table_back_button}>
+                        <h1>{area?.name}</h1>
+                        <BackButton skipWord>Назад</BackButton>
+                    </div>
                     <Key
+                        sessionLog={modifiedLog}
                         currentSessionId={+params.id}
                         currentAreaId={area?.id as number}
                         organizations={organizations}
@@ -54,7 +86,10 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         case 'register': {
             return (
                 <div className={scss.children_with_table}>
-                    <h1 className={scss.page_title_with_table}>{area?.name}</h1>
+                    <div className={scss.page_title_with_table_back_button}>
+                        <h1>{area?.name}</h1>
+                        <BackButton skipWord>Назад</BackButton>
+                    </div>
                     <Register
                         currentSessionId={+params.id}
                         currentAreaId={area?.id as number}
@@ -66,8 +101,12 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         case 'security': {
             return (
                 <div className={scss.children_with_table}>
-                    <h1 className={scss.page_title_with_table}>{area?.name}</h1>
+                    <div className={scss.page_title_with_table_back_button}>
+                        <h1>{area?.name}</h1>
+                        <BackButton skipWord>Назад</BackButton>
+                    </div>
                     <Security
+                        sessionLog={modifiedLog}
                         currentSessionId={+params.id}
                         currentAreaId={area?.id as number}
                     />

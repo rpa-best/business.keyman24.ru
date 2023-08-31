@@ -13,6 +13,7 @@ interface BackButtonProps {
     absolute?: boolean;
     skipNumber?: boolean;
     skipWord?: boolean;
+    skipTwoWords?: boolean;
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({
@@ -20,6 +21,7 @@ export const BackButton: React.FC<BackButtonProps> = ({
     children,
     skipNumber = true,
     skipWord = false,
+    skipTwoWords = false,
 }) => {
     const router = useRouter();
 
@@ -47,6 +49,13 @@ export const BackButton: React.FC<BackButtonProps> = ({
                 router.push(
                     routeWithoutSlash.slice(0, routeWithoutSlash.length - 1)
                 );
+            } else if (skipTwoWords) {
+                const secondSlashIndex = routeWithoutSlash.lastIndexOf('/');
+                const secondRouteWithoutSlash = routeWithoutSlash.slice(
+                    0,
+                    secondSlashIndex
+                );
+                router.push(secondRouteWithoutSlash);
             } else {
                 router.push(routeWithoutSlash);
             }

@@ -21,8 +21,14 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
     worker,
     halfScreen,
 }) => {
-    if (!workerDocs) {
-        return <Spinner />;
+    if (!worker) {
+        return (
+            <div className={scss.worker_card_empty}>
+                <p style={{ textAlign: 'center' }}>
+                    Здесь будет карточка работника
+                </p>
+            </div>
+        );
     }
 
     const inputWrapperClass = clsx({
@@ -53,16 +59,6 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                             placeholder="-"
                             value={worker.name}
                             name="worker-name"
-                            onChange={() => {}}
-                        />
-                    </div>
-                    <div className={inputWrapperClass}>
-                        <Input
-                            placeholder="-"
-                            label="Имя пользователя"
-                            disabled
-                            value={worker?.user?.username ?? ''}
-                            name="username"
                             onChange={() => {}}
                         />
                     </div>

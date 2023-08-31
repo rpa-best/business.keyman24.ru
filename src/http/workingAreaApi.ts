@@ -67,6 +67,19 @@ export const getSessions: T.GetAreaSessions = async (orgId, areaId) => {
     return res.data;
 };
 
+export const getSessionLog: T.GetSessionLog = async (
+    orgId,
+    areaId,
+    sessionId
+) => {
+    const res: AxiosResponse<ReturnType<T.GetSessionLog>> =
+        await $serverAuth.get(
+            `business/${orgId}/working_area/${areaId}/session/${sessionId}/element`
+        );
+
+    return res.data;
+};
+
 export const closeSession: T.CloseSession = async (areaId, sessionId) => {
     const orgId = cookie.get('orgId') ?? 1;
     try {

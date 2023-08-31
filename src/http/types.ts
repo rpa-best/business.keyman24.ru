@@ -175,6 +175,17 @@ export interface IModifiedSession extends Omit<ISession, 'status'> {
     status: string;
 }
 
+export interface SessionLogResponse {
+    id: number;
+    worker: IWorker;
+    mode: boolean;
+    date: string;
+    card: string;
+    comment: string;
+    image: string;
+    inventory: number;
+}
+
 export interface IWorkerDocs {
     id: number;
     lcId: number;
@@ -481,6 +492,12 @@ export type GetAreaSessions = (
     orgId: number,
     areaId: number
 ) => Promise<IResponse<ISession>>;
+
+export type GetSessionLog = (
+    orgId: number,
+    areaId: number,
+    sessionId: number
+) => Promise<IResponse<SessionLogResponse>>;
 
 export type CreateWorkingArea = (data: CreateWorkingAreaProp) => Promise<void>;
 
