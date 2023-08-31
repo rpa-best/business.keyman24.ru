@@ -6,3 +6,10 @@
     margin-bottom: 20px;
   }
 }
+
+.card_info_children {
+  @extend .children;
+  @include phoneOrTablet {
+    width: calc(100% - 20px);
+  }
+}

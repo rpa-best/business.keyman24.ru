@@ -1,2 +1,42 @@
 @import "scss/utils";
 
+.title_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 35px;
+  @include thousendTwoWidth {
+    padding-bottom: 25px;
+  }
+  @include phoneOrTablet {
+    padding-bottom: 20px;
+    width: calc(100% - 50px);
+    margin: 0 auto;
+  }
+  @include phone {
+    width: calc(100% - 20px);
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 20px;
+  }
+}
+
+.title_text_wrapper {
+  width: 100%;
+  @include MontserratSemiBold(32px);
+  color: white;
+  @include thousendTwoWidth {
+    font-size: 28px;
+  }
+  @include phoneOrTablet {
+    font-size: 24px;
+  }
+  @include phone {
+    font-size: 22px;
+  }
+}
+
+.button_wrapper {
+  width: max-content;
+  white-space: nowrap;
+}

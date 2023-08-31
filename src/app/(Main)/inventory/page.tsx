@@ -4,6 +4,7 @@ import { InventoryWrapper } from 'app/(Main)/inventory/components/InventoryWrapp
 import { getInventories, getInventoryTypes } from 'http/inventoryApi';
 import { IModifiedInventory } from 'app/(Main)/inventory/types';
 import { cookies } from 'next/headers';
+import { ButtonWrapper } from 'app/(Main)/inventory/components/ButtonWrapper/ButtonWrapper';
 
 import scss from './inventory.module.scss';
 
@@ -31,7 +32,12 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
 
     return (
         <div className={scss.children_with_table}>
-            <h2 className={scss.page_title_with_table}>Инвентарь / Список</h2>
+            <div className={scss.title_wrapper}>
+                <h2 className={scss.title_text_wrapper}>Инвентарь</h2>
+                <div className={scss.button_wrapper}>
+                    <ButtonWrapper />
+                </div>
+            </div>
             <InventoryWrapper
                 inventoryTypes={inventoryTypes.results}
                 count={inventories.count}

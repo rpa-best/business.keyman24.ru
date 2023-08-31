@@ -1,4 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
+import { IInventory, IWorker, LocKeysResponse } from 'http/types';
+import { ModifiedWorker } from 'app/(Main)/locations/edit/[id]/types';
 
 export interface IData {
     id: string;
@@ -6,10 +8,15 @@ export interface IData {
     category: string;
 }
 
+export interface WorkersPickListWrapperProps {
+    source: IWorker[];
+    target: ModifiedWorker[];
+}
+
 export interface IGeneratedKeys {
-    id: string;
-    category: string;
-    code: string;
+    id: number;
+    name: string;
+    codeNumber: string;
 }
 
 export interface RowFormProps {
@@ -19,12 +26,8 @@ export interface RowFormProps {
 export interface PreviewRowsListProps {
     deleteOne: (id: string) => void;
     data: IData[];
-    deleteAll: () => void;
-    handleChange: (id: string, field: string, value: string) => void;
 }
 
 export interface PreviewListItemProps extends IData {
-    data: IData[];
-    handleChange: (id: string, field: string, value: string) => void;
     deleteOne: (id: string) => void;
 }

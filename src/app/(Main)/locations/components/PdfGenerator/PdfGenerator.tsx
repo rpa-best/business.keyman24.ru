@@ -4,10 +4,10 @@ import React from 'react';
 import { Document, Page, StyleSheet } from '@react-pdf/renderer';
 
 import { SavePdfElement } from 'app/(Main)/locations/components/PdfGenerator/SavePdfElement';
-import { IGeneratedKeys } from 'app/(Main)/locations/types';
+import { IInventory, LocKeysResponse } from 'http/types';
 
 interface PdfGeneratorProps {
-    data: IGeneratedKeys[];
+    data: { id: number; name: string; codeNumber: string }[];
 }
 
 export const PdfGenerator: React.FC<PdfGeneratorProps> = ({ data }) => {

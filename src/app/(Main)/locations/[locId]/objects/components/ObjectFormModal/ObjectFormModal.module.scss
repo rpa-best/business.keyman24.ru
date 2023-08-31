@@ -1,0 +1,26 @@
+@import "scss/utils";
+
+.card_title {
+  @extend .page_title;
+  text-align: center;
+  @include phone {
+    font-size: 20px;
+  }
+}
+
+.location_card {
+  width: 500px;
+
+  @include thousendWidth {
+    width: 400px;
+  }
+  @include phone {
+    width: 100%;
+  }
+}
+
+.form_button {
+  width: 100%;
+  margin: 20px auto 0;
+
+}

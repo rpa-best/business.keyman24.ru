@@ -39,7 +39,7 @@ export const HeaderInputSelect: React.FC<{
     const [id, setId] = useState<number>(
         cookie.get('orgId') ?? listValues[0].id
     );
-    const [name, setName] = useState<string>(listValues[0].name);
+    const [name, setName] = useState<string>(listValues[0]?.name);
     const [setOrganization] = useOrganizationStore((state) => [
         state.setOrganization,
     ]);

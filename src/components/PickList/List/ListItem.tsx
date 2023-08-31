@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { DefaultElem } from 'components/PickList/PickList';
+import { DefaultElem } from 'components/PickList/types';
 
 import scss from 'components/PickList/List/List.module.scss';
 

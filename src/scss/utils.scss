@@ -148,6 +148,40 @@ $accent-color-blue: #516FA5;
   }
 }
 
+.page_title_with_table_back_button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 35px;
+  @include thousendTwoWidth {
+    font-size: 28px;
+    padding-bottom: 25px;
+  }
+  @include phoneOrTablet {
+    width: calc(100% - 40px);
+    margin: 20px auto 0;
+    font-size: 24px;
+    padding-bottom: 20px;
+  }
+  @include phone {
+    font-size: 22px;
+  }
+  & h1 {
+    @include MontserratSemiBold(32px);
+    color: white;
+    @include thousendTwoWidth {
+      font-size: 28px;
+    }
+    @include phoneOrTablet {
+      font-size: 24px;
+    }
+    @include phone {
+      font-size: 22px;
+    }
+  }
+}
+
 .children {
   width: calc(100% - 90px);
   margin: 40px auto 0 auto;

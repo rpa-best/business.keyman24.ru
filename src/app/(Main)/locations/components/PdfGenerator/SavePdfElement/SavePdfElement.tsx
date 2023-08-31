@@ -14,17 +14,17 @@ Font.register({
 });
 
 export const SavePdfElement: React.FC<IGeneratedKeys> = ({
-    code,
-    category,
+    name,
+    codeNumber,
     id,
 }) => {
-    const barcodeDataURL = generateBarcodeDataURL(code);
+    const barcodeDataURL = generateBarcodeDataURL(codeNumber);
 
     return (
         <View style={styles.listItem}>
             <View style={styles.listItemDescription}>
                 <Text style={styles.listItemField}>{id}</Text>
-                <Text style={styles.listItemField}>{category}</Text>
+                <Text style={styles.listItemField}>{name}</Text>
             </View>
             <View style={styles.barcode}>
                 <Image src={barcodeDataURL} />

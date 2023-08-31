@@ -41,7 +41,7 @@
   border-radius: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  transition: .1s background-color ease-in-out;
+  transition: .1s all ease-in-out;
   &:hover {
     background-color: $additional-dark;
   }

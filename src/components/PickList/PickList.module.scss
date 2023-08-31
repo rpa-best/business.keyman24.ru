@@ -1,13 +1,51 @@
 @import "scss/utils";
 
+.pick_list_header {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+.picklist_header_svg_wrapper {
+  width: 35px;
+  height: 35px;
+  padding: 9px;
+  background: transparent;
+  box-shadow: 0 0 0 2px transparentize($gray-semi, 0.3);
+  border-radius: 5px;
+  @extend .svg;
+
+  &:hover {
+    box-shadow: 0 0 0 2px white;
+  }
+}
+
+
+.picklist_header_svg {
+  transition: .2s all ease-in-out;
+  transform: rotate(0deg) translateX(1px);
+}
+
+.picklist_header_svg_active {
+  @extend .picklist_header_svg;
+  transform: rotate(180deg) translateY(1px);
+}
+
 .picklist_title {
   color: white;
   @include MontserratSemiBold(24px);
   margin: 30px 0;
+  @include phoneOrTablet {
+    margin-left: 20px;
+  }
+}
+
+.picklist_wrapper_hidden {
+  display: none;
 }
 
 .picklist_wrapper {
-  width: 80%;
+  width: 100%;
   height: max-content;
   display: flex;
   justify-content: space-between;
@@ -17,12 +55,10 @@
   border-radius: 40px;
   align-items: center;
   overflow: hidden;
-  @include thousendTwoWidth {
-    width: 90%;
-  }
   @include phoneOrTablet {
     flex-direction: column;
     width: calc(100% - 20px);
+    margin: 0 auto;
     height: max-content;
   }
 }
@@ -98,10 +134,12 @@
   color: $accent-color;
   transition: .2s all ease-in-out;
   cursor: pointer;
+
   &:hover {
     background: $accent-color;
     color: white;
   }
+
   @include thousendWidth {
     height: 45px;
     width: 45px;
@@ -113,8 +151,8 @@
   height: 20px;
 }
 
-.arrow_left{
- @extend .arrow_settings;
+.arrow_left {
+  @extend .arrow_settings;
   transform: rotate(90deg);
   margin: 2px 5px 0 2px;
   @include phoneOrTablet {

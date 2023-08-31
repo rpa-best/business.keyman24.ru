@@ -8,8 +8,15 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async (orgId) => {
+export const getWorkers: T.GetWorkers = async () => {
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
+        `business/${orgId}/worker/`
+    );
+
+    return res.data;
+};
+export const getServerWorkers: T.GetServerWorkers = async (orgId) => {
+    const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`
     );
 
@@ -24,19 +31,33 @@ export const getWorker: T.GetWorker = async (orgId, workerId) => {
     return res.data;
 };
 
+export const getWorkerUser: T.GetWorkerUser = async (orgId, workerId) => {
+    const res: AxiosResponse<ReturnType<T.GetWorkerUser>> =
+        await $serverAuth.get(`business/${orgId}/worker/${workerId}/user`);
+
+    return res.data;
+};
+
+export const createWorkerUser: T.CreateWorkerUser = async (workerId, body) => {
+    try {
+        await $clientAuth.post(
+            `business/${orgId}/worker/${workerId}/user/`,
+            body
+        );
+    } catch (e: unknown) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 400) {
+                throw e;
+            }
+        }
+    }
+};
+
 export const getWorkerCard: T.GetWorkerCard = async (orgId, workerId) => {
     const res: AxiosResponse<ReturnType<T.GetWorkerCard>> =
         await $serverAuth.get(
             `business/${orgId}/worker/${workerId}/card/?offset=0&ordering=id&limit=10`
         );
-
-    return res.data;
-};
-
-export const getServerSideWorkers: T.GetWorkers = async (orgId) => {
-    const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
-        `business/${orgId}/worker/`
-    );
 
     return res.data;
 };

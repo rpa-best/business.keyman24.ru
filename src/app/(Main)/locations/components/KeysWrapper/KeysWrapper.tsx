@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Button } from 'components/UI/Buttons/Button';
@@ -11,111 +12,81 @@ import { IData, IGeneratedKeys } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
 import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
+import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
+import { LocKeyBody, LocKeysResponse } from 'http/types';
+import { Spinner } from 'components/Spinner';
+import { useModalStore } from 'store/modalVisibleStore';
+import { Modal } from 'components/Modal';
 
 import scss from './KeysWrapper.module.scss';
 
-export const KeysWrapper = () => {
+interface KeysWrapperProps {
+    count: number;
+    keys: LocKeysResponse[];
+}
+
+export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
-    const [generatedData, setGeneratedData] = useState<IGeneratedKeys[]>([]);
+    const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
+
+    const router = useRouter();
+
+    const params = useParams();
 
     useEffect(() => {
-        const localData = localStorage.getItem('data') as string;
-        const parsedData: IData[] = JSON.parse(localData) ?? [];
+        /* const countName: Record<string, number> = keys.reduce((acc, item) => {
+            const { name } = item;
+            // @ts-ignore
+            acc[name] = (acc[name] ?? 0) + 1;
+            return acc;
+        }, {});
 
-        const arr: IGeneratedKeys[] = [];
-        parsedData.forEach((item) => {
-            for (let i = 1; i <= +item.count; i++) {
-                arr.push({
-                    id: i.toString(),
-                    code: generateRandomITF14Code(),
-                    category: item.category,
-                });
-            }
-        });
-        setData(parsedData);
-        setGeneratedData(arr);
-    }, []);
+        const resultArray: IData[] = Object.keys(countName).map((name) => ({
+            id: name,
+            count: countName[name],
+            category: name,
+        }));
 
-    const handleDeleteOne = (id: string) => {
-        const dataItem = data.find((dat) => dat.id === id);
-        setData(data?.filter((d) => d.id !== id));
-        setGeneratedData(
-            generatedData.filter((d) => d.category !== dataItem?.category)
-        );
-        const localData: IData[] = JSON.parse(
-            localStorage.getItem('data') as string
-        );
-        const newLocalData = localData.filter(
-            (l) => l.category !== dataItem?.category
-        );
-        localStorage.setItem('data', JSON.stringify(newLocalData));
+        setData(resultArray);*/
+        setGeneratedData(keys ?? []);
+    }, [keys]);
+
+    const handleTableButtonClick = () => {
+        setVisible(true);
     };
 
-    const handleDeleteAll = () => {
-        setData([]);
-        localStorage.removeItem('data');
+    const handleDeleteOneData = (id: string) => {
+        setData((d) => d.filter((dat) => dat.id !== id));
     };
 
-    const handleChangeItem = (id: string, field: string, value: string) => {
-        setData((prevValue) => {
-            if (!prevValue) {
-                return prevValue;
+    const handleDeleteClick = async (id: number) => {
+        setLoading(true);
+        await deleteLocationKey(+params.locId, +params.objId, +id).finally(
+            () => {
+                router.refresh();
             }
-
-            return prevValue.map((item) => {
-                if (item.id === id) {
-                    return { ...item, [field]: value };
-                }
-                return item;
-            });
-        });
+        );
+        setLoading(false);
     };
 
     const handleGenerateClick = async () => {
-        const arr: IGeneratedKeys[] = [];
-        data.forEach((item) => {
-            for (let i = 1; i <= +item.count; i++) {
-                const newItem = {
-                    id: i.toString(),
-                    code: generateRandomITF14Code(),
-                    category: item.category,
-                };
-                const isDuplicate = generatedData.some(
-                    (existingItem) =>
-                        existingItem.id === newItem.id &&
-                        existingItem.category === newItem.category
-                );
-
-                if (!isDuplicate) {
-                    arr.push(newItem);
-                }
-            }
+        setLoading(true);
+        const body: LocKeyBody[] = data.map((d) => {
+            return { name: d.category, count: d.count };
         });
-        setGeneratedData((data) => [...data, ...arr]);
+
+        createLocationKeys(+params.locId, +params.objId, body).finally(() => {
+            router.refresh();
+            setLoading(false);
+            setVisible(false);
+        });
     };
 
     return (
         <>
             <div className={scss.keys}>
-                <div className={scss.actions_wrapper}>
-                    <RowForm setData={setData} />
-                    <PreviewRowsList
-                        handleChange={handleChangeItem}
-                        deleteAll={handleDeleteAll}
-                        deleteOne={handleDeleteOne}
-                        data={data}
-                    />
-                </div>
-                <div className={scss.button_layout}>
-                    <div className={scss.button_wrapper}>
-                        <Button
-                            type="button"
-                            onClick={() => handleGenerateClick()}
-                        >
-                            Сгенерировать ключи
-                        </Button>
-                    </div>
-                </div>
                 {generatedData.length !== 0 && (
                     <>
                         <div className={scss.download_button_wrapper}>
@@ -130,20 +101,53 @@ export const KeysWrapper = () => {
                         </div>
                         <div className={scss.keys_table_layout}>
                             <Table
+                                buttonData={{
+                                    text: 'Генерация ключей',
+                                    onClick: () => handleTableButtonClick(),
+                                }}
+                                paginatorData={{
+                                    offset: 25,
+                                    countItems: count,
+                                }}
+                                handleDeleteClick={handleDeleteClick}
                                 rowClickable={false}
-                                tableRows={generatedData.slice(0, 50) as any}
+                                tableRows={generatedData}
                             >
-                                <Column header="id" field="id" />
                                 <Column
                                     header="Название"
-                                    field="category"
+                                    field="name"
                                     sortable
                                 />
-                                <Column header="Код" field="code" />
+                                <Column header="Код" field="codeNumber" />
                             </Table>
                         </div>
                     </>
                 )}
+                <Modal>
+                    <>
+                        <h2 className={scss.actions_data_title}>
+                            Генерация ключей
+                        </h2>
+                        <div className={scss.actions_wrapper}>
+                            <RowForm setData={setData} />
+                            <PreviewRowsList
+                                deleteOne={handleDeleteOneData}
+                                data={data}
+                            />
+                        </div>
+                        <div className={scss.button_wrapper}>
+                            <Button
+                                type="button"
+                                disabled={data.length === 0}
+                                nowrap
+                                onClick={() => handleGenerateClick()}
+                            >
+                                Сгенерировать ключи
+                            </Button>
+                        </div>
+                    </>
+                </Modal>
+                {loading && <Spinner />}
             </div>
         </>
     );

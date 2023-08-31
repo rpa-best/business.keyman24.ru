@@ -81,6 +81,66 @@ export const createAdminPermission: T.CreateOrgPermission = async ({
     return response.data;
 };
 
+export const getWorkerPermissions: T.GetWorkerPermission = async (
+    orgId,
+    username
+) => {
+    const res: AxiosResponse<ReturnType<T.GetWorkerPermission>> =
+        await $serverAuth.get(`business/${orgId}/permission/user/${username}/`);
+
+    return res.data;
+};
+
+export const createWorkerPermission: T.CreateWorkerPermission = async ({
+    permission,
+    user,
+    type,
+}) => {
+    await $clientAuth.post(`business/${orgId}/permission/user/${user}/`, {
+        permission,
+        user,
+        type,
+    });
+};
+
+export const getWorkerGroupPermissions: T.GetWorkerGroupUserPerm = async (
+    orgId,
+    workerName
+) => {
+    const res: AxiosResponse<ReturnType<T.GetWorkerGroupUserPerm>> =
+        await $serverAuth.get(
+            `business/${orgId}/permission/group/user/${workerName}/`
+        );
+
+    return res.data;
+};
+
+export const createWorkerGroupUser: T.CreateWorkerGroupUser = async (
+    workerName,
+    body
+) => {
+    await $clientAuth.post(
+        `business/${orgId}/permission/group/user/${workerName}/`,
+        body
+    );
+};
+
+export const deleteWorkerGroupUser: T.DeleteWorkerGroupUser = async (
+    workerName,
+    groupId
+) => {
+    await $clientAuth.delete(
+        `business/${orgId}/permission/group/user/${workerName}/${groupId}`
+    );
+};
+
+export const deleteWorkerPermission: T.DeleteWorkerPermission = async (
+    user,
+    id
+) => {
+    await $clientAuth.delete(`business/${orgId}/permission/user/${user}/${id}`);
+};
+
 export const deleteAdminPermission: T.DeleteOrgPermission = async ({
     id,
     orgId,

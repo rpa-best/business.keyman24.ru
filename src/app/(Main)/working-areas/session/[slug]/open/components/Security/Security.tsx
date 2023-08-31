@@ -35,7 +35,7 @@ export const Security: React.FC<SecurityProps> = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            return await getWorkers(1);
+            return await getWorkers();
         };
         fetchData().then(async (d) => {
             await getWorkerDocs(d.results[0].id, 1 as number).then((d) =>

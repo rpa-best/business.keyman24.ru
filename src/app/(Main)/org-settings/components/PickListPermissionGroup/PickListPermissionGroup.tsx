@@ -1,19 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { PickList } from 'components/PickList';
 import { IAdminGroupPermission, IGroupPermission } from 'http/types';
-import { getModeName } from 'helpers/permTypeHelper';
-import {
-    getGroupListValues,
-    getListValues,
-} from 'components/PickList/helpers/getListValues';
 
-import {} from 'http/organizationApi';
 import { useRouter } from 'next/navigation';
-import { Spinner } from 'components/Spinner';
-import { CustomGroupAdminPermission } from 'app/(Main)/org-settings/components/PickListPermissionGroup/types';
+
 import {
     CustomAdminPermission,
     CustomPermission,
@@ -34,91 +27,41 @@ export const PickListPermissionGroup: React.FC<
 > = ({ adminPermissions, permissions, orgId }) => {
     const router = useRouter();
 
-    const [loading, setLoading] = useState(false);
-
-    //Левая колонка
-    const [allPermissions, setAllPermissions] = useState<IGroupPermission[]>();
-    //Правая колонка
-    const [allAdminPermissions, setAllAdminPermissions] =
-        useState<CustomGroupAdminPermission[]>();
-
-    const [selectedClicked, setSelectedClicked] = useState<
-        CustomGroupAdminPermission[]
-    >([]);
-    const [availableClicked, setAvailableClicked] = useState<
-        IGroupPermission[]
-    >([]);
-
-    //Конвертация для лучшего UI
-    useEffect(() => {
-        const available = getGroupListValues(permissions, adminPermissions);
-        const selected = adminPermissions.map((perm) => {
-            return {
-                ...perm,
-                content: `${perm?.group?.name}`,
-            };
-        });
-        setAllPermissions(available);
-        setAllAdminPermissions(selected);
-        setLoading(false);
-    }, [adminPermissions, permissions]);
-
-    //Очистка выбранного при кликах на стрелки
-    useEffect(() => {
-        setAvailableClicked((prev) =>
-            prev.filter((item) => allPermissions?.includes(item))
-        );
-
-        setSelectedClicked((prev) =>
-            prev.filter((item) => allAdminPermissions?.includes(item))
-        );
-    }, [allAdminPermissions, allPermissions]);
-
-    const handleArrowRight = (elems: CustomPermission[]) => {
-        if (availableClicked.length === 0) {
-            return;
-        }
-        setLoading(true);
-        Promise.all(
+    const handleArrowRight = async (elems: CustomPermission[]) => {
+        await Promise.all(
             elems.map(async (el) => {
                 await createAdminGroupPermission({
                     group: el.id,
                     org: orgId,
                 });
             })
-        ).then(() => {
+        ).finally(() => {
             router.refresh();
         });
     };
 
-    const handleArrowLeft = (elems: CustomAdminPermission[]) => {
-        if (selectedClicked.length === 0) {
-            return;
-        }
-        setLoading(true);
-        Promise.all(
+    const handleArrowLeft = async (elems: CustomAdminPermission[]) => {
+        await Promise.all(
             elems.map((el) => {
                 deleteAdminGroupPermission({
                     id: el.id,
                     orgId: orgId,
                 });
             })
-        ).then(() => router.refresh());
+        ).finally(() => {
+            router.refresh();
+        });
     };
 
     return (
         <>
             <PickList
-                loading={loading}
-                selectedClicked={selectedClicked as any}
-                availableClicked={availableClicked as any}
                 title="Настройка доступа"
-                available={allPermissions as any}
-                selected={allAdminPermissions as any}
+                available={permissions as []}
+                selected={adminPermissions as []}
                 handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}
             />
-            {loading && <Spinner />}
         </>
     );
 };

@@ -4,41 +4,35 @@
   padding-bottom: 20px;
 }
 
-
-.actions_wrapper {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 20px;
-  @include thousendWidth {
-    flex-direction: column;
-    justify-content: center;
-    row-gap: 20px;
-  }
+.actions_data_title {
+  @include MontserratSemiBold(28px);
+  text-align: center;
+  color: white;
   @include phoneOrTablet {
-    width: calc(100% - 40px);
-    margin: 0 auto;
-    row-gap: 10px;
+    font-size: 20px;
   }
 }
 
+.actions_wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+
+}
+
 .button_wrapper {
-  width: max-content;
+    width: 50%;
+    margin: 20px auto 0;
   @include phoneOrTablet {
     width: 100%;
   }
 }
 
-.button_layout {
-  display: flex;
-  justify-content: flex-end;
-  margin: 19px 35px;
-}
 
 .download_button_wrapper {
   width: max-content;
   margin: 0 0 10px 20px;
   @include phoneOrTablet {
-    width: calc(100% - 70px);
-    margin: 19px 35px;
+    margin: 15px 20px;
   }
 }

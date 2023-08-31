@@ -1,0 +1,1 @@
+export { WorkersPickListWrapper } from './WorkersPickListWrapper';

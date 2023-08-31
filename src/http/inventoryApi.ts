@@ -11,7 +11,7 @@ const orgId = cookie.get('orgId');
 
 export const getInventories: T.GetInventories = async (orgId, offset) => {
     const query = new URLSearchParams();
-    offset ? query.set('limit', offset.toString()) : query.set('limit', '10');
+    query.set('limit', '10');
     offset ? query.set('offset', offset.toString()) : '';
 
     const res: AxiosResponse<ReturnType<T.GetInventories>> =
@@ -75,5 +75,12 @@ export const deleteInventoryItemPhoto: T.DeleteInventoryPhoto = async (
 ) => {
     await $clientAuth.delete(
         `business/${orgId}/inventory/${itemId}/image/${imageId}`
+    );
+};
+
+export const createInventoryKeys: T.CreateInventoryCode = async (body) => {
+    await $clientAuth.post(
+        `business/${orgId}/inventory/inventory-generate/`,
+        body
     );
 };

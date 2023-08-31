@@ -1,17 +1,18 @@
 import { cookies } from 'next/headers';
 
-import { getServerSideWorkers } from 'http/workerApi';
 import { ModifiedWorkers } from 'app/(Main)/workers/types';
 import { WorkersTableWrapper } from 'app/(Main)/workers/components/WorkersTableWrapper';
+import { getServerWorkers } from 'http/workerApi';
 
 import scss from './Worker.module.scss';
+import { BackButton } from 'components/UI/Buttons/BackButton';
 
 const WorkersPage = async () => {
     const cookieStore = cookies();
 
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const serverWorkers = await getServerSideWorkers(+orgId);
+    const serverWorkers = await getServerWorkers(+orgId);
 
     const modifiedWorkers: ModifiedWorkers = {
         ...serverWorkers,
