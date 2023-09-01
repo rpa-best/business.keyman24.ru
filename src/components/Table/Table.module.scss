@@ -83,7 +83,7 @@
 
 .table_header {
   @extend .table_td;
-  width: 30%;
+  width: 33%;
   font-size: 20px!important;
   min-width: 250px;
   &:first-child {
@@ -161,7 +161,7 @@
 .table_td {
   @include MontserratMediumBold(18px);
   min-height: 70px;
-  width: 30%;
+  width: 33%;
   min-width: 200px;
   display: flex;
   align-items: center;
@@ -188,6 +188,9 @@
   }
 
   &:last-child {
+    @include fullHd {
+      min-width: 200px;
+    }
     min-width: 250px;
     display: flex;
     justify-content: space-between;

@@ -1,10 +1,6 @@
 import { cookies } from 'next/headers';
 
-import {
-    getGroupPermissions,
-    getPermissions,
-    getPermLevels,
-} from 'http/permissionsApi';
+import { getGroupPermissions, getPermLevels } from 'http/permissionsApi';
 import { PermGroupTableWrapper } from 'app/(Main)/permission-group/components/PermGroupTableWrapper';
 
 import scss from './PermGroup.module.scss';

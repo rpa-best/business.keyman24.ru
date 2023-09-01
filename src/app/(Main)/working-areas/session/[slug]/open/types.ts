@@ -8,15 +8,12 @@ export interface RegisterProps {
     organizations: IOrganization[];
     currentAreaId: number;
     currentSessionId: number;
-}
-
-export interface SecurityProps extends Omit<RegisterProps, 'organizations'> {
     sessionLog: SessionLogResponse[];
 }
 
-export interface KeyProps extends RegisterProps {
-    sessionLog: SessionLogResponse[];
-}
+export interface SecurityProps extends Omit<RegisterProps, 'organizations'> {}
+
+export interface KeyProps extends RegisterProps {}
 
 export type CloseSessionType = (
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,

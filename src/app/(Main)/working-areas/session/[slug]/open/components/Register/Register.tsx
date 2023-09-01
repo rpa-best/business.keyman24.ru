@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { closeSession } from 'http/workingAreaApi';
@@ -12,14 +12,18 @@ import { IWorker, IWorkerDocs } from 'http/types';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
 import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
+import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
+import { Table } from 'components/Table';
+import { Column } from 'components/Table/Column';
 
 import scss from './Register.module.scss';
-import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
+import { useSocketConnect } from 'helpers/useSocketConnect';
 
 export const Register: React.FC<RegisterProps> = ({
     organizations,
     currentSessionId,
     currentAreaId,
+    sessionLog,
 }) => {
     const router = useRouter();
 
@@ -28,7 +32,16 @@ export const Register: React.FC<RegisterProps> = ({
     const [selectedWorkerDocs, setSelectedWorkerDocs] =
         useState<IWorkerDocs[]>();
     const [workers, setWorkers] = useState<IWorker[]>([]);
+    const [workerCard, setWorkerCard] = useState<IWorker>();
     const [loading, setLoading] = useState(false);
+    const socket = useRef<WebSocket>();
+
+    useSocketConnect({
+        setLoading,
+        socket: socket.current as WebSocket,
+        setWorker: setWorkerCard,
+        sessionId: currentSessionId,
+    });
 
     const handleSelectOrg = (org: IOrganization) => {
         setLoading(true);
@@ -55,7 +68,7 @@ export const Register: React.FC<RegisterProps> = ({
         setLoading(true);
         setSelectedWorker(worker);
         const fetchData = async () => {
-            return await getWorkerDocs(worker.id, selectedOrg?.id as number);
+            return await getWorkerDocs(worker.id);
         };
         fetchData()
             .then((d) => setSelectedWorkerDocs(d.results))
@@ -64,7 +77,7 @@ export const Register: React.FC<RegisterProps> = ({
 
     return (
         <div>
-            <div className={scss.button_wrapper}>
+            <div className={scss.button_register_wrapper}>
                 <Button onClick={() => onCloseSessionClick()} type="button">
                     Завершить сессию
                 </Button>
@@ -92,10 +105,21 @@ export const Register: React.FC<RegisterProps> = ({
                 )}
             </div>
             {selectedOrg && selectedWorker && (
-                <WorkerInfoCard
-                    worker={selectedWorker}
-                    workerDocs={selectedWorkerDocs as IWorkerDocs[]}
-                />
+                <div className={scss.working_view_wrapper}>
+                    <div className={scss.working_view_card}>
+                        <WorkerInfoCard
+                            worker={selectedWorker as IWorker}
+                            workerDocs={selectedWorkerDocs as IWorkerDocs[]}
+                        />
+                    </div>
+                    <div className={scss.working_view_table}>
+                        <Table tableRows={sessionLog}>
+                            <Column header="Работник" field="workerName" />
+                            <Column header="Дата" field="date" />
+                            <Column header="Тип" field="modeName" />
+                        </Table>
+                    </div>
+                </div>
             )}
             {loading && <Spinner />}
         </div>

@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { WorkAreaValues } from 'app/(Main)/working-areas/components/EditWorkingArea/types';
@@ -8,9 +8,14 @@ import { Input } from 'components/UI/Inputs/Input';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { CreateWorkingAreaProp, ILocation, IType } from 'http/types';
 import { Button } from 'components/UI/Buttons/Button';
-import { ValidateAddWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea/EditWorkingArea.utils';
+import {
+    fetchAreasData,
+    ValidateAddWorkingArea,
+} from 'app/(Main)/working-areas/components/EditWorkingArea/EditWorkingArea.utils';
 import { useModalStore } from 'store/modalVisibleStore';
 import { createWorkingArea, patchWorkingArea } from 'http/workingAreaApi';
+import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
+import { AreaPickList } from 'app/(Main)/working-areas/components/AreasPickList/AreasPickList';
 
 import scss from './EditWorkingArea.module.scss';
 
@@ -21,6 +26,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     editableArea,
 }) => {
     const router = useRouter();
+    const [refresh, setRefresh] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const onSubmit = async (values: WorkAreaValues) => {
         const body: CreateWorkingAreaProp = {
@@ -68,6 +74,18 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         validate: ValidateAddWorkingArea,
         onSubmit,
     });
+
+    const [source, setSource] = useState<CustomGroupDefaultElem[]>([]);
+    const [target, setTarget] = useState<CustomGroupDefaultElem[]>([]);
+
+    useEffect(() => {
+        if (formType === 'edit') {
+            fetchAreasData(editableArea?.id as number).then((d) => {
+                setSource(d.trg as []);
+                setTarget(d.src as []);
+            });
+        }
+    }, [editableArea?.id, formType, refresh]);
 
     return (
         <>
@@ -125,6 +143,14 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                         {formType === 'create' ? 'Добавить' : 'Сохранить'}
                     </Button>
                 </div>
+                {formType === 'edit' && (
+                    <AreaPickList
+                        target={target}
+                        source={source}
+                        setRefresh={setRefresh}
+                        areaId={editableArea?.id as number}
+                    />
+                )}
             </form>
         </>
     );

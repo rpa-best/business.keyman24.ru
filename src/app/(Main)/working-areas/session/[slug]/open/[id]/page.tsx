@@ -1,15 +1,10 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 
-import { Inventory } from 'app/(Main)/working-areas/session/[slug]/open/components/Inventory';
 import { Key } from 'app/(Main)/working-areas/session/[slug]/open/components/Key';
 import { Register } from 'app/(Main)/working-areas/session/[slug]/open/components/Register';
 import { Security } from 'app/(Main)/working-areas/session/[slug]/open/components/Security';
-import {
-    getSessionLog,
-    getSessions,
-    getWorkingAreas,
-} from 'http/workingAreaApi';
+import { getSessionLog, getWorkingAreas } from 'http/workingAreaApi';
 import { getOrganizations } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
@@ -47,7 +42,25 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
     );
 
     const modifiedLog = sessionLog.results.map((s) => {
-        return { ...s, workerName: s.worker.name };
+        const mode = s.mode ? 'Зашёл' : 'Вышел';
+        return { ...s, workerName: s.worker.name, modeName: mode };
+    });
+
+    const keyLog = modifiedLog.map((l) => {
+        const inventoryName = `${l.worker.inventories[0].id} ${l.worker.inventories[0].name}`;
+        if (l.mode) {
+            return {
+                ...l,
+                modeName: 'Выдана',
+                inventoryName: inventoryName,
+            };
+        } else {
+            return {
+                ...l,
+                modeName: 'Сдана',
+                inventoryName: inventoryName,
+            };
+        }
     });
 
     switch (params.slug) {
@@ -59,7 +72,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Key
-                        sessionLog={modifiedLog}
+                        sessionLog={keyLog}
                         currentSessionId={+params.id}
                         currentAreaId={area?.id as number}
                         organizations={organizations}
@@ -75,7 +88,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Key
-                        sessionLog={modifiedLog}
+                        sessionLog={keyLog}
                         currentSessionId={+params.id}
                         currentAreaId={area?.id as number}
                         organizations={organizations}
@@ -91,6 +104,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Register
+                        sessionLog={keyLog}
                         currentSessionId={+params.id}
                         currentAreaId={area?.id as number}
                         organizations={organizations}

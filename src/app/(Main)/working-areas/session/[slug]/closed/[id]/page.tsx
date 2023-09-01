@@ -28,7 +28,13 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
     );
 
     const modifiedLog = sessionLog.results.map((s) => {
-        return { ...s, workerName: s.worker.name };
+        let mode;
+        if (params.slug !== 'security') {
+            mode = s.mode ? 'Получено' : 'Сдано';
+        } else {
+            mode = s.mode ? 'Зашёл' : 'Вышел';
+        }
+        return { ...s, workerName: s.worker.name, mode: mode };
     });
 
     return (
@@ -39,8 +45,8 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
             {modifiedLog.length !== 0 ? (
                 <Table tableRows={modifiedLog}>
                     <Column header="Работник" field="workerName" />
-                    <Column header="Дата" field="date" />
-                    <Column header="Тип" field="mode" />
+                    <Column sortable header="Дата" field="date" />
+                    <Column sortable header="Тип" field="mode" />
                 </Table>
             ) : (
                 <h2 className={scss.empty}>

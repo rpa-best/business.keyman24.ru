@@ -8,14 +8,14 @@ import { Column } from 'components/Table/Column';
 import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { AttachCard } from 'app/(Main)/working-areas/components/AttachCard';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Button } from 'components/UI/Buttons/Button';
 import { ICreateSessionBody } from 'http/types';
 import { closeSession, createSession } from 'http/workingAreaApi';
+import { Spinner } from 'components/Spinner';
+import { useUserStore } from 'store/userStore';
 
 import scss from './SessionWrapper.module.scss';
-import { useUserStore } from 'store/userStore';
-import { Spinner } from 'components/Spinner';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -26,8 +26,10 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
-    const pathname = usePathname();
     const router = useRouter();
+
+    const params = useParams();
+    const pathname = usePathname();
 
     const currentSession = sessions.find((s) => s.status === 'В процессе');
 
@@ -40,7 +42,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         if (session?.status === 'Завершена') {
             router.push(`${pathname}/closed/${session.id}`);
         } else {
-            router.push(`${pathname}/open/${session?.id}`);
+            if (params.slug === 'register') {
+                router.push(`${pathname}/open/${session?.id}`);
+                return;
+            }
+            setVisible(true);
         }
     };
 
@@ -64,7 +70,15 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             is_active: false,
             user: user?.username as string,
         };
-        await createSession(areaId, body).then(() => setVisible(false));
+        await createSession(areaId, body)
+            .then(() => setVisible(false))
+            .then(() => {
+                if (params.slug === 'register') {
+                    router.push(`${pathname}/open/${maxNumber + 1}`);
+                    return;
+                }
+                setVisible(true);
+            });
         router.refresh();
         setLoading(false);
     };
@@ -104,7 +118,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                 <Column header="Статус" field="status" />
             </Table>
             <Modal>
-                <AttachCard />
+                <AttachCard
+                    user={user?.username as string}
+                    session={currentSession?.id as number}
+                    areaId={areaId}
+                />
             </Modal>
             {loading && <Spinner />}
         </>

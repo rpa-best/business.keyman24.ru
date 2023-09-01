@@ -4,6 +4,7 @@
   @include MontserratSemiBold(26px);
   color: white;
   text-align: center;
+  margin-bottom: 50px;
   @include phoneOrTablet {
     font-size: 24px;
   }

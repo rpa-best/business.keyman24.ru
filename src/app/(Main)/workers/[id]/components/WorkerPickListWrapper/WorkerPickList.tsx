@@ -23,7 +23,6 @@ export const WorkersPermissionsPickList: React.FC<
     const router = useRouter();
 
     const handleArrowRight = async (elems: CustomDefaultElem[]) => {
-        console.log(elems);
         setLoading(true);
         await Promise.all(
             elems.map(async (el) => {

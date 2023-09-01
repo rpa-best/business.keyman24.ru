@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
@@ -12,6 +12,8 @@ import { IWorker, IWorkerDocs } from 'http/types';
 import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
+import { useSocketConnect } from 'helpers/useSocketConnect';
+import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 
 import scss from './Security.module.scss';
 
@@ -24,6 +26,15 @@ export const Security: React.FC<SecurityProps> = ({
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const socket = useRef<WebSocket>();
+
+    useSocketConnect({
+        setLoading,
+        setWorker,
+        setWorkerDocs,
+        socket: socket.current as WebSocket,
+        sessionId: currentSessionId,
+    });
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(
@@ -40,7 +51,7 @@ export const Security: React.FC<SecurityProps> = ({
             return await getWorkers();
         };
         fetchData().then(async (d) => {
-            await getWorkerDocs(d.results[2].id, 1 as number).then((d) =>
+            await getWorkerDocs(d.results[2].id).then((d) =>
                 setWorkerDocs(d.results)
             );
             setWorker(d.results[0]);
@@ -55,12 +66,21 @@ export const Security: React.FC<SecurityProps> = ({
                 </Button>
             </div>
             <div className={scss.working_view_wrapper}>
-                <div className={scss.working_view_card}>
+                {worker?.id ? (
                     <WorkerInfoCard
                         worker={worker as IWorker}
                         workerDocs={workerDocs as IWorkerDocs[]}
                     />
-                </div>
+                ) : (
+                    <div className={scss.worker_empty_wrapper}>
+                        <h2 className={scss.spinner_header}>
+                            Ожидание работника
+                        </h2>
+                        <div className={scss.spinner}>
+                            <SpinnerFit />
+                        </div>
+                    </div>
+                )}
                 <div className={scss.working_view_table}>
                     <Table tableRows={sessionLog}>
                         <Column header="Работник" field="workerName" />

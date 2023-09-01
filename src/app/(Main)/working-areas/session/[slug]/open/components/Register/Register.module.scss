@@ -1,4 +1,5 @@
 @import "scss/utils";
+@import "src/app/(Main)/working-areas/session/[slug]/open/components/Security/Security.module.scss";
 
 .inputs_wrapper {
   display: flex;
@@ -19,7 +20,8 @@
   }
 }
 
-.button_wrapper {
+.button_register_wrapper {
   width: max-content;
-  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
 }

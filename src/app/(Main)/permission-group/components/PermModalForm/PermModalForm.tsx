@@ -14,9 +14,9 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { Input } from 'components/UI/Inputs/Input';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
+import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 
 import scss from 'app/(Main)/permission-group/PermGroup.module.scss';
-import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 
 export const PermModalForm: React.FC<IFormProps> = ({
     level,

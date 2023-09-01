@@ -63,7 +63,7 @@ export interface IInventory {
     codeImage: string;
     is_active: boolean;
     location: number;
-    object_area: number;
+    objectArea: number;
 }
 
 export interface IGroupPermission {
@@ -127,6 +127,22 @@ export interface IWorkingArea {
     type: IType;
 }
 
+export interface IWorkingAreaDevice {
+    id: number;
+    device: IDevice;
+    area: number;
+}
+
+export interface SocketResponse {
+    data: {
+        device: number;
+        mode: boolean;
+        user: string;
+        worker: IWorker;
+    };
+    type: 'success' | string;
+}
+
 export interface CreateWorkingAreaProp {
     deleted: boolean;
     location: number;
@@ -156,7 +172,7 @@ export interface IWorker {
         isOfficial: string;
     };
     org: IOrganization;
-    inventories: string;
+    inventories: IInventory[];
     lc_id: number;
     name: string;
     user_lc_id: number;
@@ -173,6 +189,14 @@ export interface ICreateSessionBody
 
 export interface IModifiedSession extends Omit<ISession, 'status'> {
     status: string;
+}
+
+export interface IDevice {
+    id: number;
+    type: string;
+    name: string;
+    desc: string;
+    simValue: number;
 }
 
 export interface SessionLogResponse {
@@ -515,6 +539,18 @@ export type CreateSession = (
     body: ICreateSessionBody
 ) => Promise<void>;
 
+export type SendCheckSession = (
+    areaId: number,
+    sessionId: number,
+    body: { user: string; session: number }
+) => Promise<void>;
+
+export type SendBarcode = (
+    areaId: number,
+    sessionId: number,
+    body: { session: number; worker: number; barcode: string }
+) => Promise<void>;
+
 export type GetWorkers = () => Promise<IResponse<IWorker>>;
 
 export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
@@ -558,4 +594,24 @@ export type GetWorkerDocs = (
     orgId: number
 ) => Promise<IResponse<IWorkerDocs>>;
 
+export type GetClientWorkerDocs = (
+    workerId: number
+) => Promise<IResponse<IWorkerDocs>>;
+
 export type DeleteWorker = (workerId: number) => Promise<void>;
+
+export type GetWorkingAreaDevices = (
+    areaId: number
+) => Promise<IResponse<IWorkingAreaDevice>>;
+
+export type CreateWorkingAreaDevice = (
+    areaId: number,
+    body: { device: number; areaId: number }
+) => Promise<void>;
+
+export type DeleteWorkingAreaDevice = (
+    areaId: number,
+    deviceId: number
+) => Promise<void>;
+
+export type GetDevices = () => Promise<IResponse<IDevice>>;
