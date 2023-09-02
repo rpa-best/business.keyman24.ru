@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { closeSession } from 'http/workingAreaApi';
@@ -18,6 +18,7 @@ import { Column } from 'components/Table/Column';
 
 import scss from './Register.module.scss';
 import { useSocketConnect } from 'helpers/useSocketConnect';
+import { useModalStore } from 'store/modalVisibleStore';
 
 export const Register: React.FC<RegisterProps> = ({
     organizations,
@@ -35,6 +36,12 @@ export const Register: React.FC<RegisterProps> = ({
     const [workerCard, setWorkerCard] = useState<IWorker>();
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
+
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    useEffect(() => {
+        setVisible(false);
+    }, [setVisible]);
 
     useSocketConnect({
         setLoading,

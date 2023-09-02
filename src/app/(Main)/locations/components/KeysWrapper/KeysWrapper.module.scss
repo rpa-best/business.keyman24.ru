@@ -4,6 +4,11 @@
   padding-bottom: 20px;
 }
 
+.key_generate_button {
+  width: max-content;
+  margin-right: auto;
+}
+
 .actions_data_title {
   @include MontserratSemiBold(28px);
   text-align: center;

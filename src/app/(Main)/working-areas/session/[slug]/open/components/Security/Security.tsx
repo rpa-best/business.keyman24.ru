@@ -16,6 +16,7 @@ import { useSocketConnect } from 'helpers/useSocketConnect';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 
 import scss from './Security.module.scss';
+import { useModalStore } from 'store/modalVisibleStore';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -27,6 +28,12 @@ export const Security: React.FC<SecurityProps> = ({
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const socket = useRef<WebSocket>();
+
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    useEffect(() => {
+        setVisible(false);
+    }, [setVisible]);
 
     useSocketConnect({
         setLoading,

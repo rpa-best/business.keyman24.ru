@@ -35,11 +35,11 @@ export const AttachCard: React.FC<AttachCardProps> = ({
             session,
         };
         await sendCheck(areaId, session, body).then(() => {
-            router.push(`${pathname}/open/${session}`);
+            setVisible(false);
             if (socket.current) {
                 socket.current?.close();
             }
-            setVisible(false);
+            router.push(`${pathname}/open/${session}`);
         });
     };
 

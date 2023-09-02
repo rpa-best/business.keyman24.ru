@@ -41,20 +41,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const params = useParams();
 
     useEffect(() => {
-        /* const countName: Record<string, number> = keys.reduce((acc, item) => {
-            const { name } = item;
-            // @ts-ignore
-            acc[name] = (acc[name] ?? 0) + 1;
-            return acc;
-        }, {});
-
-        const resultArray: IData[] = Object.keys(countName).map((name) => ({
-            id: name,
-            count: countName[name],
-            category: name,
-        }));
-
-        setData(resultArray);*/
         setGeneratedData(keys ?? []);
     }, [keys]);
 
@@ -106,6 +92,13 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     return (
         <>
             <div className={scss.keys}>
+                <div className={scss.key_generate_button}>
+                    {fullData.length === 0 && (
+                        <Button onClick={handleTableButtonClick} type="button">
+                            Сгенерировать ключи
+                        </Button>
+                    )}
+                </div>
                 {generatedData.length !== 0 && (
                     <>
                         <div className={scss.download_button_wrapper}>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { EnterCodeForm } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm';
@@ -16,6 +16,7 @@ import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { useSocketConnect } from 'helpers/useSocketConnect';
 
 import scss from './Key.module.scss';
+import { useModalStore } from 'store/modalVisibleStore';
 
 export const Key: React.FC<KeyProps> = ({
     currentSessionId,
@@ -26,8 +27,13 @@ export const Key: React.FC<KeyProps> = ({
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
-
     const router = useRouter();
+
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    useEffect(() => {
+        setVisible(false);
+    }, [setVisible]);
 
     useSocketConnect({
         sessionId: currentSessionId,
