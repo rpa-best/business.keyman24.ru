@@ -19,12 +19,9 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
 
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const keys = await getLocationKeys(
-        +orgId,
-        +params.locId,
-        +params.objId,
-        offset
-    );
+    const keys = await getLocationKeys(+orgId, +params.locId, +params.objId, {
+        offset,
+    });
 
     return (
         <div className={scss.children_with_table}>

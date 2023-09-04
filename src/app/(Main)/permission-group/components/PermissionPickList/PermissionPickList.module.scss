@@ -1,0 +1,19 @@
+@import "scss/utils";
+
+.pick_list_wrapper {
+  height: 150px;
+
+  @include fullHd {
+    max-height: 500px;
+  }
+  @include laptopWidth {
+    max-height: 350px;
+  }
+  @include thousendWidth {
+    width: 100%;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+
+  }
+}

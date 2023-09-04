@@ -25,6 +25,7 @@ export const Row: React.FC<ColumnRowProps> = ({
     const tableTdClassName = clsx({
         [scss.table_td]: true,
         [scss.table_td_less_3]: headers.length < 3,
+        [scss.table_td_more_3]: headers.length > 3,
     });
 
     const needActions = !!(handleEditClick || handleDeleteClick);

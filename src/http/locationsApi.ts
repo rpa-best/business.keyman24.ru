@@ -1,5 +1,5 @@
 import * as T from 'http/types';
-import { AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { $clientAuth } from 'http/clientIndex';
 import { $serverAuth } from 'http/serverIndex';
 import UniversalCookies from 'universal-cookie';
@@ -78,18 +78,32 @@ export const getLocationKeys: T.GetLocationKeys = async (
     orgId,
     locId,
     objId,
-    offset
+    { full, offset }
 ) => {
     const query = new URLSearchParams();
     query.set('limit', '25');
-    offset ? query.set('offset', offset) : '';
+    offset && query.set('offset', offset);
+
+    const config: AxiosRequestConfig = {
+        params: !full ? query : undefined,
+    };
 
     const res: AxiosResponse<ReturnType<T.GetLocationKeys>> =
         await $serverAuth.get(
-            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name&limit=25&type=keys`,
-            {
-                params: query,
-            }
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name&type=keys`,
+            config
+        );
+
+    return res.data;
+};
+
+export const getLocationClientKeys: T.GetLocationClientKeys = async (
+    locId,
+    objId
+) => {
+    const res: AxiosResponse<ReturnType<T.GetLocationKeys>> =
+        await $clientAuth.get(
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name&type=keys`
         );
 
     return res.data;

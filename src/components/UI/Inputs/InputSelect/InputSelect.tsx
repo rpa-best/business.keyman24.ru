@@ -51,10 +51,19 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     }, [value]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const inputValue = e.target.value;
         if (setFieldTouched) {
             setFieldTouched(name, true);
         }
-        setInputValue(e.target.value);
+        setInputValue(inputValue);
+
+        // Фильтруем список на основе inputValue
+        const filteredList = listValues.filter((item) =>
+            item.name.includes(inputValue)
+        );
+
+        // Устанавливаем отфильтрованный список в modifiedListValues
+        setModifiedListValues(filteredList);
     };
 
     const handleSetData = (id: number) => {

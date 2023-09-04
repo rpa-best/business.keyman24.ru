@@ -44,6 +44,7 @@ export const WorkerGroupPickList: React.FC<WorkerPresetPermValues> = ({
     return (
         <>
             <PickList
+                visibile={false}
                 hidden
                 title="Настройка группы прав"
                 available={source}

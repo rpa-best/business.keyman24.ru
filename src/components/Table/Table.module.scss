@@ -37,6 +37,14 @@
   overflow-y: auto;
   scrollbar-width: thin;
 
+  @include laptopWidth {
+    height: 350px;
+  }
+
+  @include phoneOrTablet {
+    height: 250px;
+  }
+
   &::-webkit-scrollbar {
     position: absolute;
     width: 5px;
@@ -54,14 +62,6 @@
 
   &::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
-  }
-
-  @include laptopWidth {
-    height: 300px;
-  }
-
-  @include phoneOrTablet {
-    height: 250px;
   }
 
 }
@@ -83,7 +83,7 @@
 
 .table_header {
   @extend .table_td;
-  width: 30%;
+  width: 33%;
   font-size: 20px!important;
   min-width: 250px;
   &:first-child {
@@ -119,6 +119,11 @@
 
   &:hover {
     background-color: $additional-dark;
+    & .table_td{
+      @include phone {
+        background-color: inherit;
+      }
+    }
   }
 }
 
@@ -138,11 +143,25 @@
   }
 }
 
+
+.table_headers_more_3 {
+  width: 25%!important;
+  @include thousendWidth {
+    min-width: 150px!important;
+  }
+}
+
+.table_td_more_3 {
+  width: 25%!important;
+  @include thousendWidth {
+    min-width: 150px!important;
+  }
+}
+
 .table_td {
-  transition: .25s all ease-in-out;
   @include MontserratMediumBold(18px);
   min-height: 70px;
-  width: 30%;
+  width: 33%;
   min-width: 200px;
   display: flex;
   align-items: center;
@@ -169,6 +188,9 @@
   }
 
   &:last-child {
+    @include fullHd {
+      min-width: 200px;
+    }
     min-width: 250px;
     display: flex;
     justify-content: space-between;
@@ -292,13 +314,14 @@
 
 
 .actions_wrapper {
-  margin-right: 5%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   column-gap: 20px;
+  transition: .2s all ease-in-out;
+  padding-right: 5%;
   opacity: 0;
-  transition: .2s opacity ease-in-out;
+  background-color: inherit;
   padding-left: 20px;
   @include phoneOrTablet {
     height: 100%;

@@ -62,7 +62,7 @@ export const getWorkerCard: T.GetWorkerCard = async (orgId, workerId) => {
     return res.data;
 };
 
-export const getWorkerDocs: T.GetWorkerDocs = async (workerId, orgId) => {
+export const getWorkerDocs: T.GetClientWorkerDocs = async (workerId) => {
     const res: AxiosResponse<ReturnType<T.GetWorkerDocs>> =
         await $clientAuth.get(`business/${orgId}/worker/${workerId}/docs`);
 

@@ -1,18 +1,26 @@
 @import "scss/utils";
+@import "src/app/(Main)/working-areas/components/AttachCard/AttachCard.module.scss";
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .button_wrapper {
   width: max-content;
-  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
 }
 
 
 .key_content {
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 }
 
 .content_wrapper {
-  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   @include thousendTwoWidth {
@@ -25,8 +33,23 @@
 }
 
 .worker_info_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: $dark-main;
+  border-radius: 40px;
   width: 64%;
   @include thousendTwoWidth {
     width: 100%;
   }
+}
+
+.worker_empty_wrapper {
+  width: 400px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

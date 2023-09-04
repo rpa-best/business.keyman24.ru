@@ -1,1 +1,14 @@
 @import "scss/utils";
+
+.tooltip {
+  @include MontserratMediumBold(22px);
+  color: $gray;
+  text-align: center;
+  margin: 20px 0;
+  @include thousendWidth {
+    font-size: 20px;
+  }
+  @include phoneOrTablet {
+    font-size: 18px;
+  }
+}

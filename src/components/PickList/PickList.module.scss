@@ -7,8 +7,8 @@
 }
 
 .picklist_header_svg_wrapper {
-  width: 35px;
-  height: 35px;
+  min-width: 35px;
+  min-height: 35px;
   padding: 9px;
   background: transparent;
   box-shadow: 0 0 0 2px transparentize($gray-semi, 0.3);
@@ -23,12 +23,12 @@
 
 .picklist_header_svg {
   transition: .2s all ease-in-out;
-  transform: rotate(0deg) translateX(1px);
+  transform: rotate(180deg) translateY(1px);
 }
 
 .picklist_header_svg_active {
   @extend .picklist_header_svg;
-  transform: rotate(180deg) translateY(1px);
+  transform: rotate(0deg) translateX(1px);
 }
 
 .picklist_title {

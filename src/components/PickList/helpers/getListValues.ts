@@ -9,7 +9,7 @@ import { CustomPermission } from 'app/(Main)/org-settings/components/PickListPer
 
 const contains = (arr: IAdminPermission[], elem: CustomPermission) => {
     return (
-        arr.filter((i) => i.permission.id === elem.id && i.type === elem.type)
+        arr?.filter((i) => i.permission.id === elem.id && i.type === elem.type)
             .length === 0
     );
 };
@@ -18,7 +18,7 @@ const containsGroup = (
     arr: IAdminGroupPermission[],
     elem: IGroupPermission
 ) => {
-    return arr.filter((i) => i.group.id === elem.id).length === 0;
+    return arr?.filter((i) => i.group.id === elem.id).length === 0;
 };
 
 export function getListValues(

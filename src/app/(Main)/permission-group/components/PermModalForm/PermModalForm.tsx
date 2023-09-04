@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { PermFormValues } from 'app/(Main)/permission-group/components/PermModalForm/types';
 import { PermFormValidate } from 'app/(Main)/permission-group/components/PermModalForm/PermModalForm.utils';
@@ -8,10 +8,13 @@ import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { Button } from 'components/UI/Buttons/Button';
 import { CreateGroupPermBody } from 'http/types';
 import { createGroupPerm, editGroupPerm } from 'http/permissionsApi';
+import { PermissionPickList } from 'app/(Main)/permission-group/components/PermissionPickList';
+import { fetchData } from 'app/(Main)/permission-group/components/PermModalForm/fetchData';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Input } from 'components/UI/Inputs/Input';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
+import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 
 import scss from 'app/(Main)/permission-group/PermGroup.module.scss';
 
@@ -20,6 +23,7 @@ export const PermModalForm: React.FC<IFormProps> = ({
     formType,
     selectedPerm,
 }) => {
+    const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const router = useRouter();
@@ -66,6 +70,21 @@ export const PermModalForm: React.FC<IFormProps> = ({
         onSubmit,
     });
 
+    const [source, setSource] = useState<CustomGroupDefaultElem[]>([]);
+    const [target, setTarget] = useState<CustomGroupDefaultElem[]>([]);
+
+    useEffect(() => {
+        if (formType === 'edit') {
+            fetchData(
+                selectedPerm?.id as number,
+                values.level?.name as string
+            ).then((d) => {
+                setSource(d.src as []);
+                setTarget(d.trg as []);
+            });
+        }
+    }, [formType, selectedPerm?.id, refresh, values.level?.name]);
+
     return (
         <div className={scss.form_layout}>
             <h2 className={scss.form_title}>
@@ -95,9 +114,17 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     />
                 </div>
                 <Button disabled={!isValid} onClick={() => {}} type="submit">
-                    Добавить
+                    {formType === 'create' ? 'Добавить' : 'Сохранить'}
                 </Button>
             </form>
+            {formType === 'edit' && (
+                <PermissionPickList
+                    setRefresh={setRefresh}
+                    source={source}
+                    target={target}
+                    groupId={selectedPerm?.id as number}
+                />
+            )}
             {loading && <Spinner />}
         </div>
     );

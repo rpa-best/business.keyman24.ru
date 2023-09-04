@@ -56,7 +56,7 @@ export const PickListPermissionGroup: React.FC<
     return (
         <>
             <PickList
-                title="Настройка доступа"
+                title="Настройка группы прав доступа"
                 available={permissions as []}
                 selected={adminPermissions as []}
                 handleArrowLeft={handleArrowLeft as any}

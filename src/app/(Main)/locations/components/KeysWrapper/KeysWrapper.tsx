@@ -12,7 +12,11 @@ import { IData, IGeneratedKeys } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
 import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
-import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
+import {
+    createLocationKeys,
+    deleteLocationKey,
+    getLocationClientKeys,
+} from 'http/locationsApi';
 import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
@@ -29,6 +33,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
+    const [fullData, setFullData] = useState<LocKeysResponse[]>([]);
     const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
 
     const router = useRouter();
@@ -36,22 +41,22 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const params = useParams();
 
     useEffect(() => {
-        /* const countName: Record<string, number> = keys.reduce((acc, item) => {
-            const { name } = item;
-            // @ts-ignore
-            acc[name] = (acc[name] ?? 0) + 1;
-            return acc;
-        }, {});
-
-        const resultArray: IData[] = Object.keys(countName).map((name) => ({
-            id: name,
-            count: countName[name],
-            category: name,
-        }));
-
-        setData(resultArray);*/
         setGeneratedData(keys ?? []);
     }, [keys]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await getLocationClientKeys(
+                +params.locId,
+                +params.objId
+            );
+
+            return res.results;
+        };
+        fetchData().then((d) => {
+            setFullData(d);
+        });
+    }, [params.locId, params.objId, keys]);
 
     const handleTableButtonClick = () => {
         setVisible(true);
@@ -87,11 +92,18 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     return (
         <>
             <div className={scss.keys}>
+                <div className={scss.key_generate_button}>
+                    {keys.length === 0 && (
+                        <Button onClick={handleTableButtonClick} type="button">
+                            Сгенерировать ключи
+                        </Button>
+                    )}
+                </div>
                 {generatedData.length !== 0 && (
                     <>
                         <div className={scss.download_button_wrapper}>
                             <PDFDownloadLink
-                                document={<PdfGenerator data={generatedData} />}
+                                document={<PdfGenerator data={fullData} />}
                                 fileName="Наклейки ШК"
                             >
                                 <Button onClick={() => {}} type="button">

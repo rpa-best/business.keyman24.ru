@@ -1,4 +1,36 @@
+@import "scss/utils";
+@import "src/app/(Main)/working-areas/session/[slug]/open/components/Key/Key.module.scss";
+
+
 .button_wrapper {
   width: max-content;
-  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  @include phoneOrTablet {
+    margin-left: 20px;
+  }
+}
+
+.working_view_wrapper {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 20px;
+  row-gap: 20px;
+  @include thousendTwoWidth {
+    flex-direction: column;
+  }
+}
+
+.working_view_card {
+  @include fullHd {
+    flex-grow: 1;
+  }
+  flex-grow: 1.5;
+}
+
+
+.working_view_table {
+  @include fullHd {
+    flex-grow: 1.3;
+  }
 }

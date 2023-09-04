@@ -1,10 +1,12 @@
 import React from 'react';
 
-import scss from './SessionPage.module.scss';
 import { getSessions, getWorkingAreas } from 'http/workingAreaApi';
 import { cookies } from 'next/headers';
 import { SessionWrapper } from 'app/(Main)/working-areas/session/components/SessionWrapper';
 import { DateHelper } from 'helpers/dateHelper';
+import { BackButton } from 'components/UI/Buttons/BackButton';
+
+import scss from './SessionPage.module.scss';
 
 interface SessionPageProps {
     params: { slug: string };
@@ -44,9 +46,10 @@ const SessionPage: React.FC<SessionPageProps> = async ({ params }) => {
 
     return (
         <div className={scss.children_with_table}>
-            <h1 className={scss.page_title_with_table}>
-                Сессии в {area?.name} / Список
-            </h1>
+            <div className={scss.button_wrapper}>
+                <h1>Сессии в {area?.name} / Список</h1>
+                <BackButton skipTwoWords>Назад</BackButton>
+            </div>
             <SessionWrapper
                 areaId={area?.id as number}
                 type={params.slug as any}

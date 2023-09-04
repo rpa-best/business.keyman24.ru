@@ -6,6 +6,8 @@ import UniversalCookies from 'universal-cookie';
 
 const cookie = new UniversalCookies();
 
+const orgId = cookie.get('orgId') ?? 1;
+
 export const getWorkingAreas: T.GetWorkingAreas = async (orgId) => {
     const res: AxiosResponse<T.IResponse<T.IWorkingArea>> =
         await $serverAuth.get(
@@ -23,7 +25,6 @@ export const getWorkingAreaTypes: T.GetWorkingAreaTypes = async (orgId) => {
 };
 
 export const createWorkingArea: T.CreateWorkingArea = async (body) => {
-    const orgId = cookie.get('orgId') ?? 1;
     try {
         await $clientAuth.post(`business/${orgId}/working_area/`, body);
     } catch (e: unknown) {
@@ -34,7 +35,6 @@ export const createWorkingArea: T.CreateWorkingArea = async (body) => {
 };
 
 export const patchWorkingArea: T.PatchWorkingArea = async (body, areaId) => {
-    const orgId = cookie.get('orgId') ?? 1;
     try {
         await $clientAuth.patch(
             `business/${orgId}/working_area/${areaId}/`,
@@ -48,7 +48,6 @@ export const patchWorkingArea: T.PatchWorkingArea = async (body, areaId) => {
 };
 
 export const deleteWorkingArea: T.DeleteWorkingArea = async (id) => {
-    const orgId = cookie.get('orgId') ?? 1;
     try {
         await $clientAuth.delete(`business/${orgId}/working_area/${id}`);
     } catch (e: unknown) {
@@ -67,8 +66,20 @@ export const getSessions: T.GetAreaSessions = async (orgId, areaId) => {
     return res.data;
 };
 
+export const getSessionLog: T.GetSessionLog = async (
+    orgId,
+    areaId,
+    sessionId
+) => {
+    const res: AxiosResponse<ReturnType<T.GetSessionLog>> =
+        await $serverAuth.get(
+            `business/${orgId}/working_area/${areaId}/session/${sessionId}/element`
+        );
+
+    return res.data;
+};
+
 export const closeSession: T.CloseSession = async (areaId, sessionId) => {
-    const orgId = cookie.get('orgId') ?? 1;
     try {
         await $clientAuth.delete(
             `business/${orgId}/working_area/${areaId}/session/${sessionId}/`
@@ -81,7 +92,6 @@ export const closeSession: T.CloseSession = async (areaId, sessionId) => {
 };
 
 export const createSession: T.CreateSession = async (areaId, body) => {
-    const orgId = cookie.get('orgId') ?? 1;
     try {
         await $clientAuth.post(
             `business/${orgId}/working_area/${areaId}/session/`,
@@ -92,4 +102,21 @@ export const createSession: T.CreateSession = async (areaId, body) => {
             throw new Error('Ошибка в создании рабочей сессии');
         }
     }
+};
+
+export const sendCheck: T.SendCheckSession = async (
+    areaId,
+    sessionId,
+    body
+) => {
+    await $clientAuth.patch(
+        `business/${orgId}/working_area/${areaId}/session/${sessionId}/check/`,
+        body
+    );
+};
+export const sendBarcode: T.SendBarcode = async (areaId, sessionId, body) => {
+    await $clientAuth.post(
+        `business/${orgId}/working_area/${areaId}/session/${sessionId}/use/`,
+        body
+    );
 };

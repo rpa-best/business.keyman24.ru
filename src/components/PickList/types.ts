@@ -8,6 +8,7 @@ export interface DefaultElem {
 export interface PickListProps {
     title: string;
     hidden?: boolean;
+    visibile?: boolean;
     available: DefaultElem[];
     selected: DefaultElem[];
     handleArrowLeft: (arr: DefaultElem[]) => Promise<void>;

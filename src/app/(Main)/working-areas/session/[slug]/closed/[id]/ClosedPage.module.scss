@@ -1,0 +1,8 @@
+@import "scss/utils";
+
+.empty {
+  @include MontserratSemiBold(26px);
+  color: white;
+  transform: translateY(20vh);
+  text-align: center;
+}

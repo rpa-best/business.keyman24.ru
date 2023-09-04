@@ -1,4 +1,5 @@
 import { IOrganization, IUser } from 'store/types';
+import { boolean } from 'zod';
 
 export interface IUserAuthRequest {
     username: string;
@@ -62,13 +63,20 @@ export interface IInventory {
     codeImage: string;
     is_active: boolean;
     location: number;
-    object_area: number;
+    objectArea: number;
 }
 
 export interface IGroupPermission {
     id: number;
     level: ILevel;
     name: string;
+}
+
+export interface IGroupPermPermissions {
+    group: number;
+    id: number;
+    permission: IPermission;
+    type: string;
 }
 
 export interface WorkerUserGroupPermission extends IGroupPermission {
@@ -119,6 +127,22 @@ export interface IWorkingArea {
     type: IType;
 }
 
+export interface IWorkingAreaDevice {
+    id: number;
+    device: IDevice;
+    area: number;
+}
+
+export interface SocketResponse {
+    data: {
+        device: number;
+        mode: boolean;
+        user: string;
+        worker: IWorker;
+    };
+    type: 'success' | string;
+}
+
 export interface CreateWorkingAreaProp {
     deleted: boolean;
     location: number;
@@ -148,7 +172,7 @@ export interface IWorker {
         isOfficial: string;
     };
     org: IOrganization;
-    inventories: string;
+    inventories: IInventory[];
     lc_id: number;
     name: string;
     user_lc_id: number;
@@ -165,6 +189,25 @@ export interface ICreateSessionBody
 
 export interface IModifiedSession extends Omit<ISession, 'status'> {
     status: string;
+}
+
+export interface IDevice {
+    id: number;
+    type: string;
+    name: string;
+    desc: string;
+    simValue: number;
+}
+
+export interface SessionLogResponse {
+    id: number;
+    worker: IWorker;
+    mode: boolean;
+    date: string;
+    card: string;
+    comment: string;
+    image: string;
+    inventory: number;
 }
 
 export interface IWorkerDocs {
@@ -265,6 +308,8 @@ export interface LocationWorkerResponse {
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
+export type GetClientOrgPermissions = (type?: string) => Promise<IPermission[]>;
+
 export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
 
 export type CreateGroupPerm = (body: CreateGroupPermBody) => Promise<void>;
@@ -305,6 +350,21 @@ export type DeleteOrgPermission = (obj: { id: number; orgId: number }) => void;
 export type GetGroupOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IGroupPermission>>;
+
+export type GetPermGroupPermissions = (
+    permGroup: number
+) => Promise<IGroupPermPermissions[]>;
+
+export type CreatePermGroupPermissions = (
+    permGroup: number,
+    permId: number,
+    type: string
+) => Promise<void>;
+
+export type DeletePermGroupPermissions = (
+    permGroup: number,
+    permId: number
+) => Promise<void>;
 
 export type GetInventories = (
     orgId: number,
@@ -380,7 +440,15 @@ export type GetLocationKeys = (
     orgId: number,
     locId: number,
     objId: number,
-    offset?: string
+    params: {
+        offset?: string;
+        full?: boolean;
+    }
+) => Promise<IResponse<LocKeysResponse>>;
+
+export type GetLocationClientKeys = (
+    locId: number,
+    objId: number
 ) => Promise<IResponse<LocKeysResponse>>;
 
 export type CreateLocationKeys = (
@@ -449,6 +517,12 @@ export type GetAreaSessions = (
     areaId: number
 ) => Promise<IResponse<ISession>>;
 
+export type GetSessionLog = (
+    orgId: number,
+    areaId: number,
+    sessionId: number
+) => Promise<IResponse<SessionLogResponse>>;
+
 export type CreateWorkingArea = (data: CreateWorkingAreaProp) => Promise<void>;
 
 export type PatchWorkingArea = (
@@ -463,6 +537,18 @@ export type CloseSession = (areaId: number, sessionId: number) => Promise<void>;
 export type CreateSession = (
     areaId: number,
     body: ICreateSessionBody
+) => Promise<void>;
+
+export type SendCheckSession = (
+    areaId: number,
+    sessionId: number,
+    body: { user: string; session: number }
+) => Promise<void>;
+
+export type SendBarcode = (
+    areaId: number,
+    sessionId: number,
+    body: { session: number; worker: number; barcode: string }
 ) => Promise<void>;
 
 export type GetWorkers = () => Promise<IResponse<IWorker>>;
@@ -508,4 +594,24 @@ export type GetWorkerDocs = (
     orgId: number
 ) => Promise<IResponse<IWorkerDocs>>;
 
+export type GetClientWorkerDocs = (
+    workerId: number
+) => Promise<IResponse<IWorkerDocs>>;
+
 export type DeleteWorker = (workerId: number) => Promise<void>;
+
+export type GetWorkingAreaDevices = (
+    areaId: number
+) => Promise<IResponse<IWorkingAreaDevice>>;
+
+export type CreateWorkingAreaDevice = (
+    areaId: number,
+    body: { device: number; areaId: number }
+) => Promise<void>;
+
+export type DeleteWorkingAreaDevice = (
+    areaId: number,
+    deviceId: number
+) => Promise<void>;
+
+export type GetDevices = () => Promise<IResponse<IDevice>>;
