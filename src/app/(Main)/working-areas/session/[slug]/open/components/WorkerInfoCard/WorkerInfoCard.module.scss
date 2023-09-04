@@ -45,8 +45,7 @@
 .worker_card_data {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-flow: row wrap;
   column-gap: 10px;
 }
 
@@ -72,8 +71,7 @@
 }
 
 .worker_card_input_wrapper {
-  width: 100%;
-
+  width: 49%;
   &:last-child {
     flex-grow: 1;
   }

@@ -11,6 +11,7 @@ export const Input: React.FC<T.IInputProps> = ({
     autoFocus,
     value,
     name,
+
     handleError,
     onChange,
     onBlur,
@@ -55,23 +56,21 @@ export const Input: React.FC<T.IInputProps> = ({
             ) : (
                 <label className={labelErrorClass}>{handleError}</label>
             )}
-            <div className={scss.input_wrapper}>
-                <input
-                    style={handleError ? { color: errorFontColor } : undefined}
-                    tabIndex={tabIndex}
-                    autoComplete={autoComplete as string}
-                    className={inputClass}
-                    type={type}
-                    onChange={onChange as ChangeEventHandler<HTMLInputElement>}
-                    value={value}
-                    autoFocus={autoFocus}
-                    id={name}
-                    name={name}
-                    placeholder={placeholder}
-                    onBlur={onBlur}
-                    disabled={disabled}
-                />
-            </div>
+            <input
+                style={handleError ? { color: errorFontColor } : undefined}
+                tabIndex={tabIndex}
+                autoComplete={autoComplete as string}
+                className={inputClass}
+                type={type}
+                onChange={onChange as ChangeEventHandler<HTMLInputElement>}
+                value={value}
+                autoFocus={autoFocus}
+                id={name}
+                name={name}
+                placeholder={placeholder}
+                onBlur={onBlur}
+                disabled={disabled}
+            />
             {label && <label className={labelErrorClass}>{handleError}</label>}
         </div>
     );
