@@ -23,7 +23,7 @@
 
 .working_view_card {
   @include fullHd {
-    flex-grow: 1;
+    width: 45%;
   }
   flex-grow: 1.5;
 }
@@ -31,6 +31,10 @@
 
 .working_view_table {
   @include fullHd {
-    flex-grow: 1.3;
+    width: 55%;
+  }
+  width: 50%;
+  @include thousendTwoWidth {
+    width: 100%;
   }
 }

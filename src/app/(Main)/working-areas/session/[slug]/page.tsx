@@ -7,6 +7,7 @@ import { DateHelper } from 'helpers/dateHelper';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './SessionPage.module.scss';
+import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 interface SessionPageProps {
     params: { slug: string };
@@ -18,9 +19,11 @@ const SessionPage: React.FC<SessionPageProps> = async ({ params }) => {
 
     const workingAreas = await getWorkingAreas(+orgId);
 
-    const area = workingAreas.results.find(
-        (area) => area.type.slug === params.slug
-    );
+    const id = getParamsId(params.slug);
+
+    const type = getParamsType(params.slug);
+
+    const area = workingAreas.results.find((area) => area.id === +id);
 
     const sessions = await getSessions(+orgId, area?.id as number);
 
@@ -52,7 +55,14 @@ const SessionPage: React.FC<SessionPageProps> = async ({ params }) => {
             </div>
             <SessionWrapper
                 areaId={area?.id as number}
-                type={params.slug as any}
+                type={
+                    type as
+                        | 'register'
+                        | 'security'
+                        | 'inventory'
+                        | 'key'
+                        | 'register_inventory'
+                }
                 sessions={modifiedSessions}
             />
         </div>

@@ -42,7 +42,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         if (session?.status === 'Завершена') {
             router.push(`${pathname}/closed/${session.id}`);
         } else {
-            if (params.slug === 'register') {
+            if (!needAttach) {
                 router.push(`${pathname}/open/${session?.id}`);
                 return;
             }

@@ -26,9 +26,11 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const handleRowClick = (id: number) => {
-        const slug = initialAreas.find((area) => area.id === id)?.type.slug;
+        const slug = initialAreas.find((area) => area.id === id);
 
-        router.push('working-areas/session/' + slug);
+        router.push(
+            'working-areas/session/' + `${slug?.type.slug}-${slug?.id}`
+        );
     };
 
     const handleDeleteClick = async (id: number) => {

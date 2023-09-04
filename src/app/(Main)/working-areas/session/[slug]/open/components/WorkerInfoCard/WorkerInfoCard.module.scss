@@ -50,7 +50,6 @@
 }
 
 .worker_card_data_additional {
-  width: 100%;
   column-gap: 20px ;
   @extend .worker_card_data;
 }
@@ -76,14 +75,11 @@
     flex-grow: 1;
   }
 
-  @include thousendWidth {
-    width: 100%;
-  }
 }
 
 .worker_card_input_half {
   @include fullHd {
-    width: calc(50% - 10px);
+    width: 100%;
     &:last-child {
       flex-grow: 1;
     }
@@ -95,10 +91,14 @@
 
 
 .worker_card_input_additional {
-  flex-grow: 1;
+  width: 48%;
   @include phoneOrTablet {
     width: 100%;
     margin-bottom: 10px;
+  }
+
+  &:last-child {
+    flex-grow: 2;
   }
 }
 

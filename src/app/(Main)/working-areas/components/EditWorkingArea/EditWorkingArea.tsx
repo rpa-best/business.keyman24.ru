@@ -108,32 +108,36 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                     name="description"
                     onChange={handleChange}
                 />
-                <InputSelect
-                    setFieldTouched={setFieldTouched}
-                    autoComplete="off"
-                    placeholder="Укажите локацию"
-                    listValues={locations}
-                    value={values.location.name}
-                    handleError={
-                        touched.location && (errors.location as string)
-                    }
-                    name="location"
-                    onChange={(location: ILocation) => {
-                        setFieldValue('location', location);
-                    }}
-                />
-                <InputSelect
-                    setFieldTouched={setFieldTouched}
-                    autoComplete="off"
-                    handleError={touched.type && (errors.type as string)}
-                    placeholder="Укажите тип"
-                    listValues={types}
-                    onChange={(type: IType) => {
-                        setFieldValue('type', type);
-                    }}
-                    value={values.type.name}
-                    name="type"
-                />
+                <div style={{ position: 'relative' }}>
+                    <InputSelect
+                        setFieldTouched={setFieldTouched}
+                        autoComplete="off"
+                        placeholder="Укажите локацию"
+                        listValues={locations}
+                        value={values.location.name}
+                        handleError={
+                            touched.location && (errors.location as string)
+                        }
+                        name="location"
+                        onChange={(location: ILocation) => {
+                            setFieldValue('location', location);
+                        }}
+                    />
+                </div>
+                <div style={{ position: 'relative' }}>
+                    <InputSelect
+                        setFieldTouched={setFieldTouched}
+                        autoComplete="off"
+                        handleError={touched.type && (errors.type as string)}
+                        placeholder="Укажите тип"
+                        listValues={types}
+                        onChange={(type: IType) => {
+                            setFieldValue('type', type);
+                        }}
+                        value={values.type.name}
+                        name="type"
+                    />
+                </div>
                 <div className={scss.button_wrapper}>
                     <Button
                         onClick={() => {}}
