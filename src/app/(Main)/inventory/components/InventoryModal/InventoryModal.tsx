@@ -21,6 +21,8 @@ import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/components';
 
 import scss from './InventoryModal.module.scss';
+import Image from 'next/image';
+import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
@@ -41,11 +43,13 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             type: values.type.slug as string,
         };
         if (type === 'create') {
-            await createInventoryItem(body).finally(() => {
-                router.refresh();
-                setLoading(false);
-                setVisible(false);
-            });
+            await createInventoryItem(body)
+                .finally(() => {
+                    router.refresh();
+                    setLoading(false);
+                    setVisible(false);
+                })
+                .then((d) => {});
         } else {
             await updateInventoryItem(selectedItem?.id as number, body).finally(
                 () => {
@@ -80,20 +84,30 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     });
 
     const onDrop = async (acceptedFiles: any) => {
-        setLoading(true);
-        const res = await uploadInventoryPhoto(
-            selectedItem?.id as number,
-            acceptedFiles
-        ).finally(() => setLoading(false));
+        if (type === 'edit') {
+            setLoading(true);
+            const res = await uploadInventoryPhoto(
+                selectedItem?.id as number,
+                acceptedFiles
+            ).finally(() => setLoading(false));
 
-        router.refresh();
+            router.refresh();
 
-        const modifiedRes: IInventoryImage = {
-            ...res,
-            image: res.image.slice(22),
-        };
+            const modifiedRes: IInventoryImage = {
+                ...res,
+                image: res.image.slice(22),
+            };
 
-        setSelectedImage((img) => [...(img as []), modifiedRes]);
+            setSelectedImage((img) => [...(img as []), modifiedRes]);
+            return;
+        }
+        setSelectedImage(
+            (img) =>
+                [
+                    ...(img || []),
+                    URL.createObjectURL(acceptedFiles[0]),
+                ] as IInventoryImage[]
+        );
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -183,13 +197,21 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                                 name="type"
                             />
                         </div>
-                        <ImageContainer
-                            setSelectedImage={setSelectedImage}
-                            setLoading={setLoading}
-                            rootProps={getRootProps}
-                            selectedItemId={selectedItem?.id as number}
-                            selectedImage={selectedImage}
-                        />
+                        {type === 'edit' ? (
+                            <ImageContainer
+                                setSelectedImage={setSelectedImage as any}
+                                setLoading={setLoading}
+                                rootProps={getRootProps}
+                                selectedItemId={selectedItem?.id as number}
+                                selectedImage={selectedImage as any}
+                            />
+                        ) : (
+                            <ImageCreateContainer
+                                selectedImage={selectedImage as string[]}
+                                rootProps={getRootProps}
+                                setSelectedImage={setSelectedImage as any}
+                            />
+                        )}
                         <div className={scss.button_wrapper}>
                             <Button
                                 disabled={!isValid}

@@ -9,9 +9,9 @@ export interface InventoryModalProps {
     type: 'create' | 'edit';
     inventoryTypes: IType[];
     selectedItem?: IModifiedInventory;
-    selectedImage: IInventoryImage[];
+    selectedImage: IInventoryImage[] | string[];
     setSelectedImage: React.Dispatch<
-        React.SetStateAction<IInventoryImage[] | undefined>
+        React.SetStateAction<IInventoryImage[] | string[] | undefined>
     >;
 }
 
@@ -22,6 +22,14 @@ export interface ImageContainerProps {
     rootProps: any;
     setSelectedImage: React.Dispatch<
         React.SetStateAction<IInventoryImage[] | undefined>
+    >;
+}
+
+export interface ImageContainerCreateProps {
+    selectedImage: string[];
+    rootProps: any;
+    setSelectedImage: React.Dispatch<
+        React.SetStateAction<string[] | undefined>
     >;
 }
 

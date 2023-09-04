@@ -25,8 +25,9 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     const [type, setType] = useState<'create' | 'edit'>('create');
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [selectedItemImage, setSelectedItemImage] =
-        useState<IInventoryImage[]>();
+    const [selectedItemImage, setSelectedItemImage] = useState<
+        IInventoryImage[] | string[]
+    >();
 
     const router = useRouter();
 

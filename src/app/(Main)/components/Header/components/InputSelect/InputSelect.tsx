@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { useSpring } from 'framer-motion';
 
@@ -10,10 +10,10 @@ import { useOrganizationStore } from 'store/organizationStore';
 import { IOrganization } from 'store/types';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
-
-import scss from './InputSelect.module.scss';
 import { SelectList } from 'app/(Main)/components/Header/components/InputSelect/List';
 import clsx from 'clsx';
+
+import scss from './InputSelect.module.scss';
 
 const cookie = new Cookies();
 
@@ -48,6 +48,10 @@ export const HeaderInputSelect: React.FC<{
         [scss.input_arrow_svg]: true,
         [scss.input_arrow_svg_open]: visible,
     });
+
+    useEffect(() => {
+        cookie.set('orgId', listValues[0].id);
+    }, []);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);

@@ -5,7 +5,6 @@ import { WorkersTableWrapper } from 'app/(Main)/workers/components/WorkersTableW
 import { getServerWorkers } from 'http/workerApi';
 
 import scss from './Worker.module.scss';
-import { BackButton } from 'components/UI/Buttons/BackButton';
 
 const WorkersPage = async () => {
     const cookieStore = cookies();
