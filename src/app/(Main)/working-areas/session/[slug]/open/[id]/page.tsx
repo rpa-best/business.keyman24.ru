@@ -9,15 +9,11 @@ import { getOrganizations } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './OpenSession.module.scss';
+import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 interface OpenSessionPage {
     params: {
-        slug:
-            | 'register'
-            | 'security'
-            | 'inventory'
-            | 'register_inventory'
-            | 'key';
+        slug: string;
         id: string;
     };
 }
@@ -25,15 +21,17 @@ interface OpenSessionPage {
 const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
     const cookieStore = cookies();
 
+    const areaId = +getParamsId(params.slug);
+
+    const areaType = getParamsType(params.slug);
+
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
     const organizations = await getOrganizations();
 
     const workingAreas = await getWorkingAreas(+orgId);
 
-    const area = workingAreas.results.find(
-        (area) => area.type.slug === params.slug
-    );
+    const area = workingAreas.results.find((area) => +area.id === areaId);
 
     const sessionLog = await getSessionLog(
         +orgId,
@@ -63,7 +61,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         }
     });
 
-    switch (params.slug) {
+    switch (areaType) {
         case 'inventory': {
             return (
                 <div className={scss.children_with_table}>
@@ -74,7 +72,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                     <Key
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
-                        currentAreaId={area?.id as number}
+                        currentAreaId={areaId}
                         organizations={organizations}
                     />
                 </div>
@@ -90,7 +88,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                     <Key
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
-                        currentAreaId={area?.id as number}
+                        currentAreaId={areaId}
                         organizations={organizations}
                     />
                 </div>
@@ -106,7 +104,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                     <Register
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
-                        currentAreaId={area?.id as number}
+                        currentAreaId={areaId}
                         organizations={organizations}
                     />
                 </div>
@@ -122,7 +120,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                     <Security
                         sessionLog={modifiedLog}
                         currentSessionId={+params.id}
-                        currentAreaId={area?.id as number}
+                        currentAreaId={areaId}
                     />
                 </div>
             );

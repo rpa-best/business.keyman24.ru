@@ -7,7 +7,7 @@
 
 .input {
   width: 100%;
-  height: 50px;
+  height: 45px;
   border-radius: 10px;
   outline: none;
   border: 2px solid transparent;
@@ -44,11 +44,6 @@
   }
 }
 
-.input_wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
 
 .input_arrow_svg {
   position: absolute;
@@ -96,7 +91,7 @@
 
 .field_with_label {
   @extend .field;
-  height: 95px!important;
+  height: 90px!important;
   margin-top: 0!important;
   justify-content: flex-start!important;
   @include phone {
@@ -105,7 +100,7 @@
 }
 
 .field {
-  height: 60px;
+  height: 65px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
