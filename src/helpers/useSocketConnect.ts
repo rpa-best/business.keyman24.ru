@@ -28,13 +28,16 @@ export const useSocketConnect: SocketConnectFunc = ({
         async (data: SocketResponse) => {
             setLoading(true);
             setWorker(data.data.worker);
-            await getWorkerDocs(data.data.worker.id).then((d) => {
-                if (setWorkerDocs) {
-                    setWorkerDocs(d.results);
-                }
-                setLoading(false);
-            });
-            router.refresh();
+            await getWorkerDocs(data.data.worker.id)
+                .then((d) => {
+                    if (setWorkerDocs) {
+                        setWorkerDocs(d.results);
+                    }
+                })
+                .finally(() => {
+                    router.refresh();
+                    setLoading(false);
+                });
         },
         [setLoading, setWorker, setWorkerDocs]
     );
