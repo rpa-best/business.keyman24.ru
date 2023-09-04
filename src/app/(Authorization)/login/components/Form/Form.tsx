@@ -22,6 +22,7 @@ export const Form = () => {
     const router = useRouter();
 
     const onSubmit = (values: IFormTypes) => {
+        router.prefetch('/');
         setLoading(true);
         userAuth(values)
             .then(() =>

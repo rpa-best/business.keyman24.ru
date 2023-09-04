@@ -93,7 +93,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         <>
             <div className={scss.keys}>
                 <div className={scss.key_generate_button}>
-                    {fullData.length === 0 && (
+                    {keys.length === 0 && (
                         <Button onClick={handleTableButtonClick} type="button">
                             Сгенерировать ключи
                         </Button>
