@@ -95,7 +95,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                     onBlur={handleBlur}
                     handleError={touched.name && errors.name}
                     value={values.name}
-                    placeholder="Укажите имя"
+                    placeholder="Укажите название рабочего места"
                     name="name"
                     onChange={handleChange}
                 />

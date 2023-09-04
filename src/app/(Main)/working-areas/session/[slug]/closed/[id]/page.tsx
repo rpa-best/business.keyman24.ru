@@ -7,6 +7,7 @@ import { Column } from 'components/Table/Column';
 
 import scss from './ClosedPage.module.scss';
 import { BackButton } from 'components/UI/Buttons/BackButton';
+import { getParamsId } from 'app/(Main)/working-areas/helpers';
 
 interface ClosedSessionProps {
     params: { id: string; slug: string };
@@ -18,7 +19,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
     const workingAreas = await getWorkingAreas(+orgId);
 
     const area = workingAreas.results.find(
-        (area) => area.type.slug === params.slug
+        (area) => area.id === +getParamsId(params.slug)
     );
 
     const sessionLog = await getSessionLog(
