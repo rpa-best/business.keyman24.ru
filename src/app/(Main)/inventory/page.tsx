@@ -22,8 +22,6 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
 
     const inventories = await getInventories(+orgId, +offset);
 
-    const inventoryTypes = await getInventoryTypes(+orgId);
-
     const modifiedInventory: IModifiedInventory[] = inventories.results.map(
         (i) => {
             return { ...i, type: i.type.name };
@@ -39,7 +37,6 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
                 </div>
             </div>
             <InventoryWrapper
-                inventoryTypes={inventoryTypes.results}
                 count={inventories.count}
                 inventory={modifiedInventory}
             />

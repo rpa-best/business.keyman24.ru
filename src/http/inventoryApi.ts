@@ -56,10 +56,10 @@ export const deleteInventoryItem = async (itemId: number) => {
 
 export const uploadInventoryPhoto: T.UploadInventoryPhoto = async (
     itemId: number,
-    photo: FileList
+    photo: File
 ) => {
     const formData = new FormData();
-    formData.append('image', photo[0]);
+    formData.append('image', photo);
 
     const res = await $clientAuth.post(
         `business/${orgId}/inventory/${itemId}/image/`,

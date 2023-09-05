@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
-import { deleteInventoryItemPhoto } from 'http/inventoryApi';
 import { ImageContainerCreateProps } from 'app/(Main)/inventory/types';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import DeleteSvg from '/public/svg/x.svg';
@@ -15,7 +13,9 @@ export const ImageCreateContainer: React.FC<ImageContainerCreateProps> = ({
     setSelectedImage,
 }) => {
     const handleDeleteImageClick = async (url: string) => {
-        setSelectedImage((img) => img?.filter((image) => image !== url));
+        setSelectedImage(
+            (img) => img?.filter((image) => image.preview !== url)
+        );
     };
 
     return (
@@ -34,14 +34,14 @@ export const ImageCreateContainer: React.FC<ImageContainerCreateProps> = ({
                                 <div className={scss.image_wrapper} key={index}>
                                     <Image
                                         className={scss.image}
-                                        src={item}
+                                        src={item.preview}
                                         fill
                                         alt="изображение инвентаря"
                                     />
                                     <div
                                         onClick={() =>
                                             handleDeleteImageClick(
-                                                item as string
+                                                item.preview as string
                                             )
                                         }
                                         className={scss.delete_svg_wrapper}

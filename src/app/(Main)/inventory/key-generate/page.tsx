@@ -18,7 +18,9 @@ const KeysPage: React.FC<KeysPageProps> = async () => {
     return (
         <div className={scss.children_with_table}>
             <div className={scss.title_wrapper}>
-                <h2 className={scss.page_title_with_table}>Ключи</h2>
+                <h2 className={scss.page_title_with_table}>
+                    Генерация инвентаря
+                </h2>
                 <div>
                     <BackButton>Назад</BackButton>
                 </div>

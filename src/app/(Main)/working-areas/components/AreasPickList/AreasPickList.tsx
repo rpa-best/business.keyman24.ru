@@ -55,6 +55,8 @@ export const AreaPickList: React.FC<WorkingAreaDevicePickList> = ({
                 title="Настройка устройств"
                 available={target as []}
                 selected={source as []}
+                leftTitle="Доступные устройства"
+                rightTitle="Назначенные устройства"
                 handleArrowLeft={handleArrowLeft}
                 handleArrowRight={handleArrowRight}
             />

@@ -17,6 +17,8 @@ export const PickList = ({
     selected,
     visibile = true,
     hidden = false,
+    rightTitle = 'Доступ разрёшен',
+    leftTitle = 'Доступ запрещён',
 }: PickListProps) => {
     const [visibility, setVisibility] = useState(visibile);
 
@@ -89,7 +91,7 @@ export const PickList = ({
             </div>
             <div className={pickListClass}>
                 <div className={scss.list_view_wrapper}>
-                    <span className={scss.header_wrapper}>Доступ запрещен</span>
+                    <span className={scss.header_wrapper}>{leftTitle}</span>
                     <div className={scss.list_view_content}>
                         <List
                             selected={sourceSelected}
@@ -121,7 +123,7 @@ export const PickList = ({
                     </li>
                 </ul>
                 <div className={scss.list_view_wrapper}>
-                    <span className={scss.header_wrapper}>Доступ разрешен</span>
+                    <span className={scss.header_wrapper}>{rightTitle}</span>
                     <div className={scss.list_view_content}>
                         <List
                             selected={targetSelected}

@@ -45,7 +45,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
     });
 
     const keyLog = modifiedLog.map((l) => {
-        const inventoryName = `${l.worker.inventories[0].id} ${l.worker.inventories[0].name}`;
+        const inventoryName = `${l.inventory} ${l.inventory}`;
         if (l.mode) {
             return {
                 ...l,
@@ -70,6 +70,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Key
+                        type="inventory"
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
                         currentAreaId={areaId}
@@ -86,6 +87,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Key
+                        type="keys"
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
                         currentAreaId={areaId}

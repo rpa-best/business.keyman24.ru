@@ -26,7 +26,7 @@ import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryM
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
-    inventoryTypes,
+    lastId,
     selectedImage,
     setSelectedImage,
     selectedItem,
@@ -40,7 +40,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             name: values.name,
             number: values.number,
             desc: values.description,
-            type: values.type.slug as string,
+            type: 'inventory',
         };
         if (type === 'create') {
             await createInventoryItem(body)
@@ -49,7 +49,15 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     setLoading(false);
                     setVisible(false);
                 })
-                .then((d) => {});
+                .then(() => {
+                    selectedImage.forEach(async (i) => {
+                        await uploadInventoryPhoto(
+                            lastId + 1,
+                            // @ts-ignore
+                            i.img
+                        );
+                    });
+                });
         } else {
             await updateInventoryItem(selectedItem?.id as number, body).finally(
                 () => {
@@ -66,15 +74,12 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         isValid,
         errors,
         handleBlur,
-        setFieldValue,
-        setFieldTouched,
         handleSubmit,
         handleChange,
         touched,
     } = useFormik<InventoryFormType>({
         initialValues: {
             name: selectedItem?.name ?? '',
-            type: { name: selectedItem?.type } ?? {},
             number: selectedItem?.number ?? '',
             description: selectedItem?.desc ?? '',
         },
@@ -88,7 +93,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             setLoading(true);
             const res = await uploadInventoryPhoto(
                 selectedItem?.id as number,
-                acceptedFiles
+                acceptedFiles[0]
             ).finally(() => setLoading(false));
 
             router.refresh();
@@ -105,7 +110,10 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             (img) =>
                 [
                     ...(img || []),
-                    URL.createObjectURL(acceptedFiles[0]),
+                    {
+                        img: acceptedFiles[0],
+                        preview: URL.createObjectURL(acceptedFiles[0]),
+                    },
                 ] as IInventoryImage[]
         );
     };
@@ -179,24 +187,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             name="number"
                             onChange={handleChange}
                         />
-                        <div className={scss.input_select_wrapper}>
-                            <InputSelect
-                                handleError={
-                                    touched.type && (errors.type as string)
-                                }
-                                onBlur={handleBlur}
-                                autoComplete="off"
-                                label="Тип"
-                                setFieldTouched={setFieldTouched}
-                                placeholder="Укажите тип"
-                                listValues={inventoryTypes}
-                                onChange={(type) => {
-                                    setFieldValue('type', type);
-                                }}
-                                value={values.type?.name ?? ''}
-                                name="type"
-                            />
-                        </div>
                         {type === 'edit' ? (
                             <ImageContainer
                                 setSelectedImage={setSelectedImage as any}
@@ -207,7 +197,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             />
                         ) : (
                             <ImageCreateContainer
-                                selectedImage={selectedImage as string[]}
+                                selectedImage={selectedImage as []}
                                 rootProps={getRootProps}
                                 setSelectedImage={setSelectedImage as any}
                             />

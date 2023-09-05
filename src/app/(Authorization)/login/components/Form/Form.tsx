@@ -27,14 +27,16 @@ export const Form = () => {
         userAuth(values)
             .then(() =>
                 getUser().then((user) => {
-                    router.replace('/');
                     setUser(user as IUser);
                 })
             )
             .catch((e) => {
                 setErrors({ username: e.message, password: e.message });
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                router.replace('/');
+                setLoading(false);
+            });
     };
 
     const {

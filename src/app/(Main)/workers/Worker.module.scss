@@ -2,7 +2,7 @@
 
 .tooltip {
   @include MontserratMediumBold(22px);
-  color: $gray;
+  color: white;
   text-align: center;
   margin: 20px 0;
   @include thousendWidth {

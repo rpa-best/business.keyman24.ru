@@ -4,8 +4,9 @@ export interface WorkerTableWrapperProps {
     workers: ModifiedWorkers;
 }
 
-interface NewWorkers extends Omit<IWorker, 'user'> {
+interface NewWorkers extends Omit<IWorker, 'user' | 'org'> {
     user: string;
+    org: string;
 }
 
 export interface ModifiedWorkers {

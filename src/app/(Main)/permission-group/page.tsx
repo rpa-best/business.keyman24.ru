@@ -20,6 +20,7 @@ const PermissionGroupPage = async () => {
 
     return (
         <div className={scss.children_with_table}>
+            ы
             <h1 className={scss.page_title_with_table}>
                 Права доступа / список
             </h1>
