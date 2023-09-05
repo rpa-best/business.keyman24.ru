@@ -27,3 +27,11 @@
     padding: 8px 30px ;
   }
 }
+
+.button_active {
+  @extend .button;
+  background-color: $accent-color-darker;
+  &:hover {
+    background-color: #2A7D81;
+  }
+}

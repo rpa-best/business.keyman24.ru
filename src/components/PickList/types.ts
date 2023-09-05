@@ -9,6 +9,8 @@ export interface PickListProps {
     title: string;
     hidden?: boolean;
     visibile?: boolean;
+    leftTitle?: string;
+    rightTitle?: string;
     available: DefaultElem[];
     selected: DefaultElem[];
     handleArrowLeft: (arr: DefaultElem[]) => Promise<void>;

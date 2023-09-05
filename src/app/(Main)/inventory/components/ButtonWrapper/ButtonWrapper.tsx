@@ -14,7 +14,7 @@ export const ButtonWrapper = () => {
 
     return (
         <Button onClick={() => handleButtonClick()} type="button">
-            Генерация ключей
+            Генерация инвентаря
         </Button>
     );
 };

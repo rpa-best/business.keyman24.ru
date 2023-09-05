@@ -47,7 +47,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                 <Table tableRows={modifiedLog}>
                     <Column header="Работник" field="workerName" />
                     <Column sortable header="Дата" field="date" />
-                    <Column sortable header="Тип" field="mode" />
+                    <Column sortable header="Событие" field="mode" />
                 </Table>
             ) : (
                 <h2 className={scss.empty}>

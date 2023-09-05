@@ -7,11 +7,13 @@ export interface IModifiedInventory extends Omit<IInventory, 'type'> {
 
 export interface InventoryModalProps {
     type: 'create' | 'edit';
-    inventoryTypes: IType[];
+    lastId: number;
     selectedItem?: IModifiedInventory;
-    selectedImage: IInventoryImage[] | string[];
+    selectedImage: IInventoryImage[] | { img: File; preview: string }[];
     setSelectedImage: React.Dispatch<
-        React.SetStateAction<IInventoryImage[] | string[] | undefined>
+        React.SetStateAction<
+            IInventoryImage[] | { img: File; preview: string }[] | undefined
+        >
     >;
 }
 
@@ -26,15 +28,14 @@ export interface ImageContainerProps {
 }
 
 export interface ImageContainerCreateProps {
-    selectedImage: string[];
+    selectedImage: { img: File; preview: string }[];
     rootProps: any;
     setSelectedImage: React.Dispatch<
-        React.SetStateAction<string[] | undefined>
+        React.SetStateAction<{ img: File; preview: string }[] | undefined>
     >;
 }
 
 export interface InventoryWrapperProps {
     inventory: IModifiedInventory[];
     count: number;
-    inventoryTypes: IType[];
 }

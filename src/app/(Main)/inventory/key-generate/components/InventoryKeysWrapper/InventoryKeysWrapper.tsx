@@ -36,23 +36,6 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
     const router = useRouter();
 
     useEffect(() => {
-        /*const countName: Record<string, number> = inventories.reduce(
-            (acc, item) => {
-                const { name } = item;
-                // @ts-ignore
-                acc[name] = (acc[name] ?? 0) + 1;
-                return acc;
-            },
-            {}
-        );
-
-        const resultArray: IData[] = Object.keys(countName).map((name) => ({
-            id: name,
-            count: countName[name],
-            category: name,
-        }));
-
-        setData(resultArray);*/
         setGeneratedData(inventories ?? []);
     }, [inventories]);
 
@@ -75,6 +58,7 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
             setLoading(false);
             setVisible(false);
         });
+        router.refresh();
     };
 
     return (
@@ -95,7 +79,7 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
                         <div className={scss.keys_table_layout}>
                             <Table
                                 buttonData={{
-                                    text: 'Генерация ключей',
+                                    text: 'Генерация инвентаря',
                                     onClick: () => handleTableButtonClick(),
                                 }}
                                 paginatorData={{
@@ -133,7 +117,7 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
                                 type="button"
                                 onClick={() => handleGenerateClick()}
                             >
-                                Сгенерировать ключи
+                                Сгенерировать инвентарь
                             </Button>
                         </div>
                     </>

@@ -19,6 +19,7 @@ import scss from './Key.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';
 
 export const Key: React.FC<KeyProps> = ({
+    type,
     currentSessionId,
     currentAreaId,
     sessionLog,
@@ -64,6 +65,7 @@ export const Key: React.FC<KeyProps> = ({
             <div className={scss.key_content}>
                 <div className={scss.content_wrapper}>
                     <EnterCodeForm
+                        type={type}
                         worker={worker as IWorker}
                         sessionId={currentSessionId}
                         areaId={currentAreaId}

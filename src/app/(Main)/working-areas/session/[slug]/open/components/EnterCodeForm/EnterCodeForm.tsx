@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
     areaId,
+    type,
     sessionId,
 }) => {
     const router = useRouter();
@@ -28,6 +29,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         };
         await sendBarcode(areaId, sessionId, body)
             .catch((e: AxiosError) => {
+                console.log(e);
                 // @ts-ignore
                 if (e.response.data.error[0].slug === 'invalid_barcode') {
                     errors.code = 'Такого кода не существует';
@@ -47,6 +49,17 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     'inventory_not_registered_in_location'
                 ) {
                     errors.code = 'Этот инвентарь не зарегестрирован в локации';
+                }
+                if (
+                    // @ts-ignore
+                    e.response.data.error[0].slug ===
+                    'not_support_inventory_type'
+                ) {
+                    if (type === 'inventory') {
+                        errors.code = 'Ключи не могут быть введены в инвентарь';
+                    } else {
+                        errors.code = 'Инвентарь не может быть введен в ключи';
+                    }
                 }
             })
             .finally(() => {

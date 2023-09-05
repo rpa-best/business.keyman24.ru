@@ -11,12 +11,12 @@ import { WorkerFormValuesType } from 'app/(Main)/workers/[id]/components/WorkerE
 import { WorkerEditFormValidate } from 'app/(Main)/workers/[id]/components/WorkerEditForm/WorkerEditForm.utils';
 import { Button } from 'components/UI/Buttons/Button';
 import { useRouter } from 'next/navigation';
-
-import scss from './WorkerEditForm.module.scss';
 import { CreateWorkerUserBody } from 'http/types';
 import { createWorkerUser } from 'http/workerApi';
 import { Spinner } from 'components/Spinner';
 import { AxiosError } from 'axios';
+
+import scss from './WorkerEditForm.module.scss';
 
 export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
     worker,

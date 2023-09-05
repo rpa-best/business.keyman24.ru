@@ -4,5 +4,4 @@ export interface InventoryFormType {
     name: string;
     description: string;
     number: string;
-    type: Partial<IType>;
 }

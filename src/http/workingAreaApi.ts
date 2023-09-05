@@ -57,10 +57,15 @@ export const deleteWorkingArea: T.DeleteWorkingArea = async (id) => {
     }
 };
 
-export const getSessions: T.GetAreaSessions = async (orgId, areaId) => {
+export const getSessions: T.GetAreaSessions = async (orgId, areaId, query) => {
+    const qry = new URLSearchParams();
+    query ? qry.set('is_archive', query) : '';
     const res: AxiosResponse<ReturnType<T.GetAreaSessions>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/${areaId}/session/?ordering=status`
+            `business/${orgId}/working_area/${areaId}/session/?ordering=-status`,
+            {
+                params: qry,
+            }
         );
 
     return res.data;

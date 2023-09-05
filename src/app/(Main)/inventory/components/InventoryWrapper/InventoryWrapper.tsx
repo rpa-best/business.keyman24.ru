@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Table } from 'components/Table';
@@ -19,7 +19,6 @@ import { IInventoryImage } from 'http/types';
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
-    inventoryTypes,
 }) => {
     const [selectedItem, setSelectedItem] = useState<IModifiedInventory>();
     const [type, setType] = useState<'create' | 'edit'>('create');
@@ -29,7 +28,17 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         IInventoryImage[] | string[]
     >();
 
+    const lastId = useRef<number>();
+
     const router = useRouter();
+
+    useEffect(() => {
+        const ids = inventory.map((i) => {
+            return i.id;
+        });
+        const max = Math.max(...ids);
+        lastId.current = max;
+    }, []);
 
     const handleRowClick = async (id: number) => {
         setLoading(true);
@@ -64,21 +73,22 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     onClick: handleTableButtonClick,
                     text: 'Добавить',
                 }}
-                handleRowClick={handleRowClick}
+                handleEditClick={handleRowClick}
                 handleDeleteClick={handleDeleteClick}
                 tableRows={inventory}
                 paginatorData={{ offset: 10, countItems: count }}
             >
-                <Column sortable header="Наименование" field="name" />
                 <Column sortable header="номер" field="number" />
+                <Column sortable header="Наименование" field="name" />
+                <Column sortable header="Штрихкод" field="codeNumber" />
             </Table>
             <Modal>
                 <InventoryModal
-                    setSelectedImage={setSelectedItemImage}
+                    lastId={lastId.current as number}
+                    setSelectedImage={setSelectedItemImage as any}
                     selectedImage={selectedItemImage as []}
                     selectedItem={selectedItem}
                     type={type}
-                    inventoryTypes={inventoryTypes}
                 />
             </Modal>
             {loading && <Spinner />}

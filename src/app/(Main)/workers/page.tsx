@@ -16,7 +16,7 @@ const WorkersPage = async () => {
     const modifiedWorkers: ModifiedWorkers = {
         ...serverWorkers,
         results: serverWorkers.results.map((w) => {
-            return { ...w, user: w?.user?.username ?? '-' };
+            return { ...w, user: w?.user?.username ?? '-', org: w.org.name };
         }),
     };
 

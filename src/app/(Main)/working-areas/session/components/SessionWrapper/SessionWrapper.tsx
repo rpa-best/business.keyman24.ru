@@ -16,6 +16,7 @@ import { Spinner } from 'components/Spinner';
 import { useUserStore } from 'store/userStore';
 
 import scss from './SessionWrapper.module.scss';
+import { getParamsType } from 'app/(Main)/working-areas/helpers';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -73,7 +74,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         await createSession(areaId, body)
             .then(() => setVisible(false))
             .then(() => {
-                if (params.slug === 'register') {
+                if (getParamsType(params.slug) === 'register') {
                     router.push(`${pathname}/open/${maxNumber + 1}`);
                     return;
                 }
@@ -90,26 +91,38 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         setLoading(false);
     };
 
+    const onArchiveClick = () => {
+        router.replace(`${pathname}/?query=is_archive`);
+        return;
+    };
+
     return (
         <>
             <div className={scss.buttons_layout}>
                 <div className={scss.buttons}>
-                    <Button
-                        disabled={!!startSessionDisabled}
-                        nowrap
-                        onClick={onStartSessionClick}
-                        type="button"
-                    >
-                        Начать сессию
-                    </Button>
-                    <Button
-                        disabled={!startSessionDisabled}
-                        nowrap
-                        onClick={onCloseSessionClick}
-                        type="button"
-                    >
-                        Завершить сессию
-                    </Button>
+                    <div>
+                        <Button onClick={() => onArchiveClick()} type="button">
+                            Посмотреть архив
+                        </Button>
+                    </div>
+                    <div className={scss.buttons_wrapper}>
+                        <Button
+                            disabled={!!startSessionDisabled}
+                            nowrap
+                            onClick={onStartSessionClick}
+                            type="button"
+                        >
+                            Начать сессию
+                        </Button>
+                        <Button
+                            disabled={!startSessionDisabled}
+                            nowrap
+                            onClick={onCloseSessionClick}
+                            type="button"
+                        >
+                            Завершить сессию
+                        </Button>
+                    </div>
                 </div>
             </div>
             <Table tableRows={sessions} handleRowClick={handleRowClick}>

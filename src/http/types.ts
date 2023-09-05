@@ -393,7 +393,7 @@ export type DeleteInventoryPhoto = (
 
 export type UploadInventoryPhoto = (
     itemId: number,
-    photos: FileList
+    photos: File
 ) => Promise<IInventoryImage>;
 
 export type GetGroupAdminOrgPermissions = (
@@ -514,7 +514,8 @@ export type GetWorkingAreaTypes = (orgId: number) => Promise<IResponse<IType>>;
 
 export type GetAreaSessions = (
     orgId: number,
-    areaId: number
+    areaId: number,
+    query?: string
 ) => Promise<IResponse<ISession>>;
 
 export type GetSessionLog = (

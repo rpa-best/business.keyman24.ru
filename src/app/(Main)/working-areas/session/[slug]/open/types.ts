@@ -13,7 +13,9 @@ export interface RegisterProps {
 
 export interface SecurityProps extends Omit<RegisterProps, 'organizations'> {}
 
-export interface KeyProps extends RegisterProps {}
+export interface KeyProps extends RegisterProps {
+    type: 'inventory' | 'keys';
+}
 
 export type CloseSessionType = (
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,

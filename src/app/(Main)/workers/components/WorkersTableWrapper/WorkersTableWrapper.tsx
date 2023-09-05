@@ -36,6 +36,7 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
             >
                 <Column header="ФИО" field="name" />
                 <Column header="Имя пользователя" field="user" />
+                <Column sortable header="Организация" field="org" />
             </Table>
             {loading && <Spinner />}
         </>

@@ -11,9 +11,13 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 interface SessionPageProps {
     params: { slug: string };
+    searchParams?: { query: string };
 }
 
-const SessionPage: React.FC<SessionPageProps> = async ({ params }) => {
+const SessionPage: React.FC<SessionPageProps> = async ({
+    params,
+    searchParams,
+}) => {
     const cookieStore = cookies();
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
@@ -25,7 +29,11 @@ const SessionPage: React.FC<SessionPageProps> = async ({ params }) => {
 
     const area = workingAreas.results.find((area) => area.id === +id);
 
-    const sessions = await getSessions(+orgId, area?.id as number);
+    const sessions = await getSessions(
+        +orgId,
+        area?.id as number,
+        searchParams?.query
+    );
 
     const modifiedSessions = sessions.results.map((s) => {
         const startDate = new DateHelper(s.startDate);

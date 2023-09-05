@@ -5,6 +5,7 @@ export interface EnterCodeFormValues {
 }
 
 export interface EnterCodeFormProps {
+    type: 'inventory' | 'keys';
     areaId: number;
     sessionId: number;
     worker: IWorker;

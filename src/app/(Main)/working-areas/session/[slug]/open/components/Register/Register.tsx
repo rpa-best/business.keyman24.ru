@@ -1,24 +1,26 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import UniversalCookies from 'universal-cookie';
 import { closeSession } from 'http/workingAreaApi';
 import { RegisterProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { IOrganization } from 'store/types';
 import { getWorkerDocs, getWorkers } from 'http/workerApi';
-import { IWorker, IWorkerDocs } from 'http/types';
+import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
 import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
 import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Table } from 'components/Table';
+import { useModalStore } from 'store/modalVisibleStore';
 import { Column } from 'components/Table/Column';
 
 import scss from './Register.module.scss';
-import { useSocketConnect } from 'helpers/useSocketConnect';
-import { useModalStore } from 'store/modalVisibleStore';
+
+const cookie = new UniversalCookies();
 
 export const Register: React.FC<RegisterProps> = ({
     organizations,
@@ -43,12 +45,32 @@ export const Register: React.FC<RegisterProps> = ({
         setVisible(false);
     }, [setVisible]);
 
-    useSocketConnect({
-        setLoading,
-        socket: socket.current as WebSocket,
-        setWorker: setWorkerCard,
-        sessionId: currentSessionId,
-    });
+    const onSocketSuccess = useCallback(
+        async (data: SocketResponse) => {
+            console.log(data);
+            setLoading(true);
+        },
+        [setLoading]
+    );
+
+    useEffect(() => {
+        const access = cookie.get('access');
+        socket.current = new WebSocket(
+            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}business/ws/session/${currentSessionId}/?token=${access}`
+        );
+
+        socket.current.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+
+            if (message.type === 'success') {
+                onSocketSuccess(message);
+            }
+        };
+
+        return () => {
+            socket?.current?.close();
+        };
+    }, [currentSessionId, onSocketSuccess]);
 
     const handleSelectOrg = (org: IOrganization) => {
         setLoading(true);

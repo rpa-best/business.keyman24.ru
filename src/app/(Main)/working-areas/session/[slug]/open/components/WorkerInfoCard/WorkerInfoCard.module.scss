@@ -74,7 +74,9 @@
   &:last-child {
     flex-grow: 1;
   }
-
+  @include thousendWidth {
+    width: 100%;
+  }
 }
 
 .worker_card_input_half {
