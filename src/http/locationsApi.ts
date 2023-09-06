@@ -183,11 +183,15 @@ export const deleteLocationWorker: T.DeleteLocationWorker = async (
     );
 };
 
-export const generateKeys: T.GenerateKeys = async (locId, objId, body) => {
-    const res: AxiosResponse<ReturnType<T.GenerateKeys>> =
-        await $clientAuth.post(
-            `business/${orgId}/location/${locId}/object/${objId}/key-generate/`,
-            body
+export const getKeyHistory: T.GetKeyHistory = async (
+    orgId,
+    locId,
+    objId,
+    keyId
+) => {
+    const res: AxiosResponse<ReturnType<typeof getKeyHistory>> =
+        await $serverAuth.get(
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/${keyId}/history/`
         );
 
     return res.data;

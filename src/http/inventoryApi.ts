@@ -22,6 +22,18 @@ export const getInventories: T.GetInventories = async (orgId, offset) => {
     return res.data;
 };
 
+export const getInventoryHistory: T.GetInventoryHistory = async (
+    orgId,
+    inventoryId
+) => {
+    const res: AxiosResponse<ReturnType<typeof getInventoryHistory>> =
+        await $serverAuth.get(
+            `business/${orgId}/inventory/${inventoryId}/history`
+        );
+
+    return res.data;
+};
+
 export const getInventoryTypes: T.GetInventoryTypes = async (orgId) => {
     const res: AxiosResponse<ReturnType<T.GetInventoryTypes>> =
         await $serverAuth.get(`business/${orgId}/inventory/type`);

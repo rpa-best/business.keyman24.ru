@@ -66,6 +66,17 @@ export interface IInventory {
     objectArea: number;
 }
 
+export interface IInventoryHistory {
+    id: number;
+    worker: IWorker;
+    mode: boolean;
+    date: string;
+    card: string;
+    comment: string;
+    image: string;
+    inventory: number;
+}
+
 export interface IGroupPermission {
     id: number;
     level: ILevel;
@@ -308,7 +319,9 @@ export interface LocationWorkerResponse {
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
-export type GetClientOrgPermissions = (type?: string) => Promise<IPermission[]>;
+export type GetClientOrgPermissions = (
+    level?: string
+) => Promise<IPermission[]>;
 
 export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
 
@@ -370,6 +383,18 @@ export type GetInventories = (
     orgId: number,
     offset?: number
 ) => Promise<IResponse<IInventory>>;
+
+export type GetInventoryHistory = (
+    orgId: number,
+    inventoryId: number
+) => Promise<IResponse<IInventoryHistory>>;
+
+export type GetKeyHistory = (
+    orgId: number,
+    locId: number,
+    objId: number,
+    keyId: number
+) => Promise<IResponse<IInventoryHistory>>;
 
 export type GetInventoryTypes = (orgId: number) => Promise<IResponse<IType>>;
 
@@ -515,7 +540,7 @@ export type GetWorkingAreaTypes = (orgId: number) => Promise<IResponse<IType>>;
 export type GetAreaSessions = (
     orgId: number,
     areaId: number,
-    query?: string
+    archive?: string
 ) => Promise<IResponse<ISession>>;
 
 export type GetSessionLog = (
@@ -546,10 +571,17 @@ export type SendCheckSession = (
     body: { user: string; session: number }
 ) => Promise<void>;
 
-export type SendBarcode = (
+export type SendSessionAction = (
     areaId: number,
     sessionId: number,
-    body: { session: number; worker: number; barcode: string }
+    body: {
+        session: number;
+        worker: number;
+        barcode?: string;
+        user?: string;
+        mode?: boolean;
+        device?: number;
+    }
 ) => Promise<void>;
 
 export type GetWorkers = () => Promise<IResponse<IWorker>>;

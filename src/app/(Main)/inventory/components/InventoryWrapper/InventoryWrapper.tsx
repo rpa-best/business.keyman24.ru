@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
@@ -32,6 +32,8 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     const router = useRouter();
 
+    const pathname = usePathname();
+
     useEffect(() => {
         const ids = inventory.map((i) => {
             return i.id;
@@ -40,7 +42,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         lastId.current = max;
     }, []);
 
-    const handleRowClick = async (id: number) => {
+    const handleEditClick = async (id: number) => {
         setLoading(true);
         setType('edit');
 
@@ -51,6 +53,10 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
         setLoading(false);
         setVisible(true);
+    };
+
+    const handleRowClick = async (id: number) => {
+        router.push(`${pathname}/${id}`);
     };
 
     const handleDeleteClick = async (id: number) => {
@@ -73,7 +79,8 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     onClick: handleTableButtonClick,
                     text: 'Добавить',
                 }}
-                handleEditClick={handleRowClick}
+                handleEditClick={handleEditClick}
+                handleRowClick={handleRowClick}
                 handleDeleteClick={handleDeleteClick}
                 tableRows={inventory}
                 paginatorData={{ offset: 10, countItems: count }}
