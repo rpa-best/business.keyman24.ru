@@ -77,13 +77,13 @@ export const PermModalForm: React.FC<IFormProps> = ({
         if (formType === 'edit') {
             fetchData(
                 selectedPerm?.id as number,
-                values.level?.name as string
+                values.level?.id as number
             ).then((d) => {
                 setSource(d.src as []);
                 setTarget(d.trg as []);
             });
         }
-    }, [formType, selectedPerm?.id, refresh, values.level?.name]);
+    }, [formType, selectedPerm?.id, refresh, values.level?.id]);
 
     return (
         <div className={scss.form_layout}>

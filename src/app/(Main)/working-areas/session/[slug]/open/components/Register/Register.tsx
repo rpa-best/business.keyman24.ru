@@ -4,7 +4,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
-import { closeSession } from 'http/workingAreaApi';
+import { toast } from 'react-toastify';
+import { sendSessionAction } from 'http/workingAreaApi';
 import { RegisterProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { IOrganization } from 'store/types';
@@ -19,6 +20,7 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { Column } from 'components/Table/Column';
 
 import scss from './Register.module.scss';
+import { AxiosError } from 'axios';
 
 const cookie = new UniversalCookies();
 
@@ -30,12 +32,12 @@ export const Register: React.FC<RegisterProps> = ({
 }) => {
     const router = useRouter();
 
+    const [errors, setErrors] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState<IOrganization>();
     const [selectedWorker, setSelectedWorker] = useState<IWorker>();
     const [selectedWorkerDocs, setSelectedWorkerDocs] =
         useState<IWorkerDocs[]>();
     const [workers, setWorkers] = useState<IWorker[]>([]);
-    const [workerCard, setWorkerCard] = useState<IWorker>();
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
 
@@ -47,10 +49,31 @@ export const Register: React.FC<RegisterProps> = ({
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
-            console.log(data);
             setLoading(true);
+            const body = {
+                user: data.data.user,
+                mode: data.data.mode,
+                worker: selectedWorker?.id,
+                device: data.data.device,
+            };
+            sendSessionAction(currentAreaId, currentSessionId, body as any)
+                .catch((e: unknown) => {
+                    if (e instanceof AxiosError) {
+                        toast(e.response?.data.error[0].slug, {
+                            position: 'bottom-right',
+                            hideProgressBar: true,
+                            autoClose: 600000,
+                            type: 'error',
+                            theme: 'colored',
+                        });
+                    }
+                })
+                .finally(() => {
+                    router.refresh();
+                    setLoading(false);
+                });
         },
-        [setLoading]
+        [currentAreaId, currentSessionId, router, selectedWorker?.id]
     );
 
     useEffect(() => {
@@ -63,6 +86,9 @@ export const Register: React.FC<RegisterProps> = ({
             const message = JSON.parse(event.data);
 
             if (message.type === 'success') {
+                if (errors) {
+                    return;
+                }
                 onSocketSuccess(message);
             }
         };
@@ -70,7 +96,7 @@ export const Register: React.FC<RegisterProps> = ({
         return () => {
             socket?.current?.close();
         };
-    }, [currentSessionId, onSocketSuccess]);
+    }, [currentSessionId, errors, onSocketSuccess]);
 
     const handleSelectOrg = (org: IOrganization) => {
         setLoading(true);
@@ -137,6 +163,7 @@ export const Register: React.FC<RegisterProps> = ({
                 <div className={scss.working_view_wrapper}>
                     <div className={scss.working_view_card}>
                         <WorkerInfoCard
+                            setErrors={setErrors}
                             halfScreen
                             worker={selectedWorker as IWorker}
                             workerDocs={selectedWorkerDocs as IWorkerDocs[]}

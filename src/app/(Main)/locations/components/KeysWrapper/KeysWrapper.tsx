@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Button } from 'components/UI/Buttons/Button';
@@ -37,7 +37,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
 
     const router = useRouter();
-
+    const pathName = usePathname();
     const params = useParams();
 
     useEffect(() => {
@@ -89,6 +89,10 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         });
     };
 
+    const handleRowClick = (id: number) => {
+        router.push(`${pathName}/key/${id}`);
+    };
+
     return (
         <>
             <div className={scss.keys}>
@@ -121,8 +125,8 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                                     offset: 25,
                                     countItems: count,
                                 }}
+                                handleRowClick={handleRowClick}
                                 handleDeleteClick={handleDeleteClick}
-                                rowClickable={false}
                                 tableRows={generatedData}
                             >
                                 <Column

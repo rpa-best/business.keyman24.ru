@@ -4,7 +4,9 @@ import { montserrat } from 'font/montserrat';
 
 import { Header } from 'app/(Main)/components/Header';
 import { SideMenu } from 'app/(Main)/components/SideMenu';
+import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import 'scss/utils.scss';
 import 'scss/_reset.scss';
 import scss from 'app/(Main)/MainPage.module.scss';
@@ -27,6 +29,7 @@ export default function RootLayout({
                     <SideMenu />
                     <main className={scss.children_layout}>{children}</main>
                 </div>
+                <ToastContainer />
             </body>
         </html>
     );

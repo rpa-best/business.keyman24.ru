@@ -8,7 +8,7 @@ import {
 import { CodeFormValidate } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/EnterCodeForm.utils';
 import { Button } from 'components/UI/Buttons/Button';
 import { Input } from 'components/UI/Inputs/Input';
-import { sendBarcode } from 'http/workingAreaApi';
+import { sendSessionAction } from 'http/workingAreaApi';
 
 import scss from './EnterCodeFOrm.module.scss';
 import { AxiosError } from 'axios';
@@ -27,7 +27,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             worker: +worker.id,
             barcode: values.code,
         };
-        await sendBarcode(areaId, sessionId, body)
+        await sendSessionAction(areaId, sessionId, body)
             .catch((e: AxiosError) => {
                 console.log(e);
                 // @ts-ignore

@@ -93,12 +93,15 @@
 
 
 .worker_card_input_additional {
-  width: 48%;
+  width: calc(50% - 20px);
   @include phoneOrTablet {
     width: 100%;
     margin-bottom: 10px;
   }
 
+  &:nth-child(2n) {
+    width: 50%;
+  }
   &:last-child {
     flex-grow: 2;
   }

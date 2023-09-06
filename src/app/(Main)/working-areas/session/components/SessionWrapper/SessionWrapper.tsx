@@ -8,15 +8,20 @@ import { Column } from 'components/Table/Column';
 import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { AttachCard } from 'app/(Main)/working-areas/components/AttachCard';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import {
+    useParams,
+    usePathname,
+    useRouter,
+    useSearchParams,
+} from 'next/navigation';
 import { Button } from 'components/UI/Buttons/Button';
 import { ICreateSessionBody } from 'http/types';
 import { closeSession, createSession } from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
 import { useUserStore } from 'store/userStore';
+import { getParamsType } from 'app/(Main)/working-areas/helpers';
 
 import scss from './SessionWrapper.module.scss';
-import { getParamsType } from 'app/(Main)/working-areas/helpers';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -31,6 +36,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
     const params = useParams();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const currentSession = sessions.find((s) => s.status === 'В процессе');
 
@@ -92,8 +98,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     };
 
     const onArchiveClick = () => {
-        router.replace(`${pathname}/?query=is_archive`);
-        return;
+        if (searchParams.get('archive')) {
+            router.replace(pathname);
+        } else {
+            router.replace(`${pathname}/?archive=true`);
+        }
     };
 
     return (
@@ -101,7 +110,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             <div className={scss.buttons_layout}>
                 <div className={scss.buttons}>
                     <div>
-                        <Button onClick={() => onArchiveClick()} type="button">
+                        <Button
+                            active={!!searchParams.get('archive')}
+                            onClick={() => onArchiveClick()}
+                            type="button"
+                        >
                             Посмотреть архив
                         </Button>
                     </div>

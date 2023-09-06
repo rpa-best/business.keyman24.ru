@@ -6,6 +6,7 @@ import { PickList } from 'components/PickList';
 import { DefaultElem } from 'components/PickList/types';
 import { Spinner } from 'components/Spinner';
 import { WorkingAreaDevicePickList } from 'app/(Main)/working-areas/components/AreasPickList/types';
+
 import {
     createWorkingAreaDevice,
     deleteWorkingAreaDevice,

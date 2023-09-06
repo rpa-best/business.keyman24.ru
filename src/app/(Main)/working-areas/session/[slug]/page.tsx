@@ -11,7 +11,7 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 interface SessionPageProps {
     params: { slug: string };
-    searchParams?: { query: string };
+    searchParams?: { archive: string };
 }
 
 const SessionPage: React.FC<SessionPageProps> = async ({
@@ -32,7 +32,7 @@ const SessionPage: React.FC<SessionPageProps> = async ({
     const sessions = await getSessions(
         +orgId,
         area?.id as number,
-        searchParams?.query
+        searchParams?.archive
     );
 
     const modifiedSessions = sessions.results.map((s) => {
