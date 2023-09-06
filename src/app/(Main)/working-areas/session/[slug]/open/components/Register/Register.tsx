@@ -178,6 +178,13 @@ export const Register: React.FC<RegisterProps> = ({
                     </div>
                 </div>
             )}
+            {!selectedWorker && (
+                <Table tableRows={sessionLog}>
+                    <Column header="Работник" field="workerName" />
+                    <Column header="Дата" field="date" />
+                    <Column header="Тип" field="modeName" />
+                </Table>
+            )}
             {loading && <Spinner />}
         </div>
     );
