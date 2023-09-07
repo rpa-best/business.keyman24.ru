@@ -29,7 +29,6 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         };
         await sendSessionAction(areaId, sessionId, body)
             .catch((e: AxiosError) => {
-                console.log(e);
                 // @ts-ignore
                 if (e.response.data.error[0].slug === 'invalid_barcode') {
                     errors.code = 'Такого кода не существует';

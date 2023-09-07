@@ -49,13 +49,13 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         if (l.mode) {
             return {
                 ...l,
-                modeName: 'Выдана',
+                modeName: 'Выдан',
                 inventoryName: inventoryName,
             };
         } else {
             return {
                 ...l,
-                modeName: 'Сдана',
+                modeName: 'Сдан',
                 inventoryName: inventoryName,
             };
         }

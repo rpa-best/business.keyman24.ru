@@ -1,21 +1,23 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 
+import { getKeyHistory } from 'http/locationsApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { BarChart } from 'components/Charts/BarChart';
-import { getInventoryHistory } from 'http/inventoryApi';
+
+import scss from './KeyHistoryPage.module.scss';
 import {
     formatDateHistory,
     getBarData,
     getOrgBarData,
 } from 'helpers/historyHelper';
-
-import scss from './KeyHistoryPage.module.scss';
 import { PieChart } from 'components/Charts/PieChart/PieChart';
 
 interface KeyPageProps {
     params: {
-        id: string;
+        locId: string;
+        objId: string;
+        keyId: string;
     };
 }
 
@@ -24,7 +26,12 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params }) => {
 
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const keyHistory = await getInventoryHistory(+orgId, +params.id);
+    const keyHistory = await getKeyHistory(
+        +orgId,
+        +params.locId,
+        +params.objId,
+        +params.keyId
+    );
 
     const cloneHistory = formatDateHistory(keyHistory.results);
 
@@ -33,10 +40,10 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params }) => {
     const { labels, data } = getOrgBarData(cloneHistory);
 
     return (
-        <div className={scss.custom_children}>
+        <>
             <div className={scss.custom_title_wrapper}>
-                <h1>История инвентаря {params.id}</h1>
-                <BackButton>Назад</BackButton>
+                <h1>История ключа {params.keyId}</h1>
+                <BackButton skipWord>Назад</BackButton>
             </div>
             {barData?.length !== 0 ? (
                 <>
@@ -62,11 +69,9 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params }) => {
                     </div>
                 </>
             ) : (
-                <p className={scss.empty_key}>
-                    Этот инвентарь ещё не использовался
-                </p>
+                <p className={scss.empty_key}>Этот ключ ещё не использовался</p>
             )}
-        </div>
+        </>
     );
 };
 
