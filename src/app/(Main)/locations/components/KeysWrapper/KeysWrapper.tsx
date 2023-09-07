@@ -90,7 +90,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleRowClick = (id: number) => {
-        router.push(`${pathName}/key/${id}`);
+        router.push(`${pathName}/history/${id}`);
     };
 
     return (

@@ -94,7 +94,7 @@ export const Key: React.FC<KeyProps> = ({
                     <Column header="Работник" field="workerName" />
                     <Column header="Дата" field="date" />
                     <Column header="Событие" field="modeName" />
-                    <Column header="Наименование ТМЦ" field="inventoryName" />
+                    <Column header="Наименование" field="inventoryName" />
                 </Table>
             )}
             {loading && <Spinner />}

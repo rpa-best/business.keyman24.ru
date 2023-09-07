@@ -32,7 +32,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
     });
 
     const arrowClassname = clsx({
-        [scss.table_td_header_arrow]: true,
+        [scss.table_td_header_arrow]: !bounce && !currentField,
         [scss.table_td_header_arrow_active]: bounce && currentField,
         [scss.table_td_header_arrow_active_desc]: !bounce && currentField,
     });

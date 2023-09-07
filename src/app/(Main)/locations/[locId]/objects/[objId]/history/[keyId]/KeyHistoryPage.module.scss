@@ -1,0 +1,41 @@
+@import "scss/utils";
+
+
+.bar_chart_wrapper {
+  height: 600px;
+  width: calc(100% - 90px);
+  margin: 10px auto 100px;
+  @include phone {
+    height: 70vh;
+    width: 100vw;
+    margin: 0;
+  }
+}
+
+.pie_chart_wrapper {
+  width: calc(100% - 90px);
+  margin: 10px auto 30px;
+  @include phone {
+    height: 70vh;
+    width: 100vw;
+    margin: 0;
+  }
+}
+
+.custom_title_wrapper {
+  width: calc(100% - 90px);
+  margin: 40px auto 0;
+  @extend .page_title_with_table_back_button;
+}
+
+.empty_key {
+  text-align: center;
+  @include MontserratRegular(28px);
+  color: white;
+  transform: translateY(15vh);
+}
+
+.custom_title {
+  font-size: 24px;
+  @extend .page_title
+}

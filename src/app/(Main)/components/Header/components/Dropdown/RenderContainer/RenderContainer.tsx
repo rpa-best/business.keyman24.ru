@@ -33,7 +33,7 @@ export const RenderContainer: React.FC<RenderContainerProps> = ({
         <motion.ul style={{ opacity }} className={scss.dropdown_menu}>
             <li className={scss.dropdown_item}>
                 <button className={scss.dropdown_button}>
-                    <UserSvg className={scss.svg} />
+                    <UserSvg className={scss.dropdown_svg} />
                     Профиль
                 </button>
             </li>
@@ -42,7 +42,7 @@ export const RenderContainer: React.FC<RenderContainerProps> = ({
                     className={scss.dropdown_button}
                     onClick={handleLogoutClick}
                 >
-                    <LogoutSvg className={scss.svg} />
+                    <LogoutSvg className={scss.dropdown_svg} />
                     Выйти
                 </button>
             </li>

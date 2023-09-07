@@ -23,7 +23,7 @@
     .dropdown_button {
       color: white;
       border-bottom-color: white;
-      .svg {
+      .dropdown_svg {
         color: white;
       }
     }
@@ -50,7 +50,9 @@
   border-bottom: 1px solid $additional-dark;
 }
 
-.svg {
+.dropdown_svg {
+  width: 15px;
+  height: 15px;
   margin-right: 11px;
   transition: .2s all ease-in-out;
   color: $gray-semi;
