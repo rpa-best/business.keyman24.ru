@@ -73,6 +73,7 @@ export const Key: React.FC<KeyProps> = ({
                     <div className={scss.worker_info_wrapper}>
                         {worker?.id ? (
                             <WorkerInfoCard
+                                halfScreen
                                 worker={worker as IWorker}
                                 workerDocs={workerDocs as IWorkerDocs[]}
                             />

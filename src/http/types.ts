@@ -148,8 +148,7 @@ export interface SocketResponse {
     data: {
         device: number;
         mode: boolean;
-        user: string;
-        worker: IWorker;
+        user: IWorker;
     };
     type: 'success' | string;
 }
@@ -218,7 +217,7 @@ export interface SessionLogResponse {
     card: string;
     comment: string;
     image: string;
-    inventory: number;
+    inventory: IInventory;
 }
 
 export interface IWorkerDocs {
@@ -569,6 +568,11 @@ export type SendCheckSession = (
     areaId: number,
     sessionId: number,
     body: { user: string; session: number }
+) => Promise<void>;
+
+export type SendActivateSession = (
+    areaId: number,
+    sessionId: number
 ) => Promise<void>;
 
 export type SendSessionAction = (

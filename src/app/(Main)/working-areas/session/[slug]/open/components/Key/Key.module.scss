@@ -10,7 +10,7 @@
 .button_wrapper {
   width: max-content;
   margin-right: auto;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 
@@ -46,10 +46,19 @@
 }
 
 .worker_empty_wrapper {
-  width: 400px;
-  height: 350px;
+  width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: $dark-main;
+  border-radius: 40px;
+  @include thousendTwoWidth {
+    height: 400px;
+    width: 100% ;
+  }
+  @include phoneOrTablet {
+    height: 300px;
+    border-radius: 0;
+  }
 }

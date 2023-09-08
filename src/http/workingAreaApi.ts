@@ -122,6 +122,15 @@ export const sendCheck: T.SendCheckSession = async (
         body
     );
 };
+
+export const sendActivateSession: T.SendActivateSession = async (
+    areaId,
+    sessionId
+) => {
+    await $clientAuth.post(
+        `business/${orgId}/working_area/${areaId}/session/${sessionId}/activate/`
+    );
+};
 export const sendSessionAction: T.SendSessionAction = async (
     areaId,
     sessionId,

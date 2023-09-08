@@ -101,6 +101,9 @@
 
   &:nth-child(2n) {
     width: 50%;
+    @include phoneOrTablet {
+      width: 100%;
+    }
   }
   &:last-child {
     flex-grow: 2;
