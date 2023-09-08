@@ -45,20 +45,12 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
     });
 
     const keyLog = modifiedLog.map((l) => {
-        const inventoryName = `${l.inventory} ${l.inventory}`;
-        if (l.mode) {
-            return {
-                ...l,
-                modeName: 'Выдан',
-                inventoryName: inventoryName,
-            };
-        } else {
-            return {
-                ...l,
-                modeName: 'Сдан',
-                inventoryName: inventoryName,
-            };
-        }
+        const mode = l.mode ? 'Выдан' : 'Сдан';
+        return {
+            ...l,
+            modeName: mode,
+            inventoryName: `${l?.inventory?.id} ${l?.inventory?.name}`,
+        };
     });
 
     switch (areaType) {

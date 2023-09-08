@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import UniversalCookies from 'universal-cookie';
 import { getWorkerDocs } from 'http/workerApi';
@@ -13,7 +13,7 @@ type UseSocketConnectProps = {
     socket: WebSocket;
 };
 
-type SocketConnectFunc = (props: UseSocketConnectProps) => void;
+type SocketConnectFunc = (props: UseSocketConnectProps) => SocketResponse;
 
 export const useSocketConnect: SocketConnectFunc = ({
     setWorker,
@@ -24,11 +24,14 @@ export const useSocketConnect: SocketConnectFunc = ({
 }) => {
     const router = useRouter();
 
+    const [data, setData] = useState<SocketResponse>();
+
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
             setLoading(true);
-            setWorker(data.data.worker);
-            await getWorkerDocs(data.data.worker.id)
+            setWorker(data.data.user);
+            setData(data);
+            await getWorkerDocs(data.data.user.id)
                 .then((d) => {
                     if (setWorkerDocs) {
                         setWorkerDocs(d.results);
@@ -60,4 +63,6 @@ export const useSocketConnect: SocketConnectFunc = ({
             socket?.close();
         };
     }, [onSocketSuccess, sessionId]);
+
+    return data as SocketResponse;
 };

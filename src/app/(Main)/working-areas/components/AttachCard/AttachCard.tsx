@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
-import { sendCheck } from 'http/workingAreaApi';
-import { usePathname, useRouter } from 'next/navigation';
+import { sendActivateSession, sendCheck } from 'http/workingAreaApi';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from 'store/modalVisibleStore';
 import UniversalCookies from 'universal-cookie';
 
 import scss from './AttachCard.module.scss';
+import { getParamsType } from 'app/(Main)/working-areas/helpers';
 
 const cookie = new UniversalCookies();
 
@@ -28,6 +29,13 @@ export const AttachCard: React.FC<AttachCardProps> = ({
     const router = useRouter();
 
     const pathname = usePathname();
+    const params = useParams();
+
+    useEffect(() => {
+        if (getParamsType(params.slug) === 'security') {
+            sendActivateSession(areaId, session);
+        }
+    }, [areaId, params.slug, session]);
 
     const onSocketSuccess = async () => {
         const body = {

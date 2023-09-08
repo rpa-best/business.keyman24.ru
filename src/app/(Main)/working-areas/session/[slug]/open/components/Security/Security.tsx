@@ -17,6 +17,7 @@ import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 
 import scss from './Security.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';
+import { sendSessionAction } from 'http/workingAreaApi';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -35,13 +36,32 @@ export const Security: React.FC<SecurityProps> = ({
         setVisible(false);
     }, [setVisible]);
 
-    useSocketConnect({
+    const data = useSocketConnect({
         setLoading,
         setWorker,
         setWorkerDocs,
         socket: socket.current as WebSocket,
         sessionId: currentSessionId,
     });
+
+    useEffect(() => {
+        if (data) {
+            setLoading(true);
+            const body = {
+                session: currentSessionId,
+                worker: data.data.user.id,
+                mode: data.data.mode,
+                user: data.data.user.user,
+            };
+            sendSessionAction(
+                currentAreaId,
+                currentSessionId,
+                body as any
+            ).finally(() => {
+                setLoading(false);
+            });
+        }
+    }, [currentAreaId, currentSessionId, data]);
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(
@@ -53,18 +73,6 @@ export const Security: React.FC<SecurityProps> = ({
         );
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            return await getWorkers();
-        };
-        fetchData().then(async (d) => {
-            await getWorkerDocs(d.results[2].id).then((d) =>
-                setWorkerDocs(d.results)
-            );
-            setWorker(d.results[0]);
-        });
-    }, []);
-
     return (
         <div>
             <div className={scss.button_wrapper}>
@@ -74,10 +82,13 @@ export const Security: React.FC<SecurityProps> = ({
             </div>
             <div className={scss.working_view_wrapper}>
                 {worker?.id ? (
-                    <WorkerInfoCard
-                        worker={worker as IWorker}
-                        workerDocs={workerDocs as IWorkerDocs[]}
-                    />
+                    <div className={scss.worker_info_wrapper}>
+                        <WorkerInfoCard
+                            halfScreen
+                            worker={worker as IWorker}
+                            workerDocs={workerDocs as IWorkerDocs[]}
+                        />
+                    </div>
                 ) : (
                     <div className={scss.worker_empty_wrapper}>
                         <h2 className={scss.spinner_header}>
@@ -92,7 +103,7 @@ export const Security: React.FC<SecurityProps> = ({
                     <Table tableRows={sessionLog}>
                         <Column header="Работник" field="workerName" />
                         <Column header="Дата" field="date" />
-                        <Column header="Тип" field="mode" />
+                        <Column header="Тип" field="modeName" />
                     </Table>
                 </div>
             </div>

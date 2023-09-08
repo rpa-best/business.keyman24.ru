@@ -51,18 +51,27 @@ export const Register: React.FC<RegisterProps> = ({
         async (data: SocketResponse) => {
             setLoading(true);
             const body = {
-                user: data.data.user,
+                user: data.data.user.user,
                 mode: data.data.mode,
                 worker: selectedWorker?.id,
                 device: data.data.device,
             };
             sendSessionAction(currentAreaId, currentSessionId, body as any)
+                .then(() => {
+                    toast('Успешно', {
+                        position: 'bottom-right',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'success',
+                        theme: 'colored',
+                    });
+                })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
                         toast(e.response?.data.error[0].slug, {
                             position: 'bottom-right',
                             hideProgressBar: true,
-                            autoClose: 600000,
+                            autoClose: 2000,
                             type: 'error',
                             theme: 'colored',
                         });

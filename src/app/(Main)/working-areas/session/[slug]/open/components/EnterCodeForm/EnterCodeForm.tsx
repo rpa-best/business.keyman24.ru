@@ -13,6 +13,7 @@ import { sendSessionAction } from 'http/workingAreaApi';
 import scss from './EnterCodeFOrm.module.scss';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -28,6 +29,15 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             barcode: values.code,
         };
         await sendSessionAction(areaId, sessionId, body)
+            .then(() => {
+                toast('Успешно', {
+                    position: 'bottom-right',
+                    hideProgressBar: true,
+                    autoClose: 2000,
+                    type: 'success',
+                    theme: 'colored',
+                });
+            })
             .catch((e: AxiosError) => {
                 // @ts-ignore
                 if (e.response.data.error[0].slug === 'invalid_barcode') {
