@@ -19,8 +19,9 @@ export interface ColumnHeaderProps extends IHeader {
     sortedField: string;
     field: string;
     headersCount: number;
-    buttonData?: { onClick: () => void; text: string };
     lastChild: boolean;
+    buttonData?: { onClick: () => void; text: string };
+    stopPropagation?: boolean;
 }
 
 interface PaginatorData {
@@ -37,6 +38,7 @@ export interface TableProps {
     handleDeleteClick?: (id: number) => void;
     paginatorData?: PaginatorData;
     rowClickable?: boolean;
+    stopPropagation?: boolean;
 }
 
 export interface ColumnProps {
@@ -56,4 +58,5 @@ export interface ColumnRowProps {
     item: TableRows;
     handleEditClick?: (id: number) => void;
     handleDeleteClick?: (id: number) => void;
+    stopPropagation?: boolean;
 }

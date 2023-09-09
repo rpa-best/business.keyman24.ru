@@ -16,6 +16,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
     field,
     sortedField,
     buttonData,
+    stopPropagation,
 }) => {
     const [bounce, setBounce] = useState(false);
     const currentField = sortedField === field;
@@ -29,6 +30,10 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
         [scss.table_header]: true,
         [scss.table_header_less_3]: headersCount < 3,
         [scss.table_headers_more_3]: headersCount > 3,
+    });
+
+    const textClass = clsx({
+        [scss.text_class]: stopPropagation,
     });
 
     const arrowClassname = clsx({
@@ -51,7 +56,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
             className={headerClassName}
         >
             <div className={scss.header_name_wrapper}>
-                {name}
+                <p className={textClass}>{name}</p>
                 {sortable && <ArrowSvg className={arrowClassname} />}
             </div>
             {lastChild && buttonData?.text && (

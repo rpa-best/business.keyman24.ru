@@ -15,6 +15,13 @@ export const getWorkers: T.GetWorkers = async () => {
 
     return res.data;
 };
+
+export const getWorkerPlan: T.GetWorkerPlan = async (orgId, workerId) => {
+    const res: AxiosResponse<ReturnType<typeof getWorkerPlan>> =
+        await $serverAuth.get(`business/${orgId}/worker/plan/${workerId}`);
+
+    return res.data;
+};
 export const getServerWorkers: T.GetServerWorkers = async (orgId) => {
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`

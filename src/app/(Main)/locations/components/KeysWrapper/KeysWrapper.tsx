@@ -128,6 +128,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                                 handleRowClick={handleRowClick}
                                 handleDeleteClick={handleDeleteClick}
                                 tableRows={generatedData}
+                                stopPropagation
                             >
                                 <Column
                                     header="Название"
