@@ -14,6 +14,7 @@ export const Row: React.FC<ColumnRowProps> = ({
     headers,
     handleEditClick,
     handleDeleteClick,
+    stopPropagation,
 }) => {
     const [textArr, setTextArr] = useState<string[]>([]);
 
@@ -21,6 +22,10 @@ export const Row: React.FC<ColumnRowProps> = ({
         e.stopPropagation();
         func(item.id);
     };
+
+    const textClass = clsx({
+        [scss.text_class]: stopPropagation,
+    });
 
     const tableTdClassName = clsx({
         [scss.table_td]: true,
@@ -44,7 +49,16 @@ export const Row: React.FC<ColumnRowProps> = ({
         const lastElem = textArr.length - 1 === index;
         return (
             <div className={tableTdClassName} key={index}>
-                <p>{el}</p>
+                <p
+                    className={textClass}
+                    onClick={
+                        stopPropagation
+                            ? (event) => event.stopPropagation()
+                            : undefined
+                    }
+                >
+                    {el}
+                </p>
                 {lastElem && needActions && (
                     <div className={scss.actions_wrapper}>
                         {handleEditClick && (

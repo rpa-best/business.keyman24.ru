@@ -189,6 +189,27 @@ export interface IWorker {
     image: string;
 }
 
+export interface IPlanObj {
+    in: string[];
+    out: string[];
+    workedTime: number;
+}
+
+export interface IPlan {
+    [key: string]: IPlanObj;
+}
+
+export interface IWorkerPlan {
+    id: number;
+    plan: IPlan;
+    lcId: number;
+    name: string;
+    userLcId: number;
+    image: string;
+    user: string;
+    org: number;
+}
+
 export interface ICreateSessionBody
     extends Pick<ISession, 'id' | 'number' | 'status'> {
     start_date: string;
@@ -589,6 +610,11 @@ export type SendSessionAction = (
 ) => Promise<void>;
 
 export type GetWorkers = () => Promise<IResponse<IWorker>>;
+
+export type GetWorkerPlan = (
+    orgId: number,
+    workerId: number
+) => Promise<IWorkerPlan>;
 
 export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 

@@ -5,6 +5,7 @@ import {
     getServerWorkerDocs,
     getWorker,
     getWorkerCard,
+    getWorkerPlan,
     getWorkerUser,
 } from 'http/workerApi';
 import { cookies } from 'next/headers';
@@ -48,6 +49,8 @@ const WorkerPage: React.FC<WorkerPage> = async ({ params: { id } }) => {
     const workerCards = await getWorkerCard(+orgId, +id);
 
     const workerDocs = await getServerWorkerDocs(+id, +orgId);
+
+    const workerPlan = await getWorkerPlan(+orgId, +id);
 
     const modifiedWorkerDocs = workerDocs.results.map((w) => {
         const activeTo = new Date(w.activeTo);
@@ -127,6 +130,7 @@ const WorkerPage: React.FC<WorkerPage> = async ({ params: { id } }) => {
                 worker={worker}
             />
             <WorkerDocsTable
+                time={workerPlan}
                 workerInventory={workerInventory}
                 docs={modifiedWorkerDocs}
                 cards={workerCards.results}

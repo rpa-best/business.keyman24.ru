@@ -30,6 +30,7 @@ export const Table: React.FC<TableProps> = ({
     buttonData,
     handleEditClick,
     handleDeleteClick,
+    stopPropagation,
 }) => {
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -109,6 +110,7 @@ export const Table: React.FC<TableProps> = ({
                             const lastChild = headers.length === index + 1;
                             return (
                                 <ColumnHeader
+                                    stopPropagation={stopPropagation}
                                     headersCount={headers.length}
                                     key={index}
                                     buttonData={buttonData}
@@ -136,6 +138,7 @@ export const Table: React.FC<TableProps> = ({
                                     className={rowClassName}
                                 >
                                     <Row
+                                        stopPropagation={stopPropagation}
                                         handleDeleteClick={handleDeleteClick}
                                         handleEditClick={handleEditClick}
                                         headers={headers}

@@ -134,6 +134,9 @@
   &:hover .actions_wrapper {
     opacity: 1;
   }
+  @include phoneOrTablet {
+    width: max-content;
+  }
 }
 
 .table_td_less_3 {
@@ -197,6 +200,10 @@
     max-width: 100%;
     flex-grow: 1;
   }
+}
+
+.text_class {
+  padding: 0 10px;
 }
 
 .table_td_img {
@@ -336,9 +343,6 @@
   max-height: 45px;
   margin-left: 5%;
   margin-right: 5%;
-  @include phoneOrTablet {
-    margin-left: 60px;
-  }
 }
 
 .header_name_wrapper {

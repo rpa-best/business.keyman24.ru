@@ -84,6 +84,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 handleDeleteClick={handleDeleteClick}
                 tableRows={inventory}
                 paginatorData={{ offset: 10, countItems: count }}
+                stopPropagation
             >
                 <Column sortable header="номер" field="number" />
                 <Column sortable header="Наименование" field="name" />
