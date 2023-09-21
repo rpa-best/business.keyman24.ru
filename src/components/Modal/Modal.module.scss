@@ -19,13 +19,13 @@
   width: max-content;
   position: relative;
   background: $dark-main;
-  padding: 40px 100px;
+  padding: 40px 80px;
   margin: 10px 0;
   border-radius: 40px;
   border: 1px solid #414141;
   box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.10);
   @include phoneOrTablet {
-    padding: 30px 50px;
+    padding: 30px 40px;
   }
   @include phone {
     width: calc(100%);

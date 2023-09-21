@@ -61,7 +61,10 @@ const OrgSettingsPage = async () => {
     );
 
     return (
-        <div className={scss.children_with_table}>
+        <div
+            style={{ marginBottom: '20px' }}
+            className={scss.children_with_table}
+        >
             <div className={scss.default_wrapper}>
                 <h2 className={scss.title}>{name}</h2>
             </div>
