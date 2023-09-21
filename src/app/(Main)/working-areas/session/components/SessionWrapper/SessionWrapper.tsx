@@ -120,7 +120,10 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                     </div>
                     <div className={scss.buttons_wrapper}>
                         <Button
-                            disabled={!!startSessionDisabled}
+                            disabled={
+                                !!searchParams.get('archive') ||
+                                !!startSessionDisabled
+                            }
                             nowrap
                             onClick={onStartSessionClick}
                             type="button"
@@ -128,7 +131,10 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                             Начать сессию
                         </Button>
                         <Button
-                            disabled={!startSessionDisabled}
+                            disabled={
+                                !!searchParams.get('archive') ||
+                                !startSessionDisabled
+                            }
                             nowrap
                             onClick={onCloseSessionClick}
                             type="button"

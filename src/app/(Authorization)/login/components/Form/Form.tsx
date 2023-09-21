@@ -10,7 +10,7 @@ import { FormValidate } from 'app/(Authorization)/login/components/Form/Form.uti
 import { userAuth, getUser } from 'http/userApi';
 import { IUser } from 'store/types';
 import { useUserStore } from 'store/userStore';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 
 import scss from './Form.module.scss';
@@ -22,19 +22,18 @@ export const Form = () => {
     const router = useRouter();
 
     const onSubmit = (values: IFormTypes) => {
-        router.prefetch('/');
         setLoading(true);
         userAuth(values)
-            .then(() =>
+            .then(() => {
+                router.replace('/');
                 getUser().then((user) => {
                     setUser(user as IUser);
-                })
-            )
+                });
+            })
             .catch((e) => {
                 setErrors({ username: e.message, password: e.message });
             })
             .finally(() => {
-                router.replace('/');
                 setLoading(false);
             });
     };
@@ -71,7 +70,7 @@ export const Form = () => {
                     name="username"
                     onBlur={handleBlur}
                     autoFocus={true}
-                    placeholder="Введите логин"
+                    placeholder="Введите почту"
                     value={values.username}
                     onChange={handleChange}
                     handleError={touched.username && errors.username}

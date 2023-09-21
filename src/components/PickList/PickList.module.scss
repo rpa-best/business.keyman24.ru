@@ -45,6 +45,7 @@
 }
 
 .picklist_wrapper {
+  min-width: 560px;
   width: 100%;
   height: max-content;
   display: flex;
@@ -58,8 +59,12 @@
   @include phoneOrTablet {
     flex-direction: column;
     width: calc(100% - 20px);
+    min-width: 400px;
     margin: 0 auto;
     height: max-content;
+  }
+  @include phone {
+    min-width: 0;
   }
 }
 

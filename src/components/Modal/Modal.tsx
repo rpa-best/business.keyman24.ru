@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import ExitSvg from '/public/svg/x.svg';
@@ -15,6 +15,14 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({ children }) => {
     const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    useEffect(() => {
+        if (visible) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }, [visible]);
 
     return (
         <AnimatePresence>
