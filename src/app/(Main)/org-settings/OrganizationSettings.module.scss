@@ -13,13 +13,12 @@
 }
 
 .default_wrapper {
+  position: relative;
   display: flex;
   width: 100%;
-  flex-direction: column;
+  justify-content: center;
   margin: 20px auto;
   color: white;
-  position: relative;
-  justify-content: center;
   align-items: center;
   @include thousendWidth {
     margin: 30px auto 10px;
@@ -29,4 +28,15 @@
 .title {
   text-align: center;
   @include MontserratSemiBold(24px);
+}
+
+.button_wrapper {
+  position: absolute;
+  left: 0;
+  @include phoneOrTablet {
+    left: 15px;
+  }
+  @include phone {
+    top: -50px
+  }
 }

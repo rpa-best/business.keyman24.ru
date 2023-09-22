@@ -11,6 +11,36 @@ export interface IUserAuthResponse {
     refresh: string;
 }
 
+export interface IService {
+    id: number;
+    status: string;
+    user: string;
+    org: number;
+    serviceRates: IServiceRate[];
+}
+
+export interface IServiceRate {
+    id: number;
+    key: IServiceRateKey;
+    value: number;
+    notLimited: boolean;
+    subs: number;
+}
+
+export interface IServiceRateKey {
+    modelName: string;
+    name: string;
+    defaultValue: number;
+    maxValue: number;
+}
+
+export interface IRate {
+    id: number;
+    key: string;
+    value: number;
+    not_limited: boolean;
+}
+
 export type UserAuthType = (
     body: IUserAuthRequest
 ) => Promise<IUserAuthResponse | string | undefined | unknown>;
@@ -22,6 +52,14 @@ export type UpdateTokens = () => Promise<boolean>;
 export type GetOrganizations = () => Promise<IOrganization[]>;
 
 export type GetOrgById = (id?: number) => Promise<IOrganization>;
+
+export type GetServices = (org: number) => Promise<IResponse<IService>>;
+
+export type GetPrice = (
+    body: IRate[]
+) => Promise<{ body: string[]; cost: number }>;
+
+export type UpdatePrice = (subId: number, body: IRate[]) => Promise<void>;
 
 export interface ILevel {
     id: number;

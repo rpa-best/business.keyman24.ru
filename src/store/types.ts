@@ -53,6 +53,7 @@ export interface IOrganization {
     address: string | null;
     phone: string | null;
     email: string | null;
+    balance: number;
 }
 
 export type SetOrganizationType = (data: IOrganization) => void;

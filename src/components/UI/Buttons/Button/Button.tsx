@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 interface ButtonProps {
     onClick: () => void;
-    children: string;
+    children: string | string[];
     disabled?: boolean;
     nowrap?: boolean;
     type: HTMLButtonElement['type'];

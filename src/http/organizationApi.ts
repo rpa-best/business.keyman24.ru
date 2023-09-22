@@ -2,6 +2,12 @@ import { AxiosResponse } from 'axios';
 import * as T from 'http/types';
 import { IOrganization } from 'store/types';
 import { $serverAuth } from 'http/serverIndex';
+import { $clientAuth } from 'http/clientIndex';
+import UniversalCookies from 'universal-cookie';
+
+const cookie = new UniversalCookies();
+
+const orgId = cookie.get('orgId');
 
 export const getOrganizations: T.GetOrganizations = async () => {
     const response: AxiosResponse<IOrganization[]> = await $serverAuth.get(
@@ -25,4 +31,31 @@ export const getOrgById: T.GetOrgById = async (id: number = 1) => {
     }
 
     return response.data;
+};
+
+export const getServices: T.GetServices = async (org) => {
+    const res: AxiosResponse<ReturnType<typeof getServices>> =
+        await $serverAuth.get(`business/${org}/service/subscription/`);
+
+    return res.data;
+};
+
+export const getPrice: T.GetPrice = async (body) => {
+    const res: AxiosResponse<ReturnType<typeof getPrice>> =
+        await $clientAuth.post('account/service-rate-calc/', body);
+
+    return res.data;
+};
+
+export const getServerPrice: T.GetPrice = async (body) => {
+    const res: AxiosResponse<ReturnType<typeof getPrice>> =
+        await $serverAuth.post('account/service-rate-calc/', body);
+
+    return res.data;
+};
+export const updateSub: T.UpdatePrice = async (subId, body) => {
+    await $clientAuth.patch(
+        `business/${orgId}/service/subscription/${subId}/`,
+        body
+    );
 };

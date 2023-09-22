@@ -1,0 +1,165 @@
+@import "scss/utils";
+
+.range_wrapper {
+  height: max-content;
+  max-height: 65px;
+  width: 100%;
+  display: flex;
+  column-gap: 10px;
+}
+
+.input_range_wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.input_range_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputs_wrapper {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  column-gap: 10px;
+}
+
+.input_state_wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.input {
+  width: 60px;
+  min-height: 35px;
+  border-radius: 5px;
+  outline: none;
+  border: 2px solid transparent;
+  @include MontserratRegular(16px);
+  padding-left: 7px;
+  background-color: #f5f6f7;
+  transition: .2s all ease-in-out;
+  @include laptopWidth {
+    font-size: 16px;
+  }
+  @include phone {
+    font-size: 14px;
+    width: 50px;
+  }
+
+  &:hover {
+    border: 2px solid $gray;
+    transition: .1s all ease-in-out;
+  }
+
+  &:focus {
+    border: 2px solid $accent-color;
+    transition: .1s all ease-in-out;
+  }
+
+  &:disabled {
+    color: black;
+    pointer-events: none;
+  }
+
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+}
+
+.input_light {
+  @extend .input;
+  border: 2px solid $gray-semi;
+}
+
+.input_range {
+  position: relative;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 15px;
+  height: 7px;
+  background-color: #ccc;
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    background-color: #31D79B;
+    border-radius: 50%;
+    border: none;
+    transition: .2s ease-in-out;
+    &:active {
+      scale: 1.1;
+    }
+  }
+  &::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    background-color: $accent-color;
+    border-radius: 50%;
+    border: none;
+    transition: .2s ease-in-out;
+    &:active {
+      scale: 1.1;
+    }
+  }
+  &::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 0.2rem transparentize(#67FFC7, .8)
+  }
+}
+
+
+.input_thumb {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.input_title {
+  @include MontserratRegular(18px);
+  color: white;
+  @include phone {
+    font-size: 16px;
+  }
+}
+
+.input_title_light {
+  @include MontserratRegular(18px);
+  color: black;
+  @include phone {
+    font-size: 16px;
+  }
+}
+
+.min {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  bottom: 0;
+  font-size: 15px;
+  color: $gray-semi;
+  @include phone {
+    font-size: 13px;
+  }
+}
+
+.max {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  bottom: 0;
+  font-size: 15px;
+  color: $gray;
+  @include phone {
+    font-size: 13px;
+  }
+}

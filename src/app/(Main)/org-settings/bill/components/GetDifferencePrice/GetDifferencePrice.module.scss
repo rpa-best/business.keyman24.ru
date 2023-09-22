@@ -1,0 +1,15 @@
+@import "scss/utils";
+
+.bigger {
+  @include MontserratRegular(20px);
+  color: red;
+  @include phoneOrTablet {
+    font-size: 18px;
+  }
+}
+
+.smaller {
+  @include MontserratRegular(20px);
+  color: $accent-color;
+
+}

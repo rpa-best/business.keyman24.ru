@@ -51,6 +51,7 @@ export const HeaderInputSelect: React.FC<{
 
     useEffect(() => {
         cookie.set('orgId', listValues[0]?.id);
+        router.refresh();
     }, [listValues]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
