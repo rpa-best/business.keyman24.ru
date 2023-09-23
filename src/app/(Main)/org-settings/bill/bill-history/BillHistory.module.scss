@@ -1,0 +1,9 @@
+@import "scss/utils";
+
+.buttons {
+  display: flex;
+  width: max-content;
+  column-gap: 20px;
+  white-space: nowrap;
+  margin-bottom: 20px;
+}

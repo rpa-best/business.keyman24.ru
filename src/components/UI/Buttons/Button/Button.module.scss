@@ -35,3 +35,36 @@
     background-color: #2A7D81;
   }
 }
+
+.button_rect {
+  min-width: 130px;
+  width: 100%;
+  height: 40px;
+  @include fullHd {
+    height: 45px;
+  }
+  padding: 0 10px;
+  border: 1px solid $border-gray;
+  border-radius: 8px;
+  @include MontserratRegular(20px);
+  color: white;
+  background-color: $additional-dark;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  &:hover {
+    border-color: $dark-main;
+    background-color: $dark-main;
+  }
+  &:active {
+    background-color: #212121;
+  }
+  @include phoneOrTablet {
+    height: 43px;
+    font-size: 18px;
+  }
+}
+
+.button_rect_active {
+  @extend .button_rect;
+  background-color: $dark-main;
+}

@@ -41,6 +41,19 @@ export interface IRate {
     not_limited: boolean;
 }
 
+export interface IBalanceHistory {
+    id: number;
+    cost: number;
+    date: string;
+    type: string;
+    data: {
+        additionalProp1: string;
+        additionalProp2: string;
+        additionalProp3: string;
+    };
+    org: number;
+}
+
 export type UserAuthType = (
     body: IUserAuthRequest
 ) => Promise<IUserAuthResponse | string | undefined | unknown>;
@@ -58,6 +71,8 @@ export type GetServices = (org: number) => Promise<IResponse<IService>>;
 export type GetPrice = (
     body: IRate[]
 ) => Promise<{ body: string[]; cost: number }>;
+
+export type GetHistory = (orgId: number) => Promise<IResponse<IBalanceHistory>>;
 
 export type UpdatePrice = (subId: number, body: IRate[]) => Promise<void>;
 

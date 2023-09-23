@@ -59,3 +59,10 @@ export const updateSub: T.UpdatePrice = async (subId, body) => {
         body
     );
 };
+
+export const getServerHistory: T.GetHistory = async (orgId) => {
+    const res: AxiosResponse<ReturnType<typeof getServerHistory>> =
+        await $serverAuth.get(`business/${orgId}/balance-history/`);
+
+    return res.data;
+};
