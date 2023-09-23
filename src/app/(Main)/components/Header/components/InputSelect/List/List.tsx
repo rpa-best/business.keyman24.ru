@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { motion, MotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ListProps } from 'components/UI/Inputs/types';
 
 import scss from './List.module.scss';

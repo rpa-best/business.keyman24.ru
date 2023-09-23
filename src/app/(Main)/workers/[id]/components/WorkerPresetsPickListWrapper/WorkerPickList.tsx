@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { PickList } from 'components/PickList';
 
 import { useRouter } from 'next/navigation';
-import { Spinner } from 'components/Spinner';
 
 import {
     createWorkerGroupUser,

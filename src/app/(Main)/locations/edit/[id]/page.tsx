@@ -16,7 +16,7 @@ import { OrgPickListWrapper } from 'app/(Main)/locations/components/OrgPickListW
 import { getOrganizations } from 'http/organizationApi';
 
 import scss from './location.module.scss';
-import { getServerWorkers, getWorkers } from 'http/workerApi';
+import { getServerWorkers } from 'http/workerApi';
 import { WorkersPickListWrapper } from 'app/(Main)/locations/components/WorkersPickListWrapper';
 
 const LocationEditPage: React.FC<LocationEditPage> = async ({

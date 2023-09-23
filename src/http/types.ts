@@ -1,5 +1,4 @@
 import { IOrganization, IUser } from 'store/types';
-import { boolean } from 'zod';
 
 export interface IUserAuthRequest {
     username: string;

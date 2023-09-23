@@ -2,7 +2,6 @@ import axios from 'axios';
 import process from 'process';
 import CookiesUniversal from 'universal-cookie';
 import { snakeToCamelCaseDeep } from 'utils/snakeTOCamelCaseDeep';
-import { $serverAuth } from 'http/serverIndex';
 
 const cookiesUni = new CookiesUniversal();
 

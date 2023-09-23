@@ -7,7 +7,6 @@ import { FormValues } from './types';
 import { Input } from 'components/UI/Inputs/Input';
 import { RowFormProps } from 'app/(Main)/locations/types';
 import { Button } from 'components/UI/Buttons/Button';
-import { useModalStore } from 'store/modalVisibleStore';
 
 import scss from './RowForm.module.scss';
 

@@ -10,7 +10,7 @@ import { FormValidate } from 'app/(Authorization)/login/components/Form/Form.uti
 import { userAuth, getUser } from 'http/userApi';
 import { IUser } from 'store/types';
 import { useUserStore } from 'store/userStore';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 
 import scss from './Form.module.scss';

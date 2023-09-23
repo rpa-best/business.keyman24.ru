@@ -5,10 +5,6 @@ import * as process from 'process';
 import { snakeToCamelCaseDeep } from 'utils/snakeTOCamelCaseDeep';
 import { cookies } from 'next/headers';
 
-import CookiesUniversal from 'universal-cookie';
-
-const cookiesUni = new CookiesUniversal();
-
 export const $serverAuth = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
 });

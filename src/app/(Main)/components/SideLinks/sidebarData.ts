@@ -1,4 +1,3 @@
-import KeySvg from '/public/svg/key.svg';
 import GlobeSvg from './svg/globe.svg';
 import HomeSvg from './svg/home.svg';
 import BriefCaseSvg from '/public/svg/briefcase.svg';

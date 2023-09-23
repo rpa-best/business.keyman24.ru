@@ -4,7 +4,6 @@ import React from 'react';
 import { Document, Page, StyleSheet } from '@react-pdf/renderer';
 
 import { SavePdfElement } from 'app/(Main)/locations/components/PdfGenerator/SavePdfElement';
-import { IInventory, LocKeysResponse } from 'http/types';
 
 interface PdfGeneratorProps {
     data: { id: number; name: string; codeNumber: string }[];
