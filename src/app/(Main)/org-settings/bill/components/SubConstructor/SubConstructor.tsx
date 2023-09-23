@@ -84,25 +84,24 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
     return (
         <>
             <div className={scss.service_constructor}>
-                {price &&
-                    fields.map((item, index) => (
-                        <div key={index} className={scss.range_wrapper}>
-                            <RangeSlider
-                                onChange={(count) =>
-                                    handleInputChange(index, count)
-                                }
-                                key={index}
-                                name={item.name}
-                                value={item.count.toString()}
-                                min="0"
-                                fields={fields}
-                                index={index}
-                                setFields={setFields}
-                                check={item.notLimited}
-                                max={item.max}
-                            />
-                        </div>
-                    ))}
+                {fields.map((item, index) => (
+                    <div key={index} className={scss.range_wrapper}>
+                        <RangeSlider
+                            onChange={(count) =>
+                                handleInputChange(index, count)
+                            }
+                            key={index}
+                            name={item.name}
+                            value={item.count.toString()}
+                            min="0"
+                            fields={fields}
+                            index={index}
+                            setFields={setFields}
+                            check={item.notLimited}
+                            max={item.max}
+                        />
+                    </div>
+                ))}
             </div>
             <div className={scss.actions_wrapper}>
                 <div className={scss.price_button}>
@@ -110,15 +109,18 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
                         Сохранить
                     </Button>
                 </div>
-                {price && (
+                {
                     <div className={scss.price_wrapper}>
-                        <span className={scss.price}>{price} ₽</span> / месяц{' '}
+                        <span className={scss.price}>
+                            {currentPrice ?? price} ₽
+                        </span>{' '}
+                        / месяц{' '}
                         <GetDifferencePrice
                             current={currentPrice}
                             newPrice={price}
                         />
                     </div>
-                )}
+                }
             </div>
             {loading && <Spinner />}
         </>

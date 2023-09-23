@@ -17,6 +17,7 @@ import { Spinner } from 'components/Spinner';
 import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 
 import scss from 'app/(Main)/permission-group/PermGroup.module.scss';
+import { AdminPermList } from 'app/(Main)/permission-group/components/AdminPermList';
 
 export const PermModalForm: React.FC<IFormProps> = ({
     level,
@@ -26,7 +27,11 @@ export const PermModalForm: React.FC<IFormProps> = ({
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    const adminPermission = !selectedPerm?.org;
+
     const router = useRouter();
+
     const onSubmit = async (values: PermFormValues) => {
         setLoading(true);
         const body: CreateGroupPermBody = {
@@ -94,6 +99,7 @@ export const PermModalForm: React.FC<IFormProps> = ({
                 <div>
                     <Input
                         value={values.name}
+                        disabled={adminPermission}
                         name="name"
                         placeholder="Укажите имя"
                         handleError={touched.name && errors.name}
@@ -102,22 +108,30 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     />
                 </div>
                 <div className={scss.select_wrapper}>
-                    <InputSelect
-                        setFieldTouched={setFieldTouched}
-                        listValues={level}
-                        autoComplete="off"
-                        onChange={(level) => setFieldValue('level', level)}
-                        placeholder="Укажите уровень"
-                        handleError={touched.level && errors.level}
-                        value={values.level?.name as string}
-                        name="level"
-                    />
+                    {!adminPermission && (
+                        <InputSelect
+                            setFieldTouched={setFieldTouched}
+                            listValues={level}
+                            autoComplete="off"
+                            onChange={(level) => setFieldValue('level', level)}
+                            placeholder="Укажите уровень"
+                            handleError={touched.level && errors.level}
+                            value={values.level?.name as string}
+                            name="level"
+                        />
+                    )}
                 </div>
-                <Button disabled={!isValid} onClick={() => {}} type="submit">
-                    {formType === 'create' ? 'Добавить' : 'Сохранить'}
-                </Button>
+                {!adminPermission && (
+                    <Button
+                        disabled={!isValid}
+                        onClick={() => {}}
+                        type="submit"
+                    >
+                        {formType === 'create' ? 'Добавить' : 'Сохранить'}
+                    </Button>
+                )}
             </form>
-            {formType === 'edit' && (
+            {!adminPermission && formType === 'edit' && (
                 <PermissionPickList
                     setRefresh={setRefresh}
                     source={source}
@@ -125,6 +139,7 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     groupId={selectedPerm?.id as number}
                 />
             )}
+            {adminPermission && <AdminPermList list={source} />}
             {loading && <Spinner />}
         </div>
     );

@@ -24,6 +24,10 @@ export const GetDifferencePrice: React.FC<GetDifferencePriceProps> = ({
         [scss.smaller]: smaller,
     });
 
+    if (!newPrice) {
+        return null;
+    }
+
     return (
         <p className={pClass}>
             {bigger} {smaller} {difference}

@@ -6,4 +6,7 @@
   column-gap: 20px;
   white-space: nowrap;
   margin-bottom: 20px;
+  @include phoneOrTablet {
+    margin-left: 20px;
+  }
 }

@@ -1,0 +1,61 @@
+@import "scss/utils";
+
+.perm_list_title {
+  @include MontserratSemiBold(20px);
+  color: white;
+  margin-bottom: 15px;
+}
+
+.admin_list_wrapper {
+  width: 450px;
+  min-height: 200px;
+  display: flex;
+  flex-flow: row wrap;
+  column-gap: 20px;
+  row-gap: 10px;
+  margin: 0 auto;
+  @include phoneOrTablet {
+    width: 350px;
+  }
+  @include phone {
+    width: 100%;
+    column-gap: 10px;
+  }
+}
+
+.admin_list_item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: calc(50% - 20px);
+  border-bottom: 1px solid $border-gray;
+  padding: 5px 0;
+  @include phone {
+    width: calc(50% - 10px);
+  }
+  &:nth-child(2n) {
+    border-left: 1px solid $border-gray;
+  }
+  &:nth-child(2n - 1) {
+    border-right: 1px solid $border-gray;
+  }
+}
+
+.item_name {
+  @include MontserratRegular(20px);
+  line-height: 20px;
+  color: white;
+  @include thousendWidth {
+    font-size: 18px;
+  }
+  @include phone {
+    font-size: 15px;
+  }
+}
+
+.item_desc {
+  @include MontserratRegular(14px);
+  line-height: 17px;
+  margin-top: 4px;
+  color: $gray-semi;
+}

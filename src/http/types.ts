@@ -134,6 +134,7 @@ export interface IGroupPermission {
     id: number;
     level: ILevel;
     name: string;
+    org: number;
 }
 
 export interface IGroupPermPermissions {
