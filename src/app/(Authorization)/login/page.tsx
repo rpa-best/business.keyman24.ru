@@ -4,8 +4,16 @@ import { Circles } from 'app/(Authorization)/login/components/Circles';
 import { Form } from 'app/(Authorization)/login/components/Form/Form';
 
 import scss from './LoginPage.module.scss';
+import { getOrganizations } from 'http/organizationApi';
+import { redirect } from 'next/navigation';
 
-const LoginPage: FC = () => {
+const LoginPage: FC = async () => {
+    const organizations = await getOrganizations().catch((e) => {});
+
+    if (organizations) {
+        redirect('/');
+    }
+
     return (
         <main className={scss.login_layout}>
             <Circles />

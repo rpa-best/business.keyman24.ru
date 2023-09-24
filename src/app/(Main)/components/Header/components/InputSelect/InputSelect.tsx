@@ -19,7 +19,8 @@ const cookie = new Cookies();
 
 export const HeaderInputSelect: React.FC<{
     organizations: IOrganization[];
-}> = ({ organizations }) => {
+    disabled?: boolean;
+}> = ({ organizations, disabled = false }) => {
     const router = useRouter();
 
     const opacity = useSpring(0);
@@ -37,7 +38,7 @@ export const HeaderInputSelect: React.FC<{
     const [visible, setVisible] = useState(false);
     //Её id и наименование
     const [id, setId] = useState<number>(
-        cookie.get('orgId') ?? listValues[0].id
+        cookie.get('orgId') ?? listValues[0]?.id
     );
     const [name, setName] = useState<string>(listValues[0]?.name);
     const [setOrganization] = useOrganizationStore((state) => [
@@ -50,8 +51,9 @@ export const HeaderInputSelect: React.FC<{
     });
 
     useEffect(() => {
-        cookie.set('orgId', listValues[0].id);
-    }, []);
+        cookie.set('orgId', listValues[0]?.id);
+        router.refresh();
+    }, [listValues]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -87,8 +89,15 @@ export const HeaderInputSelect: React.FC<{
         setName(listValues?.find((v) => v.id === id)?.name as string);
     };
 
+    if (organizations.length === 0) {
+        return null;
+    }
+
     return (
-        <div className={scss.input_layout}>
+        <div
+            style={{ pointerEvents: disabled ? 'none' : 'auto' }}
+            className={scss.input_layout}
+        >
             <Tippy
                 onMount={() => onMount(opacity)}
                 onHide={({ unmount }) => onHide({ opacity, unmount })}

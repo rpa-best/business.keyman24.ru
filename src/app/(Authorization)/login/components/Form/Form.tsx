@@ -22,19 +22,18 @@ export const Form = () => {
     const router = useRouter();
 
     const onSubmit = (values: IFormTypes) => {
-        router.prefetch('/');
         setLoading(true);
         userAuth(values)
-            .then(() =>
+            .then(() => {
+                router.replace('/');
                 getUser().then((user) => {
                     setUser(user as IUser);
-                })
-            )
+                });
+            })
             .catch((e) => {
                 setErrors({ username: e.message, password: e.message });
             })
             .finally(() => {
-                router.replace('/');
                 setLoading(false);
             });
     };
@@ -71,7 +70,7 @@ export const Form = () => {
                     name="username"
                     onBlur={handleBlur}
                     autoFocus={true}
-                    placeholder="Введите логин"
+                    placeholder="Введите почту"
                     value={values.username}
                     onChange={handleChange}
                     handleError={touched.username && errors.username}

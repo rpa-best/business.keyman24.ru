@@ -1,0 +1,80 @@
+@import "scss/utils";
+
+
+.description_wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  @include phoneOrTablet {
+    row-gap: 20px;
+  }
+}
+
+.desc_title {
+  @include MontserratSemiBold(28px);
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+  @include phoneOrTablet {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+}
+
+.desc_text {
+  @include MontserratRegular(22px);
+  color: white;
+  @include phoneOrTablet {
+    font-size: 18px;
+  }
+  @include phone {
+    font-size: 16px;
+  }
+}
+
+.steps_list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  margin-bottom: 20px;
+  @include phoneOrTablet {
+    row-gap: 25px;
+    margin-bottom: 10px;
+  }
+}
+
+.list_step {
+  @include MontserratRegular(18px);
+  color: white;
+  @include phoneOrTablet {
+    font-size: 16px;
+  }
+  @include phone {
+    font-size: 14px;
+  }
+}
+
+.link {
+  position: relative;
+  cursor: pointer;
+  color: $accent-color;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    background-color: $accent-color;
+  }
+
+}
+
+.button_wrapper {
+  @include fullHd {
+    margin: 0 auto;
+    width: 90%;
+  }
+  width: 100%;
+}

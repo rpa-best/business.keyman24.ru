@@ -3,8 +3,6 @@ import { cookies } from 'next/headers';
 import { getOrgById } from 'http/organizationApi';
 import { PickListPermission } from 'app/(Main)/org-settings/components/PickListPermission';
 import { PickListPermissionGroup } from 'app/(Main)/org-settings/components/PickListPermissionGroup';
-
-import scss from './OrganizationSettings.module.scss';
 import {
     getAdminPermissions,
     getGroupAdminPermissions,
@@ -17,12 +15,15 @@ import {
 } from 'components/PickList/helpers/getListValues';
 import { getModeName } from 'helpers/permTypeHelper';
 
+import scss from './OrganizationSettings.module.scss';
+import { SettingsButton } from 'app/(Main)/org-settings/components/ButtonWrapper/SettingsButton';
+
 const OrgSettingsPage = async () => {
     const cookieStore = cookies();
 
     const id = cookieStore.get('orgId')?.value ?? 1;
 
-    const name = await getOrgById(+id).then((r) => r.name);
+    const org = await getOrgById(+id);
 
     const allPermissions = await getPermissions(+id as number);
 
@@ -61,9 +62,13 @@ const OrgSettingsPage = async () => {
     );
 
     return (
-        <div className={scss.children_with_table}>
+        <div
+            style={{ marginBottom: '20px' }}
+            className={scss.children_with_table}
+        >
             <div className={scss.default_wrapper}>
-                <h2 className={scss.title}>{name}</h2>
+                <SettingsButton />
+                <h2 className={scss.title}>{org.name}</h2>
             </div>
 
             <PickListPermission

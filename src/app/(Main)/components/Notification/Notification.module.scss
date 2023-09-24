@@ -1,0 +1,68 @@
+@import "scss/utils";
+
+.notification_body {
+  position: fixed;
+  width: calc(100vw - 100px);
+  height: calc(100vh - 90px);
+  margin-left: 100px;
+  backdrop-filter: blur(10px);
+  z-index: 400;
+  @include thousendWidth {
+    width: calc(100vw - 70px);
+    margin-left: 70px;
+  }
+  @include phoneOrTablet {
+    width: 100vw;
+    margin-left: 0;
+  }
+}
+
+.notification {
+  height: max-content;
+  width: max-content;
+  z-index: 401;
+  margin: 10% auto;
+  padding: 20px;
+  background-color: $dark-main;
+  box-shadow: 0 0 1rem white;
+  border-radius: 20px;
+  @include fullHd {
+    margin: 12% auto;
+  }
+  @include thousendTwoWidth {
+    margin: 15% auto;
+  }
+  @include thousendWidth {
+    margin: 20% auto;
+  }
+  @include phone {
+    width: calc(100% - 20px);
+  }
+}
+
+.notification_status {
+  @include MontserratSemiBold(28px);
+  color: white;
+  @include thousendWidth {
+    font-size: 24px;
+  }
+  @include phoneOrTablet {
+    font-size: 20px;
+  }
+}
+
+.notification_desc {
+  @include MontserratRegular(20px);
+  padding: 15px 0 10px;
+  color: white;
+  @include thousendWidth {
+    font-size: 18px;
+  }
+  @include phoneOrTablet {
+    font-size: 16px;
+  }
+  &:nth-of-type(2) {
+    font-size: 22px;
+    text-align: center;
+  }
+}

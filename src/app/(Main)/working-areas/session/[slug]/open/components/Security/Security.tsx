@@ -7,17 +7,16 @@ import { Button } from 'components/UI/Buttons/Button';
 import { SecurityProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { Spinner } from 'components/Spinner';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
-import { getWorkerDocs, getWorkers } from 'http/workerApi';
 import { IWorker, IWorkerDocs } from 'http/types';
 import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { useSocketConnect } from 'helpers/useSocketConnect';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
-
-import scss from './Security.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';
 import { sendSessionAction } from 'http/workingAreaApi';
+
+import scss from './Security.module.scss';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,

@@ -1,0 +1,1 @@
+export { AdminPermList } from './AdminPermList';

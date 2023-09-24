@@ -4,7 +4,6 @@ import Image from 'next/image';
 import AvatarSvg from '/public/svg/avatar.svg';
 import { Input } from 'components/UI/Inputs/Input';
 import { IWorker, IWorkerDocs } from 'http/types';
-import { Spinner } from 'components/Spinner';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import clsx from 'clsx';
 

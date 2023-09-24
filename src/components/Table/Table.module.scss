@@ -134,9 +134,6 @@
   &:hover .actions_wrapper {
     opacity: 1;
   }
-  @include phoneOrTablet {
-    width: max-content;
-  }
 }
 
 .table_td_less_3 {

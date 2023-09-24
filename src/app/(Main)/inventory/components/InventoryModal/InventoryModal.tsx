@@ -8,7 +8,6 @@ import { InventoryFormType } from 'app/(Main)/inventory/components/InventoryModa
 import { InventoryFormValidate } from 'app/(Main)/inventory/components/InventoryModal/InventoryModal.utils';
 import { Input } from 'components/UI/Inputs/Input';
 import { Button } from 'components/UI/Buttons/Button';
-import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { IInventoryImage, ReqInventoryBody } from 'http/types';
 import {
     createInventoryItem,
@@ -19,10 +18,9 @@ import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/components';
+import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
 
 import scss from './InventoryModal.module.scss';
-import Image from 'next/image';
-import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,

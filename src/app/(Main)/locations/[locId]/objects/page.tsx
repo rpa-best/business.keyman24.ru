@@ -1,19 +1,12 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 
-import {
-    getLocation,
-    getLocationObjects,
-    getLocations,
-} from 'http/locationsApi';
-import { Column } from 'components/Table/Column';
-import { TableWrapper } from 'app/(Main)/locations/components/TableWrapper';
+import { getLocation, getLocationObjects } from 'http/locationsApi';
+
 import { BackButton } from 'components/UI/Buttons/BackButton';
+import { ObjectsTableWrapper } from 'app/(Main)/locations/[locId]/objects/components/ObjectsTableWrapper';
 
 import scss from 'app/(Main)/locations/locations.module.scss';
-import { ObjectsTableWrapper } from 'app/(Main)/locations/[locId]/objects/components/ObjectsTableWrapper';
-import { Modal } from 'components/Modal';
-import { ObjectFormModal } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/ObjectFromModal';
 
 interface LocationObjectsPageProps {
     params: { locId: string };

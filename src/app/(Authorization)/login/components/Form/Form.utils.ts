@@ -4,7 +4,7 @@ export function FormValidate(values: T.IFormTypes) {
     const errors: T.IFormValidateErrors = {};
 
     if (!values.username) {
-        errors.username = 'Укажите логин';
+        errors.username = 'Укажите почту';
     }
 
     if (!values.password) {

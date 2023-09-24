@@ -118,6 +118,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
             visible={visible}
             placement="bottom"
             onClickOutside={onClickOutside}
+            offset={label ? [0, -10] : [0, 0]}
             render={(attrs) => (
                 <InputSelectList
                     {...attrs}

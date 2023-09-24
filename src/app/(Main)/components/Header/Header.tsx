@@ -16,7 +16,7 @@ import { getUser } from 'http/userApi';
 
 import scss from './Header.module.scss';
 
-export const Header = async () => {
+export const Header = async ({ disabled }: { disabled: boolean }) => {
     const user = await getUser().catch((e: AxiosError) => {
         if (e.response?.status === 401) {
             redirect('/login');
@@ -26,16 +26,21 @@ export const Header = async () => {
     const organizations = await getOrganizations().catch((e) => e);
 
     return (
-        <div className={scss.header_layout}>
+        <header className={scss.header_layout}>
             <div className={scss.header_nav}>
-                <Link className={scss.title_wrapper} href="/">
+                <Link
+                    style={{ pointerEvents: disabled ? 'none' : 'auto' }}
+                    className={scss.title_wrapper}
+                    href="/"
+                >
                     <h2 className={scss.title}>KeyMan24</h2>
                     <span className={scss.separator} />
                     <h2 className={scss.title_second}>Business</h2>
                 </Link>
                 <div className={scss.tools_wrapper}>
-                    <SettingsSvgContainer />
+                    <SettingsSvgContainer disabled={disabled} />
                     <HeaderInputSelect
+                        disabled={disabled}
                         organizations={organizations as IOrganization[]}
                     />
                     <NotificationsContainer />
@@ -44,13 +49,16 @@ export const Header = async () => {
             </div>
             <div className={scss.header_nav_tablet}>
                 <HeaderDropdown userData={user as IUser} />
-                <div className={scss.header_nav_icons}>
+                <div
+                    style={{ pointerEvents: disabled ? 'none' : 'auto' }}
+                    className={scss.header_nav_icons}
+                >
                     <NotificationsContainer />
                     <BurgerMenu
                         organizations={organizations as IOrganization[]}
                     />
                 </div>
             </div>
-        </div>
+        </header>
     );
 };

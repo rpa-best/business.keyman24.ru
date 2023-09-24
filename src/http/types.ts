@@ -1,5 +1,4 @@
 import { IOrganization, IUser } from 'store/types';
-import { boolean } from 'zod';
 
 export interface IUserAuthRequest {
     username: string;
@@ -9,6 +8,49 @@ export interface IUserAuthRequest {
 export interface IUserAuthResponse {
     access: string;
     refresh: string;
+}
+
+export interface IService {
+    id: number;
+    status: string;
+    user: string;
+    org: number;
+    serviceRates: IServiceRate[];
+}
+
+export interface IServiceRate {
+    id: number;
+    key: IServiceRateKey;
+    value: number;
+    notLimited: boolean;
+    subs: number;
+}
+
+export interface IServiceRateKey {
+    modelName: string;
+    name: string;
+    defaultValue: number;
+    maxValue: number;
+}
+
+export interface IRate {
+    id: number;
+    key: string;
+    value: number;
+    not_limited: boolean;
+}
+
+export interface IBalanceHistory {
+    id: number;
+    cost: number;
+    date: string;
+    type: string;
+    data: {
+        additionalProp1: string;
+        additionalProp2: string;
+        additionalProp3: string;
+    };
+    org: number;
 }
 
 export type UserAuthType = (
@@ -22,6 +64,16 @@ export type UpdateTokens = () => Promise<boolean>;
 export type GetOrganizations = () => Promise<IOrganization[]>;
 
 export type GetOrgById = (id?: number) => Promise<IOrganization>;
+
+export type GetServices = (org: number) => Promise<IResponse<IService>>;
+
+export type GetPrice = (
+    body: IRate[]
+) => Promise<{ body: string[]; cost: number }>;
+
+export type GetHistory = (orgId: number) => Promise<IResponse<IBalanceHistory>>;
+
+export type UpdatePrice = (subId: number, body: IRate[]) => Promise<void>;
 
 export interface ILevel {
     id: number;
@@ -81,6 +133,7 @@ export interface IGroupPermission {
     id: number;
     level: ILevel;
     name: string;
+    org: number;
 }
 
 export interface IGroupPermPermissions {

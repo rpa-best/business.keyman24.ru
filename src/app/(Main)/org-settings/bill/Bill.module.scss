@@ -1,0 +1,114 @@
+@import "scss/utils";
+
+.page_layout {
+  @include phoneOrTablet {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+  }
+}
+
+.bill_balance {
+  @include MontserratRegular(20px);
+  color: white;
+  margin-bottom: 20px;
+}
+
+.balance_count {
+  font-size: 22px;
+  color: $accent-color;
+}
+
+
+
+.service_constructor {
+  min-height: 350px;
+  @include fullHd {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 30px;
+    & .range_wrapper {
+      width: calc(50% - 30px);
+    }
+  }
+  column-count: 2;
+  column-gap: 30px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.01);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 1px rgba(18, 18, 18, 0.3);
+  backdrop-filter: blur(30px);
+  border-radius: 12px;
+  padding: 18px 26px 30px;
+  transition: .2s all ease-in-out;
+  margin-bottom: 20px;
+
+  @include phoneOrTablet {
+    column-count: unset;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding: 15px 20px;
+    box-shadow: none;
+    background-color: transparent;
+  }
+  @include phone {
+    row-gap: 10px;
+    border-top: 1px solid $gray;
+    border-bottom: 1px solid $gray-semi;
+    border-right: none;
+    border-left: none;
+    border-radius: 0;
+    padding: 20px 0;
+  }
+}
+
+.range_wrapper {
+  min-width: calc(50% - 30px);
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+  @include thousendWidth {
+    width: 100%;
+  }
+}
+
+.price_wrapper {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  @include MontserratRegular(20px);
+  color: $gray-semi;
+  @include phoneOrTablet {
+    font-size: 18px;
+  }
+}
+
+.price {
+  @include MontserratSemiBold(32px);
+  color: $accent-color;
+  @include phoneOrTablet {
+    font-size: 24px;
+  }
+  @include phone {
+    font-size: 20px;
+  }
+}
+
+.actions_wrapper {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  @include phoneOrTablet {
+    justify-content: space-between;
+  }
+  @include phone {
+    flex-direction: column-reverse;
+    row-gap: 20px;
+  }
+}
+
+.price_button {
+  width: max-content;
+  @include phone {
+    width: 100%;
+  }
+}

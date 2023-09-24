@@ -1,5 +1,6 @@
 import { ChangeEventHandler, CSSProperties, FocusEvent } from 'react';
 import { MotionValue } from 'framer-motion';
+import { IField } from 'store/useConstructorStore';
 
 export interface IInputProps {
     autoFocus?: boolean;
@@ -34,4 +35,17 @@ export interface IInputSelectProps extends Omit<IInputProps, 'onChange'> {
     listValues: { id: number; name: string }[];
     onChange: (item: any) => void;
     setFieldTouched?: (field: string, value: boolean) => void;
+}
+
+export interface IRangeInputProps {
+    name: string;
+    value: string;
+    theme?: 'light' | 'dark';
+    check: boolean;
+    onChange: (v: string, limited?: boolean) => void;
+    min: string;
+    max: string;
+    fields?: IField[];
+    index?: number;
+    setFields?: (v: IField[]) => void;
 }

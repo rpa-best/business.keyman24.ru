@@ -53,6 +53,7 @@
 }
 
 .elem_wrapper {
+  min-width: 100px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;

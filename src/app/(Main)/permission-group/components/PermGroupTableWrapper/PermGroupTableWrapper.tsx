@@ -12,6 +12,7 @@ import { IGroupPermission } from 'http/types';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 import { deleteGroupPerm } from 'http/permissionsApi';
+import { toast } from 'react-toastify';
 
 export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     permissions,
@@ -39,11 +40,22 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     };
 
     const handleDeleteButtonClick = async (id: number) => {
-        setLoading(true);
-        await deleteGroupPerm(id).finally(() => {
-            router.refresh();
-            setLoading(false);
-        });
+        const selectedPerm = initialPermissions.find((p) => p.id === id);
+        if (selectedPerm?.org) {
+            setLoading(true);
+            await deleteGroupPerm(id).finally(() => {
+                router.refresh();
+                setLoading(false);
+            });
+        } else {
+            toast('Это зарезервированное право', {
+                position: 'bottom-right',
+                hideProgressBar: true,
+                autoClose: 2000,
+                type: 'warning',
+                theme: 'colored',
+            });
+        }
     };
 
     return (

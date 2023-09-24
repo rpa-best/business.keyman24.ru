@@ -3,8 +3,11 @@ import { cookies } from 'next/headers';
 import { ModifiedWorkers } from 'app/(Main)/workers/types';
 import { WorkersTableWrapper } from 'app/(Main)/workers/components/WorkersTableWrapper';
 import { getServerWorkers } from 'http/workerApi';
+import { WorkersButton } from 'app/(Main)/workers/components/WorkersButton';
 
 import scss from './Worker.module.scss';
+import { Modal } from 'components/Modal';
+import { WorkersModal } from 'app/(Main)/workers/components/WorkersModal';
 
 const WorkersPage = async () => {
     const cookieStore = cookies();
@@ -22,8 +25,16 @@ const WorkersPage = async () => {
 
     return (
         <div className={scss.children_with_table}>
-            <h1 className={scss.page_title_with_table}>Работники / список</h1>
+            <div className={scss.page_title_with_table_back_button}>
+                <h1>Работники / список</h1>
+                <div className={scss.button_wrapper}>
+                    <WorkersButton />
+                </div>
+            </div>
             <WorkersTableWrapper workers={modifiedWorkers} />
+            <Modal>
+                <WorkersModal />
+            </Modal>
         </div>
     );
 };

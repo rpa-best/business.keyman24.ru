@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { InventoryWrapper } from 'app/(Main)/inventory/components/InventoryWrapper';
-import { getInventories, getInventoryTypes } from 'http/inventoryApi';
+import { getInventories } from 'http/inventoryApi';
 import { IModifiedInventory } from 'app/(Main)/inventory/types';
 import { cookies } from 'next/headers';
 import { ButtonWrapper } from 'app/(Main)/inventory/components/ButtonWrapper/ButtonWrapper';

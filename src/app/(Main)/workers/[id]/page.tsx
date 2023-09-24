@@ -11,7 +11,7 @@ import {
 import { cookies } from 'next/headers';
 
 import { WorkerDocsTable } from 'app/(Main)/workers/[id]/components/WorkerDocsTable';
-import { IAdminPermission, IWorkerDocs, IWorkerUser } from 'http/types';
+import { IAdminPermission, IWorkerUser } from 'http/types';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { WorkersPermissionsPickList } from 'app/(Main)/workers/[id]/components/WorkerPickListWrapper';
 import {

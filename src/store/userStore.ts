@@ -1,8 +1,5 @@
 import { create } from 'zustand';
 import * as T from 'store/types';
-import Cookies from 'universal-cookie';
-
-const cookies = new Cookies();
 
 export const useUserStore = create<T.IUserStore>((set) => ({
     user: null,

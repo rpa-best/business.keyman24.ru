@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { IPlan, IPlanObj, IWorkerPlan } from 'http/types';
+import { IWorkerPlan } from 'http/types';
 
 import scss from './WorkerTimeTable.module.scss';
 import { TimeTableItem } from 'app/(Main)/workers/[id]/components/WorkerTimeTable/TimeTableItem';
