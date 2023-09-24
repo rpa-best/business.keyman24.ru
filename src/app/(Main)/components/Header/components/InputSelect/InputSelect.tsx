@@ -19,8 +19,8 @@ const cookie = new Cookies();
 
 export const HeaderInputSelect: React.FC<{
     organizations: IOrganization[];
-    disabled: boolean;
-}> = ({ organizations, disabled }) => {
+    disabled?: boolean;
+}> = ({ organizations, disabled = false }) => {
     const router = useRouter();
 
     const opacity = useSpring(0);

@@ -8,7 +8,11 @@ import { usePathname } from 'next/navigation';
 
 import scss from 'app/(Main)/components/Header/Header.module.scss';
 
-export const SettingsSvgContainer = ({ disabled }: { disabled: boolean }) => {
+export const SettingsSvgContainer = ({
+    disabled = false,
+}: {
+    disabled?: boolean;
+}) => {
     const href = '/org-settings';
     const active = usePathname() === href;
 
