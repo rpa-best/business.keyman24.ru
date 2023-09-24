@@ -15,9 +15,9 @@ import { Input } from 'components/UI/Inputs/Input';
 import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
+import { AdminPermList } from 'app/(Main)/permission-group/components/AdminPermList';
 
 import scss from 'app/(Main)/permission-group/PermGroup.module.scss';
-import { AdminPermList } from 'app/(Main)/permission-group/components/AdminPermList';
 
 export const PermModalForm: React.FC<IFormProps> = ({
     level,
@@ -93,13 +93,15 @@ export const PermModalForm: React.FC<IFormProps> = ({
     return (
         <div className={scss.form_layout}>
             <h2 className={scss.form_title}>
-                Группа прав доступа / добавление
+                {adminPermission && formType === 'edit'
+                    ? 'Группа прав доступа'
+                    : 'Группа прав доступа / добавление'}
             </h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <Input
                         value={values.name}
-                        disabled={adminPermission}
+                        disabled={adminPermission && formType === 'edit'}
                         name="name"
                         placeholder="Укажите имя"
                         handleError={touched.name && errors.name}
@@ -130,6 +132,15 @@ export const PermModalForm: React.FC<IFormProps> = ({
                         {formType === 'create' ? 'Добавить' : 'Сохранить'}
                     </Button>
                 )}
+                {formType === 'create' && (
+                    <Button
+                        disabled={!isValid}
+                        onClick={() => {}}
+                        type="submit"
+                    >
+                        Добавить
+                    </Button>
+                )}
             </form>
             {!adminPermission && formType === 'edit' && (
                 <PermissionPickList
@@ -139,7 +150,9 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     groupId={selectedPerm?.id as number}
                 />
             )}
-            {adminPermission && <AdminPermList list={source} />}
+            {adminPermission && formType === 'edit' && (
+                <AdminPermList list={source} />
+            )}
             {loading && <Spinner />}
         </div>
     );

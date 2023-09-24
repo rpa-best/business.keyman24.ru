@@ -19,7 +19,8 @@ const cookie = new Cookies();
 
 export const HeaderInputSelect: React.FC<{
     organizations: IOrganization[];
-}> = ({ organizations }) => {
+    disabled: boolean;
+}> = ({ organizations, disabled }) => {
     const router = useRouter();
 
     const opacity = useSpring(0);
@@ -93,7 +94,10 @@ export const HeaderInputSelect: React.FC<{
     }
 
     return (
-        <div className={scss.input_layout}>
+        <div
+            style={{ pointerEvents: disabled ? 'none' : 'auto' }}
+            className={scss.input_layout}
+        >
             <Tippy
                 onMount={() => onMount(opacity)}
                 onHide={({ unmount }) => onHide({ opacity, unmount })}

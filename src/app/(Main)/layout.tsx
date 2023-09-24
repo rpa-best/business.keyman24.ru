@@ -10,7 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'scss/utils.scss';
 import 'scss/_reset.scss';
 import scss from 'app/(Main)/MainPage.module.scss';
-import { getOrganizations } from 'http/organizationApi';
+import { getOrganizations, getServices } from 'http/organizationApi';
+import { Notification } from 'app/(Main)/components/Notification';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
@@ -24,19 +25,27 @@ export default async function RootLayout({
 }) {
     const organizations = await getOrganizations().catch((e) => e);
 
+    const services = await getServices(organizations[0].id);
+
+    const disabled = services.results[0].status === 'disabled';
+
     return (
         <html lang="en">
             <body className={montserrat.className}>
-                <Header />
-                <div
-                    style={{
-                        pointerEvents:
-                            organizations.length === 0 ? 'none' : 'auto',
-                    }}
-                    className={scss.main_layout}
-                >
-                    <SideMenu />
-                    <main className={scss.children_layout}>{children}</main>
+                <Header disabled={disabled} />
+                <div className={scss.main_layout}>
+                    <SideMenu disabled={disabled} />
+                    {disabled && (
+                        <Notification status={services.results[0].status} />
+                    )}
+                    <main
+                        style={{
+                            pointerEvents: disabled ? 'none' : 'auto',
+                        }}
+                        className={scss.children_layout}
+                    >
+                        {children}
+                    </main>
                 </div>
                 <ToastContainer />
             </body>

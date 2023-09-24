@@ -9,7 +9,7 @@ export const HistoryButtonsWrapper = () => {
     const router = useRouter();
     const params = useSearchParams();
     const path = usePathname();
-    const day = !!params.get('day');
+    const day = params.get('type') === 'day';
     const handleButtonClick = (type: 'day' | 'month') => {
         router.replace(path + `?type=${type}`);
     };
