@@ -27,7 +27,7 @@ export default async function RootLayout({
 
     const services = await getServices(organizations[0].id);
 
-    const disabled = services.results[0].status === 'disabled';
+    const disabled = false;
 
     return (
         <html lang="en">
@@ -35,9 +35,7 @@ export default async function RootLayout({
                 <Header disabled={disabled} />
                 <div className={scss.main_layout}>
                     <SideMenu disabled={disabled} />
-                    {disabled && (
-                        <Notification status={services.results[0].status} />
-                    )}
+                    {disabled && <Notification status={services.status} />}
                     <main
                         style={{
                             pointerEvents: disabled ? 'none' : 'auto',

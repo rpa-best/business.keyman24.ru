@@ -15,7 +15,7 @@ const BillPage = async () => {
 
     const subs = await getServices(+id);
 
-    const rateBody: IRate[] = subs.results[0].serviceRates.map((item) => {
+    const rateBody: IRate[] = subs.serviceRates.map((item) => {
         return {
             id: item.id,
             value: +item.value,
@@ -39,9 +39,9 @@ const BillPage = async () => {
                 месяц
             </p>
             <SubConstructor
-                subId={subs.results[0].id}
+                subId={subs.id}
                 currentPrice={price.cost}
-                subs={subs.results[0].serviceRates}
+                subs={subs.serviceRates}
             />
         </div>
     );
