@@ -65,7 +65,7 @@ export type GetOrganizations = () => Promise<IOrganization[]>;
 
 export type GetOrgById = (id?: number) => Promise<IOrganization>;
 
-export type GetServices = (org: number) => Promise<IResponse<IService>>;
+export type GetServices = (org: number) => Promise<IService>;
 
 export type GetPrice = (
     body: IRate[]
