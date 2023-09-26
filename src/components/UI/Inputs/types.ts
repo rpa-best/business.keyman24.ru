@@ -21,6 +21,7 @@ export interface IInputProps {
     autoComplete?: 'on' | 'off';
     disabled?: boolean;
     tabIndex?: number;
+    clearable?: boolean;
     label?: string;
     needErrorLabel?: boolean;
 }

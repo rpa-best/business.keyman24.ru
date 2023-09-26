@@ -31,7 +31,6 @@ export const useSocketConnect: SocketConnectFunc = ({
             setLoading(true);
             setWorker(data.data.user);
             setData(data);
-            console.log(data.data.user);
             await getWorkerDocs(data.data.user.id)
                 .then((d) => {
                     if (setWorkerDocs) {

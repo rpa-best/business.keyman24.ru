@@ -100,6 +100,7 @@
 }
 
 .field {
+  position: relative;
   height: 65px;
   display: flex;
   flex-direction: column;
@@ -134,3 +135,16 @@
   @extend .input_error_label
 }
 
+.custom_svg {
+  position: absolute;
+  right: 10px;
+  bottom: calc(50% - 10px);
+  width: 16px;
+  height: 16px;
+  color: $gray;
+  transition: .2s all ease-in-out;
+  cursor: pointer;
+  &:hover {
+    color: white;
+  }
+}

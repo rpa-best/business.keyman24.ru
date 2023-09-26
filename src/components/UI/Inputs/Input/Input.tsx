@@ -2,6 +2,7 @@ import React, { ChangeEventHandler } from 'react';
 
 import * as T from 'components/UI/Inputs/types';
 import clsx from 'clsx';
+import XSvg from '/public/svg/x.svg';
 
 import scss from 'components/UI/Inputs/Input/Input.module.scss';
 
@@ -11,7 +12,7 @@ export const Input: React.FC<T.IInputProps> = ({
     autoFocus,
     value,
     name,
-
+    clearable,
     handleError,
     onChange,
     onBlur,
@@ -49,6 +50,10 @@ export const Input: React.FC<T.IInputProps> = ({
         [scss.input_error]: handleError,
     });
 
+    const handleClearClick = () => {
+        onChange('' as any);
+    };
+
     return (
         <div style={style} className={fieldClass}>
             {label ? (
@@ -71,6 +76,9 @@ export const Input: React.FC<T.IInputProps> = ({
                 onBlur={onBlur}
                 disabled={disabled}
             />
+            {clearable && (
+                <XSvg onClick={handleClearClick} className={scss.custom_svg} />
+            )}
             {label && <label className={labelErrorClass}>{handleError}</label>}
         </div>
     );

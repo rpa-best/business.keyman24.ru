@@ -103,13 +103,21 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             </h2>
             <div className={scss.input_wrapper}>
                 <Input
+                    autoFocus
+                    clearable
                     onBlur={handleBlur}
                     placeholder="Укажите код"
                     label="Введите код из 12 цифр"
                     type="number"
                     value={values.code}
                     name="code"
-                    onChange={(e: any) => setFieldValue('code', e.target.value)}
+                    onChange={(e: any) => {
+                        if (e?.target?.value) {
+                            setFieldValue('code', e.target.value);
+                        } else {
+                            setFieldValue('code', e);
+                        }
+                    }}
                     autoComplete="off"
                     handleError={touched.code && errors.code}
                 />

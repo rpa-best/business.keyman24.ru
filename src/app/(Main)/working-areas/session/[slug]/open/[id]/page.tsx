@@ -53,8 +53,6 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         };
     });
 
-    console.log(sessionLog);
-
     switch (areaType) {
         case 'inventory': {
             return (
