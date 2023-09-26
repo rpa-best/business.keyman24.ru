@@ -1,26 +1,8 @@
 @import "scss/utils";
 
-
-.bar_chart_wrapper {
-  height: 70vh;
-  width: 90vw;
-  margin: 10px auto;
-  @include phone {
-    height: 70vh;
-    width: 100vw;
-    margin: 0;
-  }
-}
-
 .custom_title_wrapper {
   width: calc(100% - 60px);
   margin: 40px auto 0;
   @extend .page_title_with_table_back_button;
 }
 
-.empty_key {
-  text-align: center;
-  @include MontserratRegular(28px);
-  color: white;
-  transform: translateY(15vh);
-}

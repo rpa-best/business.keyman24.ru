@@ -172,7 +172,6 @@ export const Register: React.FC<RegisterProps> = ({
                 <div className={scss.working_view_wrapper}>
                     <div className={scss.working_view_card}>
                         <WorkerInfoCard
-                            setErrors={setErrors}
                             halfScreen
                             worker={selectedWorker as IWorker}
                             workerDocs={selectedWorkerDocs as IWorkerDocs[]}
