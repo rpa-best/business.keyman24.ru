@@ -131,22 +131,26 @@ export const Table: React.FC<TableProps> = ({
                             onScroll={handleBodyScroll}
                             className={scss.table_body}
                         >
-                            {memoizedTableData.map((item, index) => (
-                                <div
-                                    onClick={() => onRowClick(item.id)}
-                                    key={index}
-                                    className={rowClassName}
-                                >
-                                    <Row
-                                        stopPropagation={stopPropagation}
-                                        handleDeleteClick={handleDeleteClick}
-                                        handleEditClick={handleEditClick}
-                                        headers={headers}
+                            {memoizedTableData.map((item, index) => {
+                                return (
+                                    <div
+                                        onClick={() => onRowClick(item.id)}
                                         key={index}
-                                        item={item}
-                                    />
-                                </div>
-                            ))}
+                                        className={rowClassName}
+                                    >
+                                        <Row
+                                            stopPropagation={stopPropagation}
+                                            handleDeleteClick={
+                                                handleDeleteClick
+                                            }
+                                            handleEditClick={handleEditClick}
+                                            headers={headers}
+                                            key={index}
+                                            item={item}
+                                        />
+                                    </div>
+                                );
+                            })}
                         </div>
                         {children}
                     </TableContext.Provider>
