@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-import { WorkerInventoryType } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/WorkerDocsTable';
+import { IModifiedInventory } from 'app/(Main)/inventory/types';
 
 interface TableDocsWrapperProps {
-    inventory: WorkerInventoryType[];
+    inventory: IModifiedInventory[];
 }
 
 export const TableInventoryWrapper: React.FC<TableDocsWrapperProps> = ({

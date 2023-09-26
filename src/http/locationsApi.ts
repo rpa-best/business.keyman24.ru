@@ -187,11 +187,17 @@ export const getKeyHistory: T.GetKeyHistory = async (
     orgId,
     locId,
     objId,
-    keyId
+    keyId,
+    offset
 ) => {
+    const query = new URLSearchParams();
+    query.set('limit', '30');
+    offset ? query.set('offset', offset.toString()) : '';
+
     const res: AxiosResponse<ReturnType<typeof getKeyHistory>> =
         await $serverAuth.get(
-            `business/${orgId}/location/${locId}/object/${objId}/inventory/${keyId}/history/`
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/${keyId}/history/`,
+            { params: query }
         );
 
     return res.data;

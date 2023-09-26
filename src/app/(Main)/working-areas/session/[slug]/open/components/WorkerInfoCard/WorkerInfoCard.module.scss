@@ -33,9 +33,15 @@
 
 .worker_card_image_wrapper {
   @include fullHd {
-    max-width: 190px;
-    max-height: 190px;
+    width: 100%;
+    height: 100%;
+    max-width: 180px;
+    max-height: 180px;
   }
+  width: 100%;
+  height: 100%;
+  max-width: 160px;
+  max-height: 160px;
   @include phone {
     max-width: 140px;
   }

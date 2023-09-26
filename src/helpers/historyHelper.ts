@@ -1,4 +1,5 @@
 import { IInventoryHistory } from 'http/types';
+import { getObjValue } from 'utils/getObjProperty';
 
 export const formatDateHistory = (keyHistory: IInventoryHistory[]) => {
     return keyHistory.map((h) => {
@@ -16,25 +17,13 @@ interface cloneHistory extends Omit<IInventoryHistory, 'date'> {
     date: Date;
 }
 
-export const getBarData = (cloneHistory: cloneHistory[]) => {
-    const barLabels = [];
-    const barData = [];
+//item.worker.user.fullname
 
-    for (const item of cloneHistory) {
-        if (item.mode) {
-            const passed = cloneHistory.find((i) => i.id === item.id + 1);
-            const date = item.date.getTime();
-            const passedDate = passed ? passed.date.getTime() : Date.now();
-            const differenceInHours = (passedDate - date) / 1000 / 3600;
-            barLabels.push(item.worker.user.username);
-            barData.push(+differenceInHours.toFixed(4));
-        }
-    }
-    return { barLabels, barData };
-};
-
-export const getOrgBarData = (cloneHistory: cloneHistory[]) => {
-    const orgs: { org: string; hours: number }[] = [];
+export const getBarGroupData = (
+    cloneHistory: cloneHistory[],
+    unitPath: string
+): [string[], number[]] => {
+    const units: { unit: string; hours: number }[] = [];
 
     for (const item of cloneHistory) {
         if (item.mode) {
@@ -43,36 +32,36 @@ export const getOrgBarData = (cloneHistory: cloneHistory[]) => {
             const passedDate = passed ? passed.date.getTime() : Date.now();
             const differenceInHours = (passedDate - date) / 1000 / 3600;
 
-            orgs.push({
-                org: item.worker.org.name,
+            units.push({
+                unit: getObjValue(item, unitPath),
                 hours: differenceInHours,
             });
         }
     }
 
     interface SummarizedData {
-        org: string;
+        unit: string;
         hours: number;
     }
 
     const result: SummarizedData[] = [];
 
-    orgs.reduce((acc, current) => {
-        const item = acc.find((i) => i.org === current.org);
+    units.reduce((acc, current) => {
+        const item = acc.find((i) => i.unit === current.unit);
         if (item) {
             item.hours += current.hours;
         } else {
-            acc.push({ org: current.org, hours: current.hours });
+            acc.push({ unit: current.unit, hours: current.hours });
         }
         return acc;
     }, result);
 
-    const labels = result.map((r) => {
-        return r.org;
+    const barLabels = result.map((r) => {
+        return r.unit;
     });
-    const data = result.map((r) => {
+    const barData = result.map((r) => {
         return r.hours;
     });
 
-    return { labels, data };
+    return [barLabels, barData];
 };

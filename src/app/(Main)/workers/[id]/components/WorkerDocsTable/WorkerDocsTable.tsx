@@ -1,87 +1,75 @@
-'use client';
+'use server';
 
-import React, { useState } from 'react';
-import { ICard, IInventory, IWorkerDocs, IWorkerPlan } from 'http/types';
+import React from 'react';
 
-import { TableDocsWrapper } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/TableDocsWrapper';
-import { TableCardWrapper } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/TableCardWrapper';
-import { Button } from 'components/UI/Buttons/Button';
-import { TableInventoryWrapper } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/TableInventoryWrapper';
+import {
+    getServerWorkerDocs,
+    getWorker,
+    getWorkerCard,
+    getWorkerPlan,
+} from 'http/workerApi';
+import { cookies } from 'next/headers';
+import { WorkerTables } from 'app/(Main)/workers/[id]/components/WorkerTables';
 
 import scss from './WorkerDocsTable.module.scss';
-import { WorkerTimeTable } from 'app/(Main)/workers/[id]/components/WorkerTimeTable';
-
-export interface WorkerInventoryType extends Omit<IInventory, 'type'> {
-    type: string;
-}
 
 interface WorkerDocsTableProps {
-    cards: ICard[];
-    docs: IWorkerDocs[];
-    workerInventory: WorkerInventoryType[];
-    time: IWorkerPlan;
+    id: string;
 }
 
-export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = ({
-    cards,
-    docs,
-    workerInventory,
-    time,
+export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
+    id,
 }) => {
-    const [which, setWhich] = useState<'docs' | 'card' | 'inventory' | 'time'>(
-        'docs'
-    );
+    const cookieStore = cookies();
+
+    const orgId = cookieStore.get('orgId')?.value ?? 1;
+
+    const worker = await getWorker(+orgId, +id);
+
+    const workerDocs = await getServerWorkerDocs(+id, +orgId);
+
+    const docs = workerDocs.results.map((w) => {
+        const activeTo = new Date(w.activeTo);
+
+        const activeFrom = new Date(w.activeFrom);
+
+        const options = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        };
+        const formattedActiveTo = activeTo.toLocaleDateString(
+            'ru-RU',
+            options as any
+        );
+        const formattedActiveFrom = activeFrom.toLocaleDateString(
+            'ru-RU',
+            options as any
+        );
+
+        return {
+            ...w,
+            activeTo: formattedActiveTo,
+            activeFrom: formattedActiveFrom,
+        };
+    });
+
+    const cards = await getWorkerCard(+orgId, +id);
+
+    const time = await getWorkerPlan(+orgId, +id);
+
+    const workerInventory = worker.inventories.map((i) => {
+        return { ...i, type: i.type.name };
+    });
 
     return (
         <div className={scss.info_wrapper}>
-            <div className={scss.buttons_wrapper}>
-                <div className={scss.button}>
-                    <Button
-                        onClick={() => {
-                            setWhich('docs');
-                        }}
-                        active={which === 'docs'}
-                        type="button"
-                    >
-                        Документы
-                    </Button>
-                </div>
-                <div className={scss.button}>
-                    <Button
-                        onClick={() => {
-                            setWhich('card');
-                        }}
-                        active={which === 'card'}
-                        type="button"
-                    >
-                        Выданные карты
-                    </Button>
-                </div>
-                <div className={scss.button}>
-                    <Button
-                        onClick={() => setWhich('inventory')}
-                        active={which === 'inventory'}
-                        type="button"
-                    >
-                        Инвентарь / ключи
-                    </Button>
-                </div>
-                <div className={scss.button}>
-                    <Button
-                        onClick={() => setWhich('time')}
-                        active={which === 'time'}
-                        type="button"
-                    >
-                        Учёт времени
-                    </Button>
-                </div>
-            </div>
-            {which === 'docs' && <TableDocsWrapper data={docs} />}
-            {which === 'card' && <TableCardWrapper data={cards} />}
-            {which === 'inventory' && (
-                <TableInventoryWrapper inventory={workerInventory} />
-            )}
-            {which === 'time' && <WorkerTimeTable data={time} />}
+            <WorkerTables
+                cards={cards.results}
+                docs={docs}
+                workerInventory={workerInventory}
+                time={time}
+            />
         </div>
     );
 };

@@ -110,18 +110,21 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     />
                 </div>
                 <div className={scss.select_wrapper}>
-                    {!adminPermission && (
-                        <InputSelect
-                            setFieldTouched={setFieldTouched}
-                            listValues={level}
-                            autoComplete="off"
-                            onChange={(level) => setFieldValue('level', level)}
-                            placeholder="Укажите уровень"
-                            handleError={touched.level && errors.level}
-                            value={values.level?.name as string}
-                            name="level"
-                        />
-                    )}
+                    {!adminPermission ||
+                        (formType === 'create' && (
+                            <InputSelect
+                                setFieldTouched={setFieldTouched}
+                                listValues={level}
+                                autoComplete="off"
+                                onChange={(level) =>
+                                    setFieldValue('level', level)
+                                }
+                                placeholder="Укажите уровень"
+                                handleError={touched.level && errors.level}
+                                value={values.level?.name as string}
+                                name="level"
+                            />
+                        ))}
                 </div>
                 {!adminPermission && (
                     <Button

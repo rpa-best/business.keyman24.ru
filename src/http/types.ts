@@ -459,14 +459,16 @@ export type GetInventories = (
 
 export type GetInventoryHistory = (
     orgId: number,
-    inventoryId: number
+    inventoryId: number,
+    offset: number
 ) => Promise<IResponse<IInventoryHistory>>;
 
 export type GetKeyHistory = (
     orgId: number,
     locId: number,
     objId: number,
-    keyId: number
+    keyId: number,
+    offset: number
 ) => Promise<IResponse<IInventoryHistory>>;
 
 export type GetInventoryTypes = (orgId: number) => Promise<IResponse<IType>>;

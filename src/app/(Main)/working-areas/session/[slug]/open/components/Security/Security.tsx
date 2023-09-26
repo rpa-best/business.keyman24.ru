@@ -8,7 +8,10 @@ import { SecurityProps } from 'app/(Main)/working-areas/session/[slug]/open/type
 import { Spinner } from 'components/Spinner';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
 import { IWorker, IWorkerDocs } from 'http/types';
-import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
+import {
+    closeSessionHandler,
+    validateDate,
+} from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { useSocketConnect } from 'helpers/useSocketConnect';
@@ -17,6 +20,7 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { sendSessionAction } from 'http/workingAreaApi';
 
 import scss from './Security.module.scss';
+import { toast } from 'react-toastify';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -44,8 +48,17 @@ export const Security: React.FC<SecurityProps> = ({
     });
 
     useEffect(() => {
-        if (data) {
-            setLoading(true);
+        let error;
+        workerDocs?.forEach((doc) => {
+            if (validateDate(doc.activeTo)) {
+                error = true;
+                return;
+            }
+        });
+        if (error) {
+            return;
+        }
+        if (data && workerDocs) {
             const body = {
                 session: currentSessionId,
                 worker: data.data.user.id,
@@ -60,7 +73,7 @@ export const Security: React.FC<SecurityProps> = ({
                 setLoading(false);
             });
         }
-    }, [currentAreaId, currentSessionId, data]);
+    }, [currentAreaId, currentSessionId, data, workerDocs]);
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(
