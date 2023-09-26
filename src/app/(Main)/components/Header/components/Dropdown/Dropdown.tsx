@@ -67,9 +67,11 @@ export const HeaderDropdown = ({ userData }: { userData: IUser }) => {
                     )}
                 </div>
                 <div className={scss.user}>
-                    <p
-                        className={scss.user_name}
-                    >{`${currentUser?.name} ${currentUser?.surname}`}</p>
+                    <p className={scss.user_name}>
+                        {currentUser.name && currentUser.surname
+                            ? `${currentUser?.name} ${currentUser?.surname}`
+                            : 'Пользователь'}
+                    </p>
                     <p className={scss.user_role}>{currentUser?.username}</p>
                 </div>
                 <ArrowSvg
