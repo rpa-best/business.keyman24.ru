@@ -115,7 +115,9 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                             onClick={() => onArchiveClick()}
                             type="button"
                         >
-                            Посмотреть архив
+                            {searchParams.get('archive')
+                                ? 'Выйти из архива'
+                                : 'Посмотреть архив'}
                         </Button>
                     </div>
                     <div className={scss.buttons_wrapper}>
