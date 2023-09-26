@@ -19,6 +19,7 @@ const SessionPage: React.FC<SessionPageProps> = async ({
     searchParams,
 }) => {
     const cookieStore = cookies();
+
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
     const workingAreas = await getWorkingAreas(+orgId);
@@ -58,7 +59,10 @@ const SessionPage: React.FC<SessionPageProps> = async ({
     return (
         <div className={scss.children_with_table}>
             <div className={scss.button_wrapper}>
-                <h1>Сессии в {area?.name} / Список</h1>
+                <h1>
+                    Сессии в {area?.name} /{' '}
+                    {searchParams?.archive ? 'Архив' : 'Список'}
+                </h1>
                 <BackButton skipTwoWords>Назад</BackButton>
             </div>
             <SessionWrapper

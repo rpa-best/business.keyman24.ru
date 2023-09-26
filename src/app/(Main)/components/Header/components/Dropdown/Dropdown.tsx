@@ -68,7 +68,7 @@ export const HeaderDropdown = ({ userData }: { userData: IUser }) => {
                 </div>
                 <div className={scss.user}>
                     <p className={scss.user_name}>
-                        {currentUser.name && currentUser.surname
+                        {currentUser?.name && currentUser?.surname
                             ? `${currentUser?.name} ${currentUser?.surname}`
                             : 'Пользователь'}
                     </p>
