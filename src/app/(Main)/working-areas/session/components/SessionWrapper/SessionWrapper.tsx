@@ -16,12 +16,18 @@ import {
 } from 'next/navigation';
 import { Button } from 'components/UI/Buttons/Button';
 import { ICreateSessionBody } from 'http/types';
-import { closeSession, createSession } from 'http/workingAreaApi';
+import {
+    closeSession,
+    createSession,
+    sendActivateSession,
+    sendCheck,
+} from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
 import { useUserStore } from 'store/userStore';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
 
 import scss from './SessionWrapper.module.scss';
+import { toast } from 'react-toastify';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -31,6 +37,8 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const [loading, setLoading] = useState(false);
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    console.log(sessions);
 
     const router = useRouter();
 
@@ -50,7 +58,23 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             router.push(`${pathname}/closed/${session.id}`);
         } else {
             if (!needAttach) {
-                router.push(`${pathname}/open/${session?.id}`);
+                setLoading(true);
+                sendActivateSession(areaId, currentSession?.id as number)
+                    .then(() => {
+                        router.push(`${pathname}/open/${session?.id}`);
+                    })
+                    .catch((e) => {
+                        toast('Ошибка', {
+                            position: 'bottom-right',
+                            hideProgressBar: true,
+                            autoClose: 2000,
+                            type: 'error',
+                            theme: 'colored',
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
                 return;
             }
             setVisible(true);

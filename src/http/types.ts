@@ -500,7 +500,7 @@ export type HeadCheck = (
     path: string,
     link: string,
     orgId: number
-) => Promise<string | void>;
+) => Promise<string | undefined>;
 
 export type HeadCheckMiddleWare = (
     path: string,
