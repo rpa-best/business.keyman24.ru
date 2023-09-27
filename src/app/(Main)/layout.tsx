@@ -16,6 +16,7 @@ import { cookies } from 'next/headers';
 import { headCheckPaths } from 'http/userApi';
 import { headCheckData } from 'app/(Main)/components/SideLinks/sidebarCheckAccess';
 import { createPermissionGroupPermission } from 'http/permissionsApi';
+import { AxiosError } from 'axios';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
@@ -33,15 +34,17 @@ export default async function RootLayout({
 
     const orgId = cookieStore.get('orgId')?.value ?? organizations[0].id ?? 1;
 
-    const services = await getServices(orgId);
+    const services = await getServices(orgId).catch((e) => e);
 
-    const disabled = services.status === 'notActive';
+    const disabled = services ? services.status === 'notActive' : false;
 
     const headCheck = await Promise.all(
         headCheckData.map(async (elem) => {
             return await headCheckPaths(elem.head as string, elem.href, +orgId);
         })
     );
+
+    console.log(headCheck);
 
     return (
         <html lang="en">
