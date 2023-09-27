@@ -10,25 +10,27 @@ export async function middleware(request: NextRequest) {
 
     const access = request.cookies.get('access')?.value;
 
-    const headCheck = await Promise.all(
-        headCheckData.map(async (elem) => {
-            return await headCheckPathsMiddleware(
-                elem.head as string,
-                elem.href,
-                access as string,
-                +orgId
-            );
-        })
-    );
+    if (access && orgId) {
+        const headCheck = await Promise.all(
+            headCheckData.map(async (elem) => {
+                return await headCheckPathsMiddleware(
+                    elem.head as string,
+                    elem.href,
+                    access as string,
+                    +orgId
+                );
+            })
+        );
 
-    headCheckData.forEach((elem) => {
-        if (
-            headCheck.includes(elem.href) &&
-            url.pathname.startsWith(elem.href)
-        ) {
-            return NextResponse.redirect(new URL('/', request.url));
-        }
-    });
+        headCheckData.forEach((elem) => {
+            if (
+                headCheck.includes(elem.href) &&
+                url.pathname.startsWith(elem.href)
+            ) {
+                return NextResponse.redirect(new URL('/', request.url));
+            }
+        });
+    }
 
     if (!url.pathname.startsWith('/login')) {
         if (!request.cookies.get('access')?.value) {
