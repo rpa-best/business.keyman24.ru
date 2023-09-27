@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
-import { sendSessionAction } from 'http/workingAreaApi';
+import { sendActivateSession, sendSessionAction } from 'http/workingAreaApi';
 import { RegisterProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { IOrganization } from 'store/types';
@@ -32,7 +32,6 @@ export const Register: React.FC<RegisterProps> = ({
 }) => {
     const router = useRouter();
 
-    const [errors, setErrors] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState<IOrganization>();
     const [selectedWorker, setSelectedWorker] = useState<IWorker>();
     const [selectedWorkerDocs, setSelectedWorkerDocs] =
@@ -51,7 +50,7 @@ export const Register: React.FC<RegisterProps> = ({
         async (data: SocketResponse) => {
             setLoading(true);
             const body = {
-                user: data.data.user.user,
+                user: data.data.user,
                 mode: data.data.mode,
                 worker: selectedWorker?.id,
                 device: data.data.device,
@@ -95,17 +94,15 @@ export const Register: React.FC<RegisterProps> = ({
             const message = JSON.parse(event.data);
 
             if (message.type === 'success') {
-                if (errors) {
-                    return;
-                }
                 onSocketSuccess(message);
             }
         };
 
         return () => {
             socket?.current?.close();
+            sendActivateSession(currentAreaId, currentSessionId as number);
         };
-    }, [currentSessionId, errors, onSocketSuccess]);
+    }, [currentAreaId, currentSessionId, onSocketSuccess]);
 
     const handleSelectOrg = (org: IOrganization) => {
         setLoading(true);

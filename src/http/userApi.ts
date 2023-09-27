@@ -75,12 +75,17 @@ export const updateTokens: T.UpdateTokens = async () => {
 };
 
 export const headCheckPaths: T.HeadCheck = async (path, link, orgId) => {
-    const res = await $serverAuth.get(`business/${orgId}/` + path);
-
-    if (res.status !== 200) {
-        return link;
-    } else {
-        return;
+    const res = await $serverAuth.head(`business/${orgId}/` + path);
+    try {
+        if (res.status !== 200) {
+            return link;
+        } else {
+            return;
+        }
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            console.log(e.status);
+        }
     }
 };
 

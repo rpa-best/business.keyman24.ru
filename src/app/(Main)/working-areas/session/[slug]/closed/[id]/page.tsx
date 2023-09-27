@@ -47,6 +47,8 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
         };
     });
 
+    console.log(modifiedLog);
+
     return (
         <div className={scss.children_with_table}>
             <div className={scss.page_title_with_table}>

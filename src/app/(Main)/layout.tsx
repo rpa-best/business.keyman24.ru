@@ -40,11 +40,13 @@ export default async function RootLayout({
 
     const headCheck = await Promise.all(
         headCheckData.map(async (elem) => {
-            return await headCheckPaths(elem.head as string, elem.href, +orgId);
+            return await headCheckPaths(
+                elem.head as string,
+                elem.href,
+                +orgId
+            ).catch((e) => {});
         })
     );
-
-    console.log(headCheck);
 
     return (
         <html lang="en">
