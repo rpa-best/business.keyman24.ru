@@ -46,7 +46,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={montserrat.className}>
-                <Header disabled={disabled} />
+                <Header headCheck={headCheck} disabled={disabled} />
                 <div className={scss.main_layout}>
                     <SideMenu headCheck={headCheck} disabled={disabled} />
                     {disabled && <Notification status={services.status} />}

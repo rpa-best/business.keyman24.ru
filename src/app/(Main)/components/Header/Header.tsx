@@ -16,7 +16,15 @@ import { getUser } from 'http/userApi';
 
 import scss from './Header.module.scss';
 
-export const Header = async ({ disabled }: { disabled: boolean }) => {
+interface HeaderProps {
+    disabled: boolean;
+    headCheck: (string | void)[];
+}
+
+export const Header: React.FC<HeaderProps> = async ({
+    disabled,
+    headCheck,
+}) => {
     const user = await getUser().catch((e: AxiosError) => {
         if (e.response?.status === 401) {
             redirect('/login');
@@ -55,6 +63,7 @@ export const Header = async ({ disabled }: { disabled: boolean }) => {
                 >
                     <NotificationsContainer />
                     <BurgerMenu
+                        headCheck={headCheck}
                         organizations={organizations as IOrganization[]}
                     />
                 </div>
