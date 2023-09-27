@@ -9,9 +9,10 @@ import scss from './SideLinks.module.scss';
 interface SideLinksProps {
     open: boolean;
     setOpen?: (value: boolean) => void;
+    headCheck: (string | void)[];
 }
 
-export const SideLinks = ({ open, setOpen }: SideLinksProps) => {
+export const SideLinks = ({ open, setOpen, headCheck }: SideLinksProps) => {
     const { pcBreak } = useResizeWidth();
 
     const width = open ? (pcBreak ? '200px' : '240px') : 'max-content';
@@ -24,9 +25,14 @@ export const SideLinks = ({ open, setOpen }: SideLinksProps) => {
                 initial={{ width: 'max-content' }}
                 animate={{ width }}
             >
-                {sidebarData.map((item) => (
-                    <SidebarLink open={open} key={item.title} {...item} />
-                ))}
+                {sidebarData.map((item) => {
+                    if (headCheck.includes(item.href)) {
+                        return;
+                    }
+                    return (
+                        <SidebarLink open={open} key={item.title} {...item} />
+                    );
+                })}
             </motion.ul>
         </div>
     );

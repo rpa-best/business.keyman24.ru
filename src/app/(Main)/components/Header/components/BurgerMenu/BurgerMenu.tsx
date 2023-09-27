@@ -12,10 +12,14 @@ import { SideLinks } from 'app/(Main)/components/SideLinks';
 
 import scss from './BurgerMenu.module.scss';
 
-export const BurgerMenu = ({
-    organizations,
-}: {
+interface BurgerMenuProps {
     organizations: IOrganization[];
+    headCheck: (string | void)[];
+}
+
+export const BurgerMenu: React.FC<BurgerMenuProps> = ({
+    organizations,
+    headCheck,
 }) => {
     const [visible, setVisible] = useState(false);
 
@@ -55,7 +59,7 @@ export const BurgerMenu = ({
                             </div>
                         </div>
                         <div>
-                            <SideLinks open={true} />
+                            <SideLinks headCheck={headCheck} open={true} />
                         </div>
                         <Escape
                             onClick={() => setVisible(!visible)}
