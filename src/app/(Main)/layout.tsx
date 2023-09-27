@@ -12,6 +12,10 @@ import 'scss/_reset.scss';
 import scss from 'app/(Main)/MainPage.module.scss';
 import { getOrganizations, getServices } from 'http/organizationApi';
 import { Notification } from 'app/(Main)/components/Notification';
+import { cookies } from 'next/headers';
+import { headCheckPaths } from 'http/userApi';
+import { headCheckData } from 'app/(Main)/components/SideLinks/sidebarCheckAccess';
+import { createPermissionGroupPermission } from 'http/permissionsApi';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
@@ -23,18 +27,28 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const cookieStore = cookies();
+
     const organizations = await getOrganizations().catch((e) => e);
 
-    const services = await getServices(organizations[0].id);
+    const orgId = cookieStore.get('orgId')?.value ?? organizations[0].id ?? 1;
 
-    const disabled = false;
+    const services = await getServices(orgId);
+
+    const disabled = services.status === 'notActive';
+
+    const headCheck = await Promise.all(
+        headCheckData.map(async (elem) => {
+            return await headCheckPaths(elem.head as string, elem.href, +orgId);
+        })
+    );
 
     return (
         <html lang="en">
             <body className={montserrat.className}>
                 <Header disabled={disabled} />
                 <div className={scss.main_layout}>
-                    <SideMenu disabled={disabled} />
+                    <SideMenu headCheck={headCheck} disabled={disabled} />
                     {disabled && <Notification status={services.status} />}
                     <main
                         style={{

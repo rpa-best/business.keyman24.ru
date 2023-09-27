@@ -12,7 +12,7 @@ export interface IUserAuthResponse {
 
 export interface IService {
     id: number;
-    status: string;
+    status: 'active' | 'notActive';
     user: string;
     org: number;
     serviceRates: IServiceRate[];
@@ -495,6 +495,17 @@ export type UploadInventoryPhoto = (
     itemId: number,
     photos: File
 ) => Promise<IInventoryImage>;
+
+export type HeadCheck = (
+    path: string,
+    link: string,
+    orgId: number
+) => Promise<string | void>;
+
+export type ClientHeadCheck = (
+    path: string,
+    link: string
+) => Promise<string | void>;
 
 export type GetGroupAdminOrgPermissions = (
     orgId: number

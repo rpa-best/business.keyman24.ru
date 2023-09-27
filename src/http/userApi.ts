@@ -1,11 +1,13 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
-import { $host } from 'http/clientIndex';
+import { $clientAuth, $host } from 'http/clientIndex';
 import * as T from 'http/types';
 import { IUser } from 'store/types';
 import Cookies from 'universal-cookie';
 
 const cookie = new Cookies();
+
+const orgId = cookie.get('orgId');
 
 export const userAuth: T.UserAuthType = async (body) => {
     try {
@@ -68,5 +70,25 @@ export const updateTokens: T.UpdateTokens = async () => {
             }
         }
         return false;
+    }
+};
+
+export const headCheckPaths: T.HeadCheck = async (path, link, orgId) => {
+    const res = await $serverAuth.get(`business/${orgId}/` + path);
+
+    if (res.status !== 200) {
+        return link;
+    } else {
+        return;
+    }
+};
+
+export const headCheckPathsClient: T.ClientHeadCheck = async (path, link) => {
+    const res = await $clientAuth.head(`business/${orgId}/` + path);
+
+    if (res.status !== 200) {
+        return link;
+    } else {
+        return;
     }
 };

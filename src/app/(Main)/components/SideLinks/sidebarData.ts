@@ -10,6 +10,7 @@ export interface SidebarLinkProps {
     title: string;
     Icon: ElementType;
     href: string;
+    head?: string;
 }
 
 export const sidebarData: SidebarLinkProps[] = [
@@ -22,26 +23,31 @@ export const sidebarData: SidebarLinkProps[] = [
         title: 'Локация',
         href: '/locations',
         Icon: GlobeSvg,
+        head: 'location',
     },
 
     {
         title: 'Инвентарь',
         href: `/inventory`,
         Icon: BriefCaseSvg,
+        head: 'inventory',
     },
     {
         title: 'Права доступа',
         href: `/permission-group`,
         Icon: UserLockSvg,
+        head: 'permission/group',
     },
     {
         title: 'Работники',
         href: '/workers',
         Icon: WorkerSvg,
+        head: 'worker',
     },
     {
         title: 'Рабочее место',
         href: `/working-areas`,
         Icon: ComputerSvg,
+        head: 'working_area',
     },
 ];
