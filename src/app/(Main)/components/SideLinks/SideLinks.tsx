@@ -5,12 +5,6 @@ import { sidebarData } from 'app/(Main)/components/SideLinks/sidebarData';
 import { SidebarLink } from 'app/(Main)/components/SideLinks/SidebarLink/SidebarLink';
 
 import scss from './SideLinks.module.scss';
-import {
-    headCheckData,
-    IHeadCheck,
-} from 'app/(Main)/components/SideLinks/sidebarCheckAccess';
-import { useEffect } from 'react';
-import { headCheckPaths, headCheckPathsClient } from 'http/userApi';
 
 interface SideLinksProps {
     open: boolean;
