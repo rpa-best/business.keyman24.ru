@@ -502,9 +502,11 @@ export type HeadCheck = (
     orgId: number
 ) => Promise<string | void>;
 
-export type ClientHeadCheck = (
+export type HeadCheckMiddleWare = (
     path: string,
-    link: string
+    link: string,
+    access: string,
+    orgId: number
 ) => Promise<string | void>;
 
 export type GetGroupAdminOrgPermissions = (

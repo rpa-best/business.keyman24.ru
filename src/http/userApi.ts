@@ -1,9 +1,10 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
-import { $clientAuth, $host } from 'http/clientIndex';
+import { $host } from 'http/clientIndex';
 import * as T from 'http/types';
 import { IUser } from 'store/types';
 import Cookies from 'universal-cookie';
+import process from 'process';
 
 const cookie = new Cookies();
 
@@ -83,8 +84,21 @@ export const headCheckPaths: T.HeadCheck = async (path, link, orgId) => {
     }
 };
 
-export const headCheckPathsClient: T.ClientHeadCheck = async (path, link) => {
-    const res = await $clientAuth.head(`business/${orgId}/` + path);
+export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
+    path,
+    link,
+    orgId,
+    access
+) => {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}business/${orgId}/` + path,
+        {
+            method: 'HEAD',
+            headers: {
+                Authorization: `Bearer ${access}`,
+            },
+        }
+    );
 
     if (res.status !== 200) {
         return link;

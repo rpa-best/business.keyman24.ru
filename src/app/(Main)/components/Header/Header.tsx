@@ -12,9 +12,10 @@ import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown
 import { BurgerMenu } from 'app/(Main)/components/Header/components/BurgerMenu';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
-import { getUser } from 'http/userApi';
+import { getUser, headCheckPaths } from 'http/userApi';
 
 import scss from './Header.module.scss';
+import { cookies } from 'next/headers';
 
 interface HeaderProps {
     disabled: boolean;
@@ -25,6 +26,8 @@ export const Header: React.FC<HeaderProps> = async ({
     disabled,
     headCheck,
 }) => {
+    const cookieStore = cookies();
+
     const user = await getUser().catch((e: AxiosError) => {
         if (e.response?.status === 401) {
             redirect('/login');
@@ -32,6 +35,10 @@ export const Header: React.FC<HeaderProps> = async ({
     });
 
     const organizations = await getOrganizations().catch((e) => e);
+
+    const orgId = cookieStore.get('orgId') ?? organizations[0].id ?? 1;
+
+    //const checkOrg = await headCheckPaths('orgs/', 'org-settings', +orgId);
 
     return (
         <header className={scss.header_layout}>
