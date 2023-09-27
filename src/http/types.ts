@@ -114,8 +114,8 @@ export interface IInventory {
     desc: string;
     codeImage: string;
     is_active: boolean;
-    location: number;
-    objectArea: number;
+    location: ILocation;
+    objectArea: IObject;
 }
 
 export interface IInventoryHistory {

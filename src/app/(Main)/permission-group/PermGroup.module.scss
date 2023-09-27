@@ -6,6 +6,10 @@
   flex-direction: column;
   overflow-y: auto;
   padding-right: 10px;
+  @include fullHd {
+    height: 550px;
+  }
+  height: 500px;
   @include phoneOrTablet {
     width: 100%;
   }

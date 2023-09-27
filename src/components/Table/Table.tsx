@@ -37,6 +37,8 @@ export const Table: React.FC<TableProps> = ({
     const [sortedField, setSortedField] = useState<string>('');
     const [tableData, setTableData] = useState(tableRows);
 
+    console.log(tableRows);
+
     const router = useRouter();
 
     const pathname = usePathname();

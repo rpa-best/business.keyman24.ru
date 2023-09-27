@@ -43,11 +43,9 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
             ...s,
             workerName: s.worker.name,
             mode: mode,
-            itemName: `${s?.inventory?.id} ${s?.inventory?.name}`,
+            itemName: `${s?.inventory?.id} ${s?.inventory?.name}, ${s.inventory.objectArea.name}`,
         };
     });
-
-    console.log(modifiedLog);
 
     return (
         <div className={scss.children_with_table}>

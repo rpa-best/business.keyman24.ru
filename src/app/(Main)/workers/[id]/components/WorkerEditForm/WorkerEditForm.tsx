@@ -82,6 +82,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 <div className={scss.worker_card_data}>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
+                            autoComplete="off"
                             onBlur={handleBlur}
                             label="ФИО"
                             placeholder="-"
@@ -93,6 +94,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                     </div>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
+                            autoComplete="off"
                             onBlur={handleBlur}
                             placeholder="-"
                             label="Логин"
@@ -104,6 +106,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                     </div>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
+                            autoComplete="off"
                             onBlur={handleBlur}
                             label="Телефон"
                             placeholder="Укажите телефон"
@@ -119,6 +122,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 <div className={scss.worker_card_data_additional}>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
+                            autoComplete="off"
                             onBlur={handleBlur}
                             type="password"
                             label="Пароль"
@@ -135,6 +139,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                     </div>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
+                            autoComplete="off"
                             type="password"
                             onBlur={handleBlur}
                             label="Подтверждение пароля"

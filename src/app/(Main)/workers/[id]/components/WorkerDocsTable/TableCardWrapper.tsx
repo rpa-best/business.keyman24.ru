@@ -5,6 +5,7 @@ import { Column } from 'components/Table/Column';
 import { Table } from 'components/Table';
 
 export const TableCardWrapper = ({ data }: { data: ICard[] }) => {
+    console.log(data);
     return (
         <Table tableRows={data}>
             <Column header="Номер" field="id" />
