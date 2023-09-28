@@ -36,7 +36,22 @@
   margin-bottom: 10px;
 }
 
+.form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .select_wrapper {
   position: relative;
   margin-bottom:30px;
+}
+
+.permission_pick_list {
+  width: 100%;
+  height: 325px;
+  @include phoneOrTablet {
+    height: 250px;
+  }
 }

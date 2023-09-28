@@ -9,6 +9,7 @@ import { RowFormProps } from 'app/(Main)/locations/types';
 import { Button } from 'components/UI/Buttons/Button';
 
 import scss from './RowForm.module.scss';
+import { useNotificationStore } from 'store/notificationStore';
 
 export const RowForm: React.FC<RowFormProps> = ({ setData }) => {
     const onSubmit = (values: FormValues) => {
@@ -21,15 +22,6 @@ export const RowForm: React.FC<RowFormProps> = ({ setData }) => {
         ];
 
         setData((data) => [...(data ?? []), ...newObj]);
-        const localData = localStorage.getItem('data');
-        if (localData) {
-            const oldArr = JSON.parse(localData);
-            const newArr = [...oldArr, ...newObj];
-            localStorage.setItem('data', JSON.stringify(newArr));
-            return;
-        }
-        localStorage.setItem('data', JSON.stringify(newObj));
-        resetForm();
     };
 
     const {
@@ -40,7 +32,6 @@ export const RowForm: React.FC<RowFormProps> = ({ setData }) => {
         isValid,
         errors,
         touched,
-        resetForm,
     } = useFormik<FormValues>({
         initialValues: {
             room: '',

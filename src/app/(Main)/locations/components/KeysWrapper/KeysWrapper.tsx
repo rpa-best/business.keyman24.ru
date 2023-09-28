@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -20,8 +20,11 @@ import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
+import { ServiceChangeToast } from 'components/ServiceChangeToast';
 
 import scss from './KeysWrapper.module.scss';
+import { NotificationToast } from 'components/NotificationConfirm';
+import { useNotificationStore } from 'store/notificationStore';
 
 interface KeysWrapperProps {
     count: number;
@@ -34,6 +37,14 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const [data, setData] = useState<IData[]>([]);
     const [fullData, setFullData] = useState<LocKeysResponse[]>([]);
     const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
+    const [setNoteVisible] = useNotificationStore((state) => [
+        state.setVisible,
+    ]);
+    const confirmed = useRef(false);
+
+    const total = data.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.count;
+    }, 0);
 
     const router = useRouter();
     const pathName = usePathname();
@@ -76,16 +87,22 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleGenerateClick = async () => {
-        setLoading(true);
-        const body: LocKeyBody[] = data.map((d) => {
-            return { name: d.category, count: d.count };
-        });
+        if (confirmed.current) {
+            setLoading(true);
+            const body: LocKeyBody[] = data.map((d) => {
+                return { name: d.category, count: d.count };
+            });
 
-        createLocationKeys(+params.locId, +params.objId, body).finally(() => {
-            router.refresh();
-            setLoading(false);
-            setVisible(false);
-        });
+            createLocationKeys(+params.locId, +params.objId, body).finally(
+                () => {
+                    router.refresh();
+                    setLoading(false);
+                    setVisible(false);
+                }
+            );
+        } else {
+            setNoteVisible(true);
+        }
     };
 
     const handleRowClick = (id: number) => {
@@ -163,6 +180,16 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                         </div>
                     </>
                 </Modal>
+                <NotificationToast>
+                    <ServiceChangeToast
+                        onConfirm={() => {
+                            confirmed.current = true;
+                            handleGenerateClick();
+                        }}
+                        count={total}
+                        slug="Inventory"
+                    />
+                </NotificationToast>
                 {loading && <Spinner />}
             </div>
         </>

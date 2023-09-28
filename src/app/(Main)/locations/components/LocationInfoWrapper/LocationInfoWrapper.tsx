@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useFormik } from 'formik';
 import {
@@ -16,11 +16,13 @@ import { createLocation, editLocation } from 'http/locationsApi';
 import { Spinner } from 'components/Spinner';
 
 import scss from 'app/(Main)/locations/components/LocationInfoWrapper/LocationInfoWrapper.module.scss';
+import { useNotificationStore } from 'store/notificationStore';
 
 export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
     location,
     type,
 }) => {
+    const [setVisible] = useNotificationStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const onSubmit = (values: LocationInfoWrapperValues) => {
@@ -43,6 +45,13 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
             });
         }
     };
+
+    useEffect(() => {
+        setVisible(true);
+        return () => {
+            setVisible(false);
+        };
+    }, [setVisible]);
 
     const {
         values,

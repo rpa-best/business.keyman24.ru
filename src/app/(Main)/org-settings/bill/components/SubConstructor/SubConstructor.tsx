@@ -42,6 +42,7 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
                 max: item.key.maxValue.toString(),
                 slug: item.key.modelName,
                 notLimited: item.notLimited,
+                min: '0',
             }))
         );
     }, [subs]);
@@ -65,8 +66,9 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
             };
         });
         setLoading(true);
-        await updateSub(subId, rateBody)
+        await updateSub(rateBody)
             .then(() => {
+                router.refresh();
                 toast('Успешно', {
                     position: 'bottom-right',
                     hideProgressBar: true,
@@ -77,7 +79,6 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
             })
             .finally(() => {
                 setLoading(false);
-                router.refresh();
             });
     };
 
@@ -95,7 +96,7 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
                             value={item.count.toString()}
                             min="0"
                             fields={fields}
-                            index={index}
+                            index={index.toString()}
                             setFields={setFields}
                             check={item.notLimited}
                             max={item.max}

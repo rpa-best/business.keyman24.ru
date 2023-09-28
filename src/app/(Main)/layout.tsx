@@ -15,8 +15,6 @@ import { Notification } from 'app/(Main)/components/Notification';
 import { cookies } from 'next/headers';
 import { headCheckPaths } from 'http/userApi';
 import { headCheckData } from 'app/(Main)/components/SideLinks/sidebarCheckAccess';
-import { createPermissionGroupPermission } from 'http/permissionsApi';
-import { AxiosError } from 'axios';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
@@ -38,22 +36,25 @@ export default async function RootLayout({
 
     const disabled = services ? services.status === 'notActive' : false;
 
-    const headCheck = await Promise.all(
+    const deniedLinksCheck = await Promise.all(
         headCheckData.map(async (elem) => {
-            return await headCheckPaths(
-                elem.head as string,
-                elem.href,
-                +orgId
-            ).catch((e) => {});
+            return await headCheckPaths(elem.head as string, elem.href, +orgId);
         })
     );
 
     return (
         <html lang="en">
             <body className={montserrat.className}>
-                <Header headCheck={headCheck} disabled={disabled} />
+                <Header
+                    services={services}
+                    headCheck={deniedLinksCheck}
+                    disabled={disabled}
+                />
                 <div className={scss.main_layout}>
-                    <SideMenu headCheck={headCheck} disabled={disabled} />
+                    <SideMenu
+                        headCheck={deniedLinksCheck}
+                        disabled={disabled}
+                    />
                     {disabled && <Notification status={services.status} />}
                     <main
                         style={{

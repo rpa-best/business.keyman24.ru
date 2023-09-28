@@ -4,7 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 
 import { IOrganization, IUser } from 'store/types';
-import { getOrganizations } from 'http/organizationApi';
+import {
+    getOrganizations,
+    getServerPrice,
+    getServices,
+} from 'http/organizationApi';
 import { SettingsSvgContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Settings';
 import { HeaderInputSelect } from 'app/(Main)/components/Header/components/InputSelect';
 import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
@@ -12,22 +16,22 @@ import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown
 import { BurgerMenu } from 'app/(Main)/components/Header/components/BurgerMenu';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
-import { getUser, headCheckPaths } from 'http/userApi';
+import { getUser } from 'http/userApi';
+import { IRate, IService } from 'http/types';
 
 import scss from './Header.module.scss';
-import { cookies } from 'next/headers';
 
 interface HeaderProps {
     disabled: boolean;
     headCheck: (string | void)[];
+    services: IService;
 }
 
 export const Header: React.FC<HeaderProps> = async ({
     disabled,
     headCheck,
+    services,
 }) => {
-    const cookieStore = cookies();
-
     const user = await getUser().catch((e: AxiosError) => {
         if (e.response?.status === 401) {
             redirect('/login');
@@ -36,9 +40,16 @@ export const Header: React.FC<HeaderProps> = async ({
 
     const organizations = await getOrganizations().catch((e) => e);
 
-    const orgId = cookieStore.get('orgId') ?? organizations[0].id ?? 1;
+    const rateBody: IRate[] = services.serviceRates.map((item) => {
+        return {
+            id: item.id,
+            value: +item.value,
+            key: item.key.modelName,
+            not_limited: item.notLimited,
+        };
+    });
 
-    //const checkOrg = await headCheckPaths('orgs/', 'org-settings', +orgId);
+    const price = await getServerPrice(rateBody);
 
     return (
         <header className={scss.header_layout}>
@@ -53,17 +64,29 @@ export const Header: React.FC<HeaderProps> = async ({
                     <h2 className={scss.title_second}>Business</h2>
                 </Link>
                 <div className={scss.tools_wrapper}>
-                    <SettingsSvgContainer disabled={disabled} />
-                    <HeaderInputSelect
-                        disabled={disabled}
-                        organizations={organizations as IOrganization[]}
-                    />
+                    {!headCheck.includes('/org-settings') && (
+                        <>
+                            <SettingsSvgContainer disabled={disabled} />
+                            <HeaderInputSelect
+                                disabled={disabled}
+                                organizations={organizations as IOrganization[]}
+                            />
+                        </>
+                    )}
                     <NotificationsContainer />
-                    <HeaderDropdown userData={user as IUser} />
+                    <HeaderDropdown
+                        price={price.cost}
+                        subs={services.serviceRates}
+                        userData={user as IUser}
+                    />
                 </div>
             </div>
             <div className={scss.header_nav_tablet}>
-                <HeaderDropdown userData={user as IUser} />
+                <HeaderDropdown
+                    price={price.cost}
+                    subs={services.serviceRates}
+                    userData={user as IUser}
+                />
                 <div
                     style={{ pointerEvents: disabled ? 'none' : 'auto' }}
                     className={scss.header_nav_icons}

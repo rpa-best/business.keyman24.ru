@@ -11,11 +11,22 @@ import { onHide, onMount } from 'utils/TippyHelper';
 import Tippy from '@tippyjs/react';
 import React, { useEffect, useState } from 'react';
 import { IUser } from 'store/types';
+import { IServiceRate } from 'http/types';
 
 import scss from './Dropdown.module.scss';
+import { useConstructorStore } from 'store/useConstructorStore';
 
-export const HeaderDropdown = ({ userData }: { userData: IUser }) => {
-    const [currentUser, setCurrentUser] = useState(userData);
+interface HeaderDropdownProps {
+    userData: IUser;
+    subs: IServiceRate[];
+    price: number;
+}
+
+export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
+    userData,
+    subs,
+    price,
+}) => {
     const [visible, setVisible] = useState(false);
     const opacity = useSpring(0);
 
@@ -25,10 +36,33 @@ export const HeaderDropdown = ({ userData }: { userData: IUser }) => {
         state.setUser,
     ]);
 
+    const [setCurrentPrice] = useConstructorStore((state) => [
+        state.setCurrentPrice,
+    ]);
+
+    const [setFields] = useConstructorStore((state) => [state.setFields]);
+
+    useEffect(() => {
+        setCurrentPrice(price);
+    }, []);
+
     useEffect(() => {
         setUser(userData);
-        setCurrentUser(user as IUser);
-    }, [setUser, user, userData]);
+    }, [userData]);
+
+    useEffect(() => {
+        setFields(
+            subs?.map((item) => ({
+                id: item.id,
+                name: item.key.name,
+                count: item.value.toString(),
+                max: item.key.maxValue.toString(),
+                slug: item.key.modelName,
+                notLimited: item.notLimited,
+                min: '0',
+            }))
+        );
+    }, [subs]);
 
     return (
         <Tippy
@@ -57,22 +91,18 @@ export const HeaderDropdown = ({ userData }: { userData: IUser }) => {
             >
                 <div className={scss.user_avatar_wrapper}>
                     {user?.avatar ? (
-                        <Image
-                            src={currentUser?.avatar}
-                            fill
-                            alt="user-image"
-                        />
+                        <Image src={user?.avatar} fill alt="user-image" />
                     ) : (
                         <AvatarSvg style={{ color: '#2D2D2D' }} />
                     )}
                 </div>
                 <div className={scss.user}>
                     <p className={scss.user_name}>
-                        {currentUser?.name && currentUser?.surname
-                            ? `${currentUser?.name} ${currentUser?.surname}`
+                        {user?.name && user?.surname
+                            ? `${user?.name} ${user?.surname}`
                             : 'Пользователь'}
                     </p>
-                    <p className={scss.user_role}>{currentUser?.username}</p>
+                    <p className={scss.user_role}>{user?.username}</p>
                 </div>
                 <ArrowSvg
                     className={visible ? scss.arrow : scss.arrow_hidden}

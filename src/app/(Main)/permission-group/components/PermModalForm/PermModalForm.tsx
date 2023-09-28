@@ -97,7 +97,7 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     ? 'Группа прав доступа'
                     : 'Группа прав доступа / добавление'}
             </h2>
-            <form onSubmit={handleSubmit}>
+            <form className={scss.form} onSubmit={handleSubmit}>
                 <div>
                     <Input
                         value={values.name}
@@ -146,12 +146,14 @@ export const PermModalForm: React.FC<IFormProps> = ({
                 )}
             </form>
             {!adminPermission && formType === 'edit' && (
-                <PermissionPickList
-                    setRefresh={setRefresh}
-                    source={source}
-                    target={target}
-                    groupId={selectedPerm?.id as number}
-                />
+                <div className={scss.permission_pick_list}>
+                    <PermissionPickList
+                        setRefresh={setRefresh}
+                        source={source}
+                        target={target}
+                        groupId={selectedPerm?.id as number}
+                    />
+                </div>
             )}
             {adminPermission && formType === 'edit' && (
                 <AdminPermList list={source} />

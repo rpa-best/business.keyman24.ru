@@ -14,7 +14,7 @@ export const SettingsSvgContainer = ({
     disabled?: boolean;
 }) => {
     const href = '/org-settings';
-    const active = usePathname() === href;
+    const active = usePathname().startsWith(href);
 
     return (
         <Link

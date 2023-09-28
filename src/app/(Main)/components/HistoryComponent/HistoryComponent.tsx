@@ -17,10 +17,7 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
 }) => {
     const cloneHistory = formatDateHistory(keyHistory.results);
 
-    const [barLabels, barData] = getBarGroupData(
-        cloneHistory,
-        'worker.user.fullname'
-    );
+    const [barLabels, barData] = getBarGroupData(cloneHistory, 'worker.name');
 
     const [labels, data] = getBarGroupData(cloneHistory, 'worker.org.name');
 
