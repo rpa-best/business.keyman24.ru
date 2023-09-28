@@ -53,11 +53,8 @@ export const getServerPrice: T.GetPrice = async (body) => {
 
     return res.data;
 };
-export const updateSub: T.UpdatePrice = async (subId, body) => {
-    await $clientAuth.patch(
-        `business/${orgId}/service/subscription/${subId}/`,
-        body
-    );
+export const updateSub: T.UpdatePrice = async (body) => {
+    await $clientAuth.patch(`business/${orgId}/service/subscription/`, body);
 };
 
 export const getServerHistory: T.GetHistory = async (orgId) => {

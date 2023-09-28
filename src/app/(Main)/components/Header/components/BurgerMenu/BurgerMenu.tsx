@@ -45,19 +45,21 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({
                         transition={{ ease: 'easeOut', duration: 0.3 }}
                         className={scss.menu}
                     >
-                        <div className={scss.organization_wrapper}>
-                            <h2 className={scss.menu_listItem_header}>
-                                Организация
-                            </h2>
-                            <div className={scss.menu_item_content}>
-                                <SettingsSvgContainer />
-                                <HeaderInputSelect
-                                    organizations={
-                                        organizations as IOrganization[]
-                                    }
-                                />
+                        {!headCheck.includes('/org-settings') && (
+                            <div className={scss.organization_wrapper}>
+                                <h2 className={scss.menu_listItem_header}>
+                                    Организация
+                                </h2>
+                                <div className={scss.menu_item_content}>
+                                    <SettingsSvgContainer />
+                                    <HeaderInputSelect
+                                        organizations={
+                                            organizations as IOrganization[]
+                                        }
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                         <div>
                             <SideLinks headCheck={headCheck} open={true} />
                         </div>

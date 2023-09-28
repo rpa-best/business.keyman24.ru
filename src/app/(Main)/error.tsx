@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function Error({
     error,
@@ -9,9 +11,9 @@ export default function Error({
     error: Error;
     reset: () => void;
 }) {
+    const router = useRouter();
     useEffect(() => {
         // Log the error to an error reporting service
-        console.error(error);
     }, [error]);
 
     return (

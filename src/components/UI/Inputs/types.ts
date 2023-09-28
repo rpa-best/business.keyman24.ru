@@ -47,6 +47,6 @@ export interface IRangeInputProps {
     min: string;
     max: string;
     fields?: IField[];
-    index?: number;
+    index?: string;
     setFields?: (v: IField[]) => void;
 }

@@ -38,8 +38,6 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
-    console.log(sessions);
-
     const router = useRouter();
 
     const params = useParams();

@@ -75,16 +75,14 @@ export const updateTokens: T.UpdateTokens = async () => {
 };
 
 export const headCheckPaths: T.HeadCheck = async (path, link, orgId) => {
-    const res = await $serverAuth.head(`business/${orgId}/` + path);
     try {
-        if (res.status !== 200) {
-            return link;
-        } else {
-            return;
-        }
+        await $serverAuth.head(`business/${orgId}/` + path);
+        return;
     } catch (e) {
         if (e instanceof AxiosError) {
-            console.log(e.status);
+            if (e.response?.status === 403) {
+                return link;
+            }
         }
     }
 };
@@ -92,8 +90,8 @@ export const headCheckPaths: T.HeadCheck = async (path, link, orgId) => {
 export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
     path,
     link,
-    orgId,
-    access
+    access,
+    orgId
 ) => {
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}business/${orgId}/` + path,
@@ -105,9 +103,8 @@ export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
         }
     );
 
-    if (res.status !== 200) {
+    if (res.status === 403) {
         return link;
-    } else {
-        return;
     }
+    return;
 };

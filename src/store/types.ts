@@ -1,3 +1,5 @@
+import { IService } from 'http/types';
+
 export interface IUser {
     username: string;
     name: string | null;
@@ -30,6 +32,8 @@ export interface IModalStore {
     visible: boolean;
     setVisible: (v: boolean) => void;
 }
+
+export interface INotificationStore extends IModalStore {}
 
 interface IRegionType {
     id: number;

@@ -33,7 +33,7 @@ export const RangeSlider: React.FC<IRangeInputProps> = ({
 
     const handleCheckBox = (check: boolean) => {
         setChecked(check);
-        if (fields && setFields && index) {
+        if (fields && setFields && !!index) {
             const updatedValues = [...fields];
             updatedValues[+index].notLimited = check;
             setFields(updatedValues);
@@ -71,7 +71,7 @@ export const RangeSlider: React.FC<IRangeInputProps> = ({
     return (
         <div className={scss.range_wrapper}>
             <motion.div
-                initial={{ height: checked ? '40px' : '60px' }}
+                initial={{ height: checked ? '30px' : '60px' }}
                 animate={{ height: checked ? '40px' : '60px' }}
                 className={scss.input_range_wrapper}
             >

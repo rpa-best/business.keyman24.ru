@@ -73,7 +73,7 @@ export type GetPrice = (
 
 export type GetHistory = (orgId: number) => Promise<IResponse<IBalanceHistory>>;
 
-export type UpdatePrice = (subId: number, body: IRate[]) => Promise<void>;
+export type UpdatePrice = (body: IRate[]) => Promise<void>;
 
 export interface ILevel {
     id: number;

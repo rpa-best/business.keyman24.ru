@@ -6,6 +6,7 @@ import React, {
     useEffect,
     useRef,
     useMemo,
+    memo,
 } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -21,7 +22,7 @@ import scss from './Table.module.scss';
 
 export const TableContext = createContext<ITableContext | null>(null);
 
-export const Table: React.FC<TableProps> = ({
+export const Table = memo(function MemoTable({
     tableRows,
     handleRowClick,
     children,
@@ -31,13 +32,11 @@ export const Table: React.FC<TableProps> = ({
     handleEditClick,
     handleDeleteClick,
     stopPropagation,
-}) => {
+}: TableProps) {
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
     const [tableData, setTableData] = useState(tableRows);
-
-    console.log(tableRows);
 
     const router = useRouter();
 
@@ -51,7 +50,6 @@ export const Table: React.FC<TableProps> = ({
     const headerRef = useRef<HTMLDivElement>(null);
 
     const memoizedHeaders = useMemo(() => headers, [headers]);
-    const memoizedTableData = useMemo(() => tableData, [tableData]);
 
     const { tabletBreak } = useResizeWidth();
 
@@ -133,7 +131,7 @@ export const Table: React.FC<TableProps> = ({
                             onScroll={handleBodyScroll}
                             className={scss.table_body}
                         >
-                            {memoizedTableData.map((item, index) => {
+                            {tableData.map((item, index) => {
                                 return (
                                     <div
                                         onClick={() => onRowClick(item.id)}
@@ -174,4 +172,4 @@ export const Table: React.FC<TableProps> = ({
             )}
         </div>
     );
-};
+});
