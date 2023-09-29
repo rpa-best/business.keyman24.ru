@@ -26,13 +26,12 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const date = Date.now();
     const cookieStore = cookies();
 
-    const organizations = await getOrganizations().catch((e) => e);
+    const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const orgId = cookieStore.get('orgId')?.value ?? organizations[0].id ?? 1;
-
-    const services = await getServices(orgId).catch((e) => e);
+    const services = await getServices(+orgId).catch((e) => e);
 
     const disabled = services ? services.status === 'notActive' : false;
 
@@ -41,6 +40,8 @@ export default async function RootLayout({
             return await headCheckPaths(elem.head as string, elem.href, +orgId);
         })
     );
+
+    console.log(Date.now() - date);
 
     return (
         <html lang="en">

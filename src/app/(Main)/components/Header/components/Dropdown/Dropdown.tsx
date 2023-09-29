@@ -19,13 +19,11 @@ import { useConstructorStore } from 'store/useConstructorStore';
 interface HeaderDropdownProps {
     userData: IUser;
     subs: IServiceRate[];
-    price: number;
 }
 
 export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
     userData,
     subs,
-    price,
 }) => {
     const [visible, setVisible] = useState(false);
     const opacity = useSpring(0);
@@ -36,15 +34,7 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
         state.setUser,
     ]);
 
-    const [setCurrentPrice] = useConstructorStore((state) => [
-        state.setCurrentPrice,
-    ]);
-
     const [setFields] = useConstructorStore((state) => [state.setFields]);
-
-    useEffect(() => {
-        setCurrentPrice(price);
-    }, []);
 
     useEffect(() => {
         setUser(userData);
