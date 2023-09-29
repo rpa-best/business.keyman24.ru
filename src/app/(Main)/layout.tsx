@@ -9,12 +9,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'scss/utils.scss';
 import 'scss/_reset.scss';
-import scss from 'app/(Main)/MainPage.module.scss';
-import { getOrganizations, getServices } from 'http/organizationApi';
+import { getServices } from 'http/organizationApi';
 import { Notification } from 'app/(Main)/components/Notification';
 import { cookies } from 'next/headers';
-import { headCheckPaths } from 'http/userApi';
+import { headCheckPathsMiddleware } from 'http/userApi';
 import { headCheckData } from 'app/(Main)/components/SideLinks/sidebarCheckAccess';
+import scss from 'app/(Main)/MainPage.module.scss';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
@@ -26,21 +26,29 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const date = Date.now();
     const cookieStore = cookies();
 
-    const organizations = await getOrganizations().catch((e) => e);
+    const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const orgId = cookieStore.get('orgId')?.value ?? organizations[0].id ?? 1;
+    const access = cookieStore.get('access')?.value;
 
-    const services = await getServices(orgId).catch((e) => e);
+    const services = await getServices(+orgId).catch((e) => e);
 
     const disabled = services ? services.status === 'notActive' : false;
 
-    const deniedLinksCheck = await Promise.all(
+    const deniedLinksCheck: any[] = []; /*await Promise.all(
         headCheckData.map(async (elem) => {
-            return await headCheckPaths(elem.head as string, elem.href, +orgId);
+            return await headCheckPathsMiddleware(
+                elem.head as string,
+                elem.href,
+                access as string,
+                +orgId
+            );
         })
-    );
+    );*/
+
+    //console.log(Date.now() - date);
 
     return (
         <html lang="en">

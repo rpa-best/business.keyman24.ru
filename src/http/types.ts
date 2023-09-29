@@ -31,6 +31,8 @@ export interface IServiceRateKey {
     name: string;
     defaultValue: number;
     maxValue: number;
+    cost: number;
+    costNotLimited: number;
 }
 
 export interface IRate {
@@ -197,11 +199,15 @@ export interface IWorkingAreaDevice {
     area: number;
 }
 
+interface WorkerWithoutUser extends Omit<IWorker, 'user'> {
+    user: string;
+}
+
 export interface SocketResponse {
     data: {
         device: number;
         mode: boolean;
-        user: IWorker;
+        user: IWorker | WorkerWithoutUser;
     };
     type: 'success' | string;
 }
@@ -456,6 +462,8 @@ export type GetInventories = (
     orgId: number,
     offset?: number
 ) => Promise<IResponse<IInventory>>;
+
+export type GetClientInventories = () => Promise<IResponse<IInventory>>;
 
 export type GetInventoryHistory = (
     orgId: number,

@@ -15,9 +15,13 @@ import { IInventory, LocKeyBody } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
-import { createInventoryKeys } from 'http/inventoryApi';
+import { createInventoryKeys, getClientInventories } from 'http/inventoryApi';
+import { ServiceChangeToast } from 'components/ServiceChangeToast';
+import { NotificationToast } from 'components/NotificationConfirm';
 
 import scss from './InventoryKeys.module.scss';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 interface KeysWrapperProps {
     count: number;
@@ -28,16 +32,32 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
     inventories,
     count,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
+    const [fullData, setFullData] = useState<IInventory[]>([]);
     const [generatedData, setGeneratedData] = useState<IInventory[]>([]);
-
-    const router = useRouter();
 
     useEffect(() => {
         setGeneratedData(inventories ?? []);
     }, [inventories]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await getClientInventories();
+            return res.results;
+        };
+        fetchData().then((d) => {
+            setFullData(d);
+        });
+    }, []);
+
+    const total = data.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.count;
+    }, 0);
+
+    const router = useRouter();
 
     const handleTableButtonClick = () => {
         setVisible(true);
@@ -53,12 +73,16 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
             return { name: d.category, count: d.count };
         });
 
-        createInventoryKeys(body).finally(() => {
-            router.refresh();
-            setLoading(false);
-            setVisible(false);
-        });
-        router.refresh();
+        createInventoryKeys(body)
+            .then(() => {
+                subAction(fields, 'Inventory', total, 'add');
+                setData([]);
+                router.refresh();
+            })
+            .finally(() => {
+                setLoading(false);
+                setVisible(false);
+            });
     };
 
     return (
@@ -68,7 +92,7 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
                     <>
                         <div className={scss.download_button_wrapper}>
                             <PDFDownloadLink
-                                document={<PdfGenerator data={generatedData} />}
+                                document={<PdfGenerator data={fullData} />}
                                 fileName="Наклейки ШК"
                             >
                                 <Button onClick={() => {}} type="button">
@@ -99,7 +123,7 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
                         </div>
                     </>
                 )}
-                <Modal>
+                <Modal syncWithNote>
                     <>
                         <h2 className={scss.actions_data_title}>
                             Генерация ключей
@@ -122,6 +146,9 @@ export const InventoryKeysWrapper: React.FC<KeysWrapperProps> = ({
                         </div>
                     </>
                 </Modal>
+                <NotificationToast>
+                    <ServiceChangeToast count={total} slug="Inventory" />
+                </NotificationToast>
                 {loading && <Spinner />}
             </div>
         </>

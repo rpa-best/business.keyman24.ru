@@ -1,28 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 
 import { LocationInfoWrapperValues } from 'app/(Main)/locations/edit/[id]/types';
-import { Input } from 'components/UI/Inputs/Input';
-import { Button } from 'components/UI/Buttons/Button';
 import { useRouter } from 'next/navigation';
 import { createLocationObject, editLocationObject } from 'http/locationsApi';
-import { Spinner } from 'components/Spinner';
 import {
     ObjectFormModalProps,
     ObjectFormModalValues,
 } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/types';
-
-import scss from './ObjectFormModal.module.scss';
 import { ObjectFormValidate } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/ObjectFormModal.utils';
 import { useModalStore } from 'store/modalVisibleStore';
+import { useNotificationStore } from 'store/notificationStore';
+
+import scss from './ObjectFormModal.module.scss';
+import { Input } from 'components/UI/Inputs/Input';
+import { Button } from 'components/UI/Buttons/Button';
+import { Spinner } from 'components/Spinner';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     locId,
     object,
     type,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
+    const [setNoteVisible] = useNotificationStore((state) => [
+        state.setVisible,
+    ]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const [loading, setLoading] = useState(false);
@@ -35,11 +42,15 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
         };
 
         if (type === 'create') {
-            createLocationObject(locId, body).finally(() => {
-                router.refresh();
-                setLoading(false);
-                setVisible(false);
-            });
+            createLocationObject(locId, body)
+                .then(() => {
+                    subAction(fields, 'Object', 1, 'add');
+                    router.refresh();
+                })
+                .finally(() => {
+                    setLoading(false);
+                    setVisible(false);
+                });
         } else {
             editLocationObject(locId, object?.id as number, body).finally(
                 () => {
@@ -50,6 +61,15 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
             );
         }
     };
+
+    useEffect(() => {
+        if (type === 'create') {
+            setNoteVisible(true);
+        }
+        return () => {
+            setNoteVisible(false);
+        };
+    }, [setNoteVisible, type]);
 
     const {
         values,

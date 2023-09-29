@@ -8,6 +8,9 @@ import UniversalCookies from 'universal-cookie';
 
 import scss from './AttachCard.module.scss';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
+import { SocketResponse } from 'http/types';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 const cookie = new UniversalCookies();
 
@@ -17,11 +20,7 @@ interface AttachCardProps {
     areaId: number;
 }
 
-export const AttachCard: React.FC<AttachCardProps> = ({
-    user,
-    areaId,
-    session,
-}) => {
+export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const access = cookie.get('access');
     const socket = useRef<WebSocket>();
@@ -37,18 +36,43 @@ export const AttachCard: React.FC<AttachCardProps> = ({
         }
     }, [areaId, params.slug, session]);
 
-    const onSocketSuccess = async () => {
+    const onSocketSuccess = async (data: SocketResponse) => {
+        if (!data.data.user.user) {
+            toast('Нет доступа к сессии', {
+                position: 'bottom-right',
+                hideProgressBar: true,
+                autoClose: 2000,
+                type: 'error',
+                theme: 'colored',
+            });
+        }
         const body = {
-            user,
+            user: data.data.user.user as string,
             session,
         };
-        await sendCheck(areaId, session, body).then(() => {
-            setVisible(false);
-            if (socket.current) {
-                socket.current?.close();
-            }
-            router.push(`${pathname}/open/${session}`);
-        });
+        await sendCheck(areaId, session, body)
+            .then(() => {
+                setVisible(false);
+                if (socket.current) {
+                    socket.current?.close();
+                }
+                router.push(`${pathname}/open/${session}`);
+            })
+            .catch((e: unknown) => {
+                if (e instanceof AxiosError) {
+                    if (
+                        e.response?.data.user[0].slug === 'not_perm_to_session'
+                    ) {
+                        toast('Нет доступа к сессии', {
+                            position: 'bottom-right',
+                            hideProgressBar: true,
+                            autoClose: 2000,
+                            type: 'error',
+                            theme: 'colored',
+                        });
+                    }
+                }
+            });
     };
 
     useEffect(() => {
@@ -60,7 +84,7 @@ export const AttachCard: React.FC<AttachCardProps> = ({
             const message = JSON.parse(event.data);
 
             if (message.type === 'success') {
-                onSocketSuccess();
+                onSocketSuccess(message);
             }
         };
 

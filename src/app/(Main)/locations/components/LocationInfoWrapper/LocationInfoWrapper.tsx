@@ -17,12 +17,18 @@ import { Spinner } from 'components/Spinner';
 
 import scss from 'app/(Main)/locations/components/LocationInfoWrapper/LocationInfoWrapper.module.scss';
 import { useNotificationStore } from 'store/notificationStore';
+import { NotificationToast } from 'components/NotificationConfirm';
+import { ServiceChangeToast } from 'components/ServiceChangeToast';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
     location,
     type,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useNotificationStore((state) => [state.setVisible]);
+
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const onSubmit = (values: LocationInfoWrapperValues) => {
@@ -33,11 +39,15 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
         };
 
         if (type === 'create') {
-            createLocation(body).finally(() => {
-                router.refresh();
-                setLoading(false);
-                router.push('/locations');
-            });
+            createLocation(body)
+                .then(() => {
+                    subAction(fields, 'Location', 1, 'add');
+                    router.refresh();
+                })
+                .finally(() => {
+                    setLoading(false);
+                    router.push('/locations');
+                });
         } else {
             editLocation(location?.id as number, body).finally(() => {
                 router.refresh();
@@ -47,11 +57,13 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
     };
 
     useEffect(() => {
-        setVisible(true);
-        return () => {
-            setVisible(false);
-        };
-    }, [setVisible]);
+        if (type === 'create') {
+            setVisible(true);
+            return () => {
+                setVisible(false);
+            };
+        }
+    }, [type]);
 
     const {
         values,
@@ -96,6 +108,9 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
                 </Button>
             </div>
             {loading && <Spinner />}
+            <NotificationToast>
+                <ServiceChangeToast count={1} slug="Location" />
+            </NotificationToast>
         </form>
     );
 };

@@ -8,6 +8,8 @@ export interface IField {
     max: string;
     min: string;
     notLimited: boolean;
+    cost: number;
+    costNotLimited: number;
 }
 
 export interface IConstructorStore {

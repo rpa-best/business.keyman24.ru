@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -21,10 +21,11 @@ import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
+import { NotificationToast } from 'components/NotificationConfirm';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './KeysWrapper.module.scss';
-import { NotificationToast } from 'components/NotificationConfirm';
-import { useNotificationStore } from 'store/notificationStore';
 
 interface KeysWrapperProps {
     count: number;
@@ -32,26 +33,20 @@ interface KeysWrapperProps {
 }
 
 export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
     const [fullData, setFullData] = useState<LocKeysResponse[]>([]);
     const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
-    const [setNoteVisible] = useNotificationStore((state) => [
-        state.setVisible,
-    ]);
-    const confirmed = useRef(false);
-
-    const total = data.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.count;
-    }, 0);
 
     const router = useRouter();
     const pathName = usePathname();
     const params = useParams();
 
     useEffect(() => {
-        setGeneratedData(keys ?? []);
+        setGeneratedData(keys);
     }, [keys]);
 
     useEffect(() => {
@@ -66,7 +61,11 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         fetchData().then((d) => {
             setFullData(d);
         });
-    }, [params.locId, params.objId, keys]);
+    }, [params.locId, params.objId]);
+
+    const total = data.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.count;
+    }, 0);
 
     const handleTableButtonClick = () => {
         setVisible(true);
@@ -77,6 +76,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleDeleteClick = async (id: number) => {
+        subAction(fields, 'Inventory', 1, 'del');
         setLoading(true);
         await deleteLocationKey(+params.locId, +params.objId, +id).finally(
             () => {
@@ -87,22 +87,21 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleGenerateClick = async () => {
-        if (confirmed.current) {
-            setLoading(true);
-            const body: LocKeyBody[] = data.map((d) => {
-                return { name: d.category, count: d.count };
-            });
+        setLoading(true);
+        const body: LocKeyBody[] = data.map((d) => {
+            return { name: d.category, count: d.count };
+        });
 
-            createLocationKeys(+params.locId, +params.objId, body).finally(
-                () => {
-                    router.refresh();
-                    setLoading(false);
-                    setVisible(false);
-                }
-            );
-        } else {
-            setNoteVisible(true);
-        }
+        createLocationKeys(+params.locId, +params.objId, body)
+            .then(() => {
+                subAction(fields, 'Inventory', total, 'add');
+                setData([]);
+                router.refresh();
+            })
+            .finally(() => {
+                setLoading(false);
+                setVisible(false);
+            });
     };
 
     const handleRowClick = (id: number) => {
@@ -123,7 +122,9 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     <>
                         <div className={scss.download_button_wrapper}>
                             <PDFDownloadLink
-                                document={<PdfGenerator data={fullData} />}
+                                document={
+                                    <PdfGenerator data={fullData as any} />
+                                }
                                 fileName="Наклейки ШК"
                             >
                                 <Button onClick={() => {}} type="button">
@@ -156,7 +157,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                         </div>
                     </>
                 )}
-                <Modal>
+                <Modal syncWithNote>
                     <>
                         <h2 className={scss.actions_data_title}>
                             Генерация ключей
@@ -181,14 +182,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     </>
                 </Modal>
                 <NotificationToast>
-                    <ServiceChangeToast
-                        onConfirm={() => {
-                            confirmed.current = true;
-                            handleGenerateClick();
-                        }}
-                        count={total}
-                        slug="Inventory"
-                    />
+                    <ServiceChangeToast count={total} slug="Inventory" />
                 </NotificationToast>
                 {loading && <Spinner />}
             </div>

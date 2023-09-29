@@ -29,7 +29,7 @@ export const useSocketConnect: SocketConnectFunc = ({
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
             setLoading(true);
-            setWorker(data.data.user);
+            setWorker(data.data.user as IWorker);
             setData(data);
             await getWorkerDocs(data.data.user.id)
                 .then((d) => {

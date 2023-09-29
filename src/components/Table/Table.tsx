@@ -19,6 +19,7 @@ import clsx from 'clsx';
 import { setSortedData } from 'components/Table/utils/setSortedData';
 
 import scss from './Table.module.scss';
+import { Spinner } from 'components/Spinner';
 
 export const TableContext = createContext<ITableContext | null>(null);
 
@@ -33,6 +34,7 @@ export const Table = memo(function MemoTable({
     handleDeleteClick,
     stopPropagation,
 }: TableProps) {
+    const [loading, setLoading] = useState(false);
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
@@ -63,6 +65,10 @@ export const Table = memo(function MemoTable({
             router.replace(
                 `${pathname}/?offset=${(page - 1) * paginatorData?.offset}`
             );
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 200);
     };
 
     const sortTableData = (field: string) => {
@@ -170,6 +176,7 @@ export const Table = memo(function MemoTable({
                     handlePaginatorClick={handlePaginatorClick}
                 />
             )}
+            {loading && <Spinner />}
         </div>
     );
 });

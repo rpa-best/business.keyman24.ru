@@ -74,19 +74,6 @@ export const updateTokens: T.UpdateTokens = async () => {
     }
 };
 
-export const headCheckPaths: T.HeadCheck = async (path, link, orgId) => {
-    try {
-        await $serverAuth.head(`business/${orgId}/` + path);
-        return;
-    } catch (e) {
-        if (e instanceof AxiosError) {
-            if (e.response?.status === 403) {
-                return link;
-            }
-        }
-    }
-};
-
 export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
     path,
     link,

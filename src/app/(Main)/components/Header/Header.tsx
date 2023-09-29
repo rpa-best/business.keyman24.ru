@@ -40,17 +40,6 @@ export const Header: React.FC<HeaderProps> = async ({
 
     const organizations = await getOrganizations().catch((e) => e);
 
-    const rateBody: IRate[] = services.serviceRates?.map((item) => {
-        return {
-            id: item.id,
-            value: +item.value,
-            key: item.key.modelName,
-            not_limited: item.notLimited,
-        };
-    });
-
-    const price = await getServerPrice(rateBody);
-
     return (
         <header className={scss.header_layout}>
             <div className={scss.header_nav}>
@@ -75,7 +64,6 @@ export const Header: React.FC<HeaderProps> = async ({
                     )}
                     <NotificationsContainer />
                     <HeaderDropdown
-                        price={price.cost}
                         subs={services.serviceRates}
                         userData={user as IUser}
                     />
@@ -83,7 +71,6 @@ export const Header: React.FC<HeaderProps> = async ({
             </div>
             <div className={scss.header_nav_tablet}>
                 <HeaderDropdown
-                    price={price.cost}
                     subs={services.serviceRates}
                     userData={user as IUser}
                 />

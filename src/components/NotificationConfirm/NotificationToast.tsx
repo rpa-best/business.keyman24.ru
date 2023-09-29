@@ -25,7 +25,7 @@ export const NotificationToast: React.FC<NotificationToast> = ({
     return (
         <AnimatePresence>
             {visible && (
-                <motion.div
+                /*<motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -33,24 +33,24 @@ export const NotificationToast: React.FC<NotificationToast> = ({
                         preventClickOutside ? '' : setVisible(false)
                     }
                     className={scss.modal_background}
+                >*/
+                <motion.div
+                    onClick={(e) => e.stopPropagation()}
+                    initial={{ opacity: 0, y: phoneBreak ? '5%' : '15%' }}
+                    animate={{
+                        opacity: 1,
+                        y: phoneBreak ? '-10%' : '-15%',
+                    }}
+                    exit={{ opacity: 0, y: '-15%' }}
+                    className={scss.modal}
                 >
-                    <motion.div
-                        onClick={(e) => e.stopPropagation()}
-                        initial={{ opacity: 0, y: phoneBreak ? '5%' : '15%' }}
-                        animate={{
-                            opacity: 1,
-                            y: phoneBreak ? '-10%' : '-15%',
-                        }}
-                        exit={{ opacity: 0, y: '-15%' }}
-                        className={scss.modal}
-                    >
-                        <ExitSvg
-                            onClick={() => setVisible(false)}
-                            className={scss.exit_svg}
-                        />
-                        {children}
-                    </motion.div>
+                    <ExitSvg
+                        onClick={() => setVisible(false)}
+                        className={scss.exit_svg}
+                    />
+                    {children}
                 </motion.div>
+                /* </motion.div>*/
             )}
         </AnimatePresence>
     );

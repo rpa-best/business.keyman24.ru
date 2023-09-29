@@ -15,15 +15,23 @@ import { InventoryModal } from 'app/(Main)/inventory/components/InventoryModal';
 import { Spinner } from 'components/Spinner';
 import { deleteInventoryItem, getInventoryImage } from 'http/inventoryApi';
 import { IInventoryImage } from 'http/types';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
+import { ServiceChangeToast } from 'components/ServiceChangeToast';
+import { NotificationToast } from 'components/NotificationConfirm';
 
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
+
+    const [setNoteVisible] = useModalStore((state) => [state.setVisible]);
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
     const [selectedItem, setSelectedItem] = useState<IModifiedInventory>();
     const [type, setType] = useState<'create' | 'edit'>('create');
     const [loading, setLoading] = useState(false);
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [selectedItemImage, setSelectedItemImage] = useState<
         IInventoryImage[] | string[]
     >();
@@ -44,15 +52,13 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     const handleEditClick = async (id: number) => {
         setLoading(true);
+        setVisible(true);
         setType('edit');
-
         const selectedInventory = inventory.find((i) => i.id === id);
         setSelectedItem(selectedInventory);
         const selectedImage = await getInventoryImage(id);
         setSelectedItemImage(selectedImage.results);
-
         setLoading(false);
-        setVisible(true);
     };
 
     const handleRowClick = async (id: number) => {
@@ -61,8 +67,14 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        await deleteInventoryItem(id).finally(() => setLoading(false));
-        router.refresh();
+        await deleteInventoryItem(id)
+            .then(() => {
+                router.refresh();
+                subAction(fields, 'Inventory', 1, 'del');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const handleTableButtonClick = () => {
@@ -70,6 +82,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         setSelectedItem(undefined);
         setSelectedItemImage(undefined);
         setVisible(true);
+        setNoteVisible(true);
     };
 
     return (
@@ -83,14 +96,14 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 handleRowClick={handleRowClick}
                 handleDeleteClick={handleDeleteClick}
                 tableRows={inventory}
-                paginatorData={{ offset: 10, countItems: count }}
+                paginatorData={{ offset: 25, countItems: count }}
                 stopPropagation
             >
                 <Column sortable header="номер" field="number" />
                 <Column sortable header="Наименование" field="name" />
                 <Column sortable header="Штрихкод" field="codeNumber" />
             </Table>
-            <Modal>
+            <Modal syncWithNote>
                 <InventoryModal
                     lastId={lastId.current as number}
                     setSelectedImage={setSelectedItemImage as any}
@@ -99,6 +112,9 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     type={type}
                 />
             </Modal>
+            <NotificationToast>
+                <ServiceChangeToast count={1} slug="Inventory" />
+            </NotificationToast>
             {loading && <Spinner />}
         </>
     );

@@ -11,13 +11,20 @@ const orgId = cookie.get('orgId');
 
 export const getInventories: T.GetInventories = async (orgId, offset) => {
     const query = new URLSearchParams();
-    query.set('limit', '10');
+    query.set('limit', '25');
     offset ? query.set('offset', offset.toString()) : '';
 
     const res: AxiosResponse<ReturnType<T.GetInventories>> =
         await $serverAuth.get(`business/${orgId}/inventory/?type=inventory`, {
             params: query,
         });
+
+    return res.data;
+};
+
+export const getClientInventories: T.GetClientInventories = async () => {
+    const res: AxiosResponse<ReturnType<T.GetInventories>> =
+        await $clientAuth.get(`business/${orgId}/inventory/?type=inventory`);
 
     return res.data;
 };

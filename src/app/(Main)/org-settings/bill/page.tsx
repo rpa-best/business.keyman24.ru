@@ -38,11 +38,7 @@ const BillPage = async () => {
                 <span className={scss.balance_count}>{price.cost} ₽ </span> /
                 месяц
             </p>
-            <SubConstructor
-                subId={subs.id}
-                currentPrice={price.cost}
-                subs={subs.serviceRates}
-            />
+            <SubConstructor defaultPrice={price.cost} />
         </div>
     );
 };

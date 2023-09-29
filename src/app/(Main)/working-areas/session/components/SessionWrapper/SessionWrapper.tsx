@@ -20,7 +20,6 @@ import {
     closeSession,
     createSession,
     sendActivateSession,
-    sendCheck,
 } from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
 import { useUserStore } from 'store/userStore';
@@ -106,9 +105,9 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                     router.push(`${pathname}/open/${maxNumber + 1}`);
                     return;
                 }
+                router.refresh();
                 setVisible(true);
             });
-        router.refresh();
         setLoading(false);
     };
 

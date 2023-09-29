@@ -8,12 +8,13 @@ import { getInventories } from 'http/inventoryApi';
 
 import scss from './KeysPage.module.scss';
 
-const KeysPage: React.FC<KeysPageProps> = async () => {
+const KeysPage: React.FC<KeysPageProps> = async ({ searchParams }) => {
+    const offset = searchParams.offset ?? 0;
     const cookieStore = cookies();
 
     const orgId = cookieStore.get('orgId')?.value ?? 1;
 
-    const inventories = await getInventories(+orgId);
+    const inventories = await getInventories(+orgId, offset);
 
     return (
         <div className={scss.children_with_table}>
