@@ -23,7 +23,7 @@ export const userAuth: T.UserAuthType = async (body) => {
         return response.data;
     } catch (error: unknown) {
         if (error instanceof AxiosError) {
-            throw new Error(error.response?.data.message[0].desc);
+            throw error;
         }
         return error;
     }
