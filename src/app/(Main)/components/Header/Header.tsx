@@ -40,7 +40,7 @@ export const Header: React.FC<HeaderProps> = async ({
 
     const organizations = await getOrganizations().catch((e) => e);
 
-    const rateBody: IRate[] = services.serviceRates.map((item) => {
+    const rateBody: IRate[] = services.serviceRates?.map((item) => {
         return {
             id: item.id,
             value: +item.value,
