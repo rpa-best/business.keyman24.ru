@@ -16,15 +16,11 @@ import scss from 'app/(Main)/org-settings/bill/Bill.module.scss';
 import { toast } from 'react-toastify';
 
 interface SubConstructorProps {
-    subId: number;
-    subs: IServiceRate[];
-    currentPrice: number;
+    defaultPrice: number;
 }
 
 export const SubConstructor: React.FC<SubConstructorProps> = ({
-    subId,
-    subs,
-    currentPrice,
+    defaultPrice,
 }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -32,20 +28,6 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
     const [setFields] = useConstructorStore((state) => [state.setFields]);
 
     const price = usePrice(fields, 200);
-
-    useEffect(() => {
-        setFields(
-            subs.map((item) => ({
-                id: item.id,
-                name: item.key.name,
-                count: item.value.toString(),
-                max: item.key.maxValue.toString(),
-                slug: item.key.modelName,
-                notLimited: item.notLimited,
-                min: '0',
-            }))
-        );
-    }, [subs]);
 
     const handleInputChange = useCallback(
         (index: number, value: string) => {
@@ -55,6 +37,8 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
         },
         [fields, setFields]
     );
+
+    console.log(fields);
 
     const handleSaveChanges = async () => {
         const rateBody: IRate[] = fields.map((item) => {
@@ -112,12 +96,10 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
                 </div>
                 {
                     <div className={scss.price_wrapper}>
-                        <span className={scss.price}>
-                            {currentPrice ?? price} ₽
-                        </span>{' '}
-                        / месяц{' '}
+                        <span className={scss.price}>{defaultPrice} ₽</span> /
+                        месяц{' '}
                         <GetDifferencePrice
-                            current={currentPrice}
+                            current={defaultPrice}
                             newPrice={price}
                         />
                     </div>

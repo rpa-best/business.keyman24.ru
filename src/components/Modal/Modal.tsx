@@ -7,14 +7,32 @@ import ExitSvg from '/public/svg/x.svg';
 import { useModalStore } from 'store/modalVisibleStore';
 
 import scss from './Modal.module.scss';
+import { useNotificationStore } from 'store/notificationStore';
 
 interface ModalProps {
     children: React.ReactElement;
+    syncWithNote?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({ children }) => {
+export const Modal: React.FC<ModalProps> = ({
+    children,
+    syncWithNote = false,
+}) => {
     const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [setNoteVisible] = useNotificationStore((state) => [
+        state.setVisible,
+    ]);
+
+    useEffect(() => {
+        if (syncWithNote) {
+            if (visible) {
+                setNoteVisible(true);
+            } else {
+                setNoteVisible(false);
+            }
+        }
+    }, [setNoteVisible, syncWithNote, visible]);
 
     useEffect(() => {
         if (visible) {
@@ -42,7 +60,9 @@ export const Modal: React.FC<ModalProps> = ({ children }) => {
                         className={scss.modal}
                     >
                         <ExitSvg
-                            onClick={() => setVisible(false)}
+                            onClick={() => {
+                                setVisible(false);
+                            }}
                             className={scss.exit_svg}
                         />
                         {children}

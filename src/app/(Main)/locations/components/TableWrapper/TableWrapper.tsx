@@ -7,6 +7,9 @@ import { TableProps } from 'components/Table/types';
 import { Spinner } from 'components/Spinner';
 import { deleteLocation } from 'http/locationsApi';
 
+import { useConstructorStore } from 'store/useConstructorStore';
+import { subAction } from 'helpers/subAction';
+
 interface TableWrapperProps {
     tableRows: Array<any>;
     children: TableProps['children'];
@@ -18,6 +21,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     tableRows,
     path,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
@@ -32,12 +36,16 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         router.push(`${pathName}/edit/${id}`);
     };
 
-    const handleDeleteClick = async (id: number) => {
+    const handleDeleteClick = (id: number) => {
         setLoading(true);
-        await deleteLocation(id).finally(() => {
-            setLoading(false);
-            router.refresh();
-        });
+        deleteLocation(id)
+            .then(() => {
+                router.refresh();
+                subAction(fields, 'Location', 1, 'del');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const handleRowClick = (id: number) => {
@@ -58,6 +66,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             >
                 {children}
             </Table>
+
             {loading && <Spinner />}
         </>
     );

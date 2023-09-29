@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,9 @@ import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/c
 import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
 
 import scss from './InventoryModal.module.scss';
+import { useNotificationStore } from 'store/notificationStore';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
@@ -29,7 +32,11 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     setSelectedImage,
     selectedItem,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [setNoteVisible] = useNotificationStore((state) => [
+        state.setVisible,
+    ]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const onSubmit = async (values: InventoryFormType) => {
@@ -42,12 +49,8 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         };
         if (type === 'create') {
             await createInventoryItem(body)
-                .finally(() => {
-                    router.refresh();
-                    setLoading(false);
-                    setVisible(false);
-                })
                 .then(() => {
+                    subAction(fields, 'Inventory', 1, 'add');
                     selectedImage.forEach(async (i) => {
                         await uploadInventoryPhoto(
                             lastId + 1,
@@ -55,6 +58,11 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             i.img
                         );
                     });
+                })
+                .finally(() => {
+                    router.refresh();
+                    setLoading(false);
+                    setVisible(false);
                 });
         } else {
             await updateInventoryItem(selectedItem?.id as number, body).finally(
@@ -66,6 +74,12 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             );
         }
     };
+
+    useEffect(() => {
+        if (type === 'edit') {
+            setNoteVisible(false);
+        }
+    }, [setNoteVisible, type]);
 
     const {
         values,

@@ -50,6 +50,8 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
                 slug: item.key.modelName,
                 notLimited: item.notLimited,
                 min: '0',
+                costNotLimited: item.key.costNotLimited,
+                cost: item.key.cost,
             }))
         );
     }, [subs]);

@@ -16,8 +16,11 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { createWorkingArea, patchWorkingArea } from 'http/workingAreaApi';
 import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 import { AreaPickList } from 'app/(Main)/working-areas/components/AreasPickList/AreasPickList';
+import { useNotificationStore } from 'store/notificationStore';
 
 import scss from './EditWorkingArea.module.scss';
+import { subAction } from 'helpers/subAction';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,
@@ -25,10 +28,15 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     locations,
     editableArea,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
+    const [setNoteVisible] = useNotificationStore((state) => [
+        state.setVisible,
+    ]);
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
     const router = useRouter();
     const [refresh, setRefresh] = useState(false);
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const onSubmit = async (values: WorkAreaValues) => {
+    const onSubmit = (values: WorkAreaValues) => {
         const body: CreateWorkingAreaProp = {
             name: values.name,
             type: values.type.slug,
@@ -37,13 +45,17 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
             desc: values.description,
         };
         if (formType === 'create') {
-            await createWorkingArea(body)
-                .then(() => router.refresh())
+            createWorkingArea(body)
+                .then(() => {
+                    subAction(fields, 'WorkingArea', 1, 'add');
+                    router.refresh();
+                })
                 .finally(() => {
+                    setNoteVisible(false);
                     setVisible(false);
                 });
         } else {
-            await patchWorkingArea(body, editableArea?.id as number)
+            patchWorkingArea(body, editableArea?.id as number)
                 .then(() => {
                     router.refresh();
                 })
@@ -52,6 +64,15 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                 });
         }
     };
+
+    useEffect(() => {
+        if (formType === 'create') {
+            setNoteVisible(true);
+        }
+        return () => {
+            setNoteVisible(false);
+        };
+    }, [setNoteVisible, formType]);
 
     const {
         values,

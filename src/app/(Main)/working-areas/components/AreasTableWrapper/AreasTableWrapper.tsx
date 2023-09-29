@@ -12,6 +12,10 @@ import { EditWorkingArea } from 'app/(Main)/working-areas/components/EditWorking
 import { deleteWorkingArea } from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
 import { IWorkingArea } from 'http/types';
+import { ServiceChangeToast } from 'components/ServiceChangeToast';
+import { NotificationToast } from 'components/NotificationConfirm';
+import { useConstructorStore } from 'store/useConstructorStore';
+import { subAction } from 'helpers/subAction';
 
 export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     workingAreas,
@@ -19,11 +23,13 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     initialAreas,
     locations,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
     const [formType, setFormType] = useState<'edit' | 'create'>('create');
     const [editableArea, setEditableArea] = useState<IWorkingArea>();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const handleRowClick = (id: number) => {
         const slug = initialAreas.find((area) => area.id === id);
@@ -36,7 +42,10 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
         deleteWorkingArea(id)
-            .then(() => router.refresh())
+            .then(() => {
+                subAction(fields, 'WorkingArea', 1, 'del');
+                router.refresh();
+            })
             .finally(() => setLoading(false));
     };
 
@@ -74,6 +83,9 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                     types={workingTypes}
                 />
             </Modal>
+            <NotificationToast>
+                <ServiceChangeToast count={1} slug="WorkingArea" />
+            </NotificationToast>
             {loading && <Spinner />}
         </>
     );
