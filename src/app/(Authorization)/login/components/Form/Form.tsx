@@ -14,6 +14,8 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 
 import scss from './Form.module.scss';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 export const Form = () => {
     const [loading, setLoading] = useState(false);
@@ -30,8 +32,24 @@ export const Form = () => {
                     setUser(user as IUser);
                 });
             })
-            .catch((e) => {
-                setErrors({ username: e.message, password: e.message });
+            .catch((e: AxiosError) => {
+                if (
+                    (e?.response?.data as any)?.message[0].slug ===
+                    'username_or_password_invalid'
+                ) {
+                    setErrors({
+                        username: 'Неправильный логин или пароль',
+                        password: 'Неправильный логин или пароль',
+                    });
+                } else {
+                    toast('Непредвиденная ошибка', {
+                        position: 'bottom-right',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        theme: 'colored',
+                    });
+                }
             })
             .finally(() => {
                 setLoading(false);
