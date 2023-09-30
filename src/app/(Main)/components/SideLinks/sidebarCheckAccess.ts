@@ -9,10 +9,6 @@ export const headCheckData: IHeadCheck[] = [
         head: 'location/',
     },
     {
-        href: '/org-settings',
-        head: 'service/subscription/',
-    },
-    {
         href: `/inventory`,
         head: 'inventory/',
     },

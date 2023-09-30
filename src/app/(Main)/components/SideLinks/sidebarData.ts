@@ -23,31 +23,31 @@ export const sidebarData: SidebarLinkProps[] = [
         title: 'Локация',
         href: '/locations',
         Icon: GlobeSvg,
-        head: 'location',
+        head: 'location/',
     },
 
     {
         title: 'Инвентарь',
         href: `/inventory`,
         Icon: BriefCaseSvg,
-        head: 'inventory',
+        head: 'inventory/',
     },
     {
         title: 'Права доступа',
         href: `/permission-group`,
         Icon: UserLockSvg,
-        head: 'permission/group',
+        head: 'permission/group/',
     },
     {
         title: 'Работники',
         href: '/workers',
         Icon: WorkerSvg,
-        head: 'worker',
+        head: 'worker/',
     },
     {
         title: 'Рабочее место',
         href: `/working-areas`,
         Icon: ComputerSvg,
-        head: 'working_area',
+        head: 'working_area/',
     },
 ];

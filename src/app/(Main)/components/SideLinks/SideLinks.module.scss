@@ -23,12 +23,16 @@
 
 .menu_bar {
   position: absolute;
+  min-width: 100px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
   background: $dark-main;
+  @include thousendWidth {
+    min-width: 72px;
+  }
   @include phoneOrTablet {
     height: max-content;
   }

@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 
 import { SidebarLinkProps } from 'app/(Main)/components/SideLinks/sidebarData';
 import { motion } from 'framer-motion';
+import { useAllowedPath } from 'helpers/useDeniedPath';
 
 import scss from './SidebarLink.module.scss';
 
@@ -10,11 +11,23 @@ interface ISidebarLinkProps extends SidebarLinkProps {
     open: boolean;
 }
 
-export const SidebarLink = ({ Icon, title, href, open }: ISidebarLinkProps) => {
+export const SidebarLink = ({
+    Icon,
+    title,
+    href,
+    open,
+    head,
+}: ISidebarLinkProps) => {
     const pathname = usePathname();
 
     const pathString = pathname.replace(/^\/|\/(?=.*\/)/g, '');
     const hrefString = href.replace(/^\/|\/(?=.*\/)/g, '');
+
+    const path = useAllowedPath(head as string);
+
+    if (!path && head) {
+        return;
+    }
 
     const currentPage =
         pathString === hrefString
