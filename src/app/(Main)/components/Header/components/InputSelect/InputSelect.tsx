@@ -14,6 +14,7 @@ import { SelectList } from 'app/(Main)/components/Header/components/InputSelect/
 import clsx from 'clsx';
 
 import scss from './InputSelect.module.scss';
+import { useAllowedPath } from 'helpers/useDeniedPath';
 
 const cookie = new Cookies();
 
@@ -21,6 +22,8 @@ export const HeaderInputSelect: React.FC<{
     organizations: IOrganization[];
     disabled?: boolean;
 }> = ({ organizations, disabled = false }) => {
+    const path = useAllowedPath('service/subscription/');
+
     const router = useRouter();
 
     const opacity = useSpring(0);
@@ -90,6 +93,10 @@ export const HeaderInputSelect: React.FC<{
     };
 
     if (organizations.length === 0) {
+        return null;
+    }
+
+    if (!path) {
         return null;
     }
 

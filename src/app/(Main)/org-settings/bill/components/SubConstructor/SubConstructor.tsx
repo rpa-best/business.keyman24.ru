@@ -38,8 +38,6 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
         [fields, setFields]
     );
 
-    console.log(fields);
-
     const handleSaveChanges = async () => {
         const rateBody: IRate[] = fields.map((item) => {
             return {

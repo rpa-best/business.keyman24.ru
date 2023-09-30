@@ -6,20 +6,19 @@ import { motion } from 'framer-motion';
 import Escape from '/public/svg/x.svg';
 import BurgerMenuSvg from 'app/(Main)/components/Header/components/svg/menu.svg';
 import { IOrganization } from 'store/types';
-import { SettingsSvgContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Settings';
-import { HeaderInputSelect } from 'app/(Main)/components/Header/components/InputSelect';
 import { SideLinks } from 'app/(Main)/components/SideLinks';
+import { Organization } from 'app/(Main)/components/Header/components/Organization';
 
 import scss from './BurgerMenu.module.scss';
 
 interface BurgerMenuProps {
     organizations: IOrganization[];
-    headCheck: (string | void)[];
+    disabled: boolean;
 }
 
 export const BurgerMenu: React.FC<BurgerMenuProps> = ({
     organizations,
-    headCheck,
+    disabled,
 }) => {
     const [visible, setVisible] = useState(false);
 
@@ -45,23 +44,19 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({
                         transition={{ ease: 'easeOut', duration: 0.3 }}
                         className={scss.menu}
                     >
-                        {!headCheck.includes('/org-settings') && (
-                            <div className={scss.organization_wrapper}>
-                                <h2 className={scss.menu_listItem_header}>
-                                    Организация
-                                </h2>
-                                <div className={scss.menu_item_content}>
-                                    <SettingsSvgContainer />
-                                    <HeaderInputSelect
-                                        organizations={
-                                            organizations as IOrganization[]
-                                        }
-                                    />
-                                </div>
+                        <div className={scss.organization_wrapper}>
+                            <h2 className={scss.menu_listItem_header}>
+                                Организация
+                            </h2>
+                            <div className={scss.menu_item_content}>
+                                <Organization
+                                    disabled={disabled}
+                                    organizations={organizations}
+                                />
                             </div>
-                        )}
+                        </div>
                         <div>
-                            <SideLinks headCheck={headCheck} open={true} />
+                            <SideLinks open={true} />
                         </div>
                         <Escape
                             onClick={() => setVisible(!visible)}

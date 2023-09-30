@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
-import { $host } from 'http/clientIndex';
+import { $clientAuth, $host } from 'http/clientIndex';
 import * as T from 'http/types';
 import { IUser } from 'store/types';
 import Cookies from 'universal-cookie';
@@ -94,4 +94,10 @@ export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
         return link;
     }
     return;
+};
+
+export const allowedPath: T.AllowedPath = async (path, org) => {
+    const res = await $clientAuth.head(`business/${org}/${path}`);
+
+    return res.status !== 403;
 };

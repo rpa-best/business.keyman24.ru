@@ -4,11 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import { IOrganization, IUser } from 'store/types';
-import {
-    getOrganizations,
-    getServerPrice,
-    getServices,
-} from 'http/organizationApi';
+import { getOrganizations } from 'http/organizationApi';
 import { SettingsSvgContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Settings';
 import { HeaderInputSelect } from 'app/(Main)/components/Header/components/InputSelect';
 import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
@@ -17,21 +13,17 @@ import { BurgerMenu } from 'app/(Main)/components/Header/components/BurgerMenu';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
 import { getUser } from 'http/userApi';
-import { IRate, IService } from 'http/types';
+import { IService } from 'http/types';
 
 import scss from './Header.module.scss';
+import { Organization } from 'app/(Main)/components/Header/components/Organization';
 
 interface HeaderProps {
     disabled: boolean;
-    headCheck: (string | void)[];
     services: IService;
 }
 
-export const Header: React.FC<HeaderProps> = async ({
-    disabled,
-    headCheck,
-    services,
-}) => {
+export const Header: React.FC<HeaderProps> = async ({ disabled, services }) => {
     const user = await getUser().catch((e: AxiosError) => {
         if (e.response?.status === 401) {
             redirect('/login');
@@ -53,15 +45,10 @@ export const Header: React.FC<HeaderProps> = async ({
                     <h2 className={scss.title_second}>Business</h2>
                 </Link>
                 <div className={scss.tools_wrapper}>
-                    {!headCheck.includes('/org-settings') && (
-                        <>
-                            <SettingsSvgContainer disabled={disabled} />
-                            <HeaderInputSelect
-                                disabled={disabled}
-                                organizations={organizations as IOrganization[]}
-                            />
-                        </>
-                    )}
+                    <Organization
+                        disabled={disabled}
+                        organizations={organizations}
+                    />
                     <NotificationsContainer />
                     <HeaderDropdown
                         subs={services.serviceRates}
@@ -80,7 +67,7 @@ export const Header: React.FC<HeaderProps> = async ({
                 >
                     <NotificationsContainer />
                     <BurgerMenu
-                        headCheck={headCheck}
+                        disabled={disabled}
                         organizations={organizations as IOrganization[]}
                     />
                 </div>

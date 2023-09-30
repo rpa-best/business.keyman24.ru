@@ -517,6 +517,8 @@ export type HeadCheckMiddleWare = (
     orgId: number
 ) => Promise<string | void>;
 
+export type AllowedPath = (path: string, org: string) => Promise<boolean>;
+
 export type GetGroupAdminOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IAdminGroupPermission>>;

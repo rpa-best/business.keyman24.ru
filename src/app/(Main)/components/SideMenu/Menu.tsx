@@ -8,10 +8,9 @@ import scss from './Menu.module.scss';
 
 interface SideMenuProps {
     disabled: boolean;
-    headCheck: (string | void)[];
 }
 
-export const SideMenu: React.FC<SideMenuProps> = ({ disabled, headCheck }) => {
+export const SideMenu: React.FC<SideMenuProps> = ({ disabled }) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -20,11 +19,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ disabled, headCheck }) => {
             className={scss.sidebar_wrapper}
         >
             <nav className={scss.sidebar}>
-                <SideLinks
-                    headCheck={headCheck}
-                    open={open}
-                    setOpen={setOpen}
-                />
+                <SideLinks open={open} setOpen={setOpen} />
             </nav>
         </aside>
     );
