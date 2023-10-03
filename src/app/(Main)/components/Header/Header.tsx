@@ -5,8 +5,6 @@ import Link from 'next/link';
 
 import { IOrganization, IUser } from 'store/types';
 import { getOrganizations } from 'http/organizationApi';
-import { SettingsSvgContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Settings';
-import { HeaderInputSelect } from 'app/(Main)/components/Header/components/InputSelect';
 import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
 import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown';
 import { BurgerMenu } from 'app/(Main)/components/Header/components/BurgerMenu';
@@ -14,9 +12,9 @@ import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
 import { getUser } from 'http/userApi';
 import { IService } from 'http/types';
+import { Organization } from 'app/(Main)/components/Header/components/Organization';
 
 import scss from './Header.module.scss';
-import { Organization } from 'app/(Main)/components/Header/components/Organization';
 
 interface HeaderProps {
     disabled: boolean;

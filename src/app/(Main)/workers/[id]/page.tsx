@@ -2,28 +2,12 @@ import React, { Suspense } from 'react';
 import { cookies } from 'next/headers';
 
 import { WorkerEditForm } from 'app/(Main)/workers/[id]/components/WorkerEditForm';
-import {
-    getServerWorkerDocs,
-    getWorker,
-    getWorkerCard,
-    getWorkerPlan,
-    getWorkerUser,
-} from 'http/workerApi';
+import { getWorker, getWorkerUser } from 'http/workerApi';
 import { WorkerDocsTable } from 'app/(Main)/workers/[id]/components/WorkerDocsTable';
-import { IAdminPermission, IWorkerUser } from 'http/types';
+import { IWorkerUser } from 'http/types';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { WorkersPermissionsPickList } from 'app/(Main)/workers/[id]/components/WorkerPickListWrapper';
-import {
-    getGroupPermissions,
-    getPermissions,
-    getWorkerGroupPermissions,
-    getWorkerPermissions,
-} from 'http/permissionsApi';
-import {
-    getGroupListValues,
-    getListValues,
-} from 'components/PickList/helpers/getListValues';
-import { getModeName } from 'helpers/permTypeHelper';
+
 import { WorkerGroupPickList } from 'app/(Main)/workers/[id]/components/WorkerPresetsPickListWrapper';
 
 import scss from 'app/(Main)/workers/Worker.module.scss';

@@ -29,7 +29,7 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
                 <h1>История инвентаря {params.id}</h1>
                 <BackButton>Назад</BackButton>
             </div>
-            <HistoryComponent keyHistory={keyHistory} />
+            <HistoryComponent type="Inventory" keyHistory={keyHistory} />
         </div>
     );
 };

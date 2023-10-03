@@ -46,18 +46,11 @@ export const getWorkerUser: T.GetWorkerUser = async (orgId, workerId) => {
 };
 
 export const createWorkerUser: T.CreateWorkerUser = async (workerId, body) => {
-    try {
-        await $clientAuth.post(
-            `business/${orgId}/worker/${workerId}/user/`,
-            body
-        );
-    } catch (e: unknown) {
-        if (e instanceof AxiosError) {
-            if (e.response?.status === 400) {
-                throw e;
-            }
-        }
-    }
+    await $clientAuth.post(`business/${orgId}/worker/${workerId}/user/`, body);
+};
+
+export const editWorkerUser: T.EditWorkerUser = async (workerId, body) => {
+    await $clientAuth.patch(`business/${orgId}/worker/${workerId}/user/`, body);
 };
 
 export const getWorkerCard: T.GetWorkerCard = async (orgId, workerId) => {
@@ -85,4 +78,17 @@ export const getServerWorkerDocs: T.GetWorkerDocs = async (workerId, orgId) => {
 
 export const deleteWorker: T.DeleteWorker = async (workerId) => {
     await $clientAuth.delete(`business/${orgId}/worker/${workerId}/`);
+};
+
+export const updateUserImg: (
+    image: FileList,
+    workerId: number
+) => Promise<{ image: string }> = async (image, workerId) => {
+    const formData = new FormData();
+    formData.append('image', image.item(0) as Blob);
+    const res = await $clientAuth.patch(
+        `business/${orgId}/worker/${workerId}/`,
+        formData
+    );
+    return res.data;
 };

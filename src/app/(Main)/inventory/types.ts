@@ -1,8 +1,10 @@
 import React from 'react';
 import { IInventory, IInventoryImage, IType } from 'http/types';
 
-export interface IModifiedInventory extends Omit<IInventory, 'type'> {
+export interface IModifiedInventory
+    extends Omit<IInventory, 'type' | 'location'> {
     type: string;
+    location: string;
 }
 
 export interface InventoryModalProps {

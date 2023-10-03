@@ -16,6 +16,7 @@ import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
 import { useConstructorStore } from 'store/useConstructorStore';
 import { subAction } from 'helpers/subAction';
+import { useNotificationStore } from 'store/notificationStore';
 
 export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     workingAreas,
@@ -25,6 +26,9 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
 }) => {
     const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [setNoteVisible] = useNotificationStore((state) => [
+        state.setVisible,
+    ]);
 
     const [formType, setFormType] = useState<'edit' | 'create'>('create');
     const [editableArea, setEditableArea] = useState<IWorkingArea>();
@@ -44,7 +48,6 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
         deleteWorkingArea(id)
             .then(() => {
                 subAction(fields, 'WorkingArea', 1, 'del');
-                router.refresh();
             })
             .finally(() => setLoading(false));
     };
@@ -62,6 +65,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                     onClick: () => {
                         setFormType('create');
                         setVisible(true);
+                        setNoteVisible(true);
                         setEditableArea(undefined);
                     },
                     text: 'Добавить',
@@ -83,7 +87,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                     types={workingTypes}
                 />
             </Modal>
-            <NotificationToast>
+            <NotificationToast syncWithModal>
                 <ServiceChangeToast count={1} slug="WorkingArea" />
             </NotificationToast>
             {loading && <Spinner />}

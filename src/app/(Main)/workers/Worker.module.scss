@@ -15,4 +15,14 @@
 
 .button_wrapper {
   min-width: 300px;
+  @include thousendTwoWidth {
+    font-size: 16px;
+  }
+  @include phoneOrTablet {
+    min-width: 0;
+    white-space: pre-wrap;
+  }
+  @include phone {
+    font-size: 14px;
+  }
 }

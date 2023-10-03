@@ -1,5 +1,6 @@
 import { WorkAreaValues } from 'app/(Main)/working-areas/components/EditWorkingArea/types';
 import { getDevices, getWorkingAreaDevices } from 'http/deviceApi';
+import { v4 } from 'uuid';
 
 interface ErrorsType
     extends Partial<Omit<WorkAreaValues, 'type' | 'location'>> {
@@ -33,6 +34,7 @@ export const fetchAreasData = async (id: number) => {
     const source = sourceDevices.results.map((device) => {
         return {
             ...device,
+            uuid: v4(),
             name: `${device.name}`,
             customDesc: device.desc,
         };

@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { WorkAreaValues } from 'app/(Main)/working-areas/components/EditWorkingArea/types';
@@ -8,19 +8,15 @@ import { Input } from 'components/UI/Inputs/Input';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { CreateWorkingAreaProp, ILocation, IType } from 'http/types';
 import { Button } from 'components/UI/Buttons/Button';
-import {
-    fetchAreasData,
-    ValidateAddWorkingArea,
-} from 'app/(Main)/working-areas/components/EditWorkingArea/EditWorkingArea.utils';
+import { ValidateAddWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea/EditWorkingArea.utils';
 import { useModalStore } from 'store/modalVisibleStore';
 import { createWorkingArea, patchWorkingArea } from 'http/workingAreaApi';
-import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 import { AreaPickList } from 'app/(Main)/working-areas/components/AreasPickList/AreasPickList';
 import { useNotificationStore } from 'store/notificationStore';
-
-import scss from './EditWorkingArea.module.scss';
 import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
+
+import scss from './EditWorkingArea.module.scss';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,
@@ -32,6 +28,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
+    const [noteVisible] = useNotificationStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const router = useRouter();
@@ -66,12 +63,9 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     };
 
     useEffect(() => {
-        if (formType === 'create') {
-            setNoteVisible(true);
-        }
-        return () => {
+        if (formType === 'edit') {
             setNoteVisible(false);
-        };
+        }
     }, [setNoteVisible, formType]);
 
     const {

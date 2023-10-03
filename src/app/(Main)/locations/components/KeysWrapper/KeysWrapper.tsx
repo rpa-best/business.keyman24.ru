@@ -26,6 +26,7 @@ import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './KeysWrapper.module.scss';
+import { SelectLocationTippy } from 'app/(Main)/inventory/components/SelectLocationTippy';
 
 interface KeysWrapperProps {
     count: number;
@@ -120,17 +121,10 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                 </div>
                 {generatedData.length !== 0 && (
                     <>
-                        <div className={scss.download_button_wrapper}>
-                            <PDFDownloadLink
-                                document={
-                                    <PdfGenerator data={fullData as any} />
-                                }
-                                fileName="Наклейки ШК"
-                            >
-                                <Button onClick={() => {}} type="button">
-                                    Скачать наклейки ШК
-                                </Button>
-                            </PDFDownloadLink>
+                        <div className={scss.actions_buttons_wrapper}>
+                            <div className={scss.action_button_solo}>
+                                <SelectLocationTippy />
+                            </div>
                         </div>
                         <div className={scss.keys_table_layout}>
                             <Table
@@ -171,12 +165,11 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                         </div>
                         <div className={scss.button_wrapper}>
                             <Button
-                                type="button"
                                 disabled={data.length === 0}
-                                nowrap
+                                type="button"
                                 onClick={() => handleGenerateClick()}
                             >
-                                Сгенерировать ключи
+                                Сгенерировать инвентарь
                             </Button>
                         </div>
                     </>

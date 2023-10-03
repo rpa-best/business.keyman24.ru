@@ -15,6 +15,13 @@ export const getLocations: T.GetLocations = async (orgId) => {
     return res.data;
 };
 
+export const getLocationsOnClient: T.GetLocationsOnClient = async () => {
+    const res: AxiosResponse<ReturnType<T.GetLocations>> =
+        await $clientAuth.get(`business/${orgId}/location/?deleted=false`);
+
+    return res.data;
+};
+
 export const getLocation: T.GetLocation = async (orgId, locId) => {
     const res: AxiosResponse<ReturnType<T.GetLocation>> = await $serverAuth.get(
         `business/${orgId}/location/${locId}`
