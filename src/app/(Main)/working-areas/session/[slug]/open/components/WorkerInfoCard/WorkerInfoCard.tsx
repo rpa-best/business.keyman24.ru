@@ -58,6 +58,7 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                 <div className={scss.worker_card_image_wrapper}>
                     {worker?.image ? (
                         <Image
+                            style={{ borderRadius: '50%' }}
                             src={worker.image}
                             alt="Изображение работника"
                             fill

@@ -562,6 +562,8 @@ export type GetWorkingAreas = (
 
 export type GetLocations = (orgId: number) => Promise<IResponse<ILocation>>;
 
+export type GetLocationsOnClient = () => Promise<IResponse<ILocation>>;
+
 export type GetLocation = (orgId: number, locId: number) => Promise<ILocation>;
 
 export type CreateLocation = (body: CreateLocationBody) => Promise<void>;
@@ -734,10 +736,19 @@ export type GetWorkerUser = (
     workerId: number
 ) => Promise<IWorkerUser>;
 
+export interface errorsResponse {
+    phone?: string;
+}
+
 export type CreateWorkerUser = (
     workerId: number,
     body: CreateWorkerUserBody
-) => Promise<void>;
+) => Promise<errorsResponse | void>;
+
+export type EditWorkerUser = (
+    workerId: number,
+    body: Omit<CreateWorkerUserBody, 'password1' | 'password2'>
+) => Promise<errorsResponse | void>;
 
 export type GetWorkerGroupUserPerm = (
     orgId: number,

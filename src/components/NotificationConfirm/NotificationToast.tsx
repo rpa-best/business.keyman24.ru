@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { useNotificationStore } from 'store/notificationStore';
@@ -8,19 +8,31 @@ import { useResizeWidth } from 'hooks/useResizeWidth';
 import ExitSvg from '/public/svg/x.svg';
 
 import scss from './Notification.module.scss';
+import { useModalStore } from 'store/modalVisibleStore';
 
 interface NotificationToast {
     children: React.ReactElement;
-    preventClickOutside?: boolean;
+    syncWithModal?: boolean;
 }
 
 export const NotificationToast: React.FC<NotificationToast> = ({
     children,
-    preventClickOutside,
+    syncWithModal,
 }) => {
     const { phoneBreak } = useResizeWidth();
+    const [modalVisible] = useModalStore((state) => [state.visible]);
     const [visible] = useNotificationStore((state) => [state.visible]);
     const [setVisible] = useNotificationStore((state) => [state.setVisible]);
+
+    useEffect(() => {
+        if (syncWithModal) {
+            if (modalVisible) {
+                setVisible(true);
+            } else {
+                setVisible(false);
+            }
+        }
+    }, [modalVisible, setVisible, syncWithModal, visible]);
 
     return (
         <AnimatePresence>

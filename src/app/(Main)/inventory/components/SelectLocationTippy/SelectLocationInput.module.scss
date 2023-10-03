@@ -1,0 +1,41 @@
+@import "scss/utils";
+
+.tippy_button {
+  max-height: 100%;
+  width: 100%;
+  padding: 11px 40px;
+  color: white;
+  border-radius: 12px;
+  background-color: $accent-color;
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  &:hover {
+    background-color: #2BBB86;
+  }
+  &:active {
+    background-color: #25A476;
+  }
+  &:disabled {
+    background-color: gray;
+    pointer-events: none;
+  }
+  @include thousendWidth {
+    padding: 10px 25px ;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+    padding: 8px 30px ;
+  }
+}
+
+.tippy_wrapper {
+  position: relative;
+}
+
+.content_wrapper {
+  width: 300px;
+  padding: 10px;
+  height: 150px;
+  background-color: $additional-dark;
+  box-shadow: 0 0 0 5px white;
+}

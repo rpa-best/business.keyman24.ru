@@ -44,17 +44,16 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         return { ...s, workerName: s.worker.name, modeName: mode };
     });
 
-    const keyLog = modifiedLog.map((l) => {
-        const mode = l.mode ? 'Выдан' : 'Сдан';
-        return {
-            ...l,
-            modeName: mode,
-            inventoryName: `${l?.inventory?.id} ${l?.inventory?.name}`,
-        };
-    });
-
     switch (areaType) {
         case 'inventory': {
+            const keyLog = modifiedLog.map((l) => {
+                const mode = l.mode ? 'Выдан' : 'Сдан';
+                return {
+                    ...l,
+                    modeName: mode,
+                    inventoryName: `${l?.inventory?.id} ${l?.inventory?.name} ${l.inventory.objectArea.name}`,
+                };
+            });
             return (
                 <div className={scss.children_with_table}>
                     <div className={scss.page_title_with_table_back_button}>
@@ -72,6 +71,14 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             );
         }
         case 'key': {
+            const keyLog = modifiedLog.map((l) => {
+                const mode = l.mode ? 'Выдан' : 'Сдан';
+                return {
+                    ...l,
+                    modeName: mode,
+                    inventoryName: `${l?.inventory?.id} ${l?.inventory?.name} ${l.inventory.objectArea.name}`,
+                };
+            });
             return (
                 <div className={scss.children_with_table}>
                     <div className={scss.page_title_with_table_back_button}>
@@ -89,6 +96,14 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             );
         }
         case 'register': {
+            const registerLog = modifiedLog.map((l) => {
+                const mode = l.mode ? 'Выдан' : 'Сдан';
+                return {
+                    ...l,
+                    modeName: mode,
+                    inventoryName: `${l?.inventory?.id} ${l?.inventory?.name}`,
+                };
+            });
             return (
                 <div className={scss.children_with_table}>
                     <div className={scss.page_title_with_table_back_button}>
@@ -96,7 +111,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Register
-                        sessionLog={keyLog}
+                        sessionLog={registerLog}
                         currentSessionId={+params.id}
                         currentAreaId={areaId}
                         organizations={organizations}

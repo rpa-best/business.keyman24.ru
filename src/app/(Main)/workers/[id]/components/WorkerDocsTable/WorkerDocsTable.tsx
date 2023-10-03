@@ -67,7 +67,7 @@ export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
             <WorkerTables
                 cards={cards.results}
                 docs={docs}
-                workerInventory={workerInventory}
+                workerInventory={workerInventory as any}
                 time={time}
             />
         </div>

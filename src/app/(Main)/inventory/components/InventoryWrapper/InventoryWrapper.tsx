@@ -13,18 +13,29 @@ import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { InventoryModal } from 'app/(Main)/inventory/components/InventoryModal';
 import { Spinner } from 'components/Spinner';
-import { deleteInventoryItem, getInventoryImage } from 'http/inventoryApi';
-import { IInventoryImage } from 'http/types';
+import {
+    createInventoryKeys,
+    deleteInventoryItem,
+    getInventoryImage,
+} from 'http/inventoryApi';
+import { Button } from 'components/UI/Buttons/Button';
+import { IData } from 'app/(Main)/locations/types';
+import { IInventoryImage, LocKeyBody } from 'http/types';
 import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
+
+import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
+import { ActionsButtons } from 'app/(Main)/inventory/components/ActionsButtons';
+import { MoreInventoryModal } from 'app/(Main)/inventory/components/MoreInventoryModal';
 
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
 }) => {
     const [fields] = useConstructorStore((state) => [state.fields]);
+    const [modalType, setModalType] = useState<'one' | 'more'>('one');
 
     const [setNoteVisible] = useModalStore((state) => [state.setVisible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
@@ -35,12 +46,24 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     const [selectedItemImage, setSelectedItemImage] = useState<
         IInventoryImage[] | string[]
     >();
+    const [generatedData, setGeneratedData] = useState<IModifiedInventory[]>(
+        []
+    );
+    const [data, setData] = useState<IData[]>([]);
+
+    const total = data.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.count;
+    }, 0);
 
     const lastId = useRef<number>();
 
     const router = useRouter();
 
     const pathname = usePathname();
+
+    useEffect(() => {
+        setGeneratedData(inventory);
+    }, [inventory]);
 
     useEffect(() => {
         const ids = inventory.map((i) => {
@@ -79,6 +102,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     const handleTableButtonClick = () => {
         setType('create');
+        setModalType('one');
         setSelectedItem(undefined);
         setSelectedItemImage(undefined);
         setVisible(true);
@@ -87,6 +111,21 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     return (
         <>
+            <div className={scss.keys}>
+                <div className={scss.key_generate_button}>
+                    {inventory.length === 0 && (
+                        <Button onClick={handleTableButtonClick} type="button">
+                            Сгенерировать инвентарь
+                        </Button>
+                    )}
+                </div>
+                {generatedData.length !== 0 && (
+                    <ActionsButtons
+                        setVisible={setVisible}
+                        setModalType={setModalType}
+                    />
+                )}
+            </div>
             <Table
                 buttonData={{
                     onClick: handleTableButtonClick,
@@ -102,18 +141,34 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 <Column sortable header="номер" field="number" />
                 <Column sortable header="Наименование" field="name" />
                 <Column sortable header="Штрихкод" field="codeNumber" />
+                <Column sortable header="Локация" field="location" />
             </Table>
-            <Modal syncWithNote>
-                <InventoryModal
-                    lastId={lastId.current as number}
-                    setSelectedImage={setSelectedItemImage as any}
-                    selectedImage={selectedItemImage as []}
-                    selectedItem={selectedItem}
-                    type={type}
-                />
-            </Modal>
+            {modalType === 'more' && (
+                <Modal syncWithNote>
+                    <MoreInventoryModal
+                        setData={setData}
+                        data={data}
+                        setLoading={setLoading}
+                        total={total}
+                    />
+                </Modal>
+            )}
+            {modalType === 'one' && (
+                <Modal syncWithNote>
+                    <InventoryModal
+                        lastId={lastId.current as number}
+                        setSelectedImage={setSelectedItemImage as any}
+                        selectedImage={selectedItemImage as []}
+                        selectedItem={selectedItem}
+                        type={type}
+                    />
+                </Modal>
+            )}
             <NotificationToast>
-                <ServiceChangeToast count={1} slug="Inventory" />
+                <ServiceChangeToast
+                    count={modalType === 'one' ? 1 : total}
+                    slug="Inventory"
+                />
             </NotificationToast>
             {loading && <Spinner />}
         </>

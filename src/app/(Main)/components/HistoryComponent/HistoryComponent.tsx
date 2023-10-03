@@ -10,11 +10,15 @@ import scss from './HistoryComponent.module.scss';
 
 interface KeyHistoryComponentProps {
     keyHistory: IResponse<IInventoryHistory>;
+    type: 'Inventory' | 'Keys';
 }
 
 export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
     keyHistory,
+    type,
 }) => {
+    const emptyText = type === 'Inventory' ? 'инвентарь' : 'ключ';
+
     const cloneHistory = formatDateHistory(keyHistory.results);
 
     const [barLabels, barData] = getBarGroupData(cloneHistory, 'worker.name');
@@ -80,7 +84,7 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
                 </>
             ) : (
                 <p className={scss.empty_key}>
-                    Этот инвентарь ещё не использовался
+                    Этот {emptyText} ещё не использовался
                 </p>
             )}
         </>

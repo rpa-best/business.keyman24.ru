@@ -1,0 +1,1 @@
+export { MoreInventoryModal } from './MoreInventoryModal';

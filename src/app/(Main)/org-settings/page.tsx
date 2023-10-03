@@ -3,21 +3,9 @@ import { cookies } from 'next/headers';
 import { getOrgById } from 'http/organizationApi';
 import { PickListPermission } from 'app/(Main)/org-settings/components/PickListPermission';
 import { PickListPermissionGroup } from 'app/(Main)/org-settings/components/PickListPermissionGroup';
-import {
-    getAdminPermissions,
-    getAdminPermissionsOnClient,
-    getGroupAdminPermissions,
-    getGroupPermissions,
-    getPermissions,
-} from 'http/permissionsApi';
-import {
-    getGroupListValues,
-    getListValues,
-} from 'components/PickList/helpers/getListValues';
-import { getModeName } from 'helpers/permTypeHelper';
+import { SettingsButton } from 'app/(Main)/org-settings/components/ButtonWrapper/SettingsButton';
 
 import scss from './OrganizationSettings.module.scss';
-import { SettingsButton } from 'app/(Main)/org-settings/components/ButtonWrapper/SettingsButton';
 
 const OrgSettingsPage = async () => {
     const cookieStore = cookies();

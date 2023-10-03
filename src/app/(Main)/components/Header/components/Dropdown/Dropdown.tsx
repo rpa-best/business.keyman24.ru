@@ -8,13 +8,13 @@ import ArrowSvg from '/public/svg/arrow.svg';
 import AvatarSvg from '/public/svg/avatar.svg';
 import { RenderContainer } from 'app/(Main)/components/Header/components/Dropdown/RenderContainer';
 import { onHide, onMount } from 'utils/TippyHelper';
-import Tippy from '@tippyjs/react';
+import Tippy from '@tippyjs/react/headless';
 import React, { useEffect, useState } from 'react';
 import { IUser } from 'store/types';
 import { IServiceRate } from 'http/types';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './Dropdown.module.scss';
-import { useConstructorStore } from 'store/useConstructorStore';
 
 interface HeaderDropdownProps {
     userData: IUser;
