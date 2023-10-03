@@ -30,17 +30,18 @@ export const createWorkingAreaDevice: T.CreateWorkingAreaDevice = async (
     areaId,
     body
 ) => {
-    await $clientAuth.post(
+    const res = await $clientAuth.post(
         `business/${orgId}/working_area/${areaId}/device/`,
         body
     );
+    return res.data;
 };
 
 export const deleteWorkingAreaDevice: T.DeleteWorkingAreaDevice = async (
     areaId,
     deviceId
 ) => {
-    await $clientAuth.delete(
+    return await $clientAuth.delete(
         `business/${orgId}/working_area/${areaId}/device/${deviceId}`
     );
 };

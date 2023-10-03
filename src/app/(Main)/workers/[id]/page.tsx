@@ -46,43 +46,6 @@ const WorkerPage: React.FC<WorkerPage> = async ({ params: { id } }) => {
         workerUser = await getWorkerUser(+orgId, +id);
     }
 
-    const allPermissions = await getPermissions(+orgId as number);
-
-    const allGroupPerm = await getGroupPermissions(+orgId);
-
-    const workerPermission = workerUser?.username
-        ? await getWorkerPermissions(+orgId, workerUser.username)
-        : null;
-
-    const workerGroupPerm = workerUser?.username
-        ? await getWorkerGroupPermissions(+orgId, workerUser.username)
-        : undefined;
-
-    const permissionTarget = getListValues(
-        allPermissions,
-        workerPermission as IAdminPermission[]
-    );
-
-    const permissionSource = workerPermission?.map((perm) => {
-        return {
-            ...perm,
-            name: `${perm?.permission?.name}`,
-            customDesc: getModeName(perm?.type),
-        };
-    });
-
-    const groupPermissionSource = getGroupListValues(
-        allGroupPerm.results,
-        workerGroupPerm as any
-    );
-
-    const groupPermissionTarget = workerGroupPerm?.map((perm) => {
-        return {
-            ...perm,
-            content: `${perm?.group?.name}`,
-        };
-    });
-
     return (
         <div className={scss.children_with_table}>
             <div className={scss.page_title_with_table_back_button}>
@@ -106,14 +69,8 @@ const WorkerPage: React.FC<WorkerPage> = async ({ params: { id } }) => {
                 <>
                     <WorkersPermissionsPickList
                         workerUsername={workerUser.username}
-                        target={permissionSource as any}
-                        source={permissionTarget as any}
                     />
-                    <WorkerGroupPickList
-                        workerUsername={workerUser.username}
-                        target={groupPermissionTarget as any}
-                        source={groupPermissionSource as any}
-                    />
+                    <WorkerGroupPickList workerUsername={workerUser.username} />
                 </>
             )}
         </div>

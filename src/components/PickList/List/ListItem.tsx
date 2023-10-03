@@ -21,10 +21,14 @@ export const ListItem: React.FC<ListItemProps> = ({
         [scss.list_item_active]: selected?.includes(item),
     });
 
+    if (!item) {
+        return null;
+    }
+
     return (
         <li onClick={() => handleItemClick(item)} className={listItemClassname}>
             <div className={scss.elem_wrapper}>
-                {item.content ? (
+                {item?.content ? (
                     <p className={scss.elem_name}>{item.content}</p>
                 ) : (
                     <>

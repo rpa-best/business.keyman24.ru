@@ -6,12 +6,8 @@ export interface CustomDefaultElem extends DefaultElem {
 
 export interface WorkerPickListPermissionsWrapper {
     workerUsername: string;
-    target: CustomDefaultElem[];
-    source: CustomDefaultElem[];
 }
 
 export interface WorkerPresetPermValues {
     workerUsername: string;
-    target: DefaultElem[];
-    source: DefaultElem[];
 }

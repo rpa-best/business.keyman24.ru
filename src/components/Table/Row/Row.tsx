@@ -14,6 +14,7 @@ export const Row: React.FC<ColumnRowProps> = ({
     headers,
     handleEditClick,
     handleDeleteClick,
+    setTableData,
     stopPropagation,
 }) => {
     const [textArr, setTextArr] = useState<string[]>([]);
@@ -21,6 +22,15 @@ export const Row: React.FC<ColumnRowProps> = ({
     const handleClick = (e: MouseEvent, func: (id: number) => void) => {
         e.stopPropagation();
         func(item.id);
+    };
+
+    const onDeleteClick = (e: MouseEvent) => {
+        e.stopPropagation();
+        if (handleDeleteClick) {
+            handleDeleteClick(item.id).then((r) =>
+                setTableData((d) => d.filter((el) => el.id !== item.id))
+            );
+        }
     };
 
     const textClass = clsx({
@@ -71,9 +81,7 @@ export const Row: React.FC<ColumnRowProps> = ({
                         )}
                         {handleDeleteClick && (
                             <DeleteSvg
-                                onClick={(e: MouseEvent) =>
-                                    handleClick(e, handleDeleteClick)
-                                }
+                                onClick={onDeleteClick}
                                 className={scss.svg}
                             />
                         )}

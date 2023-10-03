@@ -36,7 +36,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         router.push(`${pathName}/edit/${id}`);
     };
 
-    const handleDeleteClick = (id: number) => {
+    const handleDeleteClick = async (id: number) => {
         setLoading(true);
         deleteLocation(id)
             .then(() => {

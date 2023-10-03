@@ -1,11 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { PickList } from 'components/PickList';
 import { IAdminGroupPermission, IGroupPermission } from 'http/types';
-
-import { useRouter } from 'next/navigation';
 
 import {
     CustomAdminPermission,
@@ -14,53 +12,83 @@ import {
 import {
     createAdminGroupPermission,
     deleteAdminGroupPermission,
+    getGroupAdminPermissionsOnClient,
+    getGroupPermissionsOnClient,
 } from 'http/permissionsApi';
+import { getGroupListValues } from 'components/PickList/helpers/getListValues';
 
-interface PickListPermissionGroupProps {
-    permissions: IGroupPermission[];
-    adminPermissions: IAdminGroupPermission[];
-    orgId: number;
-}
+interface PickListPermissionGroupProps {}
 
 export const PickListPermissionGroup: React.FC<
     PickListPermissionGroupProps
-> = ({ adminPermissions, permissions, orgId }) => {
-    const router = useRouter();
+> = () => {
+    const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(false);
+    const [source, setSource] = useState<IGroupPermission[]>();
+    const [target, setTarget] = useState<IAdminGroupPermission[]>();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const allGroupAdminPermissions =
+                await getGroupAdminPermissionsOnClient();
+
+            const target = allGroupAdminPermissions.results.map((perm) => {
+                return {
+                    ...perm,
+                    content: `${perm?.group?.name}`,
+                };
+            });
+            const allGroupPermissions = await getGroupPermissionsOnClient();
+
+            const source = getGroupListValues(
+                allGroupPermissions.results,
+                target
+            );
+
+            return { source, target };
+        };
+        fetchData()
+            .then(({ source, target }) => {
+                setSource(source);
+                setTarget(target);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [refresh]);
 
     const handleArrowRight = async (elems: CustomPermission[]) => {
-        await Promise.all(
+        return await Promise.all(
             elems.map(async (el) => {
-                await createAdminGroupPermission({
-                    group: el.id,
-                    org: orgId,
+                return await createAdminGroupPermission({
+                    group: +el.id,
                 });
             })
-        ).finally(() => {
-            router.refresh();
-        });
+        );
     };
 
     const handleArrowLeft = async (elems: CustomAdminPermission[]) => {
-        await Promise.all(
+        return await Promise.all(
             elems.map((el) => {
-                deleteAdminGroupPermission({
-                    id: el.id,
-                    orgId: orgId,
+                return deleteAdminGroupPermission({
+                    id: +el.id,
                 });
             })
-        ).finally(() => {
-            router.refresh();
-        });
+        );
     };
 
     return (
         <>
             <PickList
+                loading={loading}
+                setLoading={setLoading}
                 title="Настройка группы прав доступа"
-                available={permissions as []}
-                selected={adminPermissions as []}
+                available={source as []}
+                selected={target as []}
                 handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}
+                setRefresh={setRefresh}
             />
         </>
     );

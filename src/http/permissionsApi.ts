@@ -1,6 +1,6 @@
 import * as T from 'http/types';
 import { $serverAuth } from 'http/serverIndex';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import {
     IAdminGroupPermission,
     IAdminPermission,
@@ -25,6 +25,21 @@ export const getPermissions: T.GetOrgPermissions = async (orgId: number) => {
 
     return response.data;
 };
+
+export const getClientAllPermissions: T.GetOrgPermissionsOnClient =
+    async () => {
+        const response: AxiosResponse<T.IPermission[]> = await $clientAuth.get(
+            `business/${orgId}/permission?ordering=id`
+        );
+
+        if (response.status !== 200) {
+            throw new Error(
+                'Ошибка в получении данных для настройки прав доступа'
+            );
+        }
+
+        return response.data;
+    };
 
 export const getClientPermissions: T.GetClientOrgPermissions = async (
     level
@@ -52,6 +67,20 @@ export const getAdminPermissions: T.GetAdminOrgPermissions = async (orgId) => {
     return response.data;
 };
 
+export const getAdminPermissionsOnClient: T.GetAdminOrgPermissionsOnClient =
+    async () => {
+        const response: AxiosResponse<T.IResponse<IAdminPermission>> =
+            await $clientAuth.get(
+                `business/${orgId}/permission/admin?ordering=id`
+            );
+
+        if (response.status !== 200) {
+            throw new Error('Ошибка получения разрешений высшего уровня');
+        }
+
+        return response.data;
+    };
+
 export const getPermLevels: T.GetLevels = async (orgId) => {
     const res: AxiosResponse<ReturnType<T.GetLevels>> = await $serverAuth.get(
         `business/${orgId}/permission/level`
@@ -77,14 +106,13 @@ export const deleteGroupPerm: T.DeleteGroupPerm = async (permId) => {
 
 export const createAdminPermission: T.CreateOrgPermission = async ({
     permission,
-    org,
     type,
 }) => {
     const response: AxiosResponse<T.IPermissionObject> = await $clientAuth.post(
-        `business/${org}/permission/admin/`,
+        `business/${orgId}/permission/admin/`,
         {
             permission,
-            org,
+            orgId,
             type,
         }
     );
@@ -106,16 +134,32 @@ export const getWorkerPermissions: T.GetWorkerPermission = async (
     return res.data;
 };
 
+export const getWorkerPermissionsOnClient: T.GetWorkerPermissionOnClient =
+    async (username) => {
+        const res: AxiosResponse<
+            ReturnType<typeof getWorkerPermissionsOnClient>
+        > = await $clientAuth.get(
+            `business/${orgId}/permission/user/${username}/`
+        );
+
+        return res.data;
+    };
+
 export const createWorkerPermission: T.CreateWorkerPermission = async ({
     permission,
     user,
     type,
 }) => {
-    await $clientAuth.post(`business/${orgId}/permission/user/${user}/`, {
-        permission,
-        user,
-        type,
-    });
+    const res = await $clientAuth.post(
+        `business/${orgId}/permission/user/${user}/`,
+        {
+            permission,
+            user,
+            type,
+        }
+    );
+
+    return res.data;
 };
 
 export const getWorkerGroupPermissions: T.GetWorkerGroupUserPerm = async (
@@ -129,22 +173,33 @@ export const getWorkerGroupPermissions: T.GetWorkerGroupUserPerm = async (
 
     return res.data;
 };
+export const getWorkerGroupPermissionsOnClient: T.GetWorkerGroupPermissionOnClient =
+    async (workerName) => {
+        const res: AxiosResponse<
+            ReturnType<typeof getWorkerGroupPermissionsOnClient>
+        > = await $clientAuth.get(
+            `business/${orgId}/permission/group/user/${workerName}/`
+        );
+
+        return res.data;
+    };
 
 export const createWorkerGroupUser: T.CreateWorkerGroupUser = async (
     workerName,
     body
 ) => {
-    await $clientAuth.post(
+    const res = await $clientAuth.post(
         `business/${orgId}/permission/group/user/${workerName}/`,
         body
     );
+    return res.data;
 };
 
 export const deleteWorkerGroupUser: T.DeleteWorkerGroupUser = async (
     workerName,
     groupId
 ) => {
-    await $clientAuth.delete(
+    return await $clientAuth.delete(
         `business/${orgId}/permission/group/user/${workerName}/${groupId}`
     );
 };
@@ -153,14 +208,18 @@ export const deleteWorkerPermission: T.DeleteWorkerPermission = async (
     user,
     id
 ) => {
-    await $clientAuth.delete(`business/${orgId}/permission/user/${user}/${id}`);
+    return await $clientAuth.delete(
+        `business/${orgId}/permission/user/${user}/${id}`
+    );
 };
 
-export const deleteAdminPermission: T.DeleteOrgPermission = async ({
-    id,
-    orgId,
-}) => {
-    await $clientAuth.delete(`business/${orgId}/permission/admin/${id}`);
+export const deleteAdminPermission: T.DeleteOrgPermission = async ({ id }) => {
+    const res = await $clientAuth.delete(
+        `business/${orgId}/permission/admin/${id}`
+    );
+    if (res.status === 204) {
+        return true;
+    }
 };
 
 export const getGroupPermissions: T.GetGroupOrgPermissions = async (orgId) => {
@@ -173,6 +232,17 @@ export const getGroupPermissions: T.GetGroupOrgPermissions = async (orgId) => {
 
     return response.data;
 };
+export const getGroupPermissionsOnClient: T.GetGroupOrgPermissionsOnClient =
+    async () => {
+        const response: AxiosResponse<T.IResponse<IGroupPermission>> =
+            await $clientAuth.get(`business/${orgId}/permission/group/`);
+
+        if (response.status !== 200) {
+            throw new Error('Ошибка в получении групповых разрешений');
+        }
+
+        return response.data;
+    };
 
 export const getPermissionGroupPermission: T.GetPermGroupPermissions = async (
     permGroup
@@ -192,15 +262,16 @@ export const createPermissionGroupPermission: T.CreatePermGroupPermissions =
             permission: permId,
             type: type,
         };
-        await $clientAuth.post(
+        const res = await $clientAuth.post(
             `business/${orgId}/permission/group/${permGroup}/permission/`,
             body
         );
+        return res.data;
     };
 
 export const deletePermissionGroupPermission: T.DeletePermGroupPermissions =
     async (permGroup, permId) => {
-        await $clientAuth.delete(
+        return await $clientAuth.delete(
             `business/${orgId}/permission/group/${permGroup}/permission/${permId}/`
         );
     };
@@ -218,15 +289,28 @@ export const getGroupAdminPermissions: T.GetGroupAdminOrgPermissions = async (
     return response.data;
 };
 
+export const getGroupAdminPermissionsOnClient: T.GetGroupAdminOrgPermissionsOnClient =
+    async () => {
+        const response: AxiosResponse<T.IResponse<IAdminGroupPermission>> =
+            await $clientAuth.get(`business/${orgId}/permission/admin/group`);
+
+        if (response.status !== 200) {
+            throw new Error(
+                'Ошибка в получении групповых админских разрешений'
+            );
+        }
+
+        return response.data;
+    };
+
 export const createAdminGroupPermission: T.CreateGroupOrgPermission = async ({
-    org,
     group,
 }) => {
     const response: AxiosResponse<T.IPermissionObject> = await $clientAuth.post(
-        `business/${org}/permission/admin/group/`,
+        `business/${orgId}/permission/admin/group/`,
         {
             group,
-            org,
+            orgId,
         }
     );
 
@@ -239,7 +323,15 @@ export const createAdminGroupPermission: T.CreateGroupOrgPermission = async ({
 
 export const deleteAdminGroupPermission: T.DeleteGroupOrgPermission = async ({
     id,
-    orgId,
 }) => {
-    await $clientAuth.delete(`business/${orgId}/permission/admin/group/${id}`);
+    try {
+        await $clientAuth.delete(
+            `business/${orgId}/permission/admin/group/${id}`
+        );
+        return true;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            throw e;
+        }
+    }
 };

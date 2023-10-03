@@ -4,14 +4,15 @@ import {
     LocationWorkerResponse,
 } from 'http/types';
 import { IOrganization } from 'store/types';
+import React from 'react';
 
 export interface LocationEditPage {
     params: { id: string };
 }
 
 export interface OrgPickListProps {
-    source: ModifiedOrganizationsPickList[];
-    target: ModifiedLocOrgPickList[];
+    organizations: IOrganization[];
+    setListsRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ModifiedOrganizationsPickList extends IOrganization {
@@ -20,6 +21,7 @@ export interface ModifiedOrganizationsPickList extends IOrganization {
 
 export interface ModifiedWorker extends LocationWorkerResponse {
     name: string;
+    uuid: string;
 }
 
 export interface ModifiedLocOrgPickList extends ILocationOrgResponse {

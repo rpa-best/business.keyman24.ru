@@ -6,6 +6,7 @@ import {
 } from 'http/types';
 import { modes } from 'helpers/permTypeHelper';
 import { CustomPermission } from 'app/(Main)/org-settings/components/PickListPermission/types';
+import { v4 } from 'uuid';
 
 const contains = (arr: IAdminPermission[], elem: CustomPermission) => {
     return (
@@ -18,7 +19,7 @@ const containsGroup = (
     arr: IAdminGroupPermission[],
     elem: IGroupPermission
 ) => {
-    return arr?.filter((i) => i.group.id === elem.id).length === 0;
+    return arr?.filter((i) => i.group.id === elem.id)?.length === 0;
 };
 
 export function getListValues(
@@ -30,6 +31,7 @@ export function getListValues(
             return modes.map((mode) => {
                 return {
                     ...perm,
+                    uuid: v4(),
                     type: mode.mode,
                     name: `${perm.name} `,
                     customDesc: mode.name,
@@ -48,6 +50,7 @@ export function getGroupListValues(
         .map((group) => {
             return {
                 ...group,
+                uuid: v4(),
                 content: `${group?.name}`,
             };
         })

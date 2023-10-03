@@ -4,7 +4,6 @@ import { $clientAuth, $host } from 'http/clientIndex';
 import * as T from 'http/types';
 import { IUser } from 'store/types';
 import Cookies from 'universal-cookie';
-import process from 'process';
 
 const cookie = new Cookies();
 

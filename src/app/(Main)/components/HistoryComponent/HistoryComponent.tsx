@@ -79,7 +79,9 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
                     </div>
                 </>
             ) : (
-                <p className={scss.empty_key}>Этот ключ ещё не использовался</p>
+                <p className={scss.empty_key}>
+                    Этот инвентарь ещё не использовался
+                </p>
             )}
         </>
     );
