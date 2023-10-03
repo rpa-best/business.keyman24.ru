@@ -24,8 +24,6 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     const [selectedPerm, setSelectedPerm] = useState<IGroupPermission>();
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
-    const router = useRouter();
-
     const handleRowClick = (id: number) => {
         const selectedPerm = initialPermissions.find((p) => p.id === id);
         setSelectedPerm(selectedPerm);
@@ -44,7 +42,6 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
         if (selectedPerm?.org) {
             setLoading(true);
             await deleteGroupPerm(id).finally(() => {
-                router.refresh();
                 setLoading(false);
             });
         } else {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { PickList } from 'components/PickList';
@@ -13,52 +13,96 @@ import {
 import {
     createWorkerPermission,
     deleteWorkerPermission,
+    getAdminPermissionsOnClient,
+    getClientAllPermissions,
+    getGroupPermissions,
+    getGroupPermissionsOnClient,
+    getPermissions,
+    getWorkerGroupPermissions,
+    getWorkerPermissions,
+    getWorkerPermissionsOnClient,
 } from 'http/permissionsApi';
+import { IAdminPermission, IPermission } from 'http/types';
+import { getModeName } from 'helpers/permTypeHelper';
+import {
+    getGroupListValues,
+    getListValues,
+} from 'components/PickList/helpers/getListValues';
+import { v4 } from 'uuid';
 
 export const WorkersPermissionsPickList: React.FC<
     WorkerPickListPermissionsWrapper
-> = ({ target, source, workerUsername }) => {
+> = ({ workerUsername }) => {
+    const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [source, setSource] = useState<CustomDefaultElem[]>();
+    const [target, setTarget] = useState<CustomDefaultElem[]>();
 
-    const router = useRouter();
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+
+            const allPermissions = await getClientAllPermissions();
+
+            const workerPermission = await getWorkerPermissionsOnClient(
+                workerUsername
+            );
+
+            const source = getListValues(allPermissions, workerPermission);
+
+            const target = workerPermission.map((perm) => {
+                return {
+                    ...perm,
+                    uuid: v4(),
+                    name: `${perm?.permission?.name}`,
+                    customDesc: getModeName(perm?.type),
+                };
+            });
+
+            return { source, target };
+        };
+        fetchData()
+            .then(({ source, target }) => {
+                setSource(source);
+                setTarget(target);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [workerUsername, refresh]);
 
     const handleArrowRight = async (elems: CustomDefaultElem[]) => {
-        setLoading(true);
-        await Promise.all(
+        return await Promise.all(
             elems.map(async (el) => {
-                await createWorkerPermission({
+                return await createWorkerPermission({
                     user: workerUsername,
                     permission: +el.id,
                     type: el.type,
                 });
             })
-        ).finally(() => {
-            router.refresh();
-            setLoading(false);
-        });
+        );
     };
 
     const handleArrowLeft = async (elems: DefaultElem[]) => {
-        setLoading(true);
-        await Promise.all(
+        return await Promise.all(
             elems.map(async (el) => {
-                await deleteWorkerPermission(workerUsername, el.id);
+                return await deleteWorkerPermission(workerUsername, el.id);
             })
-        ).finally(() => {
-            router.refresh();
-            setLoading(false);
-        });
+        );
     };
 
     return (
         <>
             <PickList
                 hidden={true}
-                visibile={false}
-                handleArrowLeft={handleArrowLeft}
+                visible={false}
+                handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}
-                available={source}
-                selected={target}
+                available={source as any}
+                setRefresh={setRefresh}
+                setLoading={setLoading}
+                loading={loading}
+                selected={target as any}
                 title="Настройки прав пользователя"
             />
             {loading && <Spinner />}

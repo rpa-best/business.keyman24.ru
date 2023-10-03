@@ -4,10 +4,14 @@ import ArrowSvg from '/public/svg/arrow.svg';
 import { List } from 'components/PickList/List';
 import { addSelected } from 'components/PickList/helpers/checkForInclusion';
 import { DefaultElem, PickListProps } from 'components/PickList/types';
-
-import scss from './PickList.module.scss';
 import clsx from 'clsx';
 import { Spinner } from 'components/Spinner';
+import { toast } from 'react-toastify';
+import { sortArr } from 'helpers/sortPickListArrays';
+
+import scss from './PickList.module.scss';
+import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 
 export const PickList = ({
     available,
@@ -15,14 +19,15 @@ export const PickList = ({
     handleArrowLeft,
     title,
     selected,
-    visibile = true,
+    visible = true,
     hidden = false,
     rightTitle = 'Доступ разрёшен',
     leftTitle = 'Доступ запрещён',
+    setLoading,
+    loading,
+    setRefresh,
 }: PickListProps) => {
-    const [visibility, setVisibility] = useState(visibile);
-
-    const [loading, setLoading] = useState(false);
+    const [visibility, setVisibility] = useState(visible);
 
     const [source, setSource] = useState<DefaultElem[]>();
     const [target, setTarget] = useState<DefaultElem[]>();
@@ -31,9 +36,12 @@ export const PickList = ({
     const [targetSelected, setTargetSelected] = useState<DefaultElem[]>([]);
 
     useEffect(() => {
-        setSource(available);
-        setTarget(selected);
-    }, [available, selected]);
+        setSource(sortArr(available));
+    }, [available]);
+
+    useEffect(() => {
+        setTarget(sortArr(selected));
+    }, [selected]);
 
     function handleClick(
         elem: DefaultElem,
@@ -44,15 +52,40 @@ export const PickList = ({
         set(data);
     }
 
-    const handleArrRight = () => {
+    const handleArrRight = async () => {
         if (sourceSelected?.length === 0) {
             return;
         }
         setLoading(true);
-        handleArrowRight(sourceSelected as DefaultElem[]).finally(() => {
-            setSourceSelected([]);
-            setLoading(false);
-        });
+        handleArrowRight(sourceSelected as DefaultElem[])
+            .then((d) => {
+                const newTarget = sourceSelected.map((src, index) => {
+                    return { ...src, id: d[index].id };
+                });
+                setTarget((t) => [...(t as []), ...newTarget]);
+                setSource((s) => {
+                    return s?.filter((elem) => {
+                        return !sourceSelected.some(
+                            (search) => search.uuid === elem.uuid
+                        );
+                    });
+                });
+                setSourceSelected([]);
+            })
+            .catch((e) => {
+                if (e instanceof AxiosError) {
+                    toast('Ошибка, попробуйте обновить страницу', {
+                        position: 'bottom-right',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        theme: 'colored',
+                    });
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const handleArrLeft = () => {
@@ -60,10 +93,32 @@ export const PickList = ({
             return;
         }
         setLoading(true);
-        handleArrowLeft(targetSelected as DefaultElem[]).finally(() => {
-            setTargetSelected([]);
-            setLoading(false);
-        });
+        handleArrowLeft(targetSelected as DefaultElem[])
+            .then(() => {
+                setTarget((s) => {
+                    return s?.filter((elem) => {
+                        return !targetSelected.some(
+                            (search) => search.id === elem.id
+                        );
+                    });
+                });
+                setTargetSelected([]);
+                setRefresh((v) => !v);
+            })
+            .catch((e) => {
+                if (e instanceof AxiosError) {
+                    toast('Ошибка, попробуйте обновить страницу', {
+                        position: 'bottom-right',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        theme: 'colored',
+                    });
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const arrowClass = clsx({

@@ -149,6 +149,7 @@ export const Table = memo(function MemoTable({
                                             handleDeleteClick={
                                                 handleDeleteClick
                                             }
+                                            setTableData={setTableData}
                                             handleEditClick={handleEditClick}
                                             headers={headers}
                                             key={index}

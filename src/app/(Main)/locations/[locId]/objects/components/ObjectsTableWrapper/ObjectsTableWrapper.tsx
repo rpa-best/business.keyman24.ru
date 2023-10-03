@@ -53,7 +53,7 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
         setVisible(true);
     };
 
-    const handleDeleteClick = (id: number) => {
+    const handleDeleteClick = async (id: number) => {
         subAction(fields, 'Object', 1, 'del');
         setLoading(true);
         deleteLocationObject(locId, id).finally(() => {

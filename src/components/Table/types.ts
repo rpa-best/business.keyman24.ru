@@ -35,7 +35,7 @@ export interface TableProps {
     buttonData?: { onClick: () => void; text: string };
     handleRowClick?: (id: number) => void;
     handleEditClick?: (id: number) => void;
-    handleDeleteClick?: (id: number) => void;
+    handleDeleteClick?: (id: number) => Promise<void>;
     paginatorData?: PaginatorData;
     rowClickable?: boolean;
     stopPropagation?: boolean;
@@ -56,7 +56,8 @@ export interface PaginatorProps {
 export interface ColumnRowProps {
     headers: IHeader[];
     item: TableRows;
+    setTableData: React.Dispatch<React.SetStateAction<TableRows[]>>;
     handleEditClick?: (id: number) => void;
-    handleDeleteClick?: (id: number) => void;
+    handleDeleteClick?: (id: number) => Promise<void>;
     stopPropagation?: boolean;
 }

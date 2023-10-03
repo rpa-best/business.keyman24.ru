@@ -141,6 +141,16 @@ export const getLocationWorkers: T.GetLocationWorkers = async (
 
     return res.data;
 };
+export const getLocationWorkersOnClient: T.GetLocationWorkersOnClient = async (
+    locationId
+) => {
+    const res: AxiosResponse<ReturnType<T.GetLocationWorkers>> =
+        await $clientAuth.get(
+            `business/${orgId}/location/${locationId}/worker`
+        );
+
+    return res.data;
+};
 
 export const getLocationOrganizations: T.GetLocationOrganizations = async (
     orgId,
@@ -152,25 +162,37 @@ export const getLocationOrganizations: T.GetLocationOrganizations = async (
     return res.data;
 };
 
+export const getLocationOrganizationsOnClient: T.GetLocationOrganizationsOnClient =
+    async (locationId) => {
+        const res: AxiosResponse<ReturnType<T.GetLocationOrganizations>> =
+            await $clientAuth.get(
+                `business/${orgId}/location/${locationId}/org`
+            );
+
+        return res.data;
+    };
+
 export const createLocationOrganization: T.CreateLocationOrg = async (body) => {
-    await $clientAuth.post(
+    const res = await $clientAuth.post(
         `business/${orgId}/location/${body.location}/org/`,
         body
     );
+    return res.data;
 };
 
 export const createLocationWorker: T.CreateLocationWorker = async (body) => {
-    await $clientAuth.post(
+    const res = await $clientAuth.post(
         `business/${orgId}/location/${body.location}/worker/`,
         body
     );
+    return res.data;
 };
 
 export const deleteLocationOrganization: T.DeleteLocationOrg = async (
     locationId,
     organizationId
 ) => {
-    await $clientAuth.delete(
+    return await $clientAuth.delete(
         `business/${orgId}/location/${locationId}/org/${organizationId}`
     );
 };

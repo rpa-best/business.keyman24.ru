@@ -7,8 +7,7 @@ export interface CustomGroupDefaultElem extends DefaultElem {
 }
 
 export interface WorkingAreaPickList {
-    target: CustomGroupDefaultElem[];
-    source: CustomGroupDefaultElem[];
-    setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
     groupId: number;
+    id: number;
+    levelId: number;
 }

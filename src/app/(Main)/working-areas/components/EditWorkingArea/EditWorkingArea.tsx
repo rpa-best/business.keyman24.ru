@@ -35,7 +35,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const router = useRouter();
-    const [refresh, setRefresh] = useState(false);
+
     const onSubmit = (values: WorkAreaValues) => {
         const body: CreateWorkingAreaProp = {
             name: values.name,
@@ -95,18 +95,6 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         validate: ValidateAddWorkingArea,
         onSubmit,
     });
-
-    const [source, setSource] = useState<CustomGroupDefaultElem[]>([]);
-    const [target, setTarget] = useState<CustomGroupDefaultElem[]>([]);
-
-    useEffect(() => {
-        if (formType === 'edit') {
-            fetchAreasData(editableArea?.id as number).then((d) => {
-                setSource(d.trg as []);
-                setTarget(d.src as []);
-            });
-        }
-    }, [editableArea?.id, formType, refresh]);
 
     return (
         <>
@@ -169,12 +157,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                     </Button>
                 </div>
                 {formType === 'edit' && (
-                    <AreaPickList
-                        target={target}
-                        source={source}
-                        setRefresh={setRefresh}
-                        areaId={editableArea?.id as number}
-                    />
+                    <AreaPickList areaId={editableArea?.id as number} />
                 )}
             </form>
         </>

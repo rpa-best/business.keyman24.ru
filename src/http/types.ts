@@ -65,6 +65,10 @@ export type UpdateTokens = () => Promise<boolean>;
 
 export type GetOrganizations = () => Promise<IOrganization[]>;
 
+export type GetOrganizationContractors = (
+    orgId: number
+) => Promise<IOrganization[]>;
+
 export type GetOrgById = (id?: number) => Promise<IOrganization>;
 
 export type GetServices = (org: number) => Promise<IService>;
@@ -92,14 +96,14 @@ export interface IPermissionObject {
 export type PermissionType = 'read' | 'delete' | 'update' | 'create';
 
 export interface IPermission {
-    id: number;
+    id: string;
     level: ILevel;
     slug: string;
     name: string;
 }
 
 export interface IAdminPermission {
-    id: number;
+    id: string;
     org: number;
     permission: IPermission;
     type: PermissionType;
@@ -133,6 +137,7 @@ export interface IInventoryHistory {
 
 export interface IGroupPermission {
     id: number;
+    uuid: string;
     level: ILevel;
     name: string;
     org: number;
@@ -398,6 +403,8 @@ export interface LocationWorkerResponse {
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
+export type GetOrgPermissionsOnClient = () => Promise<IPermission[]>;
+
 export type GetClientOrgPermissions = (
     level?: string
 ) => Promise<IPermission[]>;
@@ -417,8 +424,12 @@ export type GetAdminOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IAdminPermission>>;
 
+export type GetAdminOrgPermissionsOnClient = () => Promise<
+    IResponse<IAdminPermission>
+>;
+
 export type CreateOrgPermission = (
-    obj: Omit<IPermissionObject, 'id'>
+    obj: Omit<IPermissionObject, 'id' | 'org'>
 ) => Promise<IPermissionObject>;
 
 export type CreateWorkerPermission = (obj: {
@@ -432,16 +443,28 @@ export type GetWorkerPermission = (
     username: string
 ) => Promise<IAdminPermission[]>;
 
+export type GetWorkerPermissionOnClient = (
+    username: string
+) => Promise<IAdminPermission[]>;
+
+export type GetWorkerGroupPermissionOnClient = (
+    username: string
+) => Promise<WorkerUserGroupPermission[]>;
+
 export type DeleteWorkerPermission = (
     user: string,
     id: string
 ) => Promise<void>;
 
-export type DeleteOrgPermission = (obj: { id: number; orgId: number }) => void;
+export type DeleteOrgPermission = (obj: { id: number }) => void;
 
 export type GetGroupOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IGroupPermission>>;
+
+export type GetGroupOrgPermissionsOnClient = () => Promise<
+    IResponse<IGroupPermission>
+>;
 
 export type GetPermGroupPermissions = (
     permGroup: number
@@ -523,15 +546,15 @@ export type GetGroupAdminOrgPermissions = (
     orgId: number
 ) => Promise<IResponse<IAdminGroupPermission>>;
 
+export type GetGroupAdminOrgPermissionsOnClient = () => Promise<
+    IResponse<IAdminGroupPermission>
+>;
+
 export type CreateGroupOrgPermission = (obj: {
     group: number;
-    org: number;
 }) => Promise<IPermissionObject>;
 
-export type DeleteGroupOrgPermission = (obj: {
-    id: number;
-    orgId: number;
-}) => void;
+export type DeleteGroupOrgPermission = (obj: { id: number }) => void;
 
 export type GetWorkingAreas = (
     orgId: number
@@ -602,15 +625,23 @@ export type GetLocationWorkers = (
     locationId: number
 ) => Promise<IResponse<LocationWorkerResponse>>;
 
+export type GetLocationWorkersOnClient = (
+    locationId: number
+) => Promise<IResponse<LocationWorkerResponse>>;
+
 export type GetLocationOrganizations = (
     orgId: number,
+    locationId: number
+) => Promise<IResponse<ILocationOrgResponse>>;
+
+export type GetLocationOrganizationsOnClient = (
     locationId: number
 ) => Promise<IResponse<ILocationOrgResponse>>;
 
 export type CreateLocationOrg = (body: {
     location: number;
     to_org: number;
-}) => Promise<void>;
+}) => Promise<{ id: number }>;
 
 export type CreateLocationWorker = (body: {
     location: number;
@@ -710,6 +741,10 @@ export type CreateWorkerUser = (
 
 export type GetWorkerGroupUserPerm = (
     orgId: number,
+    workerName: string
+) => Promise<WorkerUserGroupPermission[]>;
+
+export type GetWorkerGroupUserPermOnClient = (
     workerName: string
 ) => Promise<WorkerUserGroupPermission[]>;
 

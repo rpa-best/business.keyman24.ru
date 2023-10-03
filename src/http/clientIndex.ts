@@ -1,5 +1,4 @@
 import axios from 'axios';
-import process from 'process';
 import CookiesUniversal from 'universal-cookie';
 import { snakeToCamelCaseDeep } from 'utils/snakeTOCamelCaseDeep';
 

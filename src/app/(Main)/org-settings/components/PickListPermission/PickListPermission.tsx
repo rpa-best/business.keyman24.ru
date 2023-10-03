@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { PickList } from 'components/PickList';
-import { Spinner } from 'components/Spinner';
 import {
     CustomAdminPermission,
     CustomPermission,
@@ -12,57 +10,80 @@ import {
 import {
     createAdminPermission,
     deleteAdminPermission,
+    getAdminPermissions,
+    getAdminPermissionsOnClient,
+    getClientAllPermissions,
 } from 'http/permissionsApi';
 import { PickListPermissionProps } from 'app/(Main)/org-settings/types';
+import { getListValues } from 'components/PickList/helpers/getListValues';
 
-export const PickListPermission: React.FC<PickListPermissionProps> = ({
-    adminPermissions,
-    permissions,
-    orgId,
-}) => {
-    const router = useRouter();
+import { IAdminPermission, IPermission } from 'http/types';
+import { getModeName } from 'helpers/permTypeHelper';
+import { Spinner } from 'components/Spinner';
 
+export const PickListPermission: React.FC<PickListPermissionProps> = () => {
+    const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [source, setSource] = useState<IPermission[]>();
+    const [target, setTarget] = useState<IAdminPermission[]>();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            const allAdminPermissions = await getAdminPermissionsOnClient();
+            const target = allAdminPermissions.results.map((perm) => {
+                return {
+                    ...perm,
+                    name: `${perm?.permission?.name}`,
+                    customDesc: getModeName(perm?.type),
+                };
+            });
+            const allPermissions = await getClientAllPermissions();
+            const source = getListValues(allPermissions, target);
+
+            return { source, target };
+        };
+        fetchData()
+            .then(({ source, target }) => {
+                setSource(source);
+                setTarget(target);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [refresh]);
 
     const handleArrowRight = async (elems: CustomPermission[]) => {
-        setLoading(true);
-        await Promise.all(
+        return await Promise.all(
             elems.map(async (el) => {
-                await createAdminPermission({
-                    permission: el.id,
-                    org: orgId,
+                return await createAdminPermission({
+                    permission: +el.id,
                     type: el.type,
                 });
             })
-        ).finally(() => {
-            router.refresh();
-            setLoading(false);
-        });
+        );
     };
 
     const handleArrowLeft = async (elems: CustomAdminPermission[]) => {
-        setLoading(true);
-        await Promise.all(
+        return await Promise.all(
             elems.map(async (el) => {
-                deleteAdminPermission({
-                    id: el.id,
-                    orgId: orgId,
+                return deleteAdminPermission({
+                    id: +el.id,
                 });
             })
-        ).finally(() => {
-            router.refresh();
-            setLoading(false);
-        });
+        );
     };
-
     return (
         <>
             <PickList
                 title="Настройка доступа"
-                available={permissions as any}
-                selected={adminPermissions as any}
+                available={source as any}
+                setLoading={setLoading}
+                loading={loading}
+                selected={target as any}
                 handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}
+                setRefresh={setRefresh}
             />
             {loading && <Spinner />}
         </>

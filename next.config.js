@@ -20,6 +20,10 @@ const nextConfig = {
                 issuer: /\.[jt]sx?$/,
                 resourceQuery: { not: /url/ }, // exclude if *.svg?url
                 use: ['@svgr/webpack'],
+            },
+            {
+                test: /\.node$/i,
+                use: ['null-loader'],
             }
         );
         // Modify the file loader rule to ignore *.svg, since we have it handled now.

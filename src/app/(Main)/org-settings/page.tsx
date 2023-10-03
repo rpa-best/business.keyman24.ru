@@ -5,6 +5,7 @@ import { PickListPermission } from 'app/(Main)/org-settings/components/PickListP
 import { PickListPermissionGroup } from 'app/(Main)/org-settings/components/PickListPermissionGroup';
 import {
     getAdminPermissions,
+    getAdminPermissionsOnClient,
     getGroupAdminPermissions,
     getGroupPermissions,
     getPermissions,
@@ -25,42 +26,6 @@ const OrgSettingsPage = async () => {
 
     const org = await getOrgById(+id);
 
-    const allPermissions = await getPermissions(+id as number);
-
-    const allAdminPermissions = await getAdminPermissions(+id as number);
-
-    const allGroupPermissions = await getGroupPermissions(+id as number);
-
-    const allGroupAdminPermissions = await getGroupAdminPermissions(
-        +id as number
-    );
-
-    const permissionSource = getListValues(
-        allPermissions,
-        allAdminPermissions.results
-    );
-    const permissionTarget = allAdminPermissions.results.map((perm) => {
-        return {
-            ...perm,
-            name: `${perm?.permission?.name}`,
-            customDesc: getModeName(perm?.type),
-        };
-    });
-
-    const groupPermissionSource = getGroupListValues(
-        allGroupPermissions.results,
-        allGroupAdminPermissions.results
-    );
-
-    const groupPermissionTarget = allGroupAdminPermissions.results.map(
-        (perm) => {
-            return {
-                ...perm,
-                content: `${perm?.group?.name}`,
-            };
-        }
-    );
-
     return (
         <div
             style={{ marginBottom: '20px' }}
@@ -70,18 +35,8 @@ const OrgSettingsPage = async () => {
                 <SettingsButton />
                 <h2 className={scss.title}>{org.name}</h2>
             </div>
-
-            <PickListPermission
-                orgId={+id}
-                permissions={permissionSource}
-                adminPermissions={permissionTarget}
-            />
-
-            <PickListPermissionGroup
-                permissions={groupPermissionSource}
-                adminPermissions={groupPermissionTarget}
-                orgId={+id}
-            />
+            <PickListPermission />
+            <PickListPermissionGroup />
         </div>
     );
 };

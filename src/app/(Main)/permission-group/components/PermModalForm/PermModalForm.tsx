@@ -24,7 +24,6 @@ export const PermModalForm: React.FC<IFormProps> = ({
     formType,
     selectedPerm,
 }) => {
-    const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
@@ -74,21 +73,6 @@ export const PermModalForm: React.FC<IFormProps> = ({
         validate: PermFormValidate,
         onSubmit,
     });
-
-    const [source, setSource] = useState<CustomGroupDefaultElem[]>([]);
-    const [target, setTarget] = useState<CustomGroupDefaultElem[]>([]);
-
-    useEffect(() => {
-        if (formType === 'edit') {
-            fetchData(
-                selectedPerm?.id as number,
-                values.level?.id as number
-            ).then((d) => {
-                setSource(d.src as []);
-                setTarget(d.trg as []);
-            });
-        }
-    }, [formType, selectedPerm?.id, refresh, values.level?.id]);
 
     return (
         <div className={scss.form_layout}>
@@ -148,15 +132,17 @@ export const PermModalForm: React.FC<IFormProps> = ({
             {!adminPermission && formType === 'edit' && (
                 <div className={scss.permission_pick_list}>
                     <PermissionPickList
-                        setRefresh={setRefresh}
-                        source={source}
-                        target={target}
+                        levelId={values.level?.id as number}
+                        id={selectedPerm?.id}
                         groupId={selectedPerm?.id as number}
                     />
                 </div>
             )}
             {adminPermission && formType === 'edit' && (
-                <AdminPermList list={source} />
+                <AdminPermList
+                    id={selectedPerm?.id as number}
+                    levelId={values.level?.id as number}
+                />
             )}
             {loading && <Spinner />}
         </div>

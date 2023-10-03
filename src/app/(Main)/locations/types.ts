@@ -9,8 +9,7 @@ export interface IData {
 }
 
 export interface WorkersPickListWrapperProps {
-    source: IWorker[];
-    target: ModifiedWorker[];
+    listsRefresh: boolean;
 }
 
 export interface IGeneratedKeys {
