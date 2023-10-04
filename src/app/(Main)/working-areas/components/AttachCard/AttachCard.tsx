@@ -83,6 +83,26 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
         socket.current.onmessage = (event) => {
             const message = JSON.parse(event.data);
 
+            if (message.type === 'error') {
+                if (message.data.error.slug === 'worker_not_found') {
+                    toast('Работник не найден', {
+                        position: 'bottom-right',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        theme: 'colored',
+                    });
+                } else {
+                    toast('Ошибка', {
+                        position: 'bottom-right',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        theme: 'colored',
+                    });
+                }
+            }
+
             if (message.type === 'success') {
                 onSocketSuccess(message);
             }

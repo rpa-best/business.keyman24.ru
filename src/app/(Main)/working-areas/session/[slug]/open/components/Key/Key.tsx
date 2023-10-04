@@ -25,8 +25,6 @@ export const Key: React.FC<KeyProps> = ({
     currentAreaId,
     sessionLog,
 }) => {
-    const [worker, setWorker] = useState<IWorker>();
-    const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
     const router = useRouter();
@@ -39,12 +37,10 @@ export const Key: React.FC<KeyProps> = ({
         setVisible(false);
     }, [setVisible]);
 
-    useSocketConnect({
+    const { worker, workerDocs } = useSocketConnect({
         sessionId: currentSessionId,
-        setWorkerDocs,
         setLoading,
         socket: socket.current as WebSocket,
-        setWorker: setWorker,
     });
 
     const onCloseSessionClick = async () => {

@@ -29,41 +29,30 @@ export const Security: React.FC<SecurityProps> = ({
     sessionLog,
 }) => {
     const [sended, setSended] = useState(false);
-    const [worker, setWorker] = useState<IWorker>();
-    const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const socket = useRef<WebSocket>();
+
+    const { data, worker, workerDocs, errors } = useSocketConnect({
+        setLoading,
+        socket: socket.current as WebSocket,
+        sessionId: currentSessionId,
+    });
 
     const params = useParams();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     useEffect(() => {
-        setVisible(false);
-    }, [setVisible]);
-
-    const data = useSocketConnect({
-        setLoading,
-        setWorker,
-        setWorkerDocs,
-        socket: socket.current as WebSocket,
-        sessionId: currentSessionId,
-    });
-
-    useEffect(() => {
         setSended(false);
     }, [data]);
 
     useEffect(() => {
-        let error;
-        workerDocs?.forEach((doc) => {
-            if (validateDate(doc.activeTo)) {
-                error = true;
-                return;
-            }
-        });
-        if (error) {
+        setVisible(false);
+    }, [setVisible]);
+
+    useEffect(() => {
+        if (errors) {
             return;
         }
         if (sended) {
@@ -84,7 +73,7 @@ export const Security: React.FC<SecurityProps> = ({
                     setLoading(false);
                 });
         }
-    }, [currentAreaId, currentSessionId, data, workerDocs]);
+    }, [currentAreaId, currentSessionId, data, errors, workerDocs]);
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(

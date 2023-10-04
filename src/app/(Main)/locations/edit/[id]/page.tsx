@@ -2,27 +2,13 @@ import React from 'react';
 
 import { LocationInfoWrapper } from 'app/(Main)/locations/components/LocationInfoWrapper';
 import { cookies } from 'next/headers';
-import {
-    getLocation,
-    getLocationOrganizations,
-    getLocationWorkers,
-} from 'http/locationsApi';
-import {
-    LocationEditPage,
-    ModifiedWorker,
-} from 'app/(Main)/locations/edit/[id]/types';
+import { getLocation } from 'http/locationsApi';
+import { LocationEditPage } from 'app/(Main)/locations/edit/[id]/types';
 import { BackButton } from 'components/UI/Buttons/BackButton';
-import { OrgPickListWrapper } from 'app/(Main)/locations/components/OrgPickListWrapper';
-import {
-    getOrganizationContractors,
-    getOrganizations,
-} from 'http/organizationApi';
+import { getOrganizationContractors } from 'http/organizationApi';
+import { PickListsWrapper } from 'app/(Main)/locations/edit/components/PickListsWrapper';
 
 import scss from './location.module.scss';
-import { getServerWorkers } from 'http/workerApi';
-import { WorkersPickListWrapper } from 'app/(Main)/locations/components/WorkersPickListWrapper';
-import { v4 } from 'uuid';
-import { PickListsWrapper } from 'app/(Main)/locations/edit/components/PickListsWrapper';
 
 const LocationEditPage: React.FC<LocationEditPage> = async ({
     params: { id },
@@ -32,7 +18,7 @@ const LocationEditPage: React.FC<LocationEditPage> = async ({
 
     const location = await getLocation(+orgId, +id);
 
-    const organizations = await getOrganizations();
+    const organizations = await getOrganizationContractors(+orgId);
 
     return (
         <div className={scss.children_with_table}>
