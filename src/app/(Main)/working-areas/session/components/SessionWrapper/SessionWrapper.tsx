@@ -100,11 +100,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         };
         await createSession(areaId, body).then(() => {
             router.refresh();
-            setVisible(true);
             if (getParamsType(params.slug) === 'register') {
                 router.push(`${pathname}/open/${maxNumber + 1}`);
                 return;
             }
+            setVisible(true);
         });
         setLoading(false);
     };

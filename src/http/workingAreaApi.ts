@@ -81,7 +81,7 @@ export const getSessionLog: T.GetSessionLog = async (
 ) => {
     const res: AxiosResponse<ReturnType<T.GetSessionLog>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/${areaId}/session/${sessionId}/element?ordering=-date`
+            `business/${orgId}/working_area/${areaId}/session/${sessionId}/element?ordering=-date&limit=50`
         );
 
     return res.data;
