@@ -9,6 +9,7 @@ import ExitSvg from '/public/svg/x.svg';
 
 import scss from './Notification.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';
+import { useConstructorStore } from 'store/useConstructorStore';
 
 interface NotificationToast {
     children: React.ReactElement;
@@ -19,6 +20,7 @@ export const NotificationToast: React.FC<NotificationToast> = ({
     children,
     syncWithModal,
 }) => {
+    const [fields] = useConstructorStore((state) => [state.fields]);
     const { phoneBreak } = useResizeWidth();
     const [modalVisible] = useModalStore((state) => [state.visible]);
     const [visible] = useNotificationStore((state) => [state.visible]);
@@ -33,6 +35,10 @@ export const NotificationToast: React.FC<NotificationToast> = ({
             }
         }
     }, [modalVisible, setVisible, syncWithModal, visible]);
+
+    if (fields?.length || !fields) {
+        return null;
+    }
 
     return (
         <AnimatePresence>

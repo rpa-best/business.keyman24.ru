@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import { EnterCodeForm } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm';
 import { IWorker, IWorkerDocs } from 'http/types';
@@ -17,6 +17,7 @@ import { useSocketConnect } from 'helpers/useSocketConnect';
 
 import scss from './Key.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';
+import { getParamsId } from 'app/(Main)/working-areas/helpers';
 
 export const Key: React.FC<KeyProps> = ({
     type,
@@ -29,6 +30,8 @@ export const Key: React.FC<KeyProps> = ({
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
     const router = useRouter();
+
+    const params = useParams();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
@@ -50,7 +53,7 @@ export const Key: React.FC<KeyProps> = ({
             setLoading,
             currentAreaId,
             currentSessionId,
-            'key',
+            'key-' + getParamsId(params.slug),
             router
         );
     };
