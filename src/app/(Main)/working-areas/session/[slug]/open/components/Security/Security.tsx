@@ -28,6 +28,7 @@ export const Security: React.FC<SecurityProps> = ({
     currentAreaId,
     sessionLog,
 }) => {
+    const [sended, setSended] = useState(false);
     const [worker, setWorker] = useState<IWorker>();
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [loading, setLoading] = useState(false);
@@ -51,6 +52,10 @@ export const Security: React.FC<SecurityProps> = ({
     });
 
     useEffect(() => {
+        setSended(false);
+    }, [data]);
+
+    useEffect(() => {
         let error;
         workerDocs?.forEach((doc) => {
             if (validateDate(doc.activeTo)) {
@@ -61,6 +66,9 @@ export const Security: React.FC<SecurityProps> = ({
         if (error) {
             return;
         }
+        if (sended) {
+            return;
+        }
         if (data && workerDocs) {
             const body = {
                 session: currentSessionId,
@@ -68,13 +76,13 @@ export const Security: React.FC<SecurityProps> = ({
                 mode: data.data.mode,
                 user: data.data.user.user,
             };
-            sendSessionAction(
-                currentAreaId,
-                currentSessionId,
-                body as any
-            ).finally(() => {
-                setLoading(false);
-            });
+            sendSessionAction(currentAreaId, currentSessionId, body as any)
+                .then(() => {
+                    setSended(true);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     }, [currentAreaId, currentSessionId, data, workerDocs]);
 

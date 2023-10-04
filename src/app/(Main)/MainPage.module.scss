@@ -1,5 +1,18 @@
 @import "scss/utils";
 
+.error_wrapper {
+  margin-top: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  & h2 {
+    @include MontserratSemiBold(28px);
+    margin-bottom: 20px;
+    color: white;
+  }
+}
+
 .main_layout {
   height: 100%;
   display: flex;

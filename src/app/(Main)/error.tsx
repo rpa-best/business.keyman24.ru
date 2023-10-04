@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
 import { Button } from 'components/UI/Buttons/Button';
+
+import scss from './MainPage.module.scss';
 
 export default function Error({
     error,
@@ -17,7 +17,7 @@ export default function Error({
     }, [error]);
 
     return (
-        <div>
+        <div className={scss.error_wrapper}>
             <h2>Что-то пошло не так!</h2>
             <div>
                 <Button type="button" onClick={() => reset()}>
