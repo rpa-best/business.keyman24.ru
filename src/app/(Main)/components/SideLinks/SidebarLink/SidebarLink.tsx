@@ -25,7 +25,7 @@ export const SidebarLink = ({
 
     const path = useAllowedPath(head as string);
 
-    if (!path && head) {
+    if (!path && !!head) {
         return;
     }
 
