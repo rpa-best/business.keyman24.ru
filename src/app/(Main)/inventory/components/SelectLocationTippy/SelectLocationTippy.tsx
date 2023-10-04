@@ -11,7 +11,7 @@ export const SelectLocationTippy = () => {
     const opacity = useSpring(0);
 
     return (
-        <div className={scss.tippy_wrapper}>
+        <div style={{ zIndex: 300 }} className={scss.tippy_wrapper}>
             <Tippy
                 onMount={() => onMount(opacity)}
                 onHide={({ unmount }) => onHide({ opacity, unmount })}
@@ -22,7 +22,7 @@ export const SelectLocationTippy = () => {
                 onClickOutside={() => {
                     setVisible(!visible);
                 }}
-                render={() => <TippyContent />}
+                render={() => <TippyContent opacity={opacity} />}
             >
                 <button
                     className={scss.tippy_button}
