@@ -4,26 +4,32 @@ import UniversalCookies from 'universal-cookie';
 import { getWorkerDocs } from 'http/workerApi';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 
 const cookie = new UniversalCookies();
 type UseSocketConnectProps = {
     setLoading: (b: boolean) => void;
-    setWorker: (w: IWorker) => void;
-    setWorkerDocs?: (d: IWorkerDocs[]) => void;
     sessionId: number;
     socket: WebSocket;
 };
 
-type SocketConnectFunc = (props: UseSocketConnectProps) => SocketResponse;
+type SocketConnectFunc = (props: UseSocketConnectProps) => {
+    data: SocketResponse;
+    worker: IWorker;
+    workerDocs: IWorkerDocs[];
+    errors: boolean;
+};
 
 export const useSocketConnect: SocketConnectFunc = ({
-    setWorker,
     setLoading,
-    setWorkerDocs,
     sessionId,
     socket,
 }) => {
     const router = useRouter();
+
+    const [errors, setErrors] = useState<boolean>(false);
+    const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
+    const [worker, setWorker] = useState<IWorker>();
 
     const [data, setData] = useState<SocketResponse>();
 
@@ -37,13 +43,18 @@ export const useSocketConnect: SocketConnectFunc = ({
                     if (setWorkerDocs) {
                         setWorkerDocs(d.results);
                     }
+                    d.results.forEach((doc) => {
+                        if (validateDate(doc.activeTo)) {
+                            setErrors(true);
+                        }
+                    });
                 })
                 .finally(() => {
                     router.refresh();
                     setLoading(false);
                 });
         },
-        [setLoading, setWorker, setWorkerDocs]
+        [setLoading]
     );
 
     useEffect(() => {
@@ -85,5 +96,10 @@ export const useSocketConnect: SocketConnectFunc = ({
         };
     }, [onSocketSuccess, sessionId]);
 
-    return data as SocketResponse;
+    return {
+        data: data as SocketResponse,
+        worker: worker as IWorker,
+        workerDocs: workerDocs as IWorkerDocs[],
+        errors,
+    };
 };

@@ -18,5 +18,6 @@ export const closeSessionHandler: CloseSessionType = async (
     setLoading(true);
     await closeSession(areaId, sessionId);
     router.replace('/working-areas/session/' + pathSlug);
+    router.refresh();
     setLoading(false);
 };
