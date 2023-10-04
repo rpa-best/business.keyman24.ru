@@ -26,6 +26,8 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
         getParamsType(params.slug) === 'inventory' ||
         getParamsType(params.slug) === 'key';
 
+    const itsSecurity = getParamsType(params.slug) === 'security';
+
     const sessionLog = await getSessionLog(
         +orgId,
         area?.id as number,
@@ -33,6 +35,11 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
     );
 
     const modifiedLog = sessionLog.results.map((s) => {
+        const itemName = itsSecurity
+            ? null
+            : inventoryOrKeys
+            ? `${s?.inventory?.id} ${s?.inventory?.name}, ${s.inventory?.objectArea?.name}`
+            : `Карта №${s.card}`;
         let mode;
         if (getParamsType(params.slug) !== 'security') {
             mode = s.mode ? 'Получен' : 'Сдан';
@@ -43,7 +50,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
             ...s,
             workerName: s.worker.name,
             mode: mode,
-            itemName: `${s?.inventory?.id} ${s?.inventory?.name}, ${s.inventory.objectArea.name}`,
+            itemName,
         };
     });
 
@@ -57,14 +64,15 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                     <Column header="Работник" field="workerName" />
                     <Column sortable header="Дата" field="date" />
                     <Column sortable header="Событие" field="mode" />
-                    {inventoryOrKeys &&
-                        ((
-                            <Column
-                                sortable
-                                header="Наименование"
-                                field="itemName"
-                            />
-                        ) as any)}
+                    {!itsSecurity ? (
+                        <Column
+                            sortable
+                            header="Наименование"
+                            field="itemName"
+                        />
+                    ) : (
+                        (null as any)
+                    )}
                 </Table>
             ) : (
                 <h2 className={scss.empty}>

@@ -16,8 +16,12 @@ export const WorkerCreateFormValidate = (values: WorkerFormValuesType) => {
     if (!values.name) {
         errors.name = 'Обязательное поле';
     }
-
-    if (!values?.username?.match(emailCheck)?.length && values.username) {
+    if (!values.username) {
+        errors.username = 'Обязательное поле';
+    } else if (
+        !values?.username?.match(emailCheck)?.length &&
+        values.username
+    ) {
         errors.username = 'некорректный email';
     }
 

@@ -144,6 +144,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 <div className={scss.worker_card_data}>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
+                            disabled
                             autoComplete="off"
                             onBlur={handleBlur}
                             label="ФИО"

@@ -108,7 +108,9 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     <>
                         <div className={scss.actions_buttons_wrapper}>
                             <div className={scss.action_button_solo}>
-                                <SelectLocationTippy />
+                                <Button onClick={() => {}} type="button">
+                                    Скачать наклейки ШК
+                                </Button>
                             </div>
                         </div>
                         <div className={scss.keys_table_layout}>
