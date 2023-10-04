@@ -92,7 +92,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         setLoading(true);
         await deleteInventoryItem(id)
             .then(() => {
-                router.refresh();
                 subAction(fields, 'Inventory', 1, 'del');
             })
             .finally(() => {
