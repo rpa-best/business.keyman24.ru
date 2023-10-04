@@ -58,7 +58,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                 setLoading(true);
                 sendActivateSession(areaId, currentSession?.id as number)
                     .then(() => {
-                        router.push(`${pathname}/open/${session?.id}`);
+                        router.push(`${pathname}/open/${currentSession?.id}`);
                     })
                     .catch((e) => {
                         toast('Ошибка', {
@@ -98,16 +98,14 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             is_active: false,
             user: user?.username as string,
         };
-        await createSession(areaId, body)
-            .then(() => setVisible(false))
-            .then(() => {
-                if (getParamsType(params.slug) === 'register') {
-                    router.push(`${pathname}/open/${maxNumber + 1}`);
-                    return;
-                }
-                router.refresh();
-                setVisible(true);
-            });
+        await createSession(areaId, body).then(() => {
+            router.refresh();
+            setVisible(true);
+            if (getParamsType(params.slug) === 'register') {
+                router.push(`${pathname}/open/${maxNumber + 1}`);
+                return;
+            }
+        });
         setLoading(false);
     };
 

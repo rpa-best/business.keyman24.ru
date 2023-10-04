@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { Button } from 'components/UI/Buttons/Button';
 
 export default function Error({
     error,
@@ -11,22 +12,18 @@ export default function Error({
     error: Error;
     reset: () => void;
 }) {
-    const router = useRouter();
     useEffect(() => {
-        // Log the error to an error reporting service
+        console.log(error);
     }, [error]);
 
     return (
         <div>
-            <h2>Something went wrong!</h2>
-            <button
-                onClick={
-                    // Attempt to recover by trying to re-render the segment
-                    () => reset()
-                }
-            >
-                Try again
-            </button>
+            <h2>Что-то пошло не так!</h2>
+            <div>
+                <Button type="button" onClick={() => reset()}>
+                    Обновить страницу
+                </Button>
+            </div>
         </div>
     );
 }

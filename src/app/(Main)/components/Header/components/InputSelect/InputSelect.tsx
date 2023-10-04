@@ -39,13 +39,12 @@ export const HeaderInputSelect: React.FC<{
     );
 
     const [visible, setVisible] = useState(false);
-    //Её id и наименование
-    const [id, setId] = useState<number>(
-        cookie.get('orgId') ?? listValues[0]?.id
-    );
     const [name, setName] = useState<string>(listValues[0]?.name);
     const [setOrganization] = useOrganizationStore((state) => [
         state.setOrganization,
+    ]);
+    const [organization] = useOrganizationStore((state) => [
+        state.organization,
     ]);
 
     const arrowClassname = clsx({
@@ -54,9 +53,9 @@ export const HeaderInputSelect: React.FC<{
     });
 
     useEffect(() => {
-        cookie.set('orgId', listValues[0]?.id);
+        cookie.set('orgId', organizations[0]?.id);
         router.refresh();
-    }, [listValues]);
+    }, []);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
@@ -81,7 +80,6 @@ export const HeaderInputSelect: React.FC<{
             organizations?.find((org) => org.id === id) as IOrganization
         );
         setName(name);
-        setId(id);
         cookie.set('orgId', id);
         setVisible(!visible);
         router.refresh();
@@ -89,7 +87,9 @@ export const HeaderInputSelect: React.FC<{
 
     const onClickOutside = () => {
         setVisible(false);
-        setName(listValues?.find((v) => v.id === id)?.name as string);
+        setName(
+            listValues?.find((v) => v.id === organization?.id)?.name as string
+        );
     };
 
     if (organizations.length === 0) {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
@@ -21,6 +21,7 @@ import { Column } from 'components/Table/Column';
 
 import scss from './Register.module.scss';
 import { AxiosError } from 'axios';
+import { getParamsId } from 'app/(Main)/working-areas/helpers';
 
 const cookie = new UniversalCookies();
 
@@ -39,6 +40,8 @@ export const Register: React.FC<RegisterProps> = ({
     const [workers, setWorkers] = useState<IWorker[]>([]);
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
+
+    const params = useParams();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
@@ -120,7 +123,7 @@ export const Register: React.FC<RegisterProps> = ({
             setLoading,
             currentAreaId,
             currentSessionId,
-            'register',
+            'register-' + getParamsId(params.slug),
             router
         );
     };

@@ -25,8 +25,6 @@ const BillPage = async () => {
         };
     });
 
-    console.log(subs.serviceRates);
-
     const price = await getServerPrice(rateBody);
 
     return (

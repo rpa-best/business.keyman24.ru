@@ -37,7 +37,6 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
 
     const handleRowClick = (id: number) => {
         const slug = initialAreas.find((area) => area.id === id);
-
         router.push(
             'working-areas/session/' + `${slug?.type.slug}-${slug?.id}`
         );

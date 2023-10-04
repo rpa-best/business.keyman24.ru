@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { SecurityProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
@@ -21,6 +21,7 @@ import { sendSessionAction } from 'http/workingAreaApi';
 
 import scss from './Security.module.scss';
 import { toast } from 'react-toastify';
+import { getParamsId } from 'app/(Main)/working-areas/helpers';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -32,6 +33,8 @@ export const Security: React.FC<SecurityProps> = ({
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const socket = useRef<WebSocket>();
+
+    const params = useParams();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
@@ -80,7 +83,7 @@ export const Security: React.FC<SecurityProps> = ({
             setLoading,
             currentAreaId,
             currentSessionId,
-            'security',
+            'security-' + getParamsId(params.slug),
             router
         );
     };
