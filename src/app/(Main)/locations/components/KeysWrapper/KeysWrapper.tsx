@@ -39,7 +39,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IData[]>([]);
-    const [fullData, setFullData] = useState<LocKeysResponse[]>([]);
     const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
 
     const router = useRouter();
@@ -49,20 +48,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     useEffect(() => {
         setGeneratedData(keys);
     }, [keys]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const res = await getLocationClientKeys(
-                +params.locId,
-                +params.objId
-            );
-
-            return res.results;
-        };
-        fetchData().then((d) => {
-            setFullData(d);
-        });
-    }, [params.locId, params.objId]);
 
     const total = data.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.count;

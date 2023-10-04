@@ -59,10 +59,10 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
     useEffect(() => {
         if (type === 'create') {
             setVisible(true);
-            return () => {
-                setVisible(false);
-            };
         }
+        return () => {
+            setVisible(false);
+        };
     }, [type]);
 
     const {
@@ -84,7 +84,9 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
 
     return (
         <form onSubmit={handleSubmit} className={scss.location_card}>
-            <h2 className={scss.card_title}>Локация / редактирование</h2>
+            <h2 className={scss.card_title}>
+                Локация / {type === 'create' ? 'добавление' : 'редактирование'}
+            </h2>
             <Input
                 handleError={touched.name && errors.name}
                 label="Наименование локации"

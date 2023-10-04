@@ -36,7 +36,7 @@ export const NotificationToast: React.FC<NotificationToast> = ({
         }
     }, [modalVisible, setVisible, syncWithModal, visible]);
 
-    if (fields?.length || !fields) {
+    if (fields?.length === 0 || !fields) {
         return null;
     }
 
