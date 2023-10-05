@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { sendActivateSession, sendCheck } from 'http/workingAreaApi';
@@ -11,6 +11,7 @@ import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { SocketResponse } from 'http/types';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
+import { useSocketConnect } from 'helpers/useSocketConnect';
 
 const cookie = new UniversalCookies();
 
@@ -22,8 +23,7 @@ interface AttachCardProps {
 
 export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const access = cookie.get('access');
-    const socket = useRef<WebSocket>();
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
@@ -36,82 +36,61 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
         }
     }, [areaId, params.slug, session]);
 
-    const onSocketSuccess = async (data: SocketResponse) => {
-        if (!data.data.user.user) {
-            toast('Нет доступа к сессии', {
-                position: 'bottom-right',
-                hideProgressBar: true,
-                autoClose: 2000,
-                type: 'error',
-                theme: 'colored',
-            });
-        }
-        const body = {
-            user: data.data.user.user as string,
-            session,
-        };
-        await sendCheck(areaId, session, body)
-            .then(() => {
-                setVisible(false);
-                if (socket.current) {
-                    socket.current?.close();
-                }
-                router.push(`${pathname}/open/${session}`);
-            })
-            .catch((e: unknown) => {
-                if (e instanceof AxiosError) {
-                    if (
-                        e.response?.data.user[0].slug === 'not_perm_to_session'
-                    ) {
-                        toast('Нет доступа к сессии', {
-                            position: 'bottom-right',
-                            hideProgressBar: true,
-                            autoClose: 2000,
-                            type: 'error',
-                            theme: 'colored',
-                        });
+    const { data } = useSocketConnect({
+        sessionId: session,
+        setLoading,
+        areaId: areaId,
+    });
+
+    const onSocketSuccess = useCallback(
+        async (data: SocketResponse) => {
+            // @ts-ignore
+            if (!data.data.user.user) {
+                toast('Нет доступа к сессии', {
+                    position: 'bottom-right',
+                    hideProgressBar: true,
+                    autoClose: 2000,
+                    type: 'error',
+                    theme: 'colored',
+                });
+                return;
+            }
+            const body = {
+                // @ts-ignore
+                user: data.data.user.user as string,
+                session,
+            };
+            await sendCheck(areaId, session, body)
+                .then(() => {
+                    setVisible(false);
+                    router.push(`${pathname}/open/${session}`);
+                })
+                .catch((e: unknown) => {
+                    if (e instanceof AxiosError) {
+                        if (
+                            e.response?.data.user[0].slug ===
+                            'not_perm_to_session'
+                        ) {
+                            toast('Нет доступа к сессии', {
+                                position: 'bottom-right',
+                                hideProgressBar: true,
+                                autoClose: 2000,
+                                type: 'error',
+                                theme: 'colored',
+                            });
+                        }
                     }
-                }
-            });
-    };
+                });
+        },
+        [areaId, pathname, session]
+    );
 
     useEffect(() => {
-        socket.current = new WebSocket(
-            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}business/ws/session/${session}/?token=${access}`
-        );
-
-        socket.current.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-
-            if (message.type === 'error') {
-                if (message.data.error.slug === 'worker_not_found') {
-                    toast('Работник не найден', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'error',
-                        theme: 'colored',
-                    });
-                } else {
-                    toast('Ошибка', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'error',
-                        theme: 'colored',
-                    });
-                }
-            }
-
-            if (message.type === 'success') {
-                onSocketSuccess(message);
-            }
-        };
-
-        return () => {
-            socket.current?.close();
-        };
-    }, [access, onSocketSuccess, session]);
+        if (!data) {
+            return;
+        }
+        onSocketSuccess(data);
+    }, [data, onSocketSuccess]);
 
     return (
         <div>

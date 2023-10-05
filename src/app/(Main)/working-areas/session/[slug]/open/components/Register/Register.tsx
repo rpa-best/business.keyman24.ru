@@ -70,13 +70,18 @@ export const Register: React.FC<RegisterProps> = ({
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
-                        toast(e.response?.data.error[0].slug, {
-                            position: 'bottom-right',
-                            hideProgressBar: true,
-                            autoClose: 2000,
-                            type: 'error',
-                            theme: 'colored',
-                        });
+                        if (
+                            e.response?.data.error[0].slug ===
+                            'card_not_given_to_this_worker'
+                        ) {
+                            toast('У работника нет карты', {
+                                position: 'bottom-right',
+                                hideProgressBar: true,
+                                autoClose: 2000,
+                                type: 'error',
+                                theme: 'colored',
+                            });
+                        }
                     }
                 })
                 .finally(() => {
@@ -97,7 +102,17 @@ export const Register: React.FC<RegisterProps> = ({
             const message = JSON.parse(event.data);
 
             if (message.type === 'success') {
-                onSocketSuccess(message);
+                if (selectedOrg && selectedWorker) {
+                    onSocketSuccess(message);
+                } else {
+                    toast('Выберите локацию и организацию!', {
+                        position: 'top-left',
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        theme: 'colored',
+                    });
+                }
             }
         };
 
