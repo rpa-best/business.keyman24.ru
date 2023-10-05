@@ -62,8 +62,6 @@ export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
         return { ...i, type: i.type.name };
     });
 
-    console.log(time);
-
     return (
         <div className={scss.info_wrapper}>
             <WorkerTables

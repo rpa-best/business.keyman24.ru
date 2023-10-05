@@ -212,7 +212,9 @@ export interface SocketResponse {
     data: {
         device: number;
         mode: boolean;
-        user: IWorker | WorkerWithoutUser;
+        user: IWorker | string;
+        worker: IWorker;
+        error: any;
     };
     type: 'success' | string;
 }
