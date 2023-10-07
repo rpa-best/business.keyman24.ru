@@ -21,7 +21,7 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
 
     const offset = searchParams.offset ?? 0;
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const keyHistory = await getKeyHistory(
         +orgId,

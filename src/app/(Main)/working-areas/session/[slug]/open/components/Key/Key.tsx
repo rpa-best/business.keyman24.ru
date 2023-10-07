@@ -18,13 +18,19 @@ import { useSocketConnect } from 'helpers/useSocketConnect';
 import scss from './Key.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
+import { BackButton } from 'components/UI/Buttons/BackButton';
+import { useSocketStore } from 'store/useSocketStore';
 
 export const Key: React.FC<KeyProps> = ({
     type,
     currentSessionId,
     currentAreaId,
     sessionLog,
+    areaName,
 }) => {
+    const [closeConnection] = useSocketStore((state) => [
+        state.closeConnection,
+    ]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -36,14 +42,14 @@ export const Key: React.FC<KeyProps> = ({
         setVisible(false);
     }, [setVisible]);
 
-    const { worker, workerDocs, data, errors, socketClose } = useSocketConnect({
+    const { worker, workerDocs } = useSocketConnect({
         sessionId: currentSessionId,
         areaId: currentAreaId,
         setLoading,
     });
 
     const onCloseSessionClick = async () => {
-        socketClose();
+        closeConnection();
         await closeSessionHandler(
             setLoading,
             currentAreaId,
@@ -54,49 +60,57 @@ export const Key: React.FC<KeyProps> = ({
     };
 
     return (
-        <div className={scss.key_layout}>
-            <div className={scss.button_wrapper}>
-                <Button onClick={() => onCloseSessionClick()} type="button">
-                    Завершить сессию
-                </Button>
+        <>
+            <div className={scss.page_title_with_table_back_button}>
+                <h1>{areaName}</h1>
+                <BackButton onClick={() => closeConnection()} skipWord>
+                    Назад
+                </BackButton>
             </div>
-            <div className={scss.key_content}>
-                <div className={scss.content_wrapper}>
-                    <EnterCodeForm
-                        type={type}
-                        worker={worker as IWorker}
-                        sessionId={currentSessionId}
-                        areaId={currentAreaId}
-                    />
-                    <div className={scss.worker_info_wrapper}>
-                        {worker?.id ? (
-                            <WorkerInfoCard
-                                halfScreen
-                                worker={worker as IWorker}
-                                workerDocs={workerDocs as IWorkerDocs[]}
-                            />
-                        ) : (
-                            <div className={scss.worker_empty_wrapper}>
-                                <h2 className={scss.spinner_header}>
-                                    Приложите карту работника
-                                </h2>
-                                <div className={scss.spinner}>
-                                    <SpinnerFit />
+            <div className={scss.key_layout}>
+                <div className={scss.button_wrapper}>
+                    <Button onClick={() => onCloseSessionClick()} type="button">
+                        Завершить сессию
+                    </Button>
+                </div>
+                <div className={scss.key_content}>
+                    <div className={scss.content_wrapper}>
+                        <EnterCodeForm
+                            type={type}
+                            worker={worker as IWorker}
+                            sessionId={currentSessionId}
+                            areaId={currentAreaId}
+                        />
+                        <div className={scss.worker_info_wrapper}>
+                            {worker?.id ? (
+                                <WorkerInfoCard
+                                    halfScreen
+                                    worker={worker as IWorker}
+                                    workerDocs={workerDocs as IWorkerDocs[]}
+                                />
+                            ) : (
+                                <div className={scss.worker_empty_wrapper}>
+                                    <h2 className={scss.spinner_header}>
+                                        Приложите карту работника
+                                    </h2>
+                                    <div className={scss.spinner}>
+                                        <SpinnerFit />
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
+                {sessionLog.length !== 0 && (
+                    <Table tableRows={sessionLog}>
+                        <Column header="Работник" field="workerName" />
+                        <Column header="Дата" field="date" />
+                        <Column header="Событие" field="modeName" />
+                        <Column header="Наименование" field="inventoryName" />
+                    </Table>
+                )}
+                {loading && <Spinner />}
             </div>
-            {sessionLog.length !== 0 && (
-                <Table tableRows={sessionLog}>
-                    <Column header="Работник" field="workerName" />
-                    <Column header="Дата" field="date" />
-                    <Column header="Событие" field="modeName" />
-                    <Column header="Наименование" field="inventoryName" />
-                </Table>
-            )}
-            {loading && <Spinner />}
-        </div>
+        </>
     );
 };

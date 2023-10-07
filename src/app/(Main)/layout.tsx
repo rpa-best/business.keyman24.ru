@@ -27,7 +27,7 @@ export default async function RootLayout({
 }) {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const services = await getServices(+orgId).catch((e) => e);
 

@@ -17,9 +17,9 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
 
     const day = searchParams.type ? searchParams.type === 'day' : true;
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
-    const history = await getServerHistory(orgId as number);
+    const history = await getServerHistory(+orgId);
 
     return (
         <div>

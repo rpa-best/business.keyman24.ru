@@ -17,7 +17,7 @@ const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
 }) => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const objects = await getLocationObjects(+orgId, +locId);
 

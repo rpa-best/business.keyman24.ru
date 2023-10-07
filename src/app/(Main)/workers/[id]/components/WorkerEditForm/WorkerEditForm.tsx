@@ -48,7 +48,6 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
         };
         await createWorkerUser(worker.id, workerBody)
             .then(() => {
-                subAction(fields, 'User', 1, 'add');
                 router.refresh();
                 toast('Успешно', {
                     position: 'bottom-right',

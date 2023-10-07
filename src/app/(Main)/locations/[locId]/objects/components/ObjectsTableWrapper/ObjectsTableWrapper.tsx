@@ -54,7 +54,6 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     };
 
     const handleDeleteClick = async (id: number) => {
-        subAction(fields, 'Object', 1, 'del');
         setLoading(true);
         deleteLocationObject(locId, id).finally(() => {
             router.refresh();

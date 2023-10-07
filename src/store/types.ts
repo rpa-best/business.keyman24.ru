@@ -1,4 +1,4 @@
-import { IService } from 'http/types';
+import { SocketResponse } from 'http/types';
 
 export interface IUser {
     username: string;
@@ -26,6 +26,13 @@ export interface IUserStore {
     isAuth: boolean;
     setUser: SetUserType;
     setLogoutUser: LogoutUserType;
+}
+
+export interface ISocketStore {
+    socket: WebSocket | null;
+    createConnection: (sessionId: number, access: string) => void;
+    closeConnection: () => void;
+    message: SocketResponse | null;
 }
 
 export interface IModalStore {

@@ -62,7 +62,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleDeleteClick = async (id: number) => {
-        subAction(fields, 'Inventory', 1, 'del');
         setLoading(true);
         await deleteLocationKey(+params.locId, +params.objId, +id).finally(
             () => {
@@ -80,7 +79,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
 
         createLocationKeys(+params.locId, +params.objId, body)
             .then(() => {
-                subAction(fields, 'Inventory', total, 'add');
                 setData([]);
                 router.refresh();
             })

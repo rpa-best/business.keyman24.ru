@@ -5,9 +5,9 @@ import { cookies } from 'next/headers';
 import { SessionWrapper } from 'app/(Main)/working-areas/session/components/SessionWrapper';
 import { DateHelper } from 'helpers/dateHelper';
 import { BackButton } from 'components/UI/Buttons/BackButton';
+import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 import scss from './SessionPage.module.scss';
-import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 interface SessionPageProps {
     params: { slug: string };
@@ -20,7 +20,7 @@ const SessionPage: React.FC<SessionPageProps> = async ({
 }) => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const workingAreas = await getWorkingAreas(+orgId);
 

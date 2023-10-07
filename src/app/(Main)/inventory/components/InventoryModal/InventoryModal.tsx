@@ -50,7 +50,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         if (type === 'create') {
             await createInventoryItem(body)
                 .then(() => {
-                    subAction(fields, 'Inventory', 1, 'add');
                     selectedImage.forEach(async (i) => {
                         await uploadInventoryPhoto(
                             lastId + 1,

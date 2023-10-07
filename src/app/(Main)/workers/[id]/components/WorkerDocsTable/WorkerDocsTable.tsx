@@ -22,7 +22,7 @@ export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
 }) => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const worker = await getWorker(+orgId, +id);
 

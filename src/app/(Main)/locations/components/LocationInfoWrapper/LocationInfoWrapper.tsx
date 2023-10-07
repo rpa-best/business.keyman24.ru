@@ -41,7 +41,6 @@ export const LocationInfoWrapper: React.FC<LocationInfoWrapperProps> = ({
         if (type === 'create') {
             createLocation(body)
                 .then(() => {
-                    subAction(fields, 'Location', 1, 'add');
                     router.refresh();
                 })
                 .finally(() => {

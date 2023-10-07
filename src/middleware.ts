@@ -6,7 +6,7 @@ import { headCheckPathsMiddleware } from 'http/userApi';
 export async function middleware(request: NextRequest) {
     const url = request.nextUrl;
 
-    const orgId = request.cookies.get('orgId')?.value ?? 1;
+    const orgId = request.cookies.get('orgId')?.value as string;
 
     const access = request.cookies.get('access')?.value;
 

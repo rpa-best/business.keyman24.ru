@@ -41,7 +41,6 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         deleteLocation(id)
             .then(() => {
                 router.refresh();
-                subAction(fields, 'Location', 1, 'del');
             })
             .finally(() => {
                 setLoading(false);

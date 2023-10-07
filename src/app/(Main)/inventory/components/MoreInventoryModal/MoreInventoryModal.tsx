@@ -42,7 +42,6 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
 
         createInventoryKeys(body)
             .then(() => {
-                subAction(fields, 'Inventory', total, 'add');
                 setData([]);
                 router.refresh();
             })

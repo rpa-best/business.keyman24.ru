@@ -44,7 +44,6 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         if (formType === 'create') {
             createWorkingArea(body)
                 .then(() => {
-                    subAction(fields, 'WorkingArea', 1, 'add');
                     router.refresh();
                 })
                 .finally(() => {

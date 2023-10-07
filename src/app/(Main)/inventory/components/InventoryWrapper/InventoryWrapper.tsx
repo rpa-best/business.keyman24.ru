@@ -90,13 +90,9 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        await deleteInventoryItem(id)
-            .then(() => {
-                subAction(fields, 'Inventory', 1, 'del');
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        await deleteInventoryItem(id).finally(() => {
+            setLoading(false);
+        });
     };
 
     const handleTableButtonClick = () => {
@@ -113,7 +109,13 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
             <div className={scss.keys}>
                 <div className={scss.key_generate_button}>
                     {inventory.length === 0 && (
-                        <Button onClick={handleTableButtonClick} type="button">
+                        <Button
+                            onClick={() => {
+                                setModalType('more');
+                                setVisible(true);
+                            }}
+                            type="button"
+                        >
                             Сгенерировать инвентарь
                         </Button>
                     )}
@@ -125,23 +127,25 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     />
                 )}
             </div>
-            <Table
-                buttonData={{
-                    onClick: handleTableButtonClick,
-                    text: 'Добавить',
-                }}
-                handleEditClick={handleEditClick}
-                handleRowClick={handleRowClick}
-                handleDeleteClick={handleDeleteClick}
-                tableRows={inventory}
-                paginatorData={{ offset: 25, countItems: count }}
-                stopPropagation
-            >
-                <Column sortable header="номер" field="number" />
-                <Column sortable header="Наименование" field="name" />
-                <Column sortable header="Штрихкод" field="codeNumber" />
-                <Column sortable header="Локация" field="location" />
-            </Table>
+            {inventory?.length !== 0 && (
+                <Table
+                    buttonData={{
+                        onClick: handleTableButtonClick,
+                        text: 'Добавить',
+                    }}
+                    handleEditClick={handleEditClick}
+                    handleRowClick={handleRowClick}
+                    handleDeleteClick={handleDeleteClick}
+                    tableRows={inventory}
+                    paginatorData={{ offset: 25, countItems: count }}
+                    stopPropagation
+                >
+                    <Column sortable header="номер" field="number" />
+                    <Column sortable header="Наименование" field="name" />
+                    <Column sortable header="Штрихкод" field="codeNumber" />
+                    <Column sortable header="Локация" field="location" />
+                </Table>
+            )}
             {modalType === 'more' && (
                 <Modal syncWithNote>
                     <MoreInventoryModal

@@ -6,7 +6,7 @@ import UniversalCookies from 'universal-cookie';
 
 const cookie = new UniversalCookies();
 
-const orgId = cookie.get('orgId') ?? 1;
+const orgId = cookie.get('orgId') as string;
 
 export const getLocations: T.GetLocations = async (orgId) => {
     const res: AxiosResponse<ReturnType<T.GetLocations>> =

@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { sendActivateSession, sendCheck } from 'http/workingAreaApi';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from 'store/modalVisibleStore';
-import UniversalCookies from 'universal-cookie';
-
-import scss from './AttachCard.module.scss';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { SocketResponse } from 'http/types';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import { useSocketConnect } from 'helpers/useSocketConnect';
+import { useSocketStore } from 'store/useSocketStore';
+import Cookies from 'universal-cookie';
 
-const cookie = new UniversalCookies();
+import scss from './AttachCard.module.scss';
+
+const cookie = new Cookies();
 
 interface AttachCardProps {
     user: string;
@@ -22,8 +22,10 @@ interface AttachCardProps {
 }
 
 export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
+    const socketStore = useSocketStore((state) => state);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
@@ -31,16 +33,26 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     const params = useParams();
 
     useEffect(() => {
+        if (!session || !session.toString()) {
+            return;
+        }
         if (getParamsType(params.slug) === 'security') {
             sendActivateSession(areaId, session);
         }
     }, [areaId, params.slug, session]);
 
-    const { data } = useSocketConnect({
-        sessionId: session,
-        setLoading,
-        areaId: areaId,
-    });
+    useEffect(() => {
+        if (!session || !session.toString()) {
+            return;
+        }
+        const access = cookie.get('access');
+        if (visible && !isSuccess) {
+            socketStore.createConnection(session, access);
+        }
+        if (!visible && !isSuccess) {
+            socketStore.closeConnection();
+        }
+    }, [visible, isSuccess, session]);
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
@@ -55,6 +67,7 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
                 });
                 return;
             }
+            setIsSuccess(true);
             const body = {
                 // @ts-ignore
                 user: data.data.user.user as string,
@@ -86,11 +99,11 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     );
 
     useEffect(() => {
-        if (!data) {
+        if (!socketStore.message) {
             return;
         }
-        onSocketSuccess(data);
-    }, [data, onSocketSuccess]);
+        onSocketSuccess(socketStore.message);
+    }, [socketStore.message, onSocketSuccess]);
 
     return (
         <div>

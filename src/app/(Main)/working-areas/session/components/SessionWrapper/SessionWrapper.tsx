@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Table } from 'components/Table';
 import { SessionWrapperProps } from 'app/(Main)/working-areas/types';
@@ -24,9 +24,9 @@ import {
 import { Spinner } from 'components/Spinner';
 import { useUserStore } from 'store/userStore';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
+import { toast } from 'react-toastify';
 
 import scss from './SessionWrapper.module.scss';
-import { toast } from 'react-toastify';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -37,17 +37,23 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
+    const [currentSession, setCurrentSession] = useState(
+        sessions.find((s) => s.status === 'В процессе')?.id ?? null
+    );
+
     const router = useRouter();
 
-    const params = useParams();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-
-    const currentSession = sessions.find((s) => s.status === 'В процессе');
 
     const startSessionDisabled = currentSession;
 
     const needAttach = type !== 'register';
+
+    useEffect(() => {
+        const sessionId = sessions.find((s) => s.status === 'В процессе')?.id;
+        setCurrentSession(sessionId ?? null);
+    }, [sessions]);
 
     const handleRowClick = (id: number) => {
         const session = sessions.find((s) => s.id === id);
@@ -56,9 +62,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         } else {
             if (!needAttach) {
                 setLoading(true);
-                sendActivateSession(areaId, currentSession?.id as number)
+                sendActivateSession(areaId, currentSession as number)
                     .then(() => {
-                        router.push(`${pathname}/open/${currentSession?.id}`);
+                        router.push(
+                            `${pathname}/open/${currentSession as number}`
+                        );
                     })
                     .catch((e) => {
                         toast('Ошибка', {
@@ -100,8 +108,23 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         };
         await createSession(areaId, body).then(() => {
             router.refresh();
-            if (getParamsType(params.slug) === 'register') {
-                router.push(`${pathname}/open/${maxNumber + 1}`);
+            if (!needAttach) {
+                sendActivateSession(areaId, maxNumber + 1)
+                    .then(() => {
+                        router.push(`${pathname}/open/${maxNumber + 1}`);
+                    })
+                    .catch((e) => {
+                        toast('Ошибка', {
+                            position: 'bottom-right',
+                            hideProgressBar: true,
+                            autoClose: 2000,
+                            type: 'error',
+                            theme: 'colored',
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
                 return;
             }
             setVisible(true);
@@ -111,7 +134,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
     const onCloseSessionClick = async () => {
         setLoading(true);
-        await closeSession(areaId, currentSession?.id as number);
+        await closeSession(areaId, currentSession as number);
         router.refresh();
         setLoading(false);
     };
@@ -173,7 +196,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             <Modal>
                 <AttachCard
                     user={user?.username as string}
-                    session={currentSession?.id as number}
+                    session={currentSession as number}
                     areaId={areaId}
                 />
             </Modal>

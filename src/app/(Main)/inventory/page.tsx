@@ -17,7 +17,7 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
     const offset = searchParams.offset ?? 0;
 
     const cookieStore = cookies();
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const inventories = await getInventories(+orgId, +offset);
 

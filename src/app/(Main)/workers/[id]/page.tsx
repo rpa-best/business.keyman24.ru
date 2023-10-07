@@ -20,7 +20,7 @@ interface WorkerPage {
 const WorkerPage: React.FC<WorkerPage> = async ({ params: { id } }) => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const worker = await getWorker(+orgId, +id);
 
