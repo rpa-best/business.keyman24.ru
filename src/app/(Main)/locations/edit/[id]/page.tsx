@@ -14,7 +14,7 @@ const LocationEditPage: React.FC<LocationEditPage> = async ({
     params: { id },
 }) => {
     const cookieStore = cookies();
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const location = await getLocation(+orgId, +id);
 

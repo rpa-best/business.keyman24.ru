@@ -10,7 +10,7 @@ import scss from './WorkingAreas.module.scss';
 
 const WorkingAreasPage = async () => {
     const cookieStore = cookies();
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
     const workingAreas = await getWorkingAreas(+orgId);
 
     const workingAreaTypes = await getWorkingAreaTypes(+orgId);

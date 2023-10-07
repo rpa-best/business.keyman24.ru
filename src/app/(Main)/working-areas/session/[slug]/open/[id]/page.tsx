@@ -25,7 +25,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
 
     const areaType = getParamsType(params.slug);
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const organizations = await getOrganizations();
 
@@ -56,11 +56,8 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             });
             return (
                 <div className={scss.children_with_table}>
-                    <div className={scss.page_title_with_table_back_button}>
-                        <h1>{area?.name}</h1>
-                        <BackButton skipWord>Назад</BackButton>
-                    </div>
                     <Key
+                        areaName={area?.name as string}
                         type="inventory"
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
@@ -81,11 +78,8 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             });
             return (
                 <div className={scss.children_with_table}>
-                    <div className={scss.page_title_with_table_back_button}>
-                        <h1>{area?.name}</h1>
-                        <BackButton skipWord>Назад</BackButton>
-                    </div>
                     <Key
+                        areaName={area?.name as string}
                         type="keys"
                         sessionLog={keyLog}
                         currentSessionId={+params.id}
@@ -122,11 +116,8 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
         case 'security': {
             return (
                 <div className={scss.children_with_table}>
-                    <div className={scss.page_title_with_table_back_button}>
-                        <h1>{area?.name}</h1>
-                        <BackButton skipWord>Назад</BackButton>
-                    </div>
                     <Security
+                        areaName={area?.name as string}
                         sessionLog={modifiedLog}
                         currentSessionId={+params.id}
                         currentAreaId={areaId}

@@ -10,7 +10,7 @@ import scss from './OrganizationSettings.module.scss';
 const OrgSettingsPage = async () => {
     const cookieStore = cookies();
 
-    const id = cookieStore.get('orgId')?.value ?? 1;
+    const id = cookieStore.get('orgId')?.value as string;
 
     const org = await getOrgById(+id);
 

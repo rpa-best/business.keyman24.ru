@@ -8,7 +8,7 @@ import scss from './PermGroup.module.scss';
 const PermissionGroupPage = async () => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const permissions = await getGroupPermissions(+orgId);
 

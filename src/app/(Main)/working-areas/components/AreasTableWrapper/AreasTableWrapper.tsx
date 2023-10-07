@@ -44,11 +44,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteWorkingArea(id)
-            .then(() => {
-                subAction(fields, 'WorkingArea', 1, 'del');
-            })
-            .finally(() => setLoading(false));
+        deleteWorkingArea(id).finally(() => setLoading(false));
     };
 
     const handleEditClick = async (id: number) => {

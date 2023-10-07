@@ -43,12 +43,6 @@ export const Register: React.FC<RegisterProps> = ({
 
     const params = useParams();
 
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
-
-    useEffect(() => {
-        setVisible(false);
-    }, [setVisible]);
-
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
             setLoading(true);

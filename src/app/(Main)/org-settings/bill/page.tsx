@@ -10,7 +10,7 @@ import { PaymentButton } from 'app/(Main)/org-settings/bill/components/PaymentBu
 const BillPage = async () => {
     const cookieStore = cookies();
 
-    const id = cookieStore.get('orgId')?.value ?? 1;
+    const id = cookieStore.get('orgId')?.value as string;
 
     const org = await getOrgById(+id);
 

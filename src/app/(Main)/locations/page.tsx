@@ -10,7 +10,7 @@ import scss from 'app/(Main)/locations/locations.module.scss';
 const LocationsPage = async () => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const locations = await getLocations(+orgId);
 

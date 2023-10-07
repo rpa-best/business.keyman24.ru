@@ -11,9 +11,12 @@ export interface RegisterProps {
     sessionLog: SessionLogResponse[];
 }
 
-export interface SecurityProps extends Omit<RegisterProps, 'organizations'> {}
+export interface SecurityProps extends Omit<RegisterProps, 'organizations'> {
+    areaName: string;
+}
 
 export interface KeyProps extends RegisterProps {
+    areaName: string;
     type: 'inventory' | 'keys';
 }
 

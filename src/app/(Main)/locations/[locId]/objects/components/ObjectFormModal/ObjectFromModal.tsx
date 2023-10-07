@@ -44,7 +44,6 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
         if (type === 'create') {
             createLocationObject(locId, body)
                 .then(() => {
-                    subAction(fields, 'Object', 1, 'add');
                     router.refresh();
                 })
                 .finally(() => {

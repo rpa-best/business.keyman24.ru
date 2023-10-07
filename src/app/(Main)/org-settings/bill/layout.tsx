@@ -15,7 +15,7 @@ export default async function RootLayout({
     const headersList = headers();
     const fullUrl = headersList.get('referer') || '';
 
-    const id = cookieStore.get('orgId')?.value ?? 1;
+    const id = cookieStore.get('orgId')?.value as string;
 
     const org = await getOrgById(+id);
 

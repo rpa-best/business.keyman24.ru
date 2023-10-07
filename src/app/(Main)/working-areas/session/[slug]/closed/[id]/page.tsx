@@ -15,7 +15,7 @@ interface ClosedSessionProps {
 
 const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
     const cookieStore = cookies();
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
     const workingAreas = await getWorkingAreas(+orgId);
 
     const area = workingAreas.results.find(

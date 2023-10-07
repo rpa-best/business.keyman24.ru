@@ -12,7 +12,7 @@ import { WorkersModal } from 'app/(Main)/workers/components/WorkersModal';
 const WorkersPage = async () => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const serverWorkers = await getServerWorkers(+orgId);
 

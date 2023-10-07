@@ -19,9 +19,13 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
 
     const offset = searchParams.offset ?? 0;
 
-    const orgId = cookieStore.get('orgId')?.value ?? 1;
+    const orgId = cookieStore.get('orgId')?.value as string;
 
-    const keyHistory = await getInventoryHistory(+orgId, +params.id, +offset);
+    const keyHistory = await getInventoryHistory(
+        +orgId as number,
+        +params.id,
+        +offset
+    );
 
     return (
         <div className={scss.custom_children}>

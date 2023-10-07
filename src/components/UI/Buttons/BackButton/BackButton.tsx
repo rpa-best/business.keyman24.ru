@@ -14,6 +14,7 @@ interface BackButtonProps {
     skipNumber?: boolean;
     skipWord?: boolean;
     skipTwoWords?: boolean;
+    onClick?: () => void;
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({
@@ -22,6 +23,7 @@ export const BackButton: React.FC<BackButtonProps> = ({
     skipNumber = true,
     skipWord = false,
     skipTwoWords = false,
+    onClick,
 }) => {
     const router = useRouter();
 
@@ -31,6 +33,9 @@ export const BackButton: React.FC<BackButtonProps> = ({
 
     const routeWithoutSlash = pathName.slice(0, slashIndex);
     const handleButtonClick = () => {
+        if (onClick) {
+            onClick();
+        }
         if (skipNumber && skipWord) {
             // @ts-ignore
             const itsNumber = !isNaN(pathName.at(-1));
