@@ -28,6 +28,7 @@ export const Key: React.FC<KeyProps> = ({
     sessionLog,
     areaName,
 }) => {
+    const [message] = useSocketStore((state) => [state.message]);
     const [closeConnection] = useSocketStore((state) => [
         state.closeConnection,
     ]);
@@ -36,11 +37,11 @@ export const Key: React.FC<KeyProps> = ({
 
     const params = useParams();
 
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
-
     useEffect(() => {
-        setVisible(false);
-    }, [setVisible]);
+        if (!message) {
+            router.replace(`/working-areas/session/security-${currentAreaId}`);
+        }
+    }, [message]);
 
     const { worker, workerDocs } = useSocketConnect({
         sessionId: currentSessionId,
