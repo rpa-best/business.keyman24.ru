@@ -37,6 +37,12 @@ export const Security: React.FC<SecurityProps> = ({
         areaId: currentAreaId,
     });
 
+    useEffect(() => {
+        if (!socketStore.message) {
+            router.replace(`/working-areas/session/security-${currentAreaId}`);
+        }
+    }, [socketStore.message]);
+
     const params = useParams();
 
     useEffect(() => {

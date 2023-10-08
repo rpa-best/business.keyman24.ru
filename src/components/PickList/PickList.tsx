@@ -8,10 +8,10 @@ import clsx from 'clsx';
 import { Spinner } from 'components/Spinner';
 import { toast } from 'react-toastify';
 import { sortArr } from 'helpers/sortPickListArrays';
+import { AxiosError } from 'axios';
 
 import scss from './PickList.module.scss';
-import { useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
+
 
 export const PickList = ({
     available,
