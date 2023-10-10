@@ -60,7 +60,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                 <BackButton skipWord>Назад</BackButton>
             </div>
             {modifiedLog.length !== 0 ? (
-                <Table tableRows={modifiedLog}>
+                <Table tableData={modifiedLog} setTableData={() => {}}>
                     <Column header="Работник" field="workerName" />
                     <Column sortable header="Дата" field="date" />
                     <Column sortable header="Событие" field="mode" />

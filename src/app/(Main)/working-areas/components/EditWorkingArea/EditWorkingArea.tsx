@@ -13,7 +13,6 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { createWorkingArea, patchWorkingArea } from 'http/workingAreaApi';
 import { AreaPickList } from 'app/(Main)/working-areas/components/AreasPickList/AreasPickList';
 import { useNotificationStore } from 'store/notificationStore';
-import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './EditWorkingArea.module.scss';
@@ -23,17 +22,18 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     types,
     locations,
     editableArea,
+    setWorkingAreasData,
+    setLoading,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
-    const [noteVisible] = useNotificationStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const router = useRouter();
 
     const onSubmit = (values: WorkAreaValues) => {
+        setLoading(true);
         const body: CreateWorkingAreaProp = {
             name: values.name,
             type: values.type.slug,
@@ -43,19 +43,37 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         };
         if (formType === 'create') {
             createWorkingArea(body)
-                .then(() => {
+                .then((d) => {
                     router.refresh();
                 })
                 .finally(() => {
                     setNoteVisible(false);
                     setVisible(false);
+                    setLoading(false);
                 });
         } else {
             patchWorkingArea(body, editableArea?.id as number)
                 .then(() => {
-                    router.refresh();
+                    setWorkingAreasData((d) =>
+                        d.map((el) => {
+                            if (el.id === editableArea?.id) {
+                                return {
+                                    ...el,
+                                    name: values.name,
+                                    type: values.type,
+                                    typeName: values.type.name,
+                                    locationName: values.location.name,
+                                    location: values.location,
+                                    deleted: false,
+                                    desc: values.description,
+                                };
+                            }
+                            return el;
+                        })
+                    );
                 })
                 .finally(() => {
+                    setLoading(false);
                     setVisible(false);
                 });
         }

@@ -12,6 +12,7 @@ import { subAction } from 'helpers/subAction';
 import { useRouter } from 'next/navigation';
 import { useConstructorStore } from 'store/useConstructorStore';
 import { useModalStore } from 'store/modalVisibleStore';
+import { revalidatePath } from 'next/cache';
 
 interface MoreInventoryModalProps {
     setData: React.Dispatch<React.SetStateAction<IData[]>>;
@@ -26,10 +27,8 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
     setLoading,
     total,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
-    const router = useRouter();
     const handleDeleteOne = (id: string) => {
         setData(data.filter((d) => d.id !== id));
     };
@@ -43,7 +42,7 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
         createInventoryKeys(body)
             .then(() => {
                 setData([]);
-                router.refresh();
+                revalidatePath('/inventory');
             })
             .finally(() => {
                 setLoading(false);

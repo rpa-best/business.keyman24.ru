@@ -21,8 +21,8 @@ const WorkingAreasPage = async () => {
         workingAreas.results.map((area) => {
             return {
                 ...area,
-                location: area.location.name,
-                type: area.type.name,
+                locationName: area.location.name,
+                typeName: area.type.name,
             };
         });
 

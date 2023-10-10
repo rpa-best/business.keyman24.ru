@@ -1,22 +1,25 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { TableDocsWrapper } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/TableDocsWrapper';
 import { TableCardWrapper } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/TableCardWrapper';
 import { TableInventoryWrapper } from 'app/(Main)/workers/[id]/components/WorkerDocsTable/TableInventoryWrapper';
 import { WorkerTimeTable } from 'app/(Main)/workers/[id]/components/WorkerTimeTable';
-import { ICard, IInventory, IWorkerDocs, IWorkerPlan } from 'http/types';
+import { ICard, IWorkerDocs, IWorkerPlan } from 'http/types';
+import { IModifiedInventory } from 'app/(Main)/inventory/types';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import scss from 'app/(Main)/workers/[id]/components/WorkerDocsTable/WorkerDocsTable.module.scss';
-import { IModifiedInventory } from 'app/(Main)/inventory/types';
 
 interface WorkerTablesProps {
-    cards: ICard[];
-    docs: IWorkerDocs[];
-    workerInventory: IModifiedInventory[];
-    time: IWorkerPlan;
+    cards: ICard[] | null;
+    docs: IWorkerDocs[] | null;
+    workerInventory: IModifiedInventory[] | null;
+    time: IWorkerPlan | null;
 }
+
+const availableParams = ['card', 'inventory', 'time', 'docs'];
 
 export const WorkerTables: React.FC<WorkerTablesProps> = ({
     workerInventory,
@@ -24,9 +27,17 @@ export const WorkerTables: React.FC<WorkerTablesProps> = ({
     docs,
     cards,
 }) => {
-    const [which, setWhich] = useState<'docs' | 'card' | 'inventory' | 'time'>(
-        'docs'
-    );
+    const params = useSearchParams();
+    const router = useRouter();
+    const path = usePathname();
+
+    const which = params.get('which');
+
+    useEffect(() => {
+        for (const elem of availableParams) {
+            router.prefetch(path + `?which=${elem}`);
+        }
+    }, []);
 
     return (
         <>
@@ -34,7 +45,9 @@ export const WorkerTables: React.FC<WorkerTablesProps> = ({
                 <div className={scss.button}>
                     <Button
                         onClick={() => {
-                            setWhich('docs');
+                            router.replace(path + '?which=docs', {
+                                scroll: false,
+                            });
                         }}
                         active={which === 'docs'}
                         type="button"
@@ -45,7 +58,9 @@ export const WorkerTables: React.FC<WorkerTablesProps> = ({
                 <div className={scss.button}>
                     <Button
                         onClick={() => {
-                            setWhich('card');
+                            router.replace(path + '?which=card', {
+                                scroll: false,
+                            });
                         }}
                         active={which === 'card'}
                         type="button"
@@ -55,7 +70,11 @@ export const WorkerTables: React.FC<WorkerTablesProps> = ({
                 </div>
                 <div className={scss.button}>
                     <Button
-                        onClick={() => setWhich('inventory')}
+                        onClick={() => {
+                            router.replace(path + '?which=inventory', {
+                                scroll: false,
+                            });
+                        }}
                         active={which === 'inventory'}
                         type="button"
                     >
@@ -64,7 +83,11 @@ export const WorkerTables: React.FC<WorkerTablesProps> = ({
                 </div>
                 <div className={scss.button}>
                     <Button
-                        onClick={() => setWhich('time')}
+                        onClick={() => {
+                            router.replace(path + '?which=time', {
+                                scroll: false,
+                            });
+                        }}
                         active={which === 'time'}
                         type="button"
                     >

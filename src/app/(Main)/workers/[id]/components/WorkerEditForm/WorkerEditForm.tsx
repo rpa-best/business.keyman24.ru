@@ -32,11 +32,10 @@ import { ChangeImgModal } from 'app/(Main)/workers/[id]/components/ChangeImgModa
 export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
     worker,
     workerUser,
+    onUserSubmit,
 }) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
     const onSubmit = async (values: WorkerFormValuesType) => {
         setLoading(true);
         const tel = values.phone.replace(/[()-]/g, '');
@@ -48,7 +47,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
         };
         await createWorkerUser(worker.id, workerBody)
             .then(() => {
-                router.refresh();
+                onUserSubmit(tel, values.username);
                 toast('Успешно', {
                     position: 'bottom-right',
                     hideProgressBar: true,
@@ -186,7 +185,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                     </div>
                 </div>
             </div>
-            {worker.user === null && (
+            {workerUser === null && (
                 <div className={scss.worker_card_data_additional}>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input

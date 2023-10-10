@@ -2,6 +2,7 @@
 
 .pick_list_wrapper {
   height: 150px;
+  width: 100%;
 
   @include fullHd {
     max-height: 500px;

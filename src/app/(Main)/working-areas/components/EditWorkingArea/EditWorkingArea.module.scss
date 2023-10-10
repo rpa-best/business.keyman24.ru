@@ -1,11 +1,14 @@
 @import "scss/utils";
 
 .edit_form {
-  width: 700px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   padding-right: 10px;
+  @include fullHd {
+    width: 650px;
+  }
+  width: 600px;
   @include thousendWidth {
     width: 575px;
   }

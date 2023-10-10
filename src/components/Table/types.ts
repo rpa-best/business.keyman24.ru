@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { ILocation } from 'http/types';
 
 export interface TableRows extends Record<string, any> {
     id: number;
@@ -30,7 +31,8 @@ interface PaginatorData {
 }
 
 export interface TableProps {
-    tableRows: TableRows[];
+    tableData: TableRows[];
+    setTableData: React.Dispatch<React.SetStateAction<any[]>>;
     children: ReactElement<ColumnProps> | Array<ReactElement<ColumnProps>>;
     buttonData?: { onClick: () => void; text: string };
     handleRowClick?: (id: number) => void;
@@ -38,6 +40,7 @@ export interface TableProps {
     handleDeleteClick?: (id: number) => Promise<void>;
     paginatorData?: PaginatorData;
     rowClickable?: boolean;
+    prefetch?: (id: number) => void;
     stopPropagation?: boolean;
 }
 

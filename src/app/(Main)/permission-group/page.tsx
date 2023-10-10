@@ -15,7 +15,7 @@ const PermissionGroupPage = async () => {
     const levels = await getPermLevels(+orgId);
 
     const modifiedPermissions = permissions.results.map((p) => {
-        return { ...p, level: p.level.name };
+        return { ...p, levelDesc: p.level.name };
     });
 
     return (
@@ -25,7 +25,6 @@ const PermissionGroupPage = async () => {
             </h1>
             <PermGroupTableWrapper
                 levels={levels?.results}
-                initialPermissions={permissions.results}
                 permissions={modifiedPermissions}
             />
         </div>

@@ -3,7 +3,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { AreasTableWrapperProps } from 'app/(Main)/working-areas/types';
+import {
+    AreasTableWrapperProps,
+    IModfiedWorkingArea,
+} from 'app/(Main)/working-areas/types';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { useModalStore } from 'store/modalVisibleStore';
@@ -24,14 +27,16 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     initialAreas,
     locations,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
+    const [workingAreasData, setWorkingAreasData] =
+        useState<IModfiedWorkingArea[]>(workingAreas);
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
 
     const [formType, setFormType] = useState<'edit' | 'create'>('create');
-    const [editableArea, setEditableArea] = useState<IWorkingArea>();
+    const [editableArea, setEditableArea] = useState<IModfiedWorkingArea>();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -48,7 +53,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     };
 
     const handleEditClick = async (id: number) => {
-        setEditableArea(initialAreas.find((area) => area.id === id));
+        setEditableArea(workingAreasData.find((area) => area.id === id));
         setFormType('edit');
         setVisible(true);
     };
@@ -68,14 +73,23 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                 handleRowClick={handleRowClick}
                 handleEditClick={handleEditClick}
                 handleDeleteClick={handleDeleteClick}
-                tableRows={workingAreas}
+                tableData={workingAreasData}
+                setTableData={setWorkingAreasData}
+                prefetch={(id: number) => {
+                    const slug = initialAreas.find((area) => area.id === id);
+                    router.prefetch(
+                        'working-areas/session/' + `${slug?.type.slug}-${id}`
+                    );
+                }}
             >
                 <Column header="Наименование" field="name" />
-                <Column header="Локация" field="location" />
-                <Column header="Тип" field="type" />
+                <Column header="Локация" field="locationName" />
+                <Column header="Тип" field="typeName" />
             </Table>
             <Modal>
                 <EditWorkingArea
+                    setLoading={setLoading}
+                    setWorkingAreasData={setWorkingAreasData}
                     editableArea={editableArea}
                     formType={formType}
                     locations={locations}

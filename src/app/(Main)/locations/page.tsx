@@ -6,6 +6,7 @@ import { getLocations } from 'http/locationsApi';
 import { TableWrapper } from 'app/(Main)/locations/components/TableWrapper';
 
 import scss from 'app/(Main)/locations/locations.module.scss';
+import { getOrganizationContractors } from 'http/organizationApi';
 
 const LocationsPage = async () => {
     const cookieStore = cookies();
@@ -14,6 +15,8 @@ const LocationsPage = async () => {
 
     const locations = await getLocations(+orgId);
 
+    const organizations = await getOrganizationContractors(+orgId);
+
     const modifiedLocations = locations.results.map((l) => {
         return { ...l, desc: l.desc ?? '-' };
     });
@@ -21,7 +24,11 @@ const LocationsPage = async () => {
     return (
         <div className={scss.children_with_table}>
             <h2 className={scss.page_title_with_table}>Локации</h2>
-            <TableWrapper path="objects" tableRows={modifiedLocations}>
+            <TableWrapper
+                organizations={organizations}
+                path="objects"
+                tableRows={modifiedLocations}
+            >
                 <Column header="Наименование" field="name" />
                 <Column header="Описание" field="desc" />
             </TableWrapper>

@@ -103,7 +103,7 @@ export const Key: React.FC<KeyProps> = ({
                     </div>
                 </div>
                 {sessionLog.length !== 0 && (
-                    <Table tableRows={sessionLog}>
+                    <Table tableData={sessionLog} setTableData={() => {}}>
                         <Column header="Работник" field="workerName" />
                         <Column header="Дата" field="date" />
                         <Column header="Событие" field="modeName" />

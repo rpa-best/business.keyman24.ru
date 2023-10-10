@@ -1,13 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
 
-import {
-    ModifiedLocOrgPickList,
-    ModifiedOrganizationsPickList,
-    OrgPickListProps,
-} from 'app/(Main)/locations/edit/[id]/types';
 import { PickList } from 'components/PickList';
 import {
     createLocationOrganization,
@@ -15,23 +9,30 @@ import {
     getLocationOrganizationsOnClient,
 } from 'http/locationsApi';
 import { DefaultElem } from 'components/PickList/types';
+import { v4 } from 'uuid';
+import {
+    IModifiedOrganization,
+    OrgPickListProps,
+} from 'app/(Main)/locations/components/LocationsAction/components/types';
+import { IOrganization } from 'store/types';
+import { ILocationOrgResponse } from 'http/types';
 
 export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
     organizations,
     setListsRefresh,
+    locId,
+    loading,
+    setLoading,
 }) => {
-    const params = useParams();
-
     const [refresh, setRefresh] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [source, setSource] = useState<ModifiedOrganizationsPickList[]>([]);
-    const [target, setTarget] = useState<ModifiedLocOrgPickList[]>([]);
+    const [source, setSource] = useState<IModifiedOrganization[]>([]);
+    const [target, setTarget] = useState<ILocationOrgResponse[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             const locationOrganizations =
-                await getLocationOrganizationsOnClient(+params.id);
+                await getLocationOrganizationsOnClient(locId);
 
             const source = organizations.map((org) => {
                 const orgInLocation = locationOrganizations.results.find(
@@ -40,7 +41,7 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
                 if (orgInLocation) {
                     return;
                 }
-                return { ...org, customDesc: `ИНН: ${org.inn}` };
+                return { ...org, uuid: v4(), customDesc: `ИНН: ${org.inn}` };
             });
 
             const target =
@@ -67,14 +68,14 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
             .finally(() => {
                 setLoading(false);
             });
-    }, [organizations, params.id, refresh]);
+    }, [organizations, locId, refresh]);
 
     const handleArrowRight = async (elems: DefaultElem[]) => {
         const res = await Promise.all(
             elems.map(async (el) => {
                 return await createLocationOrganization({
                     to_org: +el.id,
-                    location: +params.id,
+                    location: locId,
                 });
             })
         );
@@ -85,7 +86,7 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
     const handleArrowLeft = async (elems: DefaultElem[]) => {
         return await Promise.all(
             elems.map(async (el) => {
-                return await deleteLocationOrganization(+params.id, +el.id);
+                return await deleteLocationOrganization(locId, +el.id);
             })
         ).then(() => {
             setListsRefresh((v) => !v);
@@ -101,8 +102,8 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
                 hidden
                 handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}
-                available={source as []}
-                selected={target as []}
+                available={source as any}
+                selected={target as any}
                 title="Настройки организации"
             />
         </>

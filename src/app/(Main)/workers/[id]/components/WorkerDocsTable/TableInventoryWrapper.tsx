@@ -5,14 +5,17 @@ import { Column } from 'components/Table/Column';
 import { IModifiedInventory } from 'app/(Main)/inventory/types';
 
 interface TableDocsWrapperProps {
-    inventory: IModifiedInventory[];
+    inventory: IModifiedInventory[] | null;
 }
 
 export const TableInventoryWrapper: React.FC<TableDocsWrapperProps> = ({
     inventory,
 }) => {
+    if (!inventory) {
+        return null;
+    }
     return (
-        <Table tableRows={inventory}>
+        <Table tableData={inventory} setTableData={() => {}}>
             <Column header="Тип" field="type" />
             <Column header="Штрихкод" field="codeNumber" />
             <Column header="Наименование" field="name" />

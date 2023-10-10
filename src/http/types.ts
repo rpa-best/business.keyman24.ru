@@ -277,7 +277,7 @@ export interface IWorkerPlan {
 }
 
 export interface ICreateSessionBody
-    extends Pick<ISession, 'id' | 'number' | 'status'> {
+    extends Pick<ISession, 'number' | 'status'> {
     start_date: string;
     end_date: string | null;
     user: string;
@@ -387,7 +387,7 @@ export interface IWorkerUser {
     name: string;
     lastname: string;
     surname: string;
-    isActive: string;
+    isActive: boolean;
 }
 
 export interface CreateWorkerUserBody {
@@ -413,7 +413,9 @@ export type GetClientOrgPermissions = (
 
 export type GetLevels = (orgId: number) => Promise<IResponse<ILevel>>;
 
-export type CreateGroupPerm = (body: CreateGroupPermBody) => Promise<void>;
+export type CreateGroupPerm = (
+    body: CreateGroupPermBody
+) => Promise<IGroupPermission>;
 
 export type EditGroupPerm = (
     permId: number,
@@ -568,12 +570,12 @@ export type GetLocationsOnClient = () => Promise<IResponse<ILocation>>;
 
 export type GetLocation = (orgId: number, locId: number) => Promise<ILocation>;
 
-export type CreateLocation = (body: CreateLocationBody) => Promise<void>;
+export type CreateLocation = (body: CreateLocationBody) => Promise<ILocation>;
 
 export type CreateLocationObject = (
     locId: number,
     body: CreateLocationBody
-) => Promise<void>;
+) => Promise<IObject>;
 
 export type EditLocationObject = (
     locId: number,
@@ -605,7 +607,7 @@ export type CreateLocationKeys = (
     locId: number,
     objId: number,
     body: LocKeyBody[]
-) => Promise<void>;
+) => Promise<IResponse<LocKeysResponse>>;
 
 export type DeleteLocationKey = (
     locId: number,
@@ -682,7 +684,9 @@ export type GetSessionLog = (
     sessionId: number
 ) => Promise<IResponse<SessionLogResponse>>;
 
-export type CreateWorkingArea = (data: CreateWorkingAreaProp) => Promise<void>;
+export type CreateWorkingArea = (
+    data: CreateWorkingAreaProp
+) => Promise<IWorkingArea>;
 
 export type PatchWorkingArea = (
     data: CreateWorkingAreaProp,
@@ -696,7 +700,7 @@ export type CloseSession = (areaId: number, sessionId: number) => Promise<void>;
 export type CreateSession = (
     areaId: number,
     body: ICreateSessionBody
-) => Promise<void>;
+) => Promise<ISession>;
 
 export type SendCheckSession = (
     areaId: number,
@@ -720,7 +724,7 @@ export type SendSessionAction = (
         mode?: boolean;
         device?: number;
     }
-) => Promise<void>;
+) => Promise<SessionLogResponse>;
 
 export type GetWorkers = () => Promise<IResponse<IWorker>>;
 

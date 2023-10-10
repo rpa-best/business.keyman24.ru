@@ -26,7 +26,11 @@ export const getWorkingAreaTypes: T.GetWorkingAreaTypes = async (orgId) => {
 
 export const createWorkingArea: T.CreateWorkingArea = async (body) => {
     try {
-        await $clientAuth.post(`business/${orgId}/working_area/`, body);
+        const res = await $clientAuth.post(
+            `business/${orgId}/working_area/`,
+            body
+        );
+        return res.data;
     } catch (e: unknown) {
         if (e instanceof AxiosError) {
             throw new Error('Ошибка в создании рабочего места');
@@ -101,10 +105,11 @@ export const closeSession: T.CloseSession = async (areaId, sessionId) => {
 
 export const createSession: T.CreateSession = async (areaId, body) => {
     try {
-        await $clientAuth.post(
+        const res = await $clientAuth.post(
             `business/${orgId}/working_area/${areaId}/session/`,
             body
         );
+        return res.data;
     } catch (e: unknown) {
         if (e instanceof AxiosError) {
             throw new Error('Ошибка в создании рабочей сессии');
@@ -136,8 +141,9 @@ export const sendSessionAction: T.SendSessionAction = async (
     sessionId,
     body
 ) => {
-    await $clientAuth.post(
+    const res = await $clientAuth.post(
         `business/${orgId}/working_area/${areaId}/session/${sessionId}/use/`,
         body
     );
+    return res.data;
 };

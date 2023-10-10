@@ -17,7 +17,7 @@ import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 interface ObjectsTableWrapper {
-    modifiedObjects: { id: number }[];
+    modifiedObjects: IObject[];
     locId: number;
 }
 
@@ -25,7 +25,7 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     modifiedObjects,
     locId,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
+    const [tableRows, setTableRows] = useState(modifiedObjects);
 
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
@@ -56,7 +56,6 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
         deleteLocationObject(locId, id).finally(() => {
-            router.refresh();
             setLoading(false);
         });
     };
@@ -69,15 +68,18 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
                     onClick: () => handleAddClick(),
                     text: 'Добавить',
                 }}
+                prefetch={(id) => router.prefetch(`${pathname}/${id}`)}
                 handleDeleteClick={handleDeleteClick}
                 handleRowClick={handleRowClick}
-                tableRows={modifiedObjects}
+                tableData={tableRows}
+                setTableData={setTableRows}
             >
                 <Column header="Наименование" field="name" />
                 <Column header="Описание" field="desc" />
             </Table>
             <Modal>
                 <ObjectFormModal
+                    setObjects={setTableRows}
                     object={selectedObject}
                     locId={locId}
                     type={formType}

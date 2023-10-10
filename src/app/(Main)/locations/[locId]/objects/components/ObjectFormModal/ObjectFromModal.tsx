@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 
-import { LocationInfoWrapperValues } from 'app/(Main)/locations/edit/[id]/types';
-import { useRouter } from 'next/navigation';
 import { createLocationObject, editLocationObject } from 'http/locationsApi';
 import {
     ObjectFormModalProps,
@@ -13,51 +11,61 @@ import {
 import { ObjectFormValidate } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/ObjectFormModal.utils';
 import { useModalStore } from 'store/modalVisibleStore';
 import { useNotificationStore } from 'store/notificationStore';
-
-import scss from './ObjectFormModal.module.scss';
 import { Input } from 'components/UI/Inputs/Input';
 import { Button } from 'components/UI/Buttons/Button';
 import { Spinner } from 'components/Spinner';
-import { subAction } from 'helpers/subAction';
-import { useConstructorStore } from 'store/useConstructorStore';
+
+import scss from './ObjectFormModal.module.scss';
+import { LocationFormValues } from 'app/(Main)/locations/components/LocationsAction/types';
 
 export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     locId,
     object,
     type,
+    setObjects,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
-    const onSubmit = (values: LocationInfoWrapperValues) => {
+
+    const onSubmit = (values: ObjectFormModalValues) => {
         setLoading(true);
         const body = {
-            desc: values.desc,
-            name: values.name,
+            desc: values.name,
+            name: values.desc,
         };
 
         if (type === 'create') {
             createLocationObject(locId, body)
-                .then(() => {
-                    router.refresh();
+                .then((d) => {
+                    setObjects((obj) => [...obj, d]);
                 })
                 .finally(() => {
                     setLoading(false);
                     setVisible(false);
                 });
         } else {
-            editLocationObject(locId, object?.id as number, body).finally(
-                () => {
-                    router.refresh();
+            editLocationObject(locId, object?.id as number, body)
+                .then(() => {
+                    setObjects((obj) =>
+                        obj.map((objects) => {
+                            if (objects.id === object?.id) {
+                                return {
+                                    ...objects,
+                                    name: values.name,
+                                    desc: values.desc,
+                                };
+                            }
+                            return objects;
+                        })
+                    );
+                })
+                .finally(() => {
                     setLoading(false);
                     setVisible(false);
-                }
-            );
+                });
         }
     };
 

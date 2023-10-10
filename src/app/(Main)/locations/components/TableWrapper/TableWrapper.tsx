@@ -9,19 +9,35 @@ import { deleteLocation } from 'http/locationsApi';
 
 import { useConstructorStore } from 'store/useConstructorStore';
 import { subAction } from 'helpers/subAction';
+import { EditWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea';
+import { Modal } from 'components/Modal';
+import { LocationAction } from 'app/(Main)/locations/components/LocationsAction';
+import { ILocation } from 'http/types';
+import { useModalStore } from 'store/modalVisibleStore';
+import { IOrganization } from 'store/types';
+import { NotificationToast } from 'components/NotificationConfirm';
+import { ServiceChangeToast } from 'components/ServiceChangeToast';
 
 interface TableWrapperProps {
-    tableRows: Array<any>;
+    tableRows: ILocation[];
     children: TableProps['children'];
     path?: string;
+    organizations: IOrganization[];
 }
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
     children,
     tableRows,
     path,
+    organizations,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
+    const [tableData, setTableData] = useState<ILocation[]>(tableRows);
+
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [formType, setFormType] = useState<'create' | 'edit'>('create');
+    const [editableLocation, setEditableLocation] = useState<ILocation | null>(
+        null
+    );
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
@@ -29,22 +45,22 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     const pathName = usePathname();
 
     const handleAddClick = () => {
-        router.push(`${pathName}/create`);
+        setFormType('create');
+        setEditableLocation(null);
+        setVisible(true);
     };
 
     const handleEditClick = (id: number) => {
-        router.push(`${pathName}/edit/${id}`);
+        setFormType('edit');
+        setEditableLocation(tableData.find((el) => el.id === id) ?? null);
+        setVisible(true);
     };
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteLocation(id)
-            .then(() => {
-                router.refresh();
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        deleteLocation(id).finally(() => {
+            setLoading(false);
+        });
     };
 
     const handleRowClick = (id: number) => {
@@ -61,11 +77,29 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
                 handleDeleteClick={handleDeleteClick}
                 handleEditClick={handleEditClick}
                 handleRowClick={handleRowClick}
-                tableRows={tableRows}
+                setTableData={setTableData}
+                tableData={tableData}
+                prefetch={(id: number) =>
+                    router.prefetch(
+                        `${pathName}/${id}${path ? '/' + path : ''}`
+                    )
+                }
             >
                 {children}
             </Table>
-
+            <Modal>
+                <LocationAction
+                    setTableData={setTableData}
+                    loading={loading}
+                    organizations={organizations}
+                    setLoading={setLoading}
+                    location={editableLocation as ILocation}
+                    formType={formType}
+                />
+            </Modal>
+            <NotificationToast syncWithModal>
+                <ServiceChangeToast count={1} slug="Location" />
+            </NotificationToast>
             {loading && <Spinner />}
         </>
     );

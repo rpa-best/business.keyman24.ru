@@ -1,0 +1,42 @@
+@import "scss/utils";
+@import "app/(Main)/working-areas/components/EditWorkingArea/EditWorkingArea.module.scss";
+
+.edit_form_location {
+  @extend .edit_form;
+  @include fullHd {
+    max-height: 650px;
+  }
+  max-height: 550px;
+}
+
+.pick_list_wrapper {
+  height: 100%;
+  @include thousendWidth {
+    width: 100%;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}
+
+.title {
+  text-align: center;
+  @include MontserratSemiBold(24px);
+  color: white;
+  margin-bottom: 20px;
+  @include phoneOrTablet {
+    font-size: 20px;
+    text-align: left;
+  }
+}
+
+.button_wrapper {
+  @include fullHd {
+    width: 60%;
+  }
+  width: 75%;
+  margin: 10px auto;
+  @include phoneOrTablet {
+    width: 100%;
+  }
+}

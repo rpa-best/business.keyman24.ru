@@ -1,30 +1,34 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { deleteWorker } from 'http/workerApi';
 import { Spinner } from 'components/Spinner';
-import { WorkerTableWrapperProps } from 'app/(Main)/workers/types';
+import { NewWorkers, WorkerTableWrapperProps } from 'app/(Main)/workers/types';
 
 export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
     workers,
 }) => {
+    const [tableData, setTableData] = useState<NewWorkers[]>(workers.results);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setTableData(workers.results);
+    }, [workers]);
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
         await deleteWorker(id).finally(() => {
             setLoading(false);
-            router.refresh();
         });
     };
 
     const handleRowClick = (id: number) => {
-        router.push('/workers/' + id);
+        router.push(`/workers/${id}?which=docs`);
     };
 
     return (
@@ -32,7 +36,8 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
             <Table
                 handleRowClick={handleRowClick}
                 handleDeleteClick={handleDeleteClick}
-                tableRows={workers.results}
+                tableData={tableData}
+                setTableData={setTableData}
             >
                 <Column header="ФИО" field="name" />
                 <Column header="Имя пользователя" field="user" />
