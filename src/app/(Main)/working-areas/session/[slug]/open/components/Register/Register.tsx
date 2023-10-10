@@ -6,11 +6,19 @@ import { useParams, useRouter } from 'next/navigation';
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 import { sendActivateSession, sendSessionAction } from 'http/workingAreaApi';
-import { RegisterProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
+import {
+    ModifiedRegisterLog,
+    RegisterProps,
+} from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { IOrganization } from 'store/types';
 import { getWorkerDocs, getWorkers } from 'http/workerApi';
-import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
+import {
+    IWorker,
+    IWorkerDocs,
+    SessionLogResponse,
+    SocketResponse,
+} from 'http/types';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
 import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
@@ -31,6 +39,8 @@ export const Register: React.FC<RegisterProps> = ({
     currentAreaId,
     sessionLog,
 }) => {
+    const [sessionLogData, setSessionLogData] =
+        useState<ModifiedRegisterLog[]>(sessionLog);
     const router = useRouter();
 
     const [selectedOrg, setSelectedOrg] = useState<IOrganization>();
@@ -53,7 +63,10 @@ export const Register: React.FC<RegisterProps> = ({
                 device: data.data.device,
             };
             sendSessionAction(currentAreaId, currentSessionId, body as any)
-                .then(() => {
+                .then((d) => {
+                    /*const newLog: ModifiedRegisterLog = {...d, workerName: selectedWorker?.name as string, inventoryName:}
+                    setSessionLogData((log) => [d, ...log]);*/
+                    router.refresh();
                     toast('Успешно', {
                         position: 'bottom-right',
                         hideProgressBar: true,
@@ -79,7 +92,6 @@ export const Register: React.FC<RegisterProps> = ({
                     }
                 })
                 .finally(() => {
-                    router.refresh();
                     setLoading(false);
                 });
         },
@@ -187,7 +199,10 @@ export const Register: React.FC<RegisterProps> = ({
                         />
                     </div>
                     <div className={scss.working_view_table}>
-                        <Table tableRows={sessionLog}>
+                        <Table
+                            tableData={sessionLogData}
+                            setTableData={() => {}}
+                        >
                             <Column header="Работник" field="workerName" />
                             <Column header="Дата" field="date" />
                             <Column header="Тип" field="modeName" />
@@ -196,7 +211,7 @@ export const Register: React.FC<RegisterProps> = ({
                 </div>
             )}
             {!selectedWorker && (
-                <Table tableRows={sessionLog}>
+                <Table tableData={sessionLogData} setTableData={() => {}}>
                     <Column header="Работник" field="workerName" />
                     <Column header="Дата" field="date" />
                     <Column header="Тип" field="modeName" />

@@ -34,7 +34,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [modalType, setModalType] = useState<'one' | 'more'>('one');
 
     const [setNoteVisible] = useModalStore((state) => [state.setVisible]);
@@ -55,8 +54,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         return accumulator + currentValue.count;
     }, 0);
 
-    const lastId = useRef<number>();
-
     const router = useRouter();
 
     const pathname = usePathname();
@@ -64,14 +61,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     useEffect(() => {
         setGeneratedData(inventory);
     }, [inventory]);
-
-    useEffect(() => {
-        const ids = inventory.map((i) => {
-            return i.id;
-        });
-        const max = Math.max(...ids);
-        lastId.current = max;
-    }, []);
 
     const handleEditClick = async (id: number) => {
         setLoading(true);
@@ -136,7 +125,8 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     handleEditClick={handleEditClick}
                     handleRowClick={handleRowClick}
                     handleDeleteClick={handleDeleteClick}
-                    tableRows={inventory}
+                    tableData={generatedData}
+                    setTableData={setGeneratedData}
                     paginatorData={{ offset: 25, countItems: count }}
                     stopPropagation
                 >
@@ -159,7 +149,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
             {modalType === 'one' && (
                 <Modal syncWithNote>
                     <InventoryModal
-                        lastId={lastId.current as number}
                         setSelectedImage={setSelectedItemImage as any}
                         selectedImage={selectedItemImage as []}
                         selectedItem={selectedItem}

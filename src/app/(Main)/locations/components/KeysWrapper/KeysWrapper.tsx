@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -27,6 +27,7 @@ import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './KeysWrapper.module.scss';
 import { SelectLocationTippy } from 'app/(Main)/inventory/components/SelectLocationTippy';
+import { revalidatePath } from 'next/cache';
 
 interface KeysWrapperProps {
     count: number;
@@ -34,7 +35,6 @@ interface KeysWrapperProps {
 }
 
 export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const [loading, setLoading] = useState(false);
@@ -65,10 +65,9 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         setLoading(true);
         await deleteLocationKey(+params.locId, +params.objId, +id).finally(
             () => {
-                router.refresh();
+                setLoading(false);
             }
         );
-        setLoading(false);
     };
 
     const handleGenerateClick = async () => {
@@ -78,9 +77,9 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         });
 
         createLocationKeys(+params.locId, +params.objId, body)
-            .then(() => {
+            .then((d) => {
                 setData([]);
-                router.refresh();
+                revalidatePath(pathName);
             })
             .finally(() => {
                 setLoading(false);
@@ -123,7 +122,8 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                                 }}
                                 handleRowClick={handleRowClick}
                                 handleDeleteClick={handleDeleteClick}
-                                tableRows={generatedData}
+                                tableData={generatedData}
+                                setTableData={setGeneratedData}
                                 stopPropagation
                             >
                                 <Column

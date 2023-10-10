@@ -128,7 +128,7 @@ export const Security: React.FC<SecurityProps> = ({
                         </div>
                     )}
                     <div className={scss.working_view_table}>
-                        <Table tableRows={sessionLog}>
+                        <Table tableData={sessionLog} setTableData={() => {}}>
                             <Column header="Работник" field="workerName" />
                             <Column header="Дата" field="date" />
                             <Column header="Тип" field="modeName" />

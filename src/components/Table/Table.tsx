@@ -24,7 +24,8 @@ import { Spinner } from 'components/Spinner';
 export const TableContext = createContext<ITableContext | null>(null);
 
 export const Table = memo(function MemoTable({
-    tableRows,
+    tableData,
+    setTableData,
     handleRowClick,
     children,
     paginatorData,
@@ -33,20 +34,22 @@ export const Table = memo(function MemoTable({
     handleEditClick,
     handleDeleteClick,
     stopPropagation,
+    prefetch,
 }: TableProps) {
     const [loading, setLoading] = useState(false);
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
-    const [tableData, setTableData] = useState(tableRows);
 
     const router = useRouter();
 
     const pathname = usePathname();
 
-    const totalPages = paginatorData
-        ? Math.ceil(paginatorData?.countItems / paginatorData.offset)
-        : null;
+    const totalPages = useMemo(() => {
+        return paginatorData
+            ? Math.ceil(paginatorData?.countItems / paginatorData.offset)
+            : null;
+    }, [paginatorData]);
 
     const headerClickCount = useRef<number>(1);
     const headerRef = useRef<HTMLDivElement>(null);
@@ -54,10 +57,6 @@ export const Table = memo(function MemoTable({
     const memoizedHeaders = useMemo(() => headers, [headers]);
 
     const { tabletBreak } = useResizeWidth();
-
-    useEffect(() => {
-        setTableData(tableRows);
-    }, [tableRows]);
 
     const handlePaginatorClick = (page: number) => {
         setCurrentPage(page);
@@ -70,6 +69,14 @@ export const Table = memo(function MemoTable({
             setLoading(false);
         }, 200);
     };
+
+    useEffect(() => {
+        if (prefetch) {
+            for (const elem of tableData) {
+                prefetch(elem.id);
+            }
+        }
+    }, [prefetch, tableData]);
 
     const sortTableData = (field: string) => {
         if (field === sortedField) {

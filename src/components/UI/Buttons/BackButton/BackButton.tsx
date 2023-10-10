@@ -46,6 +46,10 @@ export const BackButton: React.FC<BackButtonProps> = ({
                 router.push(
                     routeWithoutWord.slice(0, routeWithoutSlash.length - 1)
                 );
+            } else {
+                const wordSlashIndex = routeWithoutSlash.lastIndexOf('/');
+                const routeWithoutWord = pathName.slice(0, wordSlashIndex);
+                router.push(routeWithoutWord);
             }
         } else if (skipNumber) {
             // @ts-ignore

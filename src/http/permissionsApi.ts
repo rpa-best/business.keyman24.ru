@@ -90,7 +90,11 @@ export const getPermLevels: T.GetLevels = async (orgId) => {
 };
 
 export const createGroupPerm: T.CreateGroupPerm = async (body) => {
-    await $clientAuth.post(`business/${orgId}/permission/group/`, body);
+    const res = await $clientAuth.post(
+        `business/${orgId}/permission/group/`,
+        body
+    );
+    return res.data;
 };
 
 export const editGroupPerm: T.EditGroupPerm = async (permId, body) => {

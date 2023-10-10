@@ -1,6 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
-import { IInventory, IWorker, LocKeysResponse } from 'http/types';
-import { ModifiedWorker } from 'app/(Main)/locations/edit/[id]/types';
+import React, { Dispatch, SetStateAction } from 'react';
 
 export interface IData {
     id: string;
@@ -10,6 +8,9 @@ export interface IData {
 
 export interface WorkersPickListWrapperProps {
     listsRefresh: boolean;
+    locId: number;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    loading: boolean;
 }
 
 export interface IGeneratedKeys {

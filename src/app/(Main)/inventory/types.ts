@@ -9,7 +9,6 @@ export interface IModifiedInventory
 
 export interface InventoryModalProps {
     type: 'create' | 'edit';
-    lastId: number;
     selectedItem?: IModifiedInventory;
     selectedImage: IInventoryImage[] | { img: File; preview: string }[];
     setSelectedImage: React.Dispatch<

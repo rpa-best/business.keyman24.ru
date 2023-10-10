@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Table } from 'components/Table';
 import { SessionWrapperProps } from 'app/(Main)/working-areas/types';
@@ -15,7 +15,7 @@ import {
     useSearchParams,
 } from 'next/navigation';
 import { Button } from 'components/UI/Buttons/Button';
-import { ICreateSessionBody } from 'http/types';
+import { ICreateSessionBody, IModifiedSession } from 'http/types';
 import {
     closeSession,
     createSession,
@@ -27,19 +27,22 @@ import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { toast } from 'react-toastify';
 
 import scss from './SessionWrapper.module.scss';
+import { DateHelper } from 'helpers/dateHelper';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
     areaId,
     type,
 }) => {
+    const [sessionsData, setSessionsData] =
+        useState<IModifiedSession[]>(sessions);
     const [loading, setLoading] = useState(false);
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
-    const [currentSession, setCurrentSession] = useState(
-        sessions.find((s) => s.status === 'В процессе')?.id ?? null
-    );
+    const currentSession = useMemo(() => {
+        return sessionsData.find((s) => s.status === 'В процессе')?.id ?? null;
+    }, [sessionsData]);
 
     const router = useRouter();
 
@@ -51,9 +54,8 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const needAttach = type !== 'register';
 
     useEffect(() => {
-        const sessionId = sessions.find((s) => s.status === 'В процессе')?.id;
-        setCurrentSession(sessionId ?? null);
-    }, [sessions]);
+        router.prefetch(`${pathname}/open/${currentSession as number}`);
+    }, [currentSession]);
 
     const handleRowClick = (id: number) => {
         const session = sessions.find((s) => s.id === id);
@@ -90,9 +92,6 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         setLoading(true);
         needAttach && setVisible(true);
 
-        let maxNumber = Math.max(...sessions.map((s) => s.id));
-        maxNumber === -Infinity ? (maxNumber = 1) : '';
-
         const currentDate = `${new Date().toLocaleDateString(
             'ru'
         )} ${new Date().toLocaleTimeString('ru')} `;
@@ -100,18 +99,35 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         const body: ICreateSessionBody = {
             status: 1,
             number: sessions.length + 1,
-            id: maxNumber + 1,
             start_date: currentDate,
             end_date: null,
             is_active: false,
             user: user?.username as string,
         };
-        await createSession(areaId, body).then(() => {
-            router.refresh();
+
+        await createSession(areaId, body).then((d) => {
+            const startDate = new DateHelper(d.startDate);
+            const endDate = new DateHelper(d.endDate ?? '');
+            const newSession =
+                d.status === 1
+                    ? {
+                          ...d,
+                          status: 'В процессе',
+                          startDate: `${startDate.getDate} в ${startDate.getTime}`,
+                          endDate: '-',
+                      }
+                    : {
+                          ...d,
+                          status: 'Завершена',
+                          startDate: `${startDate.getDate} в ${startDate.getTime}`,
+                          endDate: `${endDate.getDate} в ${endDate.getTime}`,
+                      };
+            setSessionsData((d) => [newSession, ...d]);
+            router.prefetch(`${pathname}/open/${newSession.id}`);
             if (!needAttach) {
-                sendActivateSession(areaId, maxNumber + 1)
+                sendActivateSession(areaId, newSession.id)
                     .then(() => {
-                        router.push(`${pathname}/open/${maxNumber + 1}`);
+                        router.push(`${pathname}/open/${newSession.id}`);
                     })
                     .catch((e) => {
                         toast('Ошибка', {
@@ -134,9 +150,27 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
     const onCloseSessionClick = async () => {
         setLoading(true);
-        await closeSession(areaId, currentSession as number);
-        router.refresh();
-        setLoading(false);
+        await closeSession(areaId, currentSession as number)
+            .then(() => {
+                setSessionsData((d) =>
+                    d.map((el) => {
+                        const d = new Date();
+                        if (el.id === currentSession) {
+                            return {
+                                ...el,
+                                status: 'Завершена',
+                                endDate: `${d.getDate()}.${
+                                    d.getMonth() + 1
+                                } в ${d.getHours()}:${d.getMinutes()}`,
+                            };
+                        }
+                        return el;
+                    })
+                );
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const onArchiveClick = () => {
@@ -188,7 +222,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                     </div>
                 </div>
             </div>
-            <Table tableRows={sessions} handleRowClick={handleRowClick}>
+            <Table
+                tableData={sessionsData}
+                setTableData={() => {}}
+                handleRowClick={handleRowClick}
+            >
                 <Column header="Дата начала" field="startDate" />
                 <Column header="Дата окончания" field="endDate" />
                 <Column header="Статус" field="status" />

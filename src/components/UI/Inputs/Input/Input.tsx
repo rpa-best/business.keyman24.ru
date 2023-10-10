@@ -39,7 +39,8 @@ export const Input: React.FC<T.IInputProps> = ({
     });
 
     const labelClass = clsx({
-        [scss.input_label]: true,
+        [scss.input_label]: label && label?.length <= 25,
+        [scss.input_label_small]: label && label?.length >= 25,
     });
 
     const inputClass = clsx({

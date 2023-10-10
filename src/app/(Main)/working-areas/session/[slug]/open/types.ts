@@ -8,11 +8,19 @@ export interface RegisterProps {
     organizations: IOrganization[];
     currentAreaId: number;
     currentSessionId: number;
-    sessionLog: SessionLogResponse[];
+    sessionLog: ModifiedRegisterLog[];
 }
 
-export interface SecurityProps extends Omit<RegisterProps, 'organizations'> {
+export interface SecurityProps
+    extends Omit<RegisterProps, 'organizations' | 'sessionLog'> {
     areaName: string;
+    sessionLog: Omit<ModifiedRegisterLog, 'inventoryName'>[];
+}
+
+export interface ModifiedRegisterLog extends SessionLogResponse {
+    workerName: string;
+    modeName: string;
+    inventoryName: string;
 }
 
 export interface KeyProps extends RegisterProps {

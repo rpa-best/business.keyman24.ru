@@ -73,7 +73,8 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
                                 offset: 30,
                                 countItems: keyHistory.count,
                             }}
-                            tableRows={tableHistoryRows}
+                            setTableData={() => {}}
+                            tableData={tableHistoryRows}
                         >
                             <Column header="Дата" field="date" />
                             <Column header="Время" field="time" />

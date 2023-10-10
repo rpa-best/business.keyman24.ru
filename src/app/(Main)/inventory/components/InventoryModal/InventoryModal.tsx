@@ -27,12 +27,10 @@ import { useConstructorStore } from 'store/useConstructorStore';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
-    lastId,
     selectedImage,
     setSelectedImage,
     selectedItem,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
@@ -50,13 +48,14 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         if (type === 'create') {
             await createInventoryItem(body)
                 .then(() => {
-                    selectedImage.forEach(async (i) => {
+                    //Нужен id в createInventory
+                    /*  selectedImage.forEach(async (i) => {
                         await uploadInventoryPhoto(
                             lastId + 1,
                             // @ts-ignore
                             i.img
                         );
-                    });
+                    });*/
                 })
                 .finally(() => {
                     router.refresh();

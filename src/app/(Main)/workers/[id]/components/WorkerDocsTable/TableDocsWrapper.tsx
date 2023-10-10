@@ -5,12 +5,15 @@ import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 
 interface TableDocsWrapperProps {
-    data: IWorkerDocs[];
+    data: IWorkerDocs[] | null;
 }
 
 export const TableDocsWrapper: React.FC<TableDocsWrapperProps> = ({ data }) => {
+    if (!data) {
+        return null;
+    }
     return (
-        <Table tableRows={data}>
+        <Table tableData={data} setTableData={() => {}}>
             <Column header="Наименование" field="name" />
             <Column header="Дата начала" field="activeFrom" />
             <Column header="Дата окончания" field="activeTo" />

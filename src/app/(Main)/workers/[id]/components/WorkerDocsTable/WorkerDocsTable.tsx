@@ -15,10 +15,12 @@ import scss from './WorkerDocsTable.module.scss';
 
 interface WorkerDocsTableProps {
     id: string;
+    searchParams: { which: 'docs' | 'inventory' | 'card' | 'time' };
 }
 
 export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
     id,
+    searchParams,
 }) => {
     const cookieStore = cookies();
 
@@ -26,48 +28,60 @@ export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
 
     const worker = await getWorker(+orgId, +id);
 
-    const workerDocs = await getServerWorkerDocs(+id, +orgId);
+    const workerDocs =
+        searchParams.which === 'docs'
+            ? await getServerWorkerDocs(+id, +orgId)
+            : null;
 
-    const docs = workerDocs.results.map((w) => {
-        const activeTo = new Date(w.activeTo);
+    let docs = null;
 
-        const activeFrom = new Date(w.activeFrom);
+    if (workerDocs) {
+        docs = workerDocs.results.map((w) => {
+            const activeTo = new Date(w.activeTo);
 
-        const options = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-        };
-        const formattedActiveTo = activeTo.toLocaleDateString(
-            'ru-RU',
-            options as any
-        );
-        const formattedActiveFrom = activeFrom.toLocaleDateString(
-            'ru-RU',
-            options as any
-        );
+            const activeFrom = new Date(w.activeFrom);
 
-        return {
-            ...w,
-            activeTo: formattedActiveTo,
-            activeFrom: formattedActiveFrom,
-        };
-    });
+            const options = {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            };
+            const formattedActiveTo = activeTo.toLocaleDateString(
+                'ru-RU',
+                options as any
+            );
+            const formattedActiveFrom = activeFrom.toLocaleDateString(
+                'ru-RU',
+                options as any
+            );
 
-    const cards = await getWorkerCard(+orgId, +id);
+            return {
+                ...w,
+                activeTo: formattedActiveTo,
+                activeFrom: formattedActiveFrom,
+            };
+        });
+    }
 
-    const time = await getWorkerPlan(+orgId, +id);
+    const cards =
+        searchParams.which === 'card' ? await getWorkerCard(+orgId, +id) : null;
 
-    const workerInventory = worker.inventories.map((i) => {
-        return { ...i, type: i.type.name };
-    });
+    const time =
+        searchParams.which === 'time' ? await getWorkerPlan(+orgId, +id) : null;
+
+    const workerInventory =
+        searchParams.which === 'inventory'
+            ? worker.inventories.map((i) => {
+                  return { ...i, type: i.type.name, location: i.location.name };
+              })
+            : null;
 
     return (
         <div className={scss.info_wrapper}>
             <WorkerTables
-                cards={cards.results}
+                cards={cards?.results ?? null}
                 docs={docs}
-                workerInventory={workerInventory as any}
+                workerInventory={workerInventory}
                 time={time}
             />
         </div>

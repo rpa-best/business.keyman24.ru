@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-import { PermGroupTableWrapperProps } from 'app/(Main)/permission-group/types';
+import {
+    IModifiedPermissions,
+    PermGroupTableWrapperProps,
+} from 'app/(Main)/permission-group/types';
 import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { PermModalForm } from 'app/(Main)/permission-group/components/PermModalForm';
@@ -16,16 +19,18 @@ import { toast } from 'react-toastify';
 
 export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     permissions,
-    initialPermissions,
     levels,
 }) => {
-    const [loading, setLoading] = useState(false);
+    const [tableData, setTableData] =
+        useState<IModifiedPermissions[]>(permissions);
     const [formType, setFormType] = useState<'create' | 'edit'>('create');
-    const [selectedPerm, setSelectedPerm] = useState<IGroupPermission>();
+    const [selectedPerm, setSelectedPerm] = useState<IModifiedPermissions>();
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [loading, setLoading] = useState(false);
 
     const handleRowClick = (id: number) => {
-        const selectedPerm = initialPermissions.find((p) => p.id === id);
+        const selectedPerm = tableData.find((p) => p.id === id);
         setSelectedPerm(selectedPerm);
         setFormType('edit');
         setVisible(true);
@@ -38,7 +43,7 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     };
 
     const handleDeleteButtonClick = async (id: number) => {
-        const selectedPerm = initialPermissions.find((p) => p.id === id);
+        const selectedPerm = tableData.find((p) => p.id === id);
         if (selectedPerm?.org) {
             setLoading(true);
             await deleteGroupPerm(id).finally(() => {
@@ -52,6 +57,7 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
                 type: 'warning',
                 theme: 'colored',
             });
+            throw Error('Зарезерированно');
         }
     };
 
@@ -61,13 +67,16 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
                 handleRowClick={handleRowClick}
                 handleDeleteClick={handleDeleteButtonClick}
                 buttonData={{ onClick: handleButtonClick, text: 'Добавить' }}
-                tableRows={permissions}
+                tableData={tableData}
+                setTableData={setTableData}
             >
                 <Column sortable header="Наименование" field="name" />
-                <Column sortable header="Уровень прав" field="level" />
+                <Column sortable header="Уровень прав" field="levelDesc" />
             </Table>
             <Modal>
                 <PermModalForm
+                    setTableData={setTableData}
+                    tableData={tableData}
                     formType={formType}
                     selectedPerm={selectedPerm}
                     level={levels}

@@ -4,10 +4,10 @@ import { ModifiedWorkers } from 'app/(Main)/workers/types';
 import { WorkersTableWrapper } from 'app/(Main)/workers/components/WorkersTableWrapper';
 import { getServerWorkers } from 'http/workerApi';
 import { WorkersButton } from 'app/(Main)/workers/components/WorkersButton';
-
-import scss from './Worker.module.scss';
 import { Modal } from 'components/Modal';
 import { WorkersModal } from 'app/(Main)/workers/components/WorkersModal';
+
+import scss from './Worker.module.scss';
 
 const WorkersPage = async () => {
     const cookieStore = cookies();

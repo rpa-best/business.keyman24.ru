@@ -5,17 +5,21 @@ import {
     IType,
     IWorkingArea,
 } from 'http/types';
+import React from 'react';
 
-export interface IModfiedWorkingArea
-    extends Omit<Omit<IWorkingArea, 'type'>, 'location'> {
-    location: string;
-    type: string;
+export interface IModfiedWorkingArea extends IWorkingArea {
+    locationName: string;
+    typeName: string;
 }
 
 export interface EditWorkingAreaProps {
     formType: 'edit' | 'create';
-    editableArea?: IWorkingArea;
+    editableArea?: IModfiedWorkingArea;
     locations: ILocation[];
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    setWorkingAreasData: React.Dispatch<
+        React.SetStateAction<IModfiedWorkingArea[]>
+    >;
     types: IType[];
 }
 

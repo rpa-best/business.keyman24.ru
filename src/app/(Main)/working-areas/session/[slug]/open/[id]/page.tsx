@@ -10,6 +10,7 @@ import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './OpenSession.module.scss';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
+import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
 
 interface OpenSessionPage {
     params: {
@@ -90,7 +91,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             );
         }
         case 'register': {
-            const registerLog = modifiedLog.map((l) => {
+            const registerLog: ModifiedRegisterLog[] = modifiedLog.map((l) => {
                 const mode = l.mode ? 'Выдан' : 'Сдан';
                 return {
                     ...l,

@@ -32,7 +32,9 @@ const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
     return (
         <div className={scss.children_with_table}>
             <div className={scss.button_wrapper}>
-                <BackButton>Назад</BackButton>
+                <BackButton skipNumber skipWord>
+                    Назад
+                </BackButton>
             </div>
             <h2 className={scss.page_title_with_table}>
                 Объекты на локации: {locationName}

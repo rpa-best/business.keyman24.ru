@@ -4,9 +4,12 @@ import { ICard } from 'http/types';
 import { Column } from 'components/Table/Column';
 import { Table } from 'components/Table';
 
-export const TableCardWrapper = ({ data }: { data: ICard[] }) => {
+export const TableCardWrapper = ({ data }: { data: ICard[] | null }) => {
+    if (!data) {
+        return null;
+    }
     return (
-        <Table tableRows={data}>
+        <Table tableData={data} setTableData={() => {}}>
             <Column header="Номер" field="id" />
             <Column header="Наименование" field="card" />
         </Table>

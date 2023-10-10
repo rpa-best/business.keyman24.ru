@@ -8,15 +8,19 @@ import scss from './WorkerTimeTable.module.scss';
 import { TimeTableItem } from 'app/(Main)/workers/[id]/components/WorkerTimeTable/TimeTableItem';
 
 interface WorkerTimeTableProps {
-    data: IWorkerPlan;
+    data: IWorkerPlan | null;
 }
 
 export const WorkerTimeTable: React.FC<WorkerTimeTableProps> = ({ data }) => {
+    const headerRef = useRef<HTMLDivElement>(null);
+
+    if (!data) {
+        return null;
+    }
+
     const test = Object.entries(data.plan).filter((item) => {
         return item[1].in.length !== 0;
     });
-
-    const headerRef = useRef<HTMLDivElement>(null);
 
     const rowData = test.map((i) => {
         const data = `${i[0].slice(8)}.${i[0].slice(5, 7)}.${i[0].slice(0, 4)}`;

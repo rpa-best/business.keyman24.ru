@@ -31,7 +31,8 @@ export const getLocation: T.GetLocation = async (orgId, locId) => {
 };
 
 export const createLocation: T.CreateLocation = async (body) => {
-    await $clientAuth.post(`business/${orgId}/location/`, body);
+    const res = await $clientAuth.post(`business/${orgId}/location/`, body);
+    return res.data;
 };
 
 export const editLocation: T.EditLocation = async (locId, body) => {
@@ -46,7 +47,7 @@ export const getLocationObjects: T.GetLocationObjects = async (
     orgId,
     locationId
 ) => {
-    const res: AxiosResponse<ReturnType<T.GetLocationObjects>> =
+    const res: AxiosResponse<ReturnType<typeof getLocationObjects>> =
         await $serverAuth.get(
             `business/${orgId}/location/${locationId}/object?deleted=false`
         );
@@ -58,7 +59,11 @@ export const createLocationObject: T.CreateLocationObject = async (
     locId,
     body
 ) => {
-    await $clientAuth.post(`business/${orgId}/location/${locId}/object/`, body);
+    const res = await $clientAuth.post(
+        `business/${orgId}/location/${locId}/object/`,
+        body
+    );
+    return res.data;
 };
 
 export const editLocationObject: T.EditLocationObject = async (
@@ -121,10 +126,11 @@ export const createLocationKeys: T.CreateLocationKeys = async (
     objId,
     body
 ) => {
-    await $clientAuth.post(
+    const res = await $clientAuth.post(
         `business/${orgId}/location/${locId}/object/${objId}/key-generate/`,
         body
     );
+    return res.data;
 };
 
 export const deleteLocationKey: T.DeleteLocationKey = async (

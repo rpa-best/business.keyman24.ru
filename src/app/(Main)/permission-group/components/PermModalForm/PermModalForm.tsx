@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react';
 
 import { PermFormValues } from 'app/(Main)/permission-group/components/PermModalForm/types';
 import { PermFormValidate } from 'app/(Main)/permission-group/components/PermModalForm/PermModalForm.utils';
-import { IFormProps } from 'app/(Main)/permission-group/types';
+import {
+    IFormProps,
+    IModifiedPermissions,
+} from 'app/(Main)/permission-group/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { Button } from 'components/UI/Buttons/Button';
-import { CreateGroupPermBody } from 'http/types';
+import { CreateGroupPermBody, ILevel } from 'http/types';
 import { createGroupPerm, editGroupPerm } from 'http/permissionsApi';
 import { PermissionPickList } from 'app/(Main)/permission-group/components/PermissionPickList';
 import { fetchData } from 'app/(Main)/permission-group/components/PermModalForm/fetchData';
@@ -23,13 +26,13 @@ export const PermModalForm: React.FC<IFormProps> = ({
     level,
     formType,
     selectedPerm,
+    tableData,
+    setTableData,
 }) => {
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const adminPermission = !selectedPerm?.org;
-
-    const router = useRouter();
 
     const onSubmit = async (values: PermFormValues) => {
         setLoading(true);
@@ -38,19 +41,43 @@ export const PermModalForm: React.FC<IFormProps> = ({
             level: values.level?.id as number,
         };
         if (formType === 'create') {
-            await createGroupPerm(body).finally(() => {
-                router.refresh();
-                setLoading(false);
-                setVisible(false);
-            });
-        } else {
-            await editGroupPerm(selectedPerm?.id as number, body).finally(
-                () => {
-                    router.refresh();
+            await createGroupPerm(body)
+                .then((d) => {
+                    const newPerm = {
+                        ...d,
+                        level: {
+                            id: values.level?.id as number,
+                            name: values.level?.name as string,
+                        },
+                        levelDesc: values.level?.name as string,
+                    };
+                    setTableData((data) => [...data, newPerm]);
+                })
+                .finally(() => {
                     setLoading(false);
                     setVisible(false);
-                }
-            );
+                });
+        } else {
+            await editGroupPerm(selectedPerm?.id as number, body)
+                .then(() => {
+                    setTableData((data) =>
+                        data.map((el) => {
+                            if (el.id === (selectedPerm?.id as number)) {
+                                return {
+                                    ...el,
+                                    name: values.name,
+                                    level: values.level as ILevel,
+                                    levelDesc: values.level?.name as string,
+                                };
+                            }
+                            return el;
+                        })
+                    );
+                })
+                .finally(() => {
+                    setLoading(false);
+                    setVisible(false);
+                });
         }
     };
 

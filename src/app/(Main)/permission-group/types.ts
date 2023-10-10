@@ -1,17 +1,19 @@
-import { IGroupPermission, ILevel, IPermission } from 'http/types';
+import { IGroupPermission, ILevel } from 'http/types';
+import React from 'react';
 
-export interface IModifiedPermissions extends Omit<IGroupPermission, 'level'> {
-    level: string;
+export interface IModifiedPermissions extends IGroupPermission {
+    levelDesc: string;
 }
 
 export interface PermGroupTableWrapperProps {
     permissions: IModifiedPermissions[];
-    initialPermissions: IGroupPermission[];
     levels: ILevel[];
 }
 
 export interface IFormProps {
     level: ILevel[];
     formType: 'create' | 'edit';
-    selectedPerm?: IGroupPermission;
+    tableData: IModifiedPermissions[];
+    setTableData: React.Dispatch<React.SetStateAction<IModifiedPermissions[]>>;
+    selectedPerm?: IModifiedPermissions;
 }
