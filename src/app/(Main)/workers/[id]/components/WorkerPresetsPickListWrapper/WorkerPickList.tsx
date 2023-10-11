@@ -1,36 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
 
 import { PickList } from 'components/PickList';
-
-import { useRouter } from 'next/navigation';
 
 import {
     createWorkerGroupUser,
     deleteWorkerGroupUser,
-    getClientAllPermissions,
     getGroupPermissionsOnClient,
-    getWorkerGroupPermissions,
     getWorkerGroupPermissionsOnClient,
-    getWorkerPermissionsOnClient,
 } from 'http/permissionsApi';
-import {
-    CustomDefaultElem,
-    WorkerPresetPermValues,
-} from 'app/(Main)/workers/[id]/components/WorkerPickListWrapper/types';
+import { WorkerPresetPermValues } from 'app/(Main)/workers/[id]/components/WorkerPickListWrapper/types';
 import { DefaultElem } from 'components/PickList/types';
-import {
-    getGroupListValues,
-    getListValues,
-} from 'components/PickList/helpers/getListValues';
-import {
-    IAdminGroupPermission,
-    IAdminPermission,
-    IGroupPermission,
-} from 'http/types';
-import { v4 } from 'uuid';
-import { getModeName } from 'helpers/permTypeHelper';
+import { getGroupListValues } from 'components/PickList/helpers/getListValues';
+import { IAdminGroupPermission, IGroupPermission } from 'http/types';
 
 export const WorkerGroupPickList: React.FC<WorkerPresetPermValues> = ({
     workerUsername,

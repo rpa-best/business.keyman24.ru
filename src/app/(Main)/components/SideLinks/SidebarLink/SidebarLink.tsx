@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 
 import { SidebarLinkProps } from 'app/(Main)/components/SideLinks/sidebarData';
 import { motion } from 'framer-motion';
-import { useAllowedPath } from 'helpers/useDeniedPath';
+import { useAllowedPath } from 'hooks/useDeniedPath';
 
 import scss from './SidebarLink.module.scss';
 

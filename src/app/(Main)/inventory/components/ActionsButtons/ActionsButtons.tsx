@@ -4,8 +4,6 @@ import React from 'react';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { SelectLocationTippy } from 'app/(Main)/inventory/components/SelectLocationTippy';
-import revalidate from 'utils/revalidate';
-import { usePathname } from 'next/navigation';
 
 import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
 

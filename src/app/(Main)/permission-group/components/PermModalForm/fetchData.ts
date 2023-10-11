@@ -3,7 +3,7 @@ import {
     getPermissionGroupPermission,
 } from 'http/permissionsApi';
 import { getListValues } from 'components/PickList/helpers/getListValues';
-import { getModeName } from 'helpers/permTypeHelper';
+import { getModeName } from 'utils/permTypeHelper';
 
 export const fetchData = async (id: number, level: number) => {
     const allPermissions = await getClientPermissions(level.toString());

@@ -3,7 +3,7 @@ import { PieChart } from 'components/Charts/PieChart/PieChart';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import React from 'react';
-import { formatDateHistory, getBarGroupData } from 'helpers/historyHelper';
+import { formatDateHistory, getBarGroupData } from 'utils/historyHelper';
 import { IInventoryHistory, IResponse } from 'http/types';
 
 import scss from './HistoryComponent.module.scss';
@@ -22,7 +22,6 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
     const cloneHistory = formatDateHistory(keyHistory.results);
 
     const [barLabels, barData] = getBarGroupData(cloneHistory, 'worker.name');
-
     const [labels, data] = getBarGroupData(cloneHistory, 'worker.org.name');
 
     const tableHistoryRows = cloneHistory.map((h) => {

@@ -18,6 +18,7 @@ export const sidebarData: SidebarLinkProps[] = [
         title: 'Главная',
         href: '/',
         Icon: HomeSvg,
+        head: '/',
     },
     {
         title: 'Локация',

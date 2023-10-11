@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { deleteInventoryItemPhoto } from 'http/inventoryApi';
 import { ImageContainerProps } from 'app/(Main)/inventory/types';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import DeleteSvg from '/public/svg/x.svg';
+import revalidate from 'utils/revalidate';
 
 import scss from 'app/(Main)/inventory/components/InventoryModal/InventoryModal.module.scss';
-import revalidate from 'utils/revalidate';
 
 export const ImageContainer: React.FC<ImageContainerProps> = ({
     selectedImage,

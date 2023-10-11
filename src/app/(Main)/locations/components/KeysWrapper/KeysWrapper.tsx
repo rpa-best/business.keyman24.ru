@@ -1,32 +1,24 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { IData } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
-import { PdfGenerator } from 'app/(Main)/locations/components/PdfGenerator';
-import {
-    createLocationKeys,
-    deleteLocationKey,
-    getLocationClientKeys,
-} from 'http/locationsApi';
+import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
 import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
-import { subAction } from 'helpers/subAction';
+import revalidate from 'utils/revalidate';
 
 import scss from './KeysWrapper.module.scss';
-import { fetchData } from 'app/(Main)/permission-group/components/PermModalForm/fetchData';
-import revalidate from 'utils/revalidate';
 
 interface KeysWrapperProps {
     count: number;
@@ -77,7 +69,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         });
 
         createLocationKeys(+params.locId, +params.objId, body)
-            .then((d) => {
+            .then(() => {
                 setData([]);
             })
             .finally(() => {

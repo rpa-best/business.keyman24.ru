@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Column } from 'components/Table/Column';
-import { usePathname, useRouter } from 'next/navigation';
 import { Table } from 'components/Table';
 import { Modal } from 'components/Modal';
 import { ObjectFormModal } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/ObjectFromModal';
@@ -13,8 +13,6 @@ import { deleteLocationObject } from 'http/locationsApi';
 import { Spinner } from 'components/Spinner';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
-import { subAction } from 'helpers/subAction';
-import { useConstructorStore } from 'store/useConstructorStore';
 import revalidate from 'utils/revalidate';
 
 interface ObjectsTableWrapper {
@@ -26,15 +24,16 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     modifiedObjects,
     locId,
 }) => {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const [selectedObject, setSelectedObject] = useState<IObject>();
     const [tableRows, setTableRows] = useState(modifiedObjects);
 
-    const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [selectedObject, setSelectedObject] = useState<IObject>();
-    const [formType, setFormType] = useState<'create' | 'edit'>('create');
-    const router = useRouter();
 
-    const pathname = usePathname();
+    const [loading, setLoading] = useState(false);
+    const [formType, setFormType] = useState<'create' | 'edit'>('create');
 
     const handleRowClick = (id: number) => {
         router.push(`${pathname}/${id}`);

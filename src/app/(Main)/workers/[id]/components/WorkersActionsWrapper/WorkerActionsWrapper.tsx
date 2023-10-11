@@ -1,14 +1,11 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { useState } from 'react';
 
-import { Spinner } from 'components/Spinner';
-import { WorkerDocsTable } from 'app/(Main)/workers/[id]/components/WorkerDocsTable';
 import { WorkersPermissionsPickList } from 'app/(Main)/workers/[id]/components/WorkerPickListWrapper';
 import { WorkerGroupPickList } from 'app/(Main)/workers/[id]/components/WorkerPresetsPickListWrapper';
 import { IWorker, IWorkerUser } from 'http/types';
 import { WorkerEditForm } from 'app/(Main)/workers/[id]/components/WorkerEditForm';
-import { useParams } from 'next/navigation';
 
 import scss from 'app/(Main)/workers/Worker.module.scss';
 

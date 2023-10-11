@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
+import { warningToastConfig } from 'config/toastConfig';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import {
@@ -11,11 +13,9 @@ import {
 import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { PermModalForm } from 'app/(Main)/permission-group/components/PermModalForm';
-import { IGroupPermission } from 'http/types';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 import { deleteGroupPerm } from 'http/permissionsApi';
-import { toast } from 'react-toastify';
 import revalidate from 'utils/revalidate';
 
 export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
@@ -23,6 +23,7 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     levels,
 }) => {
     const path = usePathname();
+
     const [tableData, setTableData] =
         useState<IModifiedPermissions[]>(permissions);
     const [formType, setFormType] = useState<'create' | 'edit'>('create');
@@ -53,13 +54,7 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
                 revalidate(path);
             });
         } else {
-            toast('Это зарезервированное право', {
-                position: 'bottom-right',
-                hideProgressBar: true,
-                autoClose: 2000,
-                type: 'warning',
-                theme: 'colored',
-            });
+            toast('Это зарезервированное право', warningToastConfig);
             throw Error('Зарезерированно');
         }
     };
@@ -79,7 +74,6 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
             <Modal>
                 <PermModalForm
                     setTableData={setTableData}
-                    tableData={tableData}
                     formType={formType}
                     selectedPerm={selectedPerm}
                     level={levels}

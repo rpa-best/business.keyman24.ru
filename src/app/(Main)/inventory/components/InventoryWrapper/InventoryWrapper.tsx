@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { Table } from 'components/Table';
@@ -13,23 +13,17 @@ import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { InventoryModal } from 'app/(Main)/inventory/components/InventoryModal';
 import { Spinner } from 'components/Spinner';
-import {
-    createInventoryKeys,
-    deleteInventoryItem,
-    getInventoryImage,
-} from 'http/inventoryApi';
+import { deleteInventoryItem, getInventoryImage } from 'http/inventoryApi';
 import { Button } from 'components/UI/Buttons/Button';
 import { IData } from 'app/(Main)/locations/types';
-import { IInventoryImage, LocKeyBody } from 'http/types';
-import { subAction } from 'helpers/subAction';
-import { useConstructorStore } from 'store/useConstructorStore';
+import { IInventoryImage } from 'http/types';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
-
-import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
 import { ActionsButtons } from 'app/(Main)/inventory/components/ActionsButtons';
 import { MoreInventoryModal } from 'app/(Main)/inventory/components/MoreInventoryModal';
 import revalidate from 'utils/revalidate';
+
+import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
 
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,

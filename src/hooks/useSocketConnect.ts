@@ -4,10 +4,10 @@ import { getWorkerDocs } from 'http/workerApi';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
-import { useSocket } from 'helpers/socketManager';
 import { useSocketStore } from 'store/useSocketStore';
 import Cookies from 'universal-cookie';
 import revalidate from 'utils/revalidate';
+import { errorToastOptions } from 'config/toastConfig';
 
 const cookie = new Cookies();
 
@@ -64,39 +64,15 @@ export const useSocketConnect: SocketConnectFunc = ({
         const { message } = socketStore;
         if (message?.type === 'error') {
             if (message?.data.error.slug === 'worker_not_found') {
-                toast('Работник не найден', {
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    autoClose: 2000,
-                    type: 'error',
-                    theme: 'colored',
-                });
+                toast('Работник не найден', errorToastOptions);
             } else if (
                 message?.data.error.slug === 'worker_already_in_location'
             ) {
-                toast('Работник уже в локации', {
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    autoClose: 2000,
-                    type: 'error',
-                    theme: 'colored',
-                });
+                toast('Работник уже в локации', errorToastOptions);
             } else if (message.data.error.slug === 'worker_not_in_location') {
-                toast('Работник не в локации', {
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    autoClose: 2000,
-                    type: 'error',
-                    theme: 'colored',
-                });
+                toast('Работник не в локации', errorToastOptions);
             } else {
-                toast('Ошибка', {
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    autoClose: 2000,
-                    type: 'error',
-                    theme: 'colored',
-                });
+                toast('Ошибка', errorToastOptions);
             }
         }
     }, [socketStore.message]);
@@ -109,13 +85,7 @@ export const useSocketConnect: SocketConnectFunc = ({
 
     useEffect(() => {
         if (errors) {
-            toast('Документы просрочены', {
-                position: 'bottom-right',
-                hideProgressBar: true,
-                autoClose: 2000,
-                type: 'error',
-                theme: 'colored',
-            });
+            toast('Документы просрочены', errorToastOptions);
         }
     }, [errors]);
 

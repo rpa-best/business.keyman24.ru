@@ -1,16 +1,10 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 
 import { useResizeWidth } from 'hooks/useResizeWidth';
 import { sidebarData } from 'app/(Main)/components/SideLinks/sidebarData';
 import { SidebarLink } from 'app/(Main)/components/SideLinks/SidebarLink/SidebarLink';
-import { headCheckPathsMiddleware } from 'http/userApi';
-import { headCheckData } from 'app/(Main)/components/SideLinks/sidebarCheckAccess';
-import Cookies from 'universal-cookie';
 
 import scss from './SideLinks.module.scss';
-
-const cookie = new Cookies();
 
 interface SideLinksProps {
     open: boolean;

@@ -2,14 +2,11 @@
 
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+
 import { Table } from 'components/Table';
 import { TableProps } from 'components/Table/types';
 import { Spinner } from 'components/Spinner';
 import { deleteLocation } from 'http/locationsApi';
-
-import { useConstructorStore } from 'store/useConstructorStore';
-import { subAction } from 'helpers/subAction';
-import { EditWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea';
 import { Modal } from 'components/Modal';
 import { LocationAction } from 'app/(Main)/locations/components/LocationsAction';
 import { ILocation } from 'http/types';
@@ -33,19 +30,18 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     organizations,
 }) => {
     const pathname = usePathname();
+    const router = useRouter();
+    const pathName = usePathname();
 
     const [tableData, setTableData] = useState<ILocation[]>(tableRows);
-
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [formType, setFormType] = useState<'create' | 'edit'>('create');
     const [editableLocation, setEditableLocation] = useState<ILocation | null>(
         null
     );
+
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    const [formType, setFormType] = useState<'create' | 'edit'>('create');
     const [loading, setLoading] = useState(false);
-
-    const router = useRouter();
-
-    const pathName = usePathname();
 
     const handleAddClick = () => {
         setFormType('create');

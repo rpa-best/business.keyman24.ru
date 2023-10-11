@@ -25,8 +25,8 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
     userData,
     subs,
 }) => {
-    const [visible, setVisible] = useState(false);
     const opacity = useSpring(0);
+    const [visible, setVisible] = useState(false);
 
     const [user, setUserLogout, setUser] = useUserStore((state) => [
         state.user,

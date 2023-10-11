@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { usePathname } from 'next/navigation';
 
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
 import { Button } from 'components/UI/Buttons/Button';
-
-import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
 import { IData } from 'app/(Main)/locations/types';
 import { LocKeyBody } from 'http/types';
 import { createInventoryKeys } from 'http/inventoryApi';
-import { usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from 'store/modalVisibleStore';
 import revalidate from 'utils/revalidate';
+
+import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
 
 interface MoreInventoryModalProps {
     setData: React.Dispatch<React.SetStateAction<IData[]>>;
@@ -25,9 +25,9 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
     setLoading,
     total,
 }) => {
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
-
     const path = usePathname();
+
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const handleDeleteOne = (id: string) => {
         setData(data.filter((d) => d.id !== id));

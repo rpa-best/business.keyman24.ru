@@ -14,11 +14,8 @@ import { Modal } from 'components/Modal';
 import { EditWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea';
 import { deleteWorkingArea } from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
-import { IWorkingArea } from 'http/types';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
-import { useConstructorStore } from 'store/useConstructorStore';
-import { subAction } from 'helpers/subAction';
 import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
@@ -29,9 +26,14 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     locations,
 }) => {
     const pathName = usePathname();
+    const router = useRouter();
 
     const [workingAreasData, setWorkingAreasData] =
         useState<IModfiedWorkingArea[]>(workingAreas);
+    const [editableArea, setEditableArea] = useState<IModfiedWorkingArea>();
+
+    const [formType, setFormType] = useState<'edit' | 'create'>('create');
+    const [loading, setLoading] = useState(false);
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
@@ -41,11 +43,6 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     useEffect(() => {
         setWorkingAreasData(workingAreas);
     }, [workingAreas]);
-
-    const [formType, setFormType] = useState<'edit' | 'create'>('create');
-    const [editableArea, setEditableArea] = useState<IModfiedWorkingArea>();
-    const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     const handleRowClick = (id: number) => {
         const slug = workingAreasData.find((area) => area.id === id);

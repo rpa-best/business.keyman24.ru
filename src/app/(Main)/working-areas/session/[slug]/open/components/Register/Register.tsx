@@ -31,6 +31,7 @@ import scss from './Register.module.scss';
 import { AxiosError } from 'axios';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
 import revalidate from 'utils/revalidate';
+import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 
 const cookie = new UniversalCookies();
 
@@ -40,17 +41,18 @@ export const Register: React.FC<RegisterProps> = ({
     currentAreaId,
     sessionLog,
 }) => {
+    const router = useRouter();
+    const path = usePathname();
+
     const [sessionLogData, setSessionLogData] =
         useState<ModifiedRegisterLog[]>(sessionLog);
-    const router = useRouter();
-
-    const path = usePathname();
 
     const [selectedOrg, setSelectedOrg] = useState<IOrganization>();
     const [selectedWorker, setSelectedWorker] = useState<IWorker>();
     const [selectedWorkerDocs, setSelectedWorkerDocs] =
         useState<IWorkerDocs[]>();
     const [workers, setWorkers] = useState<IWorker[]>([]);
+
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
 
@@ -74,13 +76,7 @@ export const Register: React.FC<RegisterProps> = ({
                     /*const newLog: ModifiedRegisterLog = {...d, workerName: selectedWorker?.name as string, inventoryName:}
                     setSessionLogData((log) => [d, ...log]);*/
                     revalidate(path);
-                    toast('Успешно', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'success',
-                        theme: 'colored',
-                    });
+                    toast('Успешно', successToastConfig);
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
@@ -88,13 +84,7 @@ export const Register: React.FC<RegisterProps> = ({
                             e.response?.data.error[0].slug ===
                             'card_not_given_to_this_worker'
                         ) {
-                            toast('У работника нет карты', {
-                                position: 'bottom-right',
-                                hideProgressBar: true,
-                                autoClose: 2000,
-                                type: 'error',
-                                theme: 'colored',
-                            });
+                            toast('У работника нет карты', errorToastOptions);
                         }
                     }
                 })

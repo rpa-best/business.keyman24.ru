@@ -17,9 +17,9 @@ import { useResizeWidth } from 'hooks/useResizeWidth';
 import { Row } from 'components/Table/Row/Row';
 import clsx from 'clsx';
 import { setSortedData } from 'components/Table/utils/setSortedData';
+import { Spinner } from 'components/Spinner';
 
 import scss from './Table.module.scss';
-import { Spinner } from 'components/Spinner';
 
 export const TableContext = createContext<ITableContext | null>(null);
 
@@ -36,14 +36,14 @@ export const Table = memo(function MemoTable({
     stopPropagation,
     prefetch,
 }: TableProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+
     const [loading, setLoading] = useState(false);
+
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
-
-    const router = useRouter();
-
-    const pathname = usePathname();
 
     const totalPages = useMemo(() => {
         return paginatorData

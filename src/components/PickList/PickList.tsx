@@ -7,11 +7,11 @@ import { DefaultElem, PickListProps } from 'components/PickList/types';
 import clsx from 'clsx';
 import { Spinner } from 'components/Spinner';
 import { toast } from 'react-toastify';
-import { sortArr } from 'helpers/sortPickListArrays';
+import { sortArr } from 'utils/sortPickListArrays';
 import { AxiosError } from 'axios';
+import { errorToastOptions } from 'config/toastConfig';
 
 import scss from './PickList.module.scss';
-
 
 export const PickList = ({
     available,
@@ -74,13 +74,10 @@ export const PickList = ({
             })
             .catch((e) => {
                 if (e instanceof AxiosError) {
-                    toast('Ошибка, попробуйте обновить страницу', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'error',
-                        theme: 'colored',
-                    });
+                    toast(
+                        'Ошибка, попробуйте обновить страницу',
+                        errorToastOptions
+                    );
                 }
             })
             .finally(() => {
@@ -107,13 +104,10 @@ export const PickList = ({
             })
             .catch((e) => {
                 if (e instanceof AxiosError) {
-                    toast('Ошибка, попробуйте обновить страницу', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'error',
-                        theme: 'colored',
-                    });
+                    toast(
+                        'Ошибка, попробуйте обновить страницу',
+                        errorToastOptions
+                    );
                 }
             })
             .finally(() => {
@@ -145,22 +139,18 @@ export const PickList = ({
                 )}
             </div>
             <div className={pickListClass}>
-                <div className={scss.list_view_wrapper}>
-                    <span className={scss.header_wrapper}>{leftTitle}</span>
-                    <div className={scss.list_view_content}>
-                        <List
-                            selected={sourceSelected}
-                            items={source}
-                            handleItemClick={(elem) =>
-                                handleClick(
-                                    elem,
-                                    sourceSelected as DefaultElem[],
-                                    setSourceSelected
-                                )
-                            }
-                        />
-                    </div>
-                </div>
+                <List
+                    selected={sourceSelected}
+                    items={source}
+                    title={leftTitle}
+                    handleItemClick={(elem) =>
+                        handleClick(
+                            elem,
+                            sourceSelected as DefaultElem[],
+                            setSourceSelected
+                        )
+                    }
+                />
                 <ul className={scss.actions_separator_wrapper}>
                     <li
                         style={loading ? { pointerEvents: 'none' } : undefined}
@@ -177,22 +167,18 @@ export const PickList = ({
                         <ArrowSvg className={scss.arrow_left} />
                     </li>
                 </ul>
-                <div className={scss.list_view_wrapper}>
-                    <span className={scss.header_wrapper}>{rightTitle}</span>
-                    <div className={scss.list_view_content}>
-                        <List
-                            selected={targetSelected}
-                            items={target as DefaultElem[]}
-                            handleItemClick={(elem) =>
-                                handleClick(
-                                    elem,
-                                    targetSelected as DefaultElem[],
-                                    setTargetSelected
-                                )
-                            }
-                        />
-                    </div>
-                </div>
+                <List
+                    title={rightTitle}
+                    selected={targetSelected}
+                    items={target as DefaultElem[]}
+                    handleItemClick={(elem) =>
+                        handleClick(
+                            elem,
+                            targetSelected as DefaultElem[],
+                            setTargetSelected
+                        )
+                    }
+                />
             </div>
             {loading && <Spinner />}
         </>

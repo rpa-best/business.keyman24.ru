@@ -4,7 +4,7 @@ import {
     IGroupPermission,
     IPermission,
 } from 'http/types';
-import { modes } from 'helpers/permTypeHelper';
+import { modes } from 'utils/permTypeHelper';
 import { CustomPermission } from 'app/(Main)/org-settings/components/PickListPermission/types';
 import { v4 } from 'uuid';
 

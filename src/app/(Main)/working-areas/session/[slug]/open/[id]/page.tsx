@@ -7,10 +7,10 @@ import { Security } from 'app/(Main)/working-areas/session/[slug]/open/component
 import { getSessionLog, getWorkingAreas } from 'http/workingAreaApi';
 import { getOrganizations } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
-
-import scss from './OpenSession.module.scss';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
+
+import scss from './OpenSession.module.scss';
 
 interface OpenSessionPage {
     params: {
@@ -127,8 +127,6 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             );
         }
     }
-
-    return <h1>{params.id}</h1>;
 };
 
 export default OpenSessionPage;

@@ -24,6 +24,7 @@ export interface PickListProps {
 }
 
 export interface ListProps {
+    title: string;
     selected?: DefaultElem[];
     items?: DefaultElem[];
     handleItemClick: (elem: DefaultElem) => void;

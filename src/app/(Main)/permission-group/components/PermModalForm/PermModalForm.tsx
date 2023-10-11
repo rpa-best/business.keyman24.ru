@@ -1,33 +1,27 @@
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { PermFormValues } from 'app/(Main)/permission-group/components/PermModalForm/types';
 import { PermFormValidate } from 'app/(Main)/permission-group/components/PermModalForm/PermModalForm.utils';
-import {
-    IFormProps,
-    IModifiedPermissions,
-} from 'app/(Main)/permission-group/types';
+import { IFormProps } from 'app/(Main)/permission-group/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { Button } from 'components/UI/Buttons/Button';
 import { CreateGroupPermBody, ILevel } from 'http/types';
 import { createGroupPerm, editGroupPerm } from 'http/permissionsApi';
 import { PermissionPickList } from 'app/(Main)/permission-group/components/PermissionPickList';
-import { fetchData } from 'app/(Main)/permission-group/components/PermModalForm/fetchData';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Input } from 'components/UI/Inputs/Input';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
-import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 import { AdminPermList } from 'app/(Main)/permission-group/components/AdminPermList';
+import revalidate from 'utils/revalidate';
 
 import scss from 'app/(Main)/permission-group/PermGroup.module.scss';
-import revalidate from 'utils/revalidate';
 
 export const PermModalForm: React.FC<IFormProps> = ({
     level,
     formType,
     selectedPerm,
-    tableData,
     setTableData,
 }) => {
     const path = usePathname();
@@ -35,7 +29,6 @@ export const PermModalForm: React.FC<IFormProps> = ({
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const adminPermission = !selectedPerm?.org;
-
     const onSubmit = async (values: PermFormValues) => {
         setLoading(true);
         const body: CreateGroupPermBody = {
