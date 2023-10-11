@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { EnterCodeForm } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm';
@@ -14,12 +14,11 @@ import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { useSocketConnect } from 'hooks/useSocketConnect';
-
-import scss from './Key.module.scss';
-import { useModalStore } from 'store/modalVisibleStore';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { useSocketStore } from 'store/useSocketStore';
+
+import scss from './Key.module.scss';
 
 export const Key: React.FC<KeyProps> = ({
     type,
@@ -28,20 +27,12 @@ export const Key: React.FC<KeyProps> = ({
     sessionLog,
     areaName,
 }) => {
-    const [message] = useSocketStore((state) => [state.message]);
-    const [closeConnection] = useSocketStore((state) => [
-        state.closeConnection,
-    ]);
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
-
     const params = useParams();
 
-    useEffect(() => {
-        if (!message) {
-            router.replace(`/working-areas/session/key-${currentAreaId}`);
-        }
-    }, [message]);
+    const socketStore = useSocketStore((state) => state);
+
+    const [loading, setLoading] = useState(false);
 
     const { worker, workerDocs } = useSocketConnect({
         sessionId: currentSessionId,
@@ -49,8 +40,14 @@ export const Key: React.FC<KeyProps> = ({
         setLoading,
     });
 
+    useEffect(() => {
+        if (!socketStore.message) {
+            router.replace(`/working-areas/session/key-${currentAreaId}`);
+        }
+    }, [socketStore.message]);
+
     const onCloseSessionClick = async () => {
-        closeConnection();
+        socketStore.closeConnection();
         await closeSessionHandler(
             setLoading,
             currentAreaId,
@@ -64,7 +61,10 @@ export const Key: React.FC<KeyProps> = ({
         <>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton onClick={() => closeConnection()} skipWord>
+                <BackButton
+                    onClick={() => socketStore.closeConnection()}
+                    skipWord
+                >
                     Назад
                 </BackButton>
             </div>

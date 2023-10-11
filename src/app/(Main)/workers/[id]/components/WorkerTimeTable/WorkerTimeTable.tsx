@@ -2,10 +2,11 @@
 
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
+
 import { IWorkerPlan } from 'http/types';
+import { TimeTableItem } from 'app/(Main)/workers/[id]/components/WorkerTimeTable/TimeTableItem';
 
 import scss from './WorkerTimeTable.module.scss';
-import { TimeTableItem } from 'app/(Main)/workers/[id]/components/WorkerTimeTable/TimeTableItem';
 
 interface WorkerTimeTableProps {
     data: IWorkerPlan | null;

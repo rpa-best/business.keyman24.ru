@@ -1,60 +1,61 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { toast } from 'react-toastify';
+
+import { SessionWrapperProps } from 'app/(Main)/working-areas/types';
+import { ICreateSessionBody, IModifiedSession } from 'http/types';
+import { errorToastOptions } from 'config/toastConfig';
+
+import { useModalStore } from 'store/modalVisibleStore';
+import { useUserStore } from 'store/userStore';
 
 import { Table } from 'components/Table';
-import { SessionWrapperProps } from 'app/(Main)/working-areas/types';
 import { Column } from 'components/Table/Column';
 import { Modal } from 'components/Modal';
-import { useModalStore } from 'store/modalVisibleStore';
 import { AttachCard } from 'app/(Main)/working-areas/components/AttachCard';
-import {
-    useParams,
-    usePathname,
-    useRouter,
-    useSearchParams,
-} from 'next/navigation';
+import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
-import { ICreateSessionBody, IModifiedSession } from 'http/types';
+
 import {
     closeSession,
     createSession,
     sendActivateSession,
 } from 'http/workingAreaApi';
-import { Spinner } from 'components/Spinner';
-import { useUserStore } from 'store/userStore';
-import { getParamsType } from 'app/(Main)/working-areas/helpers';
-import { toast } from 'react-toastify';
-import { DateHelper } from 'helpers/dateHelper';
+import revalidate from 'utils/revalidate';
+import { DateHelper } from 'utils/dateHelper';
 
 import scss from './SessionWrapper.module.scss';
-import revalidate from 'utils/revalidate';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
     areaId,
     type,
 }) => {
-    const pathName = usePathname();
+    const pathname = usePathname();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [sessionsData, setSessionsData] =
         useState<IModifiedSession[]>(sessions);
-    const [loading, setLoading] = useState(false);
+
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+
+    const [loading, setLoading] = useState(false);
 
     const currentSession = useMemo(() => {
         return sessionsData.find((s) => s.status === 'В процессе')?.id ?? null;
     }, [sessionsData]);
 
-    const router = useRouter();
-
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
     const startSessionDisabled = currentSession;
 
     const needAttach = type !== 'register';
+
+    useEffect(() => {
+        setSessionsData(sessions);
+    }, [sessions]);
 
     useEffect(() => {
         router.prefetch(`${pathname}/open/${currentSession as number}`);
@@ -77,14 +78,8 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                             `${pathname}/open/${currentSession as number}`
                         );
                     })
-                    .catch((e) => {
-                        toast('Ошибка', {
-                            position: 'bottom-right',
-                            hideProgressBar: true,
-                            autoClose: 2000,
-                            type: 'error',
-                            theme: 'colored',
-                        });
+                    .catch(() => {
+                        toast('Ошибка', errorToastOptions);
                     })
                     .finally(() => {
                         setLoading(false);
@@ -115,6 +110,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         await createSession(areaId, body).then((d) => {
             const startDate = new DateHelper(d.startDate);
             const endDate = new DateHelper(d.endDate ?? '');
+
             const newSession =
                 d.status === 1
                     ? {
@@ -129,29 +125,24 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                           startDate: `${startDate.getDate} в ${startDate.getTime}`,
                           endDate: `${endDate.getDate} в ${endDate.getTime}`,
                       };
+
             setSessionsData((d) => [newSession, ...d]);
+
             router.prefetch(`${pathname}/open/${newSession.id}`);
-            revalidate(pathName);
+            revalidate(pathname);
+
             if (!needAttach) {
                 sendActivateSession(areaId, newSession.id)
                     .then(() => {
                         router.push(`${pathname}/open/${newSession.id}`);
                     })
-                    .catch((e) => {
-                        toast('Ошибка', {
-                            position: 'bottom-right',
-                            hideProgressBar: true,
-                            autoClose: 2000,
-                            type: 'error',
-                            theme: 'colored',
-                        });
+                    .catch(() => {
+                        toast('Ошибка', errorToastOptions);
                     })
                     .finally(() => {
                         setLoading(false);
                     });
-                return;
             }
-            setVisible(true);
         });
         setLoading(false);
     };
@@ -160,7 +151,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         setLoading(true);
         await closeSession(areaId, currentSession as number)
             .then(() => {
-                revalidate(pathName);
+                revalidate(pathname);
                 setSessionsData((d) =>
                     d.map((el) => {
                         const d = new Date();

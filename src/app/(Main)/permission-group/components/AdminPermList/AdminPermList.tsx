@@ -15,11 +15,13 @@ export const AdminPermList: React.FC<AdminPermListProps> = ({
     id,
 }) => {
     const [source, setSource] = useState<CustomGroupDefaultElem[]>([]);
+
     useEffect(() => {
         fetchData(id as number, levelId as number).then((d) => {
             setSource(d.src as []);
         });
     }, [id, levelId]);
+
     return (
         <>
             <h3 className={scss.perm_list_title}>Разрешённые права</h3>

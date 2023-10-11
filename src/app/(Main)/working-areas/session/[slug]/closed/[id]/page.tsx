@@ -4,10 +4,10 @@ import { cookies } from 'next/headers';
 import { getSessionLog, getWorkingAreas } from 'http/workingAreaApi';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-
-import scss from './ClosedPage.module.scss';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
+
+import scss from './ClosedPage.module.scss';
 
 interface ClosedSessionProps {
     params: { id: string; slug: string };

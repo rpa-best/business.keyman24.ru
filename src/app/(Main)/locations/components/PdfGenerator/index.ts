@@ -1,1 +1,0 @@
-export { PdfGenerator } from './PdfGenerator';

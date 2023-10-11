@@ -7,6 +7,7 @@ import { updateUserImg } from 'http/workerApi';
 import { ImgModal } from 'app/(Main)/workers/[id]/components/ChangeImgModal/ImgModal';
 import { toast } from 'react-toastify';
 import revalidate from 'utils/revalidate';
+import { errorToastOptions } from 'config/toastConfig';
 
 interface ChangeImgModalProps {
     workerId: number;
@@ -20,7 +21,9 @@ export const ChangeImgModal: React.FC<ChangeImgModalProps> = ({
     setLoading,
 }) => {
     const path = usePathname();
+
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const handleChangeFile: ChangeEventHandler<HTMLInputElement> = (e) => {
         try {
@@ -35,13 +38,7 @@ export const ChangeImgModal: React.FC<ChangeImgModalProps> = ({
                     revalidate(path);
                 });
         } catch (e: any) {
-            toast('Непредвиденная ошибка', {
-                position: 'bottom-right',
-                hideProgressBar: true,
-                autoClose: 2000,
-                type: 'error',
-                theme: 'colored',
-            });
+            toast('Непредвиденная ошибка', errorToastOptions);
         }
     };
 

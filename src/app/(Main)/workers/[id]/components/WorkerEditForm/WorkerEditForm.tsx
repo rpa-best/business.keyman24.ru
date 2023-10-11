@@ -2,33 +2,32 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
 
 import EditSvg from '/public/svg/edit.svg';
 import AvatarSvg from '/public/svg/avatar.svg';
 import { Input } from 'components/UI/Inputs/Input';
 import { IWorkerEditFormProps } from 'app/(Main)/workers/types';
-import { useFormik } from 'formik';
 import { WorkerFormValuesType } from 'app/(Main)/workers/[id]/components/WorkerEditForm/types';
 import {
     WorkerCreateFormValidate,
     WorkerEditFormValidate,
 } from 'app/(Main)/workers/[id]/components/WorkerEditForm/WorkerEditForm.utils';
 import { Button } from 'components/UI/Buttons/Button';
-import { usePathname, useRouter } from 'next/navigation';
-import { CreateWorkerUserBody, IWorker } from 'http/types';
+import { usePathname } from 'next/navigation';
+import { CreateWorkerUserBody } from 'http/types';
 import { createWorkerUser } from 'http/workerApi';
 import { Spinner } from 'components/Spinner';
-import { AxiosError } from 'axios';
 import { InputMask } from 'components/UI/Inputs/InputMask';
-import { toast } from 'react-toastify';
-import { subAction } from 'helpers/subAction';
-import { useConstructorStore } from 'store/useConstructorStore';
-import { useModalStore } from 'store/modalVisibleStore';
-
-import scss from './WorkerEditForm.module.scss';
 import { Modal } from 'components/Modal';
 import { ChangeImgModal } from 'app/(Main)/workers/[id]/components/ChangeImgModal';
 import revalidate from 'utils/revalidate';
+import { useModalStore } from 'store/modalVisibleStore';
+import { successToastConfig } from 'config/toastConfig';
+
+import scss from './WorkerEditForm.module.scss';
 
 export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
     worker,
@@ -54,13 +53,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
             .then(() => {
                 onUserSubmit(tel, values.username);
                 revalidate(path);
-                toast('Успешно', {
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    autoClose: 2000,
-                    type: 'success',
-                    theme: 'colored',
-                });
+                toast('Успешно', successToastConfig);
             })
             .catch((e: unknown) => {
                 if (e instanceof AxiosError) {
@@ -88,7 +81,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 }
             })
             .finally(() => {
-                setTimeout(() => setLoading(false), 100);
+                setLoading(false);
             });
     };
 

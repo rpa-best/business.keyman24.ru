@@ -1,7 +1,9 @@
-import { CreateLocationBody } from 'http/types';
 import React, { useEffect } from 'react';
-import { useNotificationStore } from 'store/notificationStore';
 import { usePathname } from 'next/navigation';
+import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+
+import { CreateLocationBody } from 'http/types';
 import { Input } from 'components/UI/Inputs/Input';
 import { Button } from 'components/UI/Buttons/Button';
 import {
@@ -11,13 +13,12 @@ import {
 import { LocationsActionValidate } from 'app/(Main)/locations/components/LocationsAction/LocationsAction.utils';
 import { createLocation, editLocation } from 'http/locationsApi';
 import { PickListsWrapper } from 'app/(Main)/locations/components/LocationsAction/components/PickListsWrapper';
-import { useFormik } from 'formik';
+import { useNotificationStore } from 'store/notificationStore';
 import { useModalStore } from 'store/modalVisibleStore';
-import { toast } from 'react-toastify';
 import revalidate from 'utils/revalidate';
+import { errorToastOptions } from 'config/toastConfig';
 
 import scss from './LocationsAction.module.scss';
-import { router } from 'next/client';
 
 export const LocationAction: React.FC<LocationActionProps> = ({
     location,
@@ -48,13 +49,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                     setTableData((rows) => [...rows, d]);
                 })
                 .catch(() => {
-                    toast('Ошибка', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'error',
-                        theme: 'colored',
-                    });
+                    toast('Ошибка', errorToastOptions);
                 })
                 .finally(() => {
                     setLoading(false);
@@ -78,13 +73,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                     );
                 })
                 .catch(() => {
-                    toast('Ошибка', {
-                        position: 'bottom-right',
-                        hideProgressBar: true,
-                        autoClose: 2000,
-                        type: 'error',
-                        theme: 'colored',
-                    });
+                    toast('Ошибка', errorToastOptions);
                 })
                 .finally(() => {
                     setVisible(false);

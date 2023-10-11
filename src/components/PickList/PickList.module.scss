@@ -85,8 +85,8 @@
   padding: 15px 15px;
   border-radius: 12px;
   color: white;
-  @include MontserratSemiBold(20px);
-
+  @include MontserratSemiBold(18px);
+  white-space: nowrap;
   @include thousendWidth {
     font-size: 16px;
   }

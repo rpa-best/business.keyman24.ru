@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 import AvatarSvg from '/public/svg/avatar.svg';
@@ -13,34 +13,18 @@ interface IWorkerInfoCardProps {
     worker: IWorker;
     workerDocs: IWorkerDocs[];
     halfScreen?: boolean;
-    setErrors?: (b: boolean) => void;
 }
 
 export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
     workerDocs,
     worker,
     halfScreen,
-    setErrors,
 }) => {
-    useEffect(() => {
-        if (setErrors) {
-            const activeToArr = workerDocs?.map((doc) => {
-                return validateDate(doc.activeTo);
-            });
-
-            if (activeToArr?.includes('Просрочен')) {
-                setErrors(true);
-            } else {
-                setErrors(false);
-            }
-        }
-    }, [setErrors, workerDocs]);
-
     if (!worker) {
         return (
             <div className={scss.worker_card_empty}>
                 <p style={{ textAlign: 'center' }}>
-                    Здесь будет карточка работника
+                    Здесь будет карта работника
                 </p>
             </div>
         );

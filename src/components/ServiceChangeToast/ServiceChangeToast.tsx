@@ -1,15 +1,11 @@
 'use client';
 
-import React, { memo, useEffect, useRef, useState } from 'react';
-import { usePrice } from 'hooks/usePrice';
+import React, { memo, useEffect } from 'react';
 import { IField, useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './ServiceChangeToast.module.scss';
 import { useNotificationStore } from 'store/notificationStore';
 import { GetDifferencePrice } from 'app/(Main)/org-settings/bill/components/GetDifferencePrice';
-import { IRate } from 'http/types';
-import { updateSub } from 'http/organizationApi';
-import { toast } from 'react-toastify';
 
 interface ServiceChangeToastProps {
     slug: string;
@@ -48,19 +44,6 @@ export const ServiceChangeToast = memo(function ServiceChangeToast({
             <div className={scss.change_price}>
                 Цена изменится на:{' '}
                 <GetDifferencePrice current={currentPrice} newPrice={price} />
-                {/* <div className={scss.buttons_wrapper}>
-                    <button onClick={handleConfirm} className={scss.yes_button}>
-                        Да
-                    </button>
-                    <button
-                        onClick={() => {
-                            setVisible(false);
-                        }}
-                        className={scss.no_button}
-                    >
-                        Нет
-                    </button>
-                </div>*/}
             </div>
         </div>
     );

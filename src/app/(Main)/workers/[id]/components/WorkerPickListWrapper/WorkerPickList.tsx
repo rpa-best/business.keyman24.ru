@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { v4 } from 'uuid';
 
 import { PickList } from 'components/PickList';
 import { Spinner } from 'components/Spinner';
@@ -13,30 +13,21 @@ import {
 import {
     createWorkerPermission,
     deleteWorkerPermission,
-    getAdminPermissionsOnClient,
     getClientAllPermissions,
-    getGroupPermissions,
-    getGroupPermissionsOnClient,
-    getPermissions,
-    getWorkerGroupPermissions,
-    getWorkerPermissions,
     getWorkerPermissionsOnClient,
 } from 'http/permissionsApi';
-import { IAdminPermission, IPermission } from 'http/types';
-import { getModeName } from 'helpers/permTypeHelper';
-import {
-    getGroupListValues,
-    getListValues,
-} from 'components/PickList/helpers/getListValues';
-import { v4 } from 'uuid';
+import { getModeName } from 'utils/permTypeHelper';
+import { getListValues } from 'components/PickList/helpers/getListValues';
 
 export const WorkersPermissionsPickList: React.FC<
     WorkerPickListPermissionsWrapper
 > = ({ workerUsername }) => {
     const [refresh, setRefresh] = useState(false);
-    const [loading, setLoading] = useState(false);
+
     const [source, setSource] = useState<CustomDefaultElem[]>();
     const [target, setTarget] = useState<CustomDefaultElem[]>();
+
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {

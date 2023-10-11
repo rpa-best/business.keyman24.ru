@@ -16,10 +16,10 @@ import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
 import { sendSessionAction } from 'http/workingAreaApi';
 import { useSocketStore } from 'store/useSocketStore';
+import revalidate from 'utils/revalidate';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
-import revalidate from 'utils/revalidate';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -28,8 +28,10 @@ export const Security: React.FC<SecurityProps> = ({
     areaName,
 }) => {
     const path = usePathname();
-    const socketStore = useSocketStore((state) => state);
     const router = useRouter();
+
+    const socketStore = useSocketStore((state) => state);
+
     const [sended, setSended] = useState(false);
     const [loading, setLoading] = useState(false);
 

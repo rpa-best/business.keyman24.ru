@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { WorkAreaValues } from 'app/(Main)/working-areas/components/EditWorkingArea/types';
 import { EditWorkingAreaProps } from 'app/(Main)/working-areas/types';
@@ -13,11 +13,9 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { createWorkingArea, patchWorkingArea } from 'http/workingAreaApi';
 import { AreaPickList } from 'app/(Main)/working-areas/components/AreasPickList/AreasPickList';
 import { useNotificationStore } from 'store/notificationStore';
-import { useConstructorStore } from 'store/useConstructorStore';
+import revalidate from 'utils/revalidate';
 
 import scss from './EditWorkingArea.module.scss';
-import revalidate from 'utils/revalidate';
-import { router } from 'next/client';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,

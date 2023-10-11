@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 import { useFormik } from 'formik';
 import {
@@ -10,11 +11,11 @@ import { Button } from 'components/UI/Buttons/Button';
 import { Input } from 'components/UI/Inputs/Input';
 import { sendSessionAction } from 'http/workingAreaApi';
 import { AxiosError } from 'axios';
-import { usePathname } from 'next/navigation';
 import { toast } from 'react-toastify';
+import revalidate from 'utils/revalidate';
 
 import scss from './EnterCodeFOrm.module.scss';
-import revalidate from 'utils/revalidate';
+import { successToastConfig } from 'config/toastConfig';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -23,7 +24,6 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     sessionId,
 }) => {
     const path = usePathname();
-
     const onSubmit = async (values: EnterCodeFormValues) => {
         const body = {
             session: +sessionId,
@@ -33,13 +33,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         await sendSessionAction(areaId, sessionId, body)
             .then(() => {
                 revalidate(path);
-                toast('Успешно', {
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    autoClose: 2000,
-                    type: 'success',
-                    theme: 'colored',
-                });
+                toast('Успешно', successToastConfig);
             })
             .catch((e: AxiosError) => {
                 // @ts-ignore
@@ -73,8 +67,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                         errors.code = 'Инвентарь не может быть введен в ключи';
                     }
                 }
-            })
-            .finally(() => {});
+            });
     };
 
     const {

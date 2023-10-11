@@ -12,8 +12,10 @@ import { NewWorkers, WorkerTableWrapperProps } from 'app/(Main)/workers/types';
 export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
     workers,
 }) => {
-    const [tableData, setTableData] = useState<NewWorkers[]>(workers.results);
     const router = useRouter();
+
+    const [tableData, setTableData] = useState<NewWorkers[]>(workers.results);
+
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {

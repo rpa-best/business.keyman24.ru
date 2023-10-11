@@ -18,7 +18,7 @@ import { PickListPermissionProps } from 'app/(Main)/org-settings/types';
 import { getListValues } from 'components/PickList/helpers/getListValues';
 
 import { IAdminPermission, IPermission } from 'http/types';
-import { getModeName } from 'helpers/permTypeHelper';
+import { getModeName } from 'utils/permTypeHelper';
 import { Spinner } from 'components/Spinner';
 
 export const PickListPermission: React.FC<PickListPermissionProps> = () => {

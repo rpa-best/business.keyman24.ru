@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import { usePathname } from 'next/navigation';
 
 import { createLocationObject, editLocationObject } from 'http/locationsApi';
 import {
@@ -14,12 +15,9 @@ import { useNotificationStore } from 'store/notificationStore';
 import { Input } from 'components/UI/Inputs/Input';
 import { Button } from 'components/UI/Buttons/Button';
 import { Spinner } from 'components/Spinner';
+import revalidate from 'utils/revalidate';
 
 import scss from './ObjectFormModal.module.scss';
-import { LocationFormValues } from 'app/(Main)/locations/components/LocationsAction/types';
-import revalidate from 'utils/revalidate';
-import { usePathname, useRouter } from 'next/navigation';
-import { router } from 'next/client';
 
 export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     locId,
@@ -27,8 +25,6 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     type,
     setObjects,
 }) => {
-    const router = useRouter();
-
     const pathname = usePathname();
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,

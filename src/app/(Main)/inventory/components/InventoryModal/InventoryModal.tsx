@@ -19,12 +19,10 @@ import { useModalStore } from 'store/modalVisibleStore';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/components';
 import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
+import { useNotificationStore } from 'store/notificationStore';
+import revalidate from 'utils/revalidate';
 
 import scss from './InventoryModal.module.scss';
-import { useNotificationStore } from 'store/notificationStore';
-import { subAction } from 'helpers/subAction';
-import { useConstructorStore } from 'store/useConstructorStore';
-import revalidate from 'utils/revalidate';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
@@ -33,13 +31,20 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     selectedItem,
 }) => {
     const path = usePathname();
+    const router = useRouter();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
+
+    useEffect(() => {
+        if (type === 'edit') {
+            setNoteVisible(false);
+        }
+    }, [setNoteVisible, type]);
+
     const onSubmit = async (values: InventoryFormType) => {
         setLoading(true);
         const body: ReqInventoryBody = {
@@ -77,12 +82,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         }
     };
 
-    useEffect(() => {
-        if (type === 'edit') {
-            setNoteVisible(false);
-        }
-    }, [setNoteVisible, type]);
-
     const {
         values,
         isValid,
@@ -108,9 +107,10 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             const res = await uploadInventoryPhoto(
                 selectedItem?.id as number,
                 acceptedFiles[0]
-            ).finally(() => setLoading(false));
-
-            router.refresh();
+            ).finally(() => {
+                revalidate(path);
+                setLoading(false);
+            });
 
             const modifiedRes: IInventoryImage = {
                 ...res,

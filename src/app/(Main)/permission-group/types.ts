@@ -13,7 +13,6 @@ export interface PermGroupTableWrapperProps {
 export interface IFormProps {
     level: ILevel[];
     formType: 'create' | 'edit';
-    tableData: IModifiedPermissions[];
     setTableData: React.Dispatch<React.SetStateAction<IModifiedPermissions[]>>;
     selectedPerm?: IModifiedPermissions;
 }

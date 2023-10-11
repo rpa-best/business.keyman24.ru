@@ -17,6 +17,7 @@
   }
   @include phoneOrTablet {
     margin: 10px 10px 10px 0;
+    row-gap: 10px;
   }
   @include phone {
     flex-direction: column;
@@ -27,4 +28,8 @@
 .buttons_wrapper {
   display: flex;
   column-gap: 20px;
+  @include phoneOrTablet {
+    flex-direction: column;
+    row-gap: 10px;
+  }
 }

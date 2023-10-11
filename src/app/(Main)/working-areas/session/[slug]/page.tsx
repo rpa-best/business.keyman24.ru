@@ -3,7 +3,7 @@ import React from 'react';
 import { getSessions, getWorkingAreas } from 'http/workingAreaApi';
 import { cookies } from 'next/headers';
 import { SessionWrapper } from 'app/(Main)/working-areas/session/components/SessionWrapper';
-import { DateHelper } from 'helpers/dateHelper';
+import { DateHelper } from 'utils/dateHelper';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
