@@ -35,30 +35,29 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
 }) => {
+    const router = useRouter();
+    const pathname = usePathname();
     const path = usePathname();
+
     const [modalType, setModalType] = useState<'one' | 'more'>('one');
+    const [type, setType] = useState<'create' | 'edit'>('create');
 
     const [setNoteVisible] = useModalStore((state) => [state.setVisible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [loading, setLoading] = useState(false);
 
     const [selectedItem, setSelectedItem] = useState<IModifiedInventory>();
-    const [type, setType] = useState<'create' | 'edit'>('create');
-    const [loading, setLoading] = useState(false);
     const [selectedItemImage, setSelectedItemImage] = useState<
         IInventoryImage[] | string[]
     >();
     const [generatedData, setGeneratedData] = useState<IModifiedInventory[]>(
         []
     );
-    const [data, setData] = useState<IData[]>([]);
+    const [rowFormData, setRowFormData] = useState<IData[]>([]);
 
-    const total = data.reduce((accumulator, currentValue) => {
+    const total = rowFormData.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.count;
     }, 0);
-
-    const router = useRouter();
-
-    const pathname = usePathname();
 
     useEffect(() => {
         setGeneratedData(inventory);
@@ -105,7 +104,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                             onClick={() => {
                                 setModalType('more');
                                 setVisible(true);
-                                revalidate(pathname);
                             }}
                             type="button"
                         >
@@ -143,8 +141,8 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
             {modalType === 'more' && (
                 <Modal syncWithNote>
                     <MoreInventoryModal
-                        setData={setData}
-                        data={data}
+                        setData={setRowFormData}
+                        data={rowFormData}
                         setLoading={setLoading}
                         total={total}
                     />

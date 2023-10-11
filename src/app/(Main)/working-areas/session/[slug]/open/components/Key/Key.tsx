@@ -39,7 +39,7 @@ export const Key: React.FC<KeyProps> = ({
 
     useEffect(() => {
         if (!message) {
-            router.replace(`/working-areas/session/security-${currentAreaId}`);
+            router.replace(`/working-areas/session/key-${currentAreaId}`);
         }
     }, [message]);
 

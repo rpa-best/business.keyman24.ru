@@ -51,6 +51,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         if (type === 'create') {
             await createInventoryItem(body)
                 .then(() => {
+                    //фикс
                     //Нужен id в createInventory
                     /*  selectedImage.forEach(async (i) => {
                         await uploadInventoryPhoto(
@@ -62,7 +63,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     revalidate(path);
                 })
                 .finally(() => {
-                    router.refresh();
                     setLoading(false);
                     setVisible(false);
                 });

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
@@ -30,6 +30,7 @@ import { Column } from 'components/Table/Column';
 import scss from './Register.module.scss';
 import { AxiosError } from 'axios';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
+import revalidate from 'utils/revalidate';
 
 const cookie = new UniversalCookies();
 
@@ -43,6 +44,8 @@ export const Register: React.FC<RegisterProps> = ({
         useState<ModifiedRegisterLog[]>(sessionLog);
     const router = useRouter();
 
+    const path = usePathname();
+
     const [selectedOrg, setSelectedOrg] = useState<IOrganization>();
     const [selectedWorker, setSelectedWorker] = useState<IWorker>();
     const [selectedWorkerDocs, setSelectedWorkerDocs] =
@@ -52,6 +55,10 @@ export const Register: React.FC<RegisterProps> = ({
     const socket = useRef<WebSocket>();
 
     const params = useParams();
+
+    useEffect(() => {
+        setSessionLogData(sessionLog);
+    }, [sessionLog]);
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
@@ -66,7 +73,7 @@ export const Register: React.FC<RegisterProps> = ({
                 .then((d) => {
                     /*const newLog: ModifiedRegisterLog = {...d, workerName: selectedWorker?.name as string, inventoryName:}
                     setSessionLogData((log) => [d, ...log]);*/
-                    router.refresh();
+                    revalidate(path);
                     toast('Успешно', {
                         position: 'bottom-right',
                         hideProgressBar: true,

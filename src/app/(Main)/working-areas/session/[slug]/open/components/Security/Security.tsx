@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { SecurityProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
@@ -19,6 +19,7 @@ import { useSocketStore } from 'store/useSocketStore';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
+import revalidate from 'utils/revalidate';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -26,6 +27,7 @@ export const Security: React.FC<SecurityProps> = ({
     sessionLog,
     areaName,
 }) => {
+    const path = usePathname();
     const socketStore = useSocketStore((state) => state);
     const router = useRouter();
     const [sended, setSended] = useState(false);
@@ -66,6 +68,7 @@ export const Security: React.FC<SecurityProps> = ({
             };
             sendSessionAction(currentAreaId, currentSessionId, body as any)
                 .then(() => {
+                    revalidate(path);
                     setSended(true);
                 })
                 .finally(() => {

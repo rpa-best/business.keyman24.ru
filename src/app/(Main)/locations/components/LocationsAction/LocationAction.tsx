@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import revalidate from 'utils/revalidate';
 
 import scss from './LocationsAction.module.scss';
+import { router } from 'next/client';
 
 export const LocationAction: React.FC<LocationActionProps> = ({
     location,

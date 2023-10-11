@@ -18,7 +18,8 @@ import { Spinner } from 'components/Spinner';
 import scss from './ObjectFormModal.module.scss';
 import { LocationFormValues } from 'app/(Main)/locations/components/LocationsAction/types';
 import revalidate from 'utils/revalidate';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { router } from 'next/client';
 
 export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     locId,
@@ -26,6 +27,8 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     type,
     setObjects,
 }) => {
+    const router = useRouter();
+
     const pathname = usePathname();
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
@@ -36,8 +39,8 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     const onSubmit = (values: ObjectFormModalValues) => {
         setLoading(true);
         const body = {
-            desc: values.name,
-            name: values.desc,
+            desc: values.desc,
+            name: values.name,
         };
 
         if (type === 'create') {

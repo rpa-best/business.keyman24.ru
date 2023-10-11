@@ -35,24 +35,23 @@ interface KeysWrapperProps {
 
 export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const pathname = usePathname();
-
-    const [setVisible] = useModalStore((state) => [state.setVisible]);
-
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState<IData[]>([]);
-    const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
-
     const router = useRouter();
     const pathName = usePathname();
     const params = useParams();
 
-    useEffect(() => {
-        setGeneratedData(keys);
-    }, [keys]);
+    const [setVisible] = useModalStore((state) => [state.setVisible]);
+    const [loading, setLoading] = useState(false);
+
+    const [data, setData] = useState<IData[]>([]);
+    const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
 
     const total = data.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.count;
     }, 0);
+
+    useEffect(() => {
+        setGeneratedData(keys);
+    }, [keys]);
 
     const handleTableButtonClick = () => {
         setVisible(true);
