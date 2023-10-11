@@ -6,6 +6,7 @@ import { getLocationKeys } from 'http/locationsApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from 'app/(Main)/locations/locations.module.scss';
+import { revalidatePath } from 'next/cache';
 
 interface KeyPageProps {
     params: { locId: string; objId: string };

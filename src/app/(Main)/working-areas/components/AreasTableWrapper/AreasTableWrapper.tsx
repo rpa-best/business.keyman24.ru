@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import {
     AreasTableWrapperProps,
@@ -20,6 +20,7 @@ import { NotificationToast } from 'components/NotificationConfirm';
 import { useConstructorStore } from 'store/useConstructorStore';
 import { subAction } from 'helpers/subAction';
 import { useNotificationStore } from 'store/notificationStore';
+import revalidate from 'utils/revalidate';
 
 export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     workingAreas,
@@ -27,6 +28,8 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     initialAreas,
     locations,
 }) => {
+    const pathName = usePathname();
+
     const [workingAreasData, setWorkingAreasData] =
         useState<IModfiedWorkingArea[]>(workingAreas);
 
@@ -41,7 +44,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const router = useRouter();
 
     const handleRowClick = (id: number) => {
-        const slug = initialAreas.find((area) => area.id === id);
+        const slug = workingAreasData.find((area) => area.id === id);
         router.push(
             'working-areas/session/' + `${slug?.type.slug}-${slug?.id}`
         );
@@ -49,7 +52,9 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteWorkingArea(id).finally(() => setLoading(false));
+        deleteWorkingArea(id)
+            .then(() => revalidate(pathName))
+            .finally(() => setLoading(false));
     };
 
     const handleEditClick = async (id: number) => {

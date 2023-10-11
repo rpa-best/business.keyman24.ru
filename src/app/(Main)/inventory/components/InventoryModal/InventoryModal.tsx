@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { useDropzone } from 'react-dropzone';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { InventoryModalProps } from 'app/(Main)/inventory/types';
 import { InventoryFormType } from 'app/(Main)/inventory/components/InventoryModal/types';
@@ -24,6 +24,7 @@ import scss from './InventoryModal.module.scss';
 import { useNotificationStore } from 'store/notificationStore';
 import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
+import revalidate from 'utils/revalidate';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
@@ -31,6 +32,8 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     setSelectedImage,
     selectedItem,
 }) => {
+    const path = usePathname();
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
@@ -56,6 +59,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             i.img
                         );
                     });*/
+                    revalidate(path);
                 })
                 .finally(() => {
                     router.refresh();
@@ -65,7 +69,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         } else {
             await updateInventoryItem(selectedItem?.id as number, body).finally(
                 () => {
-                    router.refresh();
+                    revalidate(path);
                     setLoading(false);
                     setVisible(false);
                 }

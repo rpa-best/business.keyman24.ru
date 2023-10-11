@@ -17,6 +17,8 @@ import { Spinner } from 'components/Spinner';
 
 import scss from './ObjectFormModal.module.scss';
 import { LocationFormValues } from 'app/(Main)/locations/components/LocationsAction/types';
+import revalidate from 'utils/revalidate';
+import { usePathname } from 'next/navigation';
 
 export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     locId,
@@ -24,6 +26,7 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     type,
     setObjects,
 }) => {
+    const pathname = usePathname();
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
@@ -40,6 +43,7 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
         if (type === 'create') {
             createLocationObject(locId, body)
                 .then((d) => {
+                    revalidate(pathname);
                     setObjects((obj) => [...obj, d]);
                 })
                 .finally(() => {
@@ -49,6 +53,7 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
         } else {
             editLocationObject(locId, object?.id as number, body)
                 .then(() => {
+                    revalidate(pathname);
                     setObjects((obj) =>
                         obj.map((objects) => {
                             if (objects.id === object?.id) {

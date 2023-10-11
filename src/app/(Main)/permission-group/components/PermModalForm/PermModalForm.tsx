@@ -15,12 +15,13 @@ import { PermissionPickList } from 'app/(Main)/permission-group/components/Permi
 import { fetchData } from 'app/(Main)/permission-group/components/PermModalForm/fetchData';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Input } from 'components/UI/Inputs/Input';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 import { CustomGroupDefaultElem } from 'app/(Main)/permission-group/components/PermissionPickList/types';
 import { AdminPermList } from 'app/(Main)/permission-group/components/AdminPermList';
 
 import scss from 'app/(Main)/permission-group/PermGroup.module.scss';
+import revalidate from 'utils/revalidate';
 
 export const PermModalForm: React.FC<IFormProps> = ({
     level,
@@ -29,6 +30,7 @@ export const PermModalForm: React.FC<IFormProps> = ({
     tableData,
     setTableData,
 }) => {
+    const path = usePathname();
     const [loading, setLoading] = useState(false);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
@@ -43,6 +45,7 @@ export const PermModalForm: React.FC<IFormProps> = ({
         if (formType === 'create') {
             await createGroupPerm(body)
                 .then((d) => {
+                    revalidate(path);
                     const newPerm = {
                         ...d,
                         level: {
@@ -60,8 +63,9 @@ export const PermModalForm: React.FC<IFormProps> = ({
         } else {
             await editGroupPerm(selectedPerm?.id as number, body)
                 .then(() => {
-                    setTableData((data) =>
-                        data.map((el) => {
+                    revalidate(path);
+                    setTableData((data) => {
+                        return data.map((el) => {
                             if (el.id === (selectedPerm?.id as number)) {
                                 return {
                                     ...el,
@@ -71,8 +75,8 @@ export const PermModalForm: React.FC<IFormProps> = ({
                                 };
                             }
                             return el;
-                        })
-                    );
+                        });
+                    });
                 })
                 .finally(() => {
                     setLoading(false);

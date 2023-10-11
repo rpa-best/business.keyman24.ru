@@ -29,11 +29,13 @@ import { NotificationToast } from 'components/NotificationConfirm';
 import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
 import { ActionsButtons } from 'app/(Main)/inventory/components/ActionsButtons';
 import { MoreInventoryModal } from 'app/(Main)/inventory/components/MoreInventoryModal';
+import revalidate from 'utils/revalidate';
 
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
 }) => {
+    const path = usePathname();
     const [modalType, setModalType] = useState<'one' | 'more'>('one');
 
     const [setNoteVisible] = useModalStore((state) => [state.setVisible]);
@@ -80,6 +82,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
         await deleteInventoryItem(id).finally(() => {
+            revalidate(path);
             setLoading(false);
         });
     };
@@ -102,6 +105,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                             onClick={() => {
                                 setModalType('more');
                                 setVisible(true);
+                                revalidate(pathname);
                             }}
                             type="button"
                         >

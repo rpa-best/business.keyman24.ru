@@ -15,6 +15,7 @@ import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
 import { subAction } from 'helpers/subAction';
 import { useConstructorStore } from 'store/useConstructorStore';
+import revalidate from 'utils/revalidate';
 
 interface ObjectsTableWrapper {
     modifiedObjects: IObject[];
@@ -55,9 +56,11 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteLocationObject(locId, id).finally(() => {
-            setLoading(false);
-        });
+        deleteLocationObject(locId, id)
+            .then(() => revalidate(pathname))
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     return (

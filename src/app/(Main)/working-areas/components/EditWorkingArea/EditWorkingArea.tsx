@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { WorkAreaValues } from 'app/(Main)/working-areas/components/EditWorkingArea/types';
 import { EditWorkingAreaProps } from 'app/(Main)/working-areas/types';
@@ -16,6 +16,7 @@ import { useNotificationStore } from 'store/notificationStore';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './EditWorkingArea.module.scss';
+import revalidate from 'utils/revalidate';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,
@@ -25,12 +26,12 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     setWorkingAreasData,
     setLoading,
 }) => {
+    const pathName = usePathname();
+
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-
-    const router = useRouter();
 
     const onSubmit = (values: WorkAreaValues) => {
         setLoading(true);
@@ -44,7 +45,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         if (formType === 'create') {
             createWorkingArea(body)
                 .then((d) => {
-                    router.refresh();
+                    revalidate(pathName);
                 })
                 .finally(() => {
                     setNoteVisible(false);
@@ -54,6 +55,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         } else {
             patchWorkingArea(body, editableArea?.id as number)
                 .then(() => {
+                    revalidate(pathName);
                     setWorkingAreasData((d) =>
                         d.map((el) => {
                             if (el.id === editableArea?.id) {

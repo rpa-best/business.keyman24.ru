@@ -1,19 +1,20 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { RangeSlider } from 'components/UI/Inputs/RangeSlider';
-import { IRate, IServiceRate } from 'http/types';
+import { IRate } from 'http/types';
 import { useConstructorStore } from 'store/useConstructorStore';
 import { usePrice } from 'helpers/usePrice';
 import { Button } from 'components/UI/Buttons/Button';
-import { useRouter } from 'next/navigation';
 import { GetDifferencePrice } from 'app/(Main)/org-settings/bill/components/GetDifferencePrice';
 import { Spinner } from 'components/Spinner';
 import { updateSub } from 'http/organizationApi';
+import { toast } from 'react-toastify';
+import revalidate from 'utils/revalidate';
 
 import scss from 'app/(Main)/org-settings/bill/Bill.module.scss';
-import { toast } from 'react-toastify';
+import { usePathname } from 'next/navigation';
 
 interface SubConstructorProps {
     defaultPrice: number;
@@ -22,12 +23,13 @@ interface SubConstructorProps {
 export const SubConstructor: React.FC<SubConstructorProps> = ({
     defaultPrice,
 }) => {
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [fields] = useConstructorStore((state) => [state.fields]);
     const [setFields] = useConstructorStore((state) => [state.setFields]);
 
     const price = usePrice(fields, 200);
+
+    const path = usePathname();
 
     const handleInputChange = useCallback(
         (index: number, value: string) => {
@@ -50,7 +52,7 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
         setLoading(true);
         await updateSub(rateBody)
             .then(() => {
-                router.refresh();
+                revalidate(path);
                 toast('Успешно', {
                     position: 'bottom-right',
                     hideProgressBar: true,

@@ -14,8 +14,8 @@ import {
     WorkerEditFormValidate,
 } from 'app/(Main)/workers/[id]/components/WorkerEditForm/WorkerEditForm.utils';
 import { Button } from 'components/UI/Buttons/Button';
-import { useRouter } from 'next/navigation';
-import { CreateWorkerUserBody } from 'http/types';
+import { usePathname, useRouter } from 'next/navigation';
+import { CreateWorkerUserBody, IWorker } from 'http/types';
 import { createWorkerUser } from 'http/workerApi';
 import { Spinner } from 'components/Spinner';
 import { AxiosError } from 'axios';
@@ -28,12 +28,17 @@ import { useModalStore } from 'store/modalVisibleStore';
 import scss from './WorkerEditForm.module.scss';
 import { Modal } from 'components/Modal';
 import { ChangeImgModal } from 'app/(Main)/workers/[id]/components/ChangeImgModal';
+import revalidate from 'utils/revalidate';
 
 export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
     worker,
     workerUser,
     onUserSubmit,
 }) => {
+    const [workerImg, setWorkerImg] = useState(worker.image);
+
+    const path = usePathname();
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
     const onSubmit = async (values: WorkerFormValuesType) => {
@@ -48,6 +53,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
         await createWorkerUser(worker.id, workerBody)
             .then(() => {
                 onUserSubmit(tel, values.username);
+                revalidate(path);
                 toast('Успешно', {
                     position: 'bottom-right',
                     hideProgressBar: true,
@@ -116,10 +122,10 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
             <h2 className={scss.worker_card_title}>Информация о работнике</h2>
             <div className={scss.worker_content}>
                 <div className={scss.worker_card_image_wrapper}>
-                    {worker?.image ? (
+                    {workerImg ? (
                         <Image
                             style={{ borderRadius: '50%' }}
-                            src={worker.image}
+                            src={workerImg}
                             alt="Изображение работника"
                             fill
                         />
@@ -133,7 +139,9 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                         />
                     )}
                     <button
-                        onClick={() => setVisible(true)}
+                        onClick={() => {
+                            setVisible(true);
+                        }}
                         className={scss.change_img_wrapper}
                     >
                         <EditSvg />
@@ -229,7 +237,11 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 </Button>
             </div>
             <Modal>
-                <ChangeImgModal workerId={worker.id} />
+                <ChangeImgModal
+                    setLoading={setLoading}
+                    setWorkerImg={setWorkerImg}
+                    workerId={worker.id}
+                />
             </Modal>
             {loading && <Spinner />}
         </form>

@@ -23,11 +23,10 @@ import { Modal } from 'components/Modal';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
 import { subAction } from 'helpers/subAction';
-import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './KeysWrapper.module.scss';
-import { SelectLocationTippy } from 'app/(Main)/inventory/components/SelectLocationTippy';
-import { revalidatePath } from 'next/cache';
+import { fetchData } from 'app/(Main)/permission-group/components/PermModalForm/fetchData';
+import revalidate from 'utils/revalidate';
 
 interface KeysWrapperProps {
     count: number;
@@ -35,6 +34,8 @@ interface KeysWrapperProps {
 }
 
 export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
+    const pathname = usePathname();
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const [loading, setLoading] = useState(false);
@@ -63,11 +64,11 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        await deleteLocationKey(+params.locId, +params.objId, +id).finally(
-            () => {
+        await deleteLocationKey(+params.locId, +params.objId, +id)
+            .then(() => revalidate(pathname))
+            .finally(() => {
                 setLoading(false);
-            }
-        );
+            });
     };
 
     const handleGenerateClick = async () => {
@@ -78,8 +79,8 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
 
         createLocationKeys(+params.locId, +params.objId, body)
             .then((d) => {
+                revalidate(pathName);
                 setData([]);
-                revalidatePath(pathName);
             })
             .finally(() => {
                 setLoading(false);

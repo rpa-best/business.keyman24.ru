@@ -1,7 +1,7 @@
 import { CreateLocationBody } from 'http/types';
 import React, { useEffect } from 'react';
 import { useNotificationStore } from 'store/notificationStore';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Input } from 'components/UI/Inputs/Input';
 import { Button } from 'components/UI/Buttons/Button';
 import {
@@ -13,9 +13,10 @@ import { createLocation, editLocation } from 'http/locationsApi';
 import { PickListsWrapper } from 'app/(Main)/locations/components/LocationsAction/components/PickListsWrapper';
 import { useFormik } from 'formik';
 import { useModalStore } from 'store/modalVisibleStore';
+import { toast } from 'react-toastify';
+import revalidate from 'utils/revalidate';
 
 import scss from './LocationsAction.module.scss';
-import { toast } from 'react-toastify';
 
 export const LocationAction: React.FC<LocationActionProps> = ({
     location,
@@ -25,6 +26,8 @@ export const LocationAction: React.FC<LocationActionProps> = ({
     loading,
     setTableData,
 }) => {
+    const path = usePathname();
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
@@ -40,6 +43,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         if (formType === 'create') {
             createLocation(body)
                 .then((d) => {
+                    revalidate(path);
                     setTableData((rows) => [...rows, d]);
                 })
                 .catch(() => {
@@ -58,6 +62,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         } else {
             editLocation(location?.id as number, body)
                 .then(() => {
+                    revalidate(path);
                     setTableData((d) =>
                         d.map((elem) => {
                             if (elem.id === location.id) {
