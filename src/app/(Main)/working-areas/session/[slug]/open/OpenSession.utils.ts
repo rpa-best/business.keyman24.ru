@@ -1,5 +1,6 @@
 import { closeSession } from 'http/workingAreaApi';
 import { CloseSessionType } from 'app/(Main)/working-areas/session/[slug]/open/types';
+import revalidate from 'utils/revalidate';
 
 export const validateDate = (date: string) => {
     const propDate = new Date(date);
@@ -16,8 +17,11 @@ export const closeSessionHandler: CloseSessionType = async (
     router
 ) => {
     setLoading(true);
-    await closeSession(areaId, sessionId);
-    router.replace('/working-areas/session/' + pathSlug);
-    router.refresh();
-    setLoading(false);
+    await closeSession(areaId, sessionId)
+        .then(() => {
+            router.replace('/working-areas/session/' + pathSlug);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
 };

@@ -17,6 +17,7 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { IOrganization } from 'store/types';
 import { NotificationToast } from 'components/NotificationConfirm';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
+import revalidate from 'utils/revalidate';
 
 interface TableWrapperProps {
     tableRows: ILocation[];
@@ -31,6 +32,8 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     path,
     organizations,
 }) => {
+    const pathname = usePathname();
+
     const [tableData, setTableData] = useState<ILocation[]>(tableRows);
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
@@ -58,9 +61,11 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteLocation(id).finally(() => {
-            setLoading(false);
-        });
+        deleteLocation(id)
+            .then(() => revalidate(pathname))
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const handleRowClick = (id: number) => {

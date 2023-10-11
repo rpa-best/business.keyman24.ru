@@ -8,11 +8,9 @@ import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module
 import { IData } from 'app/(Main)/locations/types';
 import { LocKeyBody } from 'http/types';
 import { createInventoryKeys } from 'http/inventoryApi';
-import { subAction } from 'helpers/subAction';
-import { useRouter } from 'next/navigation';
-import { useConstructorStore } from 'store/useConstructorStore';
+import { usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from 'store/modalVisibleStore';
-import { revalidatePath } from 'next/cache';
+import revalidate from 'utils/revalidate';
 
 interface MoreInventoryModalProps {
     setData: React.Dispatch<React.SetStateAction<IData[]>>;
@@ -29,6 +27,8 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
 }) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
+    const path = usePathname();
+
     const handleDeleteOne = (id: string) => {
         setData(data.filter((d) => d.id !== id));
     };
@@ -42,7 +42,7 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
         createInventoryKeys(body)
             .then(() => {
                 setData([]);
-                revalidatePath('/inventory');
+                revalidate(path);
             })
             .finally(() => {
                 setLoading(false);

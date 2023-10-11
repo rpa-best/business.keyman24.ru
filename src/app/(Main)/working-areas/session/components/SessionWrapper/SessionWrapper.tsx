@@ -25,15 +25,18 @@ import { Spinner } from 'components/Spinner';
 import { useUserStore } from 'store/userStore';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { toast } from 'react-toastify';
+import { DateHelper } from 'helpers/dateHelper';
 
 import scss from './SessionWrapper.module.scss';
-import { DateHelper } from 'helpers/dateHelper';
+import revalidate from 'utils/revalidate';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
     areaId,
     type,
 }) => {
+    const pathName = usePathname();
+
     const [sessionsData, setSessionsData] =
         useState<IModifiedSession[]>(sessions);
     const [loading, setLoading] = useState(false);
@@ -56,6 +59,10 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     useEffect(() => {
         router.prefetch(`${pathname}/open/${currentSession as number}`);
     }, [currentSession]);
+
+    useEffect(() => {
+        router.prefetch(`${pathname}/?archive=true`);
+    }, [pathname]);
 
     const handleRowClick = (id: number) => {
         const session = sessions.find((s) => s.id === id);
@@ -124,6 +131,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                       };
             setSessionsData((d) => [newSession, ...d]);
             router.prefetch(`${pathname}/open/${newSession.id}`);
+            revalidate(pathName);
             if (!needAttach) {
                 sendActivateSession(areaId, newSession.id)
                     .then(() => {
@@ -152,6 +160,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         setLoading(true);
         await closeSession(areaId, currentSession as number)
             .then(() => {
+                revalidate(pathName);
                 setSessionsData((d) =>
                     d.map((el) => {
                         const d = new Date();
