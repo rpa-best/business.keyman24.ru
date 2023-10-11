@@ -78,10 +78,10 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
 
         createLocationKeys(+params.locId, +params.objId, body)
             .then((d) => {
-                revalidate(pathName);
                 setData([]);
             })
             .finally(() => {
+                revalidate(pathName);
                 setLoading(false);
                 setVisible(false);
             });
