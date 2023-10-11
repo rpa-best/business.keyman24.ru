@@ -9,11 +9,12 @@ import { CodeFormValidate } from 'app/(Main)/working-areas/session/[slug]/open/c
 import { Button } from 'components/UI/Buttons/Button';
 import { Input } from 'components/UI/Inputs/Input';
 import { sendSessionAction } from 'http/workingAreaApi';
+import { AxiosError } from 'axios';
+import { usePathname } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 import scss from './EnterCodeFOrm.module.scss';
-import { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import revalidate from 'utils/revalidate';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -21,7 +22,8 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     type,
     sessionId,
 }) => {
-    const router = useRouter();
+    const path = usePathname();
+
     const onSubmit = async (values: EnterCodeFormValues) => {
         const body = {
             session: +sessionId,
@@ -30,6 +32,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         };
         await sendSessionAction(areaId, sessionId, body)
             .then(() => {
+                revalidate(path);
                 toast('Успешно', {
                     position: 'bottom-right',
                     hideProgressBar: true,
@@ -71,9 +74,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     }
                 }
             })
-            .finally(() => {
-                router.refresh();
-            });
+            .finally(() => {});
     };
 
     const {

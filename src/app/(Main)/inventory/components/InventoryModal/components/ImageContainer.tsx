@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { deleteInventoryItemPhoto } from 'http/inventoryApi';
 import { ImageContainerProps } from 'app/(Main)/inventory/types';
@@ -8,6 +8,7 @@ import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import DeleteSvg from '/public/svg/x.svg';
 
 import scss from 'app/(Main)/inventory/components/InventoryModal/InventoryModal.module.scss';
+import revalidate from 'utils/revalidate';
 
 export const ImageContainer: React.FC<ImageContainerProps> = ({
     selectedImage,
@@ -16,15 +17,15 @@ export const ImageContainer: React.FC<ImageContainerProps> = ({
     setLoading,
     setSelectedImage,
 }) => {
-    const router = useRouter();
+    const path = usePathname();
 
     const handleDeleteImageClick = async (id: number) => {
         setLoading(true);
-        await deleteInventoryItemPhoto(selectedItemId, id).finally(() =>
-            setLoading(false)
-        );
-
-        router.refresh();
+        await deleteInventoryItemPhoto(selectedItemId, id)
+            .then(() => {
+                revalidate(path);
+            })
+            .finally(() => setLoading(false));
 
         setSelectedImage((img) => img?.filter((image) => image.id !== id));
     };

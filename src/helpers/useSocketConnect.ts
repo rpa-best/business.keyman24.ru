@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import { getWorkerDocs } from 'http/workerApi';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { useSocket } from 'helpers/socketManager';
 import { useSocketStore } from 'store/useSocketStore';
 import Cookies from 'universal-cookie';
+import revalidate from 'utils/revalidate';
 
 const cookie = new Cookies();
 
@@ -31,7 +32,7 @@ export const useSocketConnect: SocketConnectFunc = ({
 }) => {
     const socketStore = useSocketStore((state) => state);
 
-    const router = useRouter();
+    const path = usePathname();
 
     const [errors, setErrors] = useState<boolean>(false);
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
@@ -44,6 +45,7 @@ export const useSocketConnect: SocketConnectFunc = ({
                 setWorker(data.data.worker as IWorker);
                 await getWorkerDocs(data.data.worker?.id)
                     .then((d) => {
+                        revalidate(path);
                         setWorkerDocs(d.results);
                         d.results.forEach((doc) => {
                             if (validateDate(doc.activeTo)) {
@@ -52,7 +54,6 @@ export const useSocketConnect: SocketConnectFunc = ({
                         });
                     })
                     .finally(() => {
-                        router.refresh();
                         setLoading(false);
                     });
             }

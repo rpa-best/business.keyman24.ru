@@ -18,7 +18,6 @@ export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
     setModalType,
     setVisible,
 }) => {
-    const path = usePathname();
     return (
         <>
             <div className={scss.actions_buttons_wrapper}>
@@ -30,7 +29,6 @@ export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
                         onClick={() => {
                             setVisible(true);
                             setModalType('more');
-                            revalidate(path);
                         }}
                         type="button"
                     >

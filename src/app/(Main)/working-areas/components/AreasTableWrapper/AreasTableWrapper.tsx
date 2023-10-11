@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
@@ -37,6 +37,10 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
+
+    useEffect(() => {
+        setWorkingAreasData(workingAreas);
+    }, [workingAreas]);
 
     const [formType, setFormType] = useState<'edit' | 'create'>('create');
     const [editableArea, setEditableArea] = useState<IModfiedWorkingArea>();

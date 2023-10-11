@@ -17,6 +17,7 @@ import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './EditWorkingArea.module.scss';
 import revalidate from 'utils/revalidate';
+import { router } from 'next/client';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,

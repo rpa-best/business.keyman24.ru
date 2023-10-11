@@ -103,7 +103,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                 <div className={scss.children_with_table}>
                     <div className={scss.page_title_with_table_back_button}>
                         <h1>{area?.name}</h1>
-                        <BackButton>Назад</BackButton>
+                        <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Register
                         sessionLog={registerLog}
