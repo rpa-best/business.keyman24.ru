@@ -14,7 +14,7 @@ import { SelectList } from 'app/(Main)/components/Header/components/InputSelect/
 import clsx from 'clsx';
 
 import scss from './InputSelect.module.scss';
-import { useAllowedPath } from 'helpers/useDeniedPath';
+import { useAllowedPath } from 'hooks/useDeniedPath';
 
 const cookie = new Cookies();
 

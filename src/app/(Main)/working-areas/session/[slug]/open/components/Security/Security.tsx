@@ -11,7 +11,7 @@ import { IWorker, IWorkerDocs } from 'http/types';
 import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-import { useSocketConnect } from 'helpers/useSocketConnect';
+import { useSocketConnect } from 'hooks/useSocketConnect';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
 import { sendSessionAction } from 'http/workingAreaApi';

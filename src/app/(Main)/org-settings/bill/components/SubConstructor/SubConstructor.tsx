@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { RangeSlider } from 'components/UI/Inputs/RangeSlider';
 import { IRate } from 'http/types';
 import { useConstructorStore } from 'store/useConstructorStore';
-import { usePrice } from 'helpers/usePrice';
+import { usePrice } from 'hooks/usePrice';
 import { Button } from 'components/UI/Buttons/Button';
 import { GetDifferencePrice } from 'app/(Main)/org-settings/bill/components/GetDifferencePrice';
 import { Spinner } from 'components/Spinner';

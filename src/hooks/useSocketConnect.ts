@@ -4,7 +4,6 @@ import { getWorkerDocs } from 'http/workerApi';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
-import { useSocket } from 'helpers/socketManager';
 import { useSocketStore } from 'store/useSocketStore';
 import Cookies from 'universal-cookie';
 import revalidate from 'utils/revalidate';

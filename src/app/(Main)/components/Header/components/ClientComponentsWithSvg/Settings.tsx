@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import SettingsSvg from 'app/(Main)/components/Header/components/svg/settings.svg';
 import { usePathname } from 'next/navigation';
-import { useAllowedPath } from 'helpers/useDeniedPath';
+import { useAllowedPath } from 'hooks/useDeniedPath';
 
 import scss from 'app/(Main)/components/Header/Header.module.scss';
 

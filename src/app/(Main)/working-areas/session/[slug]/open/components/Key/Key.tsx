@@ -13,7 +13,7 @@ import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/com
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
-import { useSocketConnect } from 'helpers/useSocketConnect';
+import { useSocketConnect } from 'hooks/useSocketConnect';
 
 import scss from './Key.module.scss';
 import { useModalStore } from 'store/modalVisibleStore';

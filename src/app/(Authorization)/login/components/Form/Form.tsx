@@ -27,8 +27,9 @@ export const Form = () => {
         setLoading(true);
         userAuth(values)
             .then(() => {
-                router.replace('/');
+                router.prefetch('/');
                 getUser().then((user) => {
+                    router.replace('/');
                     setUser(user as IUser);
                 });
             })

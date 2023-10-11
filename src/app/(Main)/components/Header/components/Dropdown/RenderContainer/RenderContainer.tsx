@@ -22,11 +22,11 @@ export const RenderContainer: React.FC<RenderContainerProps> = ({
     const router = useRouter();
 
     const handleLogoutClick = () => {
-        router.replace('/login');
-        setUserLogout();
         cookie.remove('access');
         cookie.remove('refresh');
         cookie.remove('orgId');
+        setUserLogout();
+        router.replace('/login');
     };
 
     return (

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo, useEffect, useRef, useState } from 'react';
-import { usePrice } from 'helpers/usePrice';
+import { usePrice } from 'hooks/usePrice';
 import { IField, useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './ServiceChangeToast.module.scss';

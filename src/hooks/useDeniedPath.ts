@@ -21,6 +21,10 @@ export const useAllowedPath = (head: string): boolean => {
         const fetchData = async () => {
             return await allowedPath(head, orgId);
         };
+        if (head === '/') {
+            setDeniedLink(true);
+            return;
+        }
         fetchData()
             .then((d) => {
                 setDeniedLink(d);
