@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import { useFormik } from 'formik';
 import {
@@ -16,6 +16,8 @@ import revalidate from 'utils/revalidate';
 
 import scss from './EnterCodeFOrm.module.scss';
 import { successToastConfig } from 'config/toastConfig';
+import { getParamsType } from 'app/(Main)/working-areas/helpers';
+import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -23,23 +25,55 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     type,
     setSessionLog,
     sessionId,
+    needWorker = true,
 }) => {
     const path = usePathname();
+    const params = useParams();
+    const slug = getParamsType(params.slug);
     const onSubmit = async (values: EnterCodeFormValues) => {
-        const body = {
-            session: +sessionId,
-            worker: +worker.id,
-            barcode: values.code,
-        };
+        let body = null;
+        if (worker?.id) {
+            body = {
+                session: +sessionId,
+                worker: +worker.id,
+                barcode: values.code,
+            };
+        } else {
+            body = {
+                session: +sessionId,
+                barcode: values.code,
+            };
+        }
+
         await sendSessionAction(areaId, sessionId, body)
             .then((d) => {
-                const mode = d.mode ? 'Выдан' : 'Сдан';
-                const newLog = {
-                    ...d,
-                    workerName: d.worker.name,
-                    modeName: mode,
-                    inventoryName: `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.objectArea.name}`,
-                };
+                let newLog:
+                    | ModifiedRegisterLog
+                    | Omit<ModifiedRegisterLog, 'workerName'>;
+                let mode: string;
+                if (slug === 'register_inventory') {
+                    mode = d.mode ? 'Зарегестрировано' : 'Сдано';
+                    newLog = {
+                        ...d,
+                        modeName: mode,
+                        inventoryName: `${d?.inventory?.id} ${d?.inventory?.name}`,
+                    };
+                } else {
+                    const inventoryName =
+                        type === 'keys'
+                            ? ` ${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.objectArea.name}`
+                            : `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.location.name}`;
+                    mode = d.mode ? 'Выдан' : 'Сдан';
+                    newLog = {
+                        ...d,
+                        workerName: d.worker.name,
+                        modeName: mode,
+                        inventoryName,
+                    };
+                }
+                if (slug === 'register_inventory') {
+                    revalidate('/inventory');
+                }
                 revalidate(path);
                 setSessionLog((log) => [newLog, ...log]);
                 toast('Успешно', successToastConfig);
@@ -94,13 +128,19 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     });
 
     useEffect(() => {
-        if (!worker) {
-            errors.code = 'Сначала приложите карту';
+        if (needWorker) {
+            if (!worker) {
+                errors.code = 'Сначала приложите карту';
+            }
         }
     }, [errors, worker]);
 
     return (
-        <form className={scss.form} onSubmit={handleSubmit}>
+        <form
+            style={!worker?.id ? { width: '100%' } : undefined}
+            className={scss.form}
+            onSubmit={handleSubmit}
+        >
             <h2 className={scss.form_title}>
                 Добавьте или отсканируйте штрихкод
             </h2>

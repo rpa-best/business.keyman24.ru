@@ -48,9 +48,15 @@ export const Key: React.FC<KeyProps> = ({
 
     useEffect(() => {
         if (!socketStore.message) {
-            router.replace(`/working-areas/session/key-${currentAreaId}`);
+            if (type === 'keys') {
+                router.replace(`/working-areas/session/key-${currentAreaId}`);
+            } else {
+                router.replace(
+                    `/working-areas/session/inventory-${currentAreaId}`
+                );
+            }
         }
-    }, [socketStore.message]);
+    }, [socketStore.message, type]);
 
     const onCloseSessionClick = async () => {
         socketStore.closeConnection();
@@ -83,7 +89,7 @@ export const Key: React.FC<KeyProps> = ({
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm
-                            setSessionLog={setSessionLogData}
+                            setSessionLog={setSessionLogData as any}
                             type={type}
                             worker={worker as IWorker}
                             sessionId={currentSessionId}

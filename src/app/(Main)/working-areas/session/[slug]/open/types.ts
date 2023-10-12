@@ -28,6 +28,12 @@ export interface KeyProps extends RegisterProps {
     type: 'inventory' | 'keys';
 }
 
+export interface RegisterInventoryProps
+    extends Omit<RegisterProps, 'sessionLog'> {
+    sessionLog: Omit<ModifiedRegisterLog, 'workerName'>[];
+    areaName: string;
+}
+
 export type CloseSessionType = (
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     areaId: number,

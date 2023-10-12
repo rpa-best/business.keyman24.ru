@@ -26,7 +26,12 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
         getParamsType(params.slug) === 'inventory' ||
         getParamsType(params.slug) === 'key';
 
+    const inventory = getParamsType(params.slug) === 'inventory';
+
     const itsSecurity = getParamsType(params.slug) === 'security';
+
+    const itsRegisterInventory =
+        getParamsType(params.slug) === 'register_inventory';
 
     const sessionLog = await getSessionLog(
         +orgId,
@@ -38,17 +43,26 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
         const itemName = itsSecurity
             ? null
             : inventoryOrKeys
-            ? `${s?.inventory?.id} ${s?.inventory?.name}, ${s.inventory?.objectArea?.name}`
+            ? `${s?.inventory?.id} ${s?.inventory?.name}, ${
+                  inventory
+                      ? s.inventory.location.name
+                      : s.inventory?.objectArea?.name
+              }`
+            : itsRegisterInventory
+            ? `${s?.inventory?.id} ${s?.inventory?.name}`
             : `Карта №${s.card}`;
+
         let mode;
-        if (getParamsType(params.slug) !== 'security') {
-            mode = s.mode ? 'Получен' : 'Сдан';
-        } else {
+        if (itsSecurity) {
             mode = s.mode ? 'Зашёл' : 'Вышел';
+        } else if (itsRegisterInventory) {
+            mode = s.mode ? 'Зарегестрирован' : 'Сдан';
+        } else {
+            mode = s.mode ? 'Получен' : 'Сдан';
         }
         return {
             ...s,
-            workerName: s.worker.name,
+            workerName: s?.worker?.name,
             mode: mode,
             itemName,
         };
@@ -60,11 +74,16 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                 <BackButton skipWord>Назад</BackButton>
             </div>
             {modifiedLog.length !== 0 ? (
-                <Table tableData={modifiedLog} setTableData={() => {}}>
-                    <Column header="Работник" field="workerName" />
+                <Table tableData={modifiedLog} setTableData={[] as any}>
+                    {!itsRegisterInventory && (
+                        <Column header="Работник" field="workerName" />
+                    )}
                     <Column sortable header="Дата" field="date" />
+                    {itsRegisterInventory && (
+                        <Column header="Инвентарь" field="itemName" />
+                    )}
                     <Column sortable header="Событие" field="mode" />
-                    {!itsSecurity ? (
+                    {!itsSecurity && !itsRegisterInventory ? (
                         <Column
                             sortable
                             header="Наименование"

@@ -38,10 +38,13 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
                 const orgInLocation = locationOrganizations.results.find(
                     (o) => o.toOrg.id === org.id
                 );
-                if (orgInLocation) {
-                    return;
+                if (!orgInLocation) {
+                    return {
+                        ...org,
+                        uuid: v4(),
+                        customDesc: `ИНН: ${org.inn}`,
+                    };
                 }
-                return { ...org, uuid: v4(), customDesc: `ИНН: ${org.inn}` };
             });
 
             const target =
@@ -71,16 +74,17 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
     }, [organizations, locId, refresh]);
 
     const handleArrowRight = async (elems: DefaultElem[]) => {
-        const res = await Promise.all(
+        return await Promise.all(
             elems.map(async (el) => {
                 return await createLocationOrganization({
                     to_org: +el.id,
                     location: locId,
                 });
             })
-        );
-        setListsRefresh((v) => !v);
-        return res;
+        ).then((d) => {
+            setListsRefresh((v) => !v);
+            return d;
+        });
     };
 
     const handleArrowLeft = async (elems: DefaultElem[]) => {
@@ -88,8 +92,9 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
             elems.map(async (el) => {
                 return await deleteLocationOrganization(locId, +el.id);
             })
-        ).then(() => {
+        ).then((d) => {
             setListsRefresh((v) => !v);
+            return d;
         });
     };
 

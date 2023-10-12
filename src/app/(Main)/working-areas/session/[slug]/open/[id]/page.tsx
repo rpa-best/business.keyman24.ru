@@ -11,6 +11,7 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
 
 import scss from './OpenSession.module.scss';
+import { RegisterInventory } from 'app/(Main)/working-areas/session/[slug]/open/components/RegisterInventory';
 
 interface OpenSessionPage {
     params: {
@@ -42,7 +43,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
 
     const modifiedLog = sessionLog.results.map((s) => {
         const mode = s.mode ? 'Зашёл' : 'Вышел';
-        return { ...s, workerName: s.worker.name, modeName: mode };
+        return { ...s, workerName: s?.worker?.name, modeName: mode };
     });
 
     switch (areaType) {
@@ -52,7 +53,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                 return {
                     ...l,
                     modeName: mode,
-                    inventoryName: `${l?.inventory?.id} ${l?.inventory?.name} ${l.inventory.objectArea.name}`,
+                    inventoryName: `${l?.inventory?.id} ${l?.inventory?.name} ${l.inventory?.location?.name}`,
                 };
             });
             return (
@@ -106,6 +107,28 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
                         <BackButton skipWord>Назад</BackButton>
                     </div>
                     <Register
+                        sessionLog={registerLog}
+                        currentSessionId={+params.id}
+                        currentAreaId={areaId}
+                        organizations={organizations}
+                    />
+                </div>
+            );
+        }
+        case 'register_inventory': {
+            const registerLog: Omit<ModifiedRegisterLog, 'workerName'>[] =
+                sessionLog.results.map((l) => {
+                    const mode = l.mode ? 'Зарегестрировано' : 'Сдано';
+                    return {
+                        ...l,
+                        modeName: mode,
+                        inventoryName: `${l?.inventory?.id} ${l?.inventory?.name}`,
+                    };
+                });
+            return (
+                <div className={scss.children_with_table}>
+                    <RegisterInventory
+                        areaName={area?.name as string}
                         sessionLog={registerLog}
                         currentSessionId={+params.id}
                         currentAreaId={areaId}

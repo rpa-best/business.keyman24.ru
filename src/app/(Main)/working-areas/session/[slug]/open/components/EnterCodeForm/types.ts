@@ -7,9 +7,14 @@ export interface EnterCodeFormValues {
 }
 
 export interface EnterCodeFormProps {
-    type: 'inventory' | 'keys';
+    type: 'inventory' | 'keys' | 'registerInventory';
     areaId: number;
-    setSessionLog: React.Dispatch<React.SetStateAction<ModifiedRegisterLog[]>>;
+    setSessionLog: React.Dispatch<
+        React.SetStateAction<
+            ModifiedRegisterLog[] | Omit<ModifiedRegisterLog, 'workerName'>[]
+        >
+    >;
     sessionId: number;
-    worker: IWorker;
+    needWorker?: boolean;
+    worker?: IWorker;
 }

@@ -86,7 +86,10 @@ export const Register: React.FC<RegisterProps> = ({
                             e.response?.data.error[0].slug ===
                             'card_not_given_to_this_worker'
                         ) {
-                            toast('У работника нет карты', errorToastOptions);
+                            toast(
+                                'Эта карта выдана другому сотруднику',
+                                errorToastOptions
+                            );
                         }
                     }
                 })

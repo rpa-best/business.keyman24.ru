@@ -720,7 +720,7 @@ export type SendSessionAction = (
     sessionId: number,
     body: {
         session: number;
-        worker: number;
+        worker?: number;
         barcode?: string;
         user?: string;
         mode?: boolean;

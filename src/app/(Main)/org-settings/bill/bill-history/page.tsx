@@ -24,7 +24,7 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
     return (
         <div>
             <HistoryButtonsWrapper />
-            <Table tableData={history.results} setTableData={() => {}}>
+            <Table tableData={history.results} setTableData={[] as any}>
                 <Column sortable header="Дата" field="date" />
                 <Column sortable header="Тип операции" field="type" />
                 <Column sortable header="Количество" field="cost" />
