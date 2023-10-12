@@ -1,9 +1,11 @@
 import * as T from './types';
 import { $serverAuth } from 'http/serverIndex';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import UniversalCookies from 'universal-cookie';
 import { $clientAuth } from 'http/clientIndex';
 import FormData from 'form-data';
+import { toast } from 'react-toastify';
+import { errorToastOptions } from 'config/toastConfig';
 
 const cookie = new UniversalCookies();
 
@@ -62,7 +64,9 @@ export const getInventoryImage: T.GetInventoryImage = async (invId) => {
 };
 
 export const createInventoryItem: T.CreateInventoryItem = async (body) => {
-    await $clientAuth.post(`business/${orgId}/inventory/`, body);
+    const res = await $clientAuth.post(`business/${orgId}/inventory/`, body);
+
+    return res.data;
 };
 
 export const updateInventoryItem: T.UpdateInventoryItem = async (
@@ -85,13 +89,20 @@ export const uploadInventoryPhoto: T.UploadInventoryPhoto = async (
 ) => {
     const formData = new FormData();
     formData.append('image', photo);
+    try {
+        const res = await $clientAuth.post(
+            `business/${orgId}/inventory/${itemId}/image/`,
+            formData
+        );
 
-    const res = await $clientAuth.post(
-        `business/${orgId}/inventory/${itemId}/image/`,
-        formData
-    );
-
-    return res.data;
+        return res.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 400) {
+                toast('Неверный формат изображения', errorToastOptions);
+            }
+        }
+    }
 };
 
 export const deleteInventoryItemPhoto: T.DeleteInventoryPhoto = async (

@@ -10,16 +10,20 @@ export interface IModifiedInventory
 export interface InventoryModalProps {
     type: 'create' | 'edit';
     selectedItem?: IModifiedInventory;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     selectedImage: IInventoryImage[] | { img: File; preview: string }[];
     setSelectedImage: React.Dispatch<
         React.SetStateAction<
             IInventoryImage[] | { img: File; preview: string }[] | undefined
         >
     >;
+    setInventoryData: React.Dispatch<
+        React.SetStateAction<IModifiedInventory[]>
+    >;
 }
 
 export interface ImageContainerProps {
-    selectedImage: IInventoryImage[];
+    selectedImage: IInventoryImage[] | undefined;
     selectedItemId: number;
     setLoading: (b: boolean) => void;
     rootProps: any;

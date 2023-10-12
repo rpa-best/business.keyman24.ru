@@ -23,21 +23,22 @@ import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
 import scss from './InventoryModal.module.scss';
+import { AxiosError } from 'axios';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,
     selectedImage,
     setSelectedImage,
+    setLoading,
     selectedItem,
+    setInventoryData,
 }) => {
     const path = usePathname();
-    const router = useRouter();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [setNoteVisible] = useNotificationStore((state) => [
         state.setVisible,
     ]);
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (type === 'edit') {
@@ -55,16 +56,35 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         };
         if (type === 'create') {
             await createInventoryItem(body)
-                .then(() => {
-                    //фикс
-                    //Нужен id в createInventory
-                    /*  selectedImage.forEach(async (i) => {
-                        await uploadInventoryPhoto(
-                            lastId + 1,
-                            // @ts-ignore
-                            i.img
-                        );
-                    });*/
+                .then((d) => {
+                    const location =
+                        d.location === null ? '-' : `${d.location.name}`;
+                    const newInventory = {
+                        ...d,
+                        type: d.type.name,
+                        location: location,
+                    };
+
+                    setInventoryData((inventory) => [
+                        ...inventory,
+                        newInventory,
+                    ]);
+                    try {
+                        selectedImage.forEach(async (i) => {
+                            await uploadInventoryPhoto(
+                                d.id,
+                                // @ts-ignore
+                                i.img
+                            );
+                        });
+                    } catch (e) {
+                        if (e instanceof AxiosError) {
+                            console.log(e.response?.data);
+                        }
+                    } finally {
+                        setSelectedImage(undefined);
+                    }
+
                     revalidate(path);
                 })
                 .finally(() => {
@@ -104,20 +124,21 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     const onDrop = async (acceptedFiles: any) => {
         if (type === 'edit') {
             setLoading(true);
-            const res = await uploadInventoryPhoto(
+            await uploadInventoryPhoto(
                 selectedItem?.id as number,
                 acceptedFiles[0]
-            ).finally(() => {
-                revalidate(path);
-                setLoading(false);
-            });
+            )
+                .then((res) => {
+                    const modifiedRes: IInventoryImage = {
+                        ...res,
+                        image: res.image.slice(22),
+                    };
+                    setSelectedImage((img) => [...(img as []), modifiedRes]);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
 
-            const modifiedRes: IInventoryImage = {
-                ...res,
-                image: res.image.slice(22),
-            };
-
-            setSelectedImage((img) => [...(img as []), modifiedRes]);
             return;
         }
         setSelectedImage(
@@ -135,6 +156,9 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         maxFiles: 1,
         multiple: false,
+        accept: {
+            'image/*': ['.png', '.jpeg', '.jpg'],
+        },
         onDrop,
     });
 
@@ -228,8 +252,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     </form>
                 </>
             )}
-
-            {loading && <Spinner />}
         </div>
     );
 };

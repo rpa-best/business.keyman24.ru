@@ -514,7 +514,9 @@ export type GetInventoryImage = (
 
 export type CreateInventoryCode = (body: LocKeyBody[]) => Promise<void>;
 
-export type CreateInventoryItem = (body: ReqInventoryBody) => Promise<void>;
+export type CreateInventoryItem = (
+    body: ReqInventoryBody
+) => Promise<IInventory>;
 
 export type UpdateInventoryItem = (
     inventoryId: number,
