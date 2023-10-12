@@ -91,6 +91,7 @@ export const Form = () => {
                     autoFocus={true}
                     placeholder="Введите почту"
                     value={values.username}
+                    autoComplete="new-password"
                     onChange={handleChange}
                     handleError={touched.username && errors.username}
                 />
@@ -101,6 +102,7 @@ export const Form = () => {
                     placeholder="Введите пароль"
                     value={values.password}
                     type="password"
+                    autoComplete="new-password"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     handleError={touched.password && errors.password}

@@ -5,7 +5,10 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { EnterCodeForm } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm';
 import { IWorker, IWorkerDocs } from 'http/types';
-import { KeyProps } from 'app/(Main)/working-areas/session/[slug]/open/types';
+import {
+    KeyProps,
+    ModifiedRegisterLog,
+} from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { Button } from 'components/UI/Buttons/Button';
 import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Spinner } from 'components/Spinner';
@@ -31,6 +34,9 @@ export const Key: React.FC<KeyProps> = ({
     const params = useParams();
 
     const socketStore = useSocketStore((state) => state);
+
+    const [sessionLogData, setSessionLogData] =
+        useState<ModifiedRegisterLog[]>(sessionLog);
 
     const [loading, setLoading] = useState(false);
 
@@ -77,6 +83,7 @@ export const Key: React.FC<KeyProps> = ({
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm
+                            setSessionLog={setSessionLogData}
                             type={type}
                             worker={worker as IWorker}
                             sessionId={currentSessionId}
@@ -103,7 +110,10 @@ export const Key: React.FC<KeyProps> = ({
                     </div>
                 </div>
                 {sessionLog.length !== 0 && (
-                    <Table tableData={sessionLog} setTableData={() => {}}>
+                    <Table
+                        tableData={sessionLogData}
+                        setTableData={setSessionLogData}
+                    >
                         <Column header="Работник" field="workerName" />
                         <Column header="Дата" field="date" />
                         <Column header="Событие" field="modeName" />

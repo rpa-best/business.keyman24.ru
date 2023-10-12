@@ -63,8 +63,10 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         setType('edit');
         const selectedInventory = inventory.find((i) => i.id === id);
         setSelectedItem(selectedInventory);
-        const selectedImage = await getInventoryImage(id);
-        setSelectedItemImage(selectedImage.results);
+        await getInventoryImage(id).then((d) => {
+            setSelectedItemImage(d.results);
+        });
+
         setLoading(false);
     };
 
@@ -145,6 +147,8 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
             {modalType === 'one' && (
                 <Modal syncWithNote>
                     <InventoryModal
+                        setLoading={setLoading}
+                        setInventoryData={setGeneratedData}
                         setSelectedImage={setSelectedItemImage as any}
                         selectedImage={selectedItemImage as []}
                         selectedItem={selectedItem}

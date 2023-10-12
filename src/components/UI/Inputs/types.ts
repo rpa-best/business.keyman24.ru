@@ -18,7 +18,7 @@ export interface IInputProps {
         | ChangeEventHandler<HTMLTextAreaElement>;
     placeholder?: string;
     style?: CSSProperties;
-    autoComplete?: 'on' | 'off';
+    autoComplete?: 'on' | 'off' | 'new-password';
     disabled?: boolean;
     tabIndex?: number;
     clearable?: boolean;

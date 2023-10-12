@@ -17,17 +17,15 @@ export const ImageContainer: React.FC<ImageContainerProps> = ({
     setLoading,
     setSelectedImage,
 }) => {
-    const path = usePathname();
-
     const handleDeleteImageClick = async (id: number) => {
         setLoading(true);
         await deleteInventoryItemPhoto(selectedItemId, id)
             .then(() => {
-                revalidate(path);
+                setSelectedImage(
+                    (img) => img?.filter((image) => image.id !== id)
+                );
             })
             .finally(() => setLoading(false));
-
-        setSelectedImage((img) => img?.filter((image) => image.id !== id));
     };
 
     return (

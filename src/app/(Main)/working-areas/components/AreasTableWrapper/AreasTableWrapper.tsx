@@ -40,10 +40,6 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
         state.setVisible,
     ]);
 
-    useEffect(() => {
-        setWorkingAreasData(workingAreas);
-    }, [workingAreas]);
-
     const handleRowClick = (id: number) => {
         const slug = workingAreasData.find((area) => area.id === id);
         router.push(
@@ -82,7 +78,9 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                 tableData={workingAreasData}
                 setTableData={setWorkingAreasData}
                 prefetch={(id: number) => {
-                    const slug = initialAreas.find((area) => area.id === id);
+                    const slug = workingAreasData.find(
+                        (area) => area.id === id
+                    );
                     router.prefetch(
                         'working-areas/session/' + `${slug?.type.slug}-${id}`
                     );
