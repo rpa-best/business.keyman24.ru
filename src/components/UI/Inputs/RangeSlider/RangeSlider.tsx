@@ -72,7 +72,7 @@ export const RangeSlider: React.FC<IRangeInputProps> = ({
         <div className={scss.range_wrapper}>
             <motion.div
                 initial={{ height: checked ? '30px' : '60px' }}
-                animate={{ height: checked ? '40px' : '60px' }}
+                animate={{ height: checked ? '30px' : '60px' }}
                 className={scss.input_range_wrapper}
             >
                 <div className={scss.input_range_wrapper}>

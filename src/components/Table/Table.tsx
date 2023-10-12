@@ -10,7 +10,12 @@ import React, {
 } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { IHeader, ITableContext, TableProps } from 'components/Table/types';
+import {
+    IHeader,
+    ITableContext,
+    TableProps,
+    TableRows,
+} from 'components/Table/types';
 import { Paginator } from 'components/Table/Paginator';
 import { ColumnHeader } from 'components/Table/ColumnHeader';
 import { useResizeWidth } from 'hooks/useResizeWidth';
@@ -44,7 +49,6 @@ export const Table = memo(function MemoTable({
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortedField, setSortedField] = useState<string>('');
-
     const totalPages = useMemo(() => {
         return paginatorData
             ? Math.ceil(paginatorData?.countItems / paginatorData.offset)
@@ -71,7 +75,7 @@ export const Table = memo(function MemoTable({
     };
 
     useEffect(() => {
-        if (prefetch) {
+        if (prefetch && tableData) {
             for (const elem of tableData) {
                 prefetch(elem.id);
             }

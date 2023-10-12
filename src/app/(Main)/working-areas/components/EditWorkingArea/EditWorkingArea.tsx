@@ -44,6 +44,15 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         if (formType === 'create') {
             createWorkingArea(body)
                 .then((d) => {
+                    const newWorkingArea = {
+                        ...d,
+                        locationName: d.location.name,
+                        typeName: d.type.name,
+                    };
+                    setWorkingAreasData((workingAreas) => [
+                        ...workingAreas,
+                        newWorkingArea,
+                    ]);
                     revalidate(pathName);
                 })
                 .finally(() => {
