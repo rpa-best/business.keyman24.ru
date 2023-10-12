@@ -62,11 +62,12 @@ export const PickList = ({
                 const newTarget = sourceSelected.map((src, index) => {
                     return { ...src, id: d[index].id };
                 });
+
                 setTarget((t) => [...(t as []), ...newTarget]);
                 setSource((s) => {
                     return s?.filter((elem) => {
                         return !sourceSelected.some(
-                            (search) => search.uuid === elem.uuid
+                            (search) => search?.uuid === elem?.uuid
                         );
                     });
                 });

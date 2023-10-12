@@ -3,5 +3,5 @@ export const getParamsId = (str: string) => {
 };
 
 export const getParamsType = (str: string) => {
-    return str.slice(0, str.indexOf('-'));
+    return str.slice(0, str.lastIndexOf('-'));
 };

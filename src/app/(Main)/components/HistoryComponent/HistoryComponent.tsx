@@ -31,7 +31,7 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
             id: h.id,
             date: h.date.toLocaleDateString('ru'),
             time: h.date.toString().slice(16, 24),
-            name: h.worker.name,
+            name: h?.worker?.name,
             status: mode,
         };
     });

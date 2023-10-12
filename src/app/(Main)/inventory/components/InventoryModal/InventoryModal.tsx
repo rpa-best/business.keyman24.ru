@@ -78,9 +78,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             );
                         });
                     } catch (e) {
-                        if (e instanceof AxiosError) {
-                            console.log(e.response?.data);
-                        }
+                        return e;
                     } finally {
                         setSelectedImage(undefined);
                     }
