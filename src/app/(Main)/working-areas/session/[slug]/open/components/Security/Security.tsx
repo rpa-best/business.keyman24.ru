@@ -32,6 +32,9 @@ export const Security: React.FC<SecurityProps> = ({
 
     const socketStore = useSocketStore((state) => state);
 
+    const [sessionLogData, setSessionLogData] =
+        useState<typeof sessionLog>(sessionLog);
+
     const [sended, setSended] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -69,7 +72,14 @@ export const Security: React.FC<SecurityProps> = ({
                 user: message.data.user,
             };
             sendSessionAction(currentAreaId, currentSessionId, body as any)
-                .then(() => {
+                .then((s) => {
+                    const mode = s.mode ? 'Зашёл' : 'Вышел';
+                    const newLog = {
+                        ...s,
+                        workerName: s.worker.name,
+                        modeName: mode,
+                    };
+                    setSessionLogData((log) => [newLog, ...log]);
                     revalidate(path);
                     setSended(true);
                 })
@@ -133,7 +143,10 @@ export const Security: React.FC<SecurityProps> = ({
                         </div>
                     )}
                     <div className={scss.working_view_table}>
-                        <Table tableData={sessionLog} setTableData={() => {}}>
+                        <Table
+                            tableData={sessionLogData}
+                            setTableData={setSessionLogData}
+                        >
                             <Column header="Работник" field="workerName" />
                             <Column header="Дата" field="date" />
                             <Column header="Тип" field="modeName" />

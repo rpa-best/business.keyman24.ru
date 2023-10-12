@@ -58,10 +58,6 @@ export const Register: React.FC<RegisterProps> = ({
 
     const params = useParams();
 
-    useEffect(() => {
-        setSessionLogData(sessionLog);
-    }, [sessionLog]);
-
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
             setLoading(true);
@@ -73,8 +69,14 @@ export const Register: React.FC<RegisterProps> = ({
             };
             sendSessionAction(currentAreaId, currentSessionId, body as any)
                 .then((d) => {
-                    /*const newLog: ModifiedRegisterLog = {...d, workerName: selectedWorker?.name as string, inventoryName:}
-                    setSessionLogData((log) => [d, ...log]);*/
+                    const mode = d.mode ? 'Выдан' : 'Сдан';
+                    const newLog = {
+                        ...d,
+                        modeName: mode,
+                        workerName: d.worker.name,
+                        inventoryName: `${d?.inventory?.id} ${d?.inventory?.name}`,
+                    };
+                    setSessionLogData((log) => [newLog, ...log]);
                     revalidate(path);
                     toast('Успешно', successToastConfig);
                 })

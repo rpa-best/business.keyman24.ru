@@ -21,6 +21,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
     areaId,
     type,
+    setSessionLog,
     sessionId,
 }) => {
     const path = usePathname();
@@ -31,8 +32,16 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             barcode: values.code,
         };
         await sendSessionAction(areaId, sessionId, body)
-            .then(() => {
+            .then((d) => {
+                const mode = d.mode ? 'Выдан' : 'Сдан';
+                const newLog = {
+                    ...d,
+                    workerName: d.worker.name,
+                    modeName: mode,
+                    inventoryName: `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.objectArea.name}`,
+                };
                 revalidate(path);
+                setSessionLog((log) => [newLog, ...log]);
                 toast('Успешно', successToastConfig);
             })
             .catch((e: AxiosError) => {
