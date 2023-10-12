@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, MotionValue } from 'framer-motion';
 
@@ -20,6 +20,10 @@ export const RenderContainer: React.FC<RenderContainerProps> = ({
     setUserLogout,
 }) => {
     const router = useRouter();
+
+    useEffect(() => {
+        router.prefetch('/login');
+    }, []);
 
     const handleLogoutClick = () => {
         cookie.remove('access');
