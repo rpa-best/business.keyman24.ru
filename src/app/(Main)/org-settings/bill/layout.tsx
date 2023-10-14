@@ -6,7 +6,7 @@ import { cookies, headers } from 'next/headers';
 import { getOrgById } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
-export default async function RootLayout({
+export default async function Layout({
     children,
 }: {
     children: React.ReactNode;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { useSpring } from 'framer-motion';
 
@@ -48,11 +48,6 @@ export const HeaderInputSelect: React.FC<{
         [scss.input_arrow_svg]: true,
         [scss.input_arrow_svg_open]: visible,
     });
-
-    useEffect(() => {
-        cookie.set('orgId', organizations[0]?.id);
-        router.refresh();
-    }, []);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);

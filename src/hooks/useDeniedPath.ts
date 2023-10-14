@@ -11,6 +11,7 @@ export const useAllowedPath = (head: string): boolean => {
 
     useEffect(() => {
         const orgId = cookies.get('orgId');
+
         setOrgId(orgId);
     }, []);
 
