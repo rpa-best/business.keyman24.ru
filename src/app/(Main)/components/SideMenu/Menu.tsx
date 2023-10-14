@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { SideLinks } from 'app/(Main)/components/SideLinks';
 
 import scss from './Menu.module.scss';
+import { useResizeWidth } from 'hooks/useResizeWidth';
 
 interface SideMenuProps {
     disabled: boolean;
@@ -12,6 +13,11 @@ interface SideMenuProps {
 
 export const SideMenu: React.FC<SideMenuProps> = ({ disabled }) => {
     const [open, setOpen] = useState(false);
+    const { tabletBreak } = useResizeWidth();
+
+    if (tabletBreak) {
+        return null;
+    }
 
     return (
         <aside

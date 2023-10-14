@@ -6,9 +6,12 @@ import { motion } from 'framer-motion';
 import { useAllowedPath } from 'hooks/useDeniedPath';
 
 import scss from './SidebarLink.module.scss';
+import React, { useEffect, useState } from 'react';
 
 interface ISidebarLinkProps extends SidebarLinkProps {
     open: boolean;
+    setVisible?: (value: boolean) => void;
+    size: 'pc' | 'tablet';
 }
 
 export const SidebarLink = ({
@@ -16,17 +19,19 @@ export const SidebarLink = ({
     title,
     href,
     open,
+    size,
     head,
+    setVisible,
 }: ISidebarLinkProps) => {
     const pathname = usePathname();
 
     const pathString = pathname.replace(/^\/|\/(?=.*\/)/g, '');
     const hrefString = href.replace(/^\/|\/(?=.*\/)/g, '');
 
-    const path = useAllowedPath(head as string);
+    const path = useAllowedPath(head as string, size);
 
-    if (!path && !!head) {
-        return;
+    if (!path) {
+        return null;
     }
 
     const currentPage =
@@ -43,6 +48,7 @@ export const SidebarLink = ({
             <Link
                 className={currentPage ? scss.link_active : scss.link}
                 href={href}
+                onClick={() => (setVisible ? setVisible(false) : '')}
             >
                 <Icon
                     className={
