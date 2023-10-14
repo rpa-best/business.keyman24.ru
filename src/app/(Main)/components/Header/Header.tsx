@@ -15,6 +15,7 @@ import { IService } from 'http/types';
 import { Organization } from 'app/(Main)/components/Header/components/Organization';
 
 import scss from './Header.module.scss';
+import { HeaderNavTablet } from 'app/(Main)/components/Header/components/HeaderNavTablet/HeaderNavTablet';
 
 interface HeaderProps {
     disabled: boolean;
@@ -54,22 +55,12 @@ export const Header: React.FC<HeaderProps> = async ({ disabled, services }) => {
                     />
                 </div>
             </div>
-            <div className={scss.header_nav_tablet}>
-                <HeaderDropdown
-                    subs={services.serviceRates}
-                    userData={user as IUser}
-                />
-                <div
-                    style={{ pointerEvents: disabled ? 'none' : 'auto' }}
-                    className={scss.header_nav_icons}
-                >
-                    <NotificationsContainer />
-                    <BurgerMenu
-                        disabled={disabled}
-                        organizations={organizations as IOrganization[]}
-                    />
-                </div>
-            </div>
+            <HeaderNavTablet
+                subs={services.serviceRates}
+                disabled={disabled}
+                organizations={organizations}
+                user={user as IUser}
+            />
         </header>
     );
 };

@@ -99,3 +99,8 @@ export const allowedPath: T.AllowedPath = async (path, org) => {
     const res = await $clientAuth.head(`business/${org}/${path}`);
     return res.status === 200;
 };
+
+export const allowedPathServer: T.AllowedPath = async (path, org) => {
+    const res = await $serverAuth.head(`business/${org}/${path}`);
+    return res.status === 200;
+};

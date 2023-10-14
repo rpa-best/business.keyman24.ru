@@ -7,10 +7,12 @@ import { SettingsSvgContainer } from 'app/(Main)/components/Header/components/Cl
 import { HeaderInputSelect } from 'app/(Main)/components/Header/components/InputSelect';
 import { IOrganization } from 'store/types';
 import Cookies from 'universal-cookie';
-import { allowedPath } from 'http/userApi';
+import { useAllowedPath } from 'hooks/useDeniedPath';
 
 interface OrganizationProps {
     disabled: boolean;
+    allowedPaths?: string[];
+    size?: 'pc' | 'tablet';
     organizations: IOrganization[];
 }
 
@@ -19,9 +21,12 @@ const cookie = new Cookies();
 export const Organization: React.FC<OrganizationProps> = ({
     disabled,
     organizations,
+    size = 'tablet',
+    allowedPaths,
 }) => {
     const router = useRouter();
-    const [path, setPath] = useState<boolean>();
+
+    const path = useAllowedPath('service/subscription', size);
 
     useEffect(() => {
         const orgId = cookie.get('orgId');
@@ -31,16 +36,11 @@ export const Organization: React.FC<OrganizationProps> = ({
         }
     }, []);
 
-    useEffect(() => {
-        const orgId = cookie.get('orgId');
-        allowedPath('service/subscription', orgId)
-            .then((d) => {
-                setPath(d);
-            })
-            .catch((e) => e);
-    }, []);
+    if (!path && size === 'pc') {
+        return null;
+    }
 
-    if (!path) {
+    if (allowedPaths && !allowedPaths?.includes('service/subscription')) {
         return null;
     }
 

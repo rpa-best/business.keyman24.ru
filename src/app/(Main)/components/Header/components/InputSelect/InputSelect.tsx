@@ -22,7 +22,6 @@ export const HeaderInputSelect: React.FC<{
     organizations: IOrganization[];
     disabled?: boolean;
 }> = ({ organizations, disabled = false }) => {
-    const path = useAllowedPath('service/subscription/');
     const router = useRouter();
     //Все оганизации пользователя
     const [listValues, setListValues] = useState(
@@ -85,10 +84,6 @@ export const HeaderInputSelect: React.FC<{
     };
 
     if (organizations.length === 0) {
-        return null;
-    }
-
-    if (!path) {
         return null;
     }
 

@@ -5,7 +5,10 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-export const useAllowedPath = (head: string): boolean => {
+export const useAllowedPath = (
+    head: string,
+    size: 'pc' | 'tablet' = 'pc'
+): boolean => {
     const [deniedLink, setDeniedLink] = useState<boolean>(false);
     const [orgId, setOrgId] = useState();
 
@@ -17,6 +20,10 @@ export const useAllowedPath = (head: string): boolean => {
 
     useEffect(() => {
         if (!orgId) {
+            return;
+        }
+        if (size === 'tablet') {
+            setDeniedLink(true);
             return;
         }
         const fetchData = async () => {
@@ -31,7 +38,7 @@ export const useAllowedPath = (head: string): boolean => {
                 setDeniedLink(d);
             })
             .catch((e) => e);
-    }, [head, orgId]);
+    }, [head, orgId, size]);
 
     return deniedLink;
 };

@@ -46,6 +46,12 @@ export const sidebarData: SidebarLinkProps[] = [
         head: 'worker/',
     },
     {
+        title: 'Работники',
+        href: '/workers',
+        Icon: WorkerSvg,
+        head: 'service/subscription',
+    },
+    {
         title: 'Рабочее место',
         href: `/working-areas`,
         Icon: ComputerSvg,
