@@ -45,6 +45,7 @@ export const Header: React.FC<HeaderProps> = async ({ disabled, services }) => {
                 </Link>
                 <div className={scss.tools_wrapper}>
                     <Organization
+                        size="pc"
                         disabled={disabled}
                         organizations={organizations}
                     />

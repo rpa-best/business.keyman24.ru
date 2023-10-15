@@ -1,5 +1,18 @@
 @import "scss/utils";
 
+.custom_children {
+  @extend .children_with_table;
+  margin: 0 auto;
+  @include thousendWidth {
+    margin-top: 0;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
 .settings_wrapper {
   width: 100%;
   display: flex;
@@ -14,14 +27,19 @@
 
 .default_wrapper {
   position: relative;
+  width: calc(100% - 100px);
   display: flex;
-  width: 100%;
-  justify-content: center;
-  margin: 20px auto;
-  color: white;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 40px 20px 0;
+  color: white;
   @include thousendWidth {
+    width: calc(100% - 70px);
     margin: 30px auto 10px;
+  }
+  @include phoneOrTablet {
+    width: 100%;
   }
 }
 
@@ -30,13 +48,60 @@
   @include MontserratSemiBold(24px);
 }
 
-.button_wrapper {
-  position: absolute;
-  left: 0;
-  @include phoneOrTablet {
-    left: 15px;
-  }
+.buttons_wrapper {
+  margin: 20px 0;
+  display: flex;
+  column-gap: 20px;
   @include phone {
-    top: -50px
+    width: calc(100% - 20px);
+    margin: 10px 20px;
   }
+}
+
+.button_wrapper {
+  height: 40px;
+  width: max-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: .2s all ease-in-out;
+  padding: 5px;
+  @include phone {
+    width: 50%
+  }
+  & div {
+    &:first-child {
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
+      color: $gray-semi;
+      transition: .2s all ease-in-out;
+      & svg {
+        width: 18px;
+        height: 18px;
+      }
+      & p {
+        @include MontserratRegular(22px);
+      }
+    }
+  }
+}
+
+.button_wrapper_active {
+  @extend .button_wrapper;
+  & div {
+    &:first-child {
+      color: white;
+    }
+  }
+}
+
+.underline {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: $accent-color;
 }

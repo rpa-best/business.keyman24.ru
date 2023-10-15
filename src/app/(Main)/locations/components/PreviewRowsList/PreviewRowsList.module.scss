@@ -2,7 +2,7 @@
 
 .empty {
   height: 186px;
-  width: 676px;
+  width: 680px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,7 @@
   color: white;
   @include MontserratSemiBold(24px);
   @include laptopWidth {
-    width: 600px;
+    width: 610px;
   }
   @include thousendWidth {
     width: 600px;

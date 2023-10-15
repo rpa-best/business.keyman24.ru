@@ -74,20 +74,29 @@ export const BurgerMenu: React.FC<BurgerMenuProps> = ({
                             transition={{ ease: 'easeOut', duration: 0.2 }}
                             className={scss.menu}
                         >
-                            <div className={scss.organization_wrapper}>
-                                <h2 className={scss.menu_listItem_header}>
-                                    Организация
-                                </h2>
-                                <div className={scss.menu_item_content}>
-                                    <Organization
-                                        size="tablet"
-                                        allowedPaths={allowedPaths}
-                                        disabled={disabled}
-                                        organizations={organizations}
-                                    />
+                            {allowedPaths?.includes('service/subscription') && (
+                                <div className={scss.organization_wrapper}>
+                                    <h2 className={scss.menu_listItem_header}>
+                                        Организация
+                                    </h2>
+                                    <div className={scss.menu_item_content}>
+                                        <Organization
+                                            size="tablet"
+                                            disabled={disabled}
+                                            organizations={organizations}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
+                            )}
+                            <div
+                                style={
+                                    !allowedPaths.includes(
+                                        'service/subscription'
+                                    )
+                                        ? { padding: '20px 0' }
+                                        : undefined
+                                }
+                            >
                                 <SideLinks
                                     allowedPaths={allowedPaths}
                                     size="tablet"

@@ -5,6 +5,7 @@ import { Button } from 'components/UI/Buttons/Button';
 import { usePathname, useRouter } from 'next/navigation';
 
 import scss from './Nav.module.scss';
+import Link from 'next/link';
 
 export const Nav = () => {
     const router = useRouter();
@@ -12,28 +13,27 @@ export const Nav = () => {
 
     return (
         <div className={scss.buttons_wrapper}>
-            <div className={scss.button}>
+            <Link href="/org-settings/bill" className={scss.button}>
                 <Button
                     active={path === '/org-settings/bill'}
-                    onClick={() => {
-                        router.push('/org-settings/bill');
-                    }}
+                    onClick={() => {}}
                     type="button"
                 >
                     Баланс
                 </Button>
-            </div>
-            <div className={scss.button}>
+            </Link>
+            <Link
+                href="/org-settings/bill/bill-history"
+                className={scss.button}
+            >
                 <Button
                     active={path === '/org-settings/bill/bill-history'}
-                    onClick={() =>
-                        router.push('/org-settings/bill/bill-history')
-                    }
+                    onClick={() => {}}
                     type="button"
                 >
                     История операций
                 </Button>
-            </div>
+            </Link>
         </div>
     );
 };
