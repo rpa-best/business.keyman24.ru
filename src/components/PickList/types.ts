@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 export interface DefaultElem {
     id: string;
@@ -27,5 +27,8 @@ export interface ListProps {
     title: string;
     selected?: DefaultElem[];
     items?: DefaultElem[];
-    handleItemClick: (elem: DefaultElem) => void;
+    handleItemClick: (
+        elem: DefaultElem,
+        event: React.MouseEvent<HTMLLIElement, MouseEvent>
+    ) => void;
 }

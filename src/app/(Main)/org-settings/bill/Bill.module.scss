@@ -1,4 +1,5 @@
 @import "scss/utils";
+@import "app/(Main)/org-settings/OrganizationSettings.module.scss";
 
 .page_layout {
   @include phoneOrTablet {
@@ -31,7 +32,6 @@
 
 
 .service_constructor {
-  min-height: 350px;
   @include fullHd {
     display: flex;
     flex-flow: row wrap;
@@ -40,6 +40,7 @@
       width: calc(50% - 30px);
     }
   }
+  margin: 20px 0;
   column-count: 2;
   column-gap: 30px;
   width: 100%;
@@ -50,7 +51,6 @@
   border-radius: 12px;
   padding: 18px 26px 30px;
   transition: .2s all ease-in-out;
-  margin-bottom: 20px;
 
   @include phoneOrTablet {
     column-count: unset;
@@ -79,6 +79,11 @@
   @include thousendWidth {
     width: 100%;
   }
+}
+
+.card_item {
+  @include MontserratRegular(18px);
+  color: white;
 }
 
 .price_wrapper {

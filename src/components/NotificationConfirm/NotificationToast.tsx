@@ -25,6 +25,7 @@ export const NotificationToast: React.FC<NotificationToast> = ({
     const [modalVisible] = useModalStore((state) => [state.visible]);
     const [visible] = useNotificationStore((state) => [state.visible]);
     const [setVisible] = useNotificationStore((state) => [state.setVisible]);
+    const [visibleNote] = useNotificationStore((state) => [state.visible]);
 
     useEffect(() => {
         if (syncWithModal) {
@@ -43,15 +44,6 @@ export const NotificationToast: React.FC<NotificationToast> = ({
     return (
         <AnimatePresence>
             {visible && (
-                /*<motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() =>
-                        preventClickOutside ? '' : setVisible(false)
-                    }
-                    className={scss.modal_background}
-                >*/
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
                     initial={{ opacity: 0, y: phoneBreak ? '5%' : '15%' }}
@@ -68,7 +60,6 @@ export const NotificationToast: React.FC<NotificationToast> = ({
                     />
                     {children}
                 </motion.div>
-                /* </motion.div>*/
             )}
         </AnimatePresence>
     );

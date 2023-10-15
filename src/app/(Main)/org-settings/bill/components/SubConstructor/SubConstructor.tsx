@@ -71,7 +71,10 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
             <div className={scss.service_constructor}>
                 {fields.map((item, index) => (
                     <div key={index} className={scss.range_wrapper}>
-                        <RangeSlider
+                        <p className={scss.card_item}>
+                            {item.name} : {item.count}
+                        </p>
+                        {/*  <RangeSlider
                             onChange={(count) =>
                                 handleInputChange(index, count)
                             }
@@ -84,11 +87,11 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
                             setFields={setFields}
                             check={item.notLimited}
                             max={item.max}
-                        />
+                        />*/}
                     </div>
                 ))}
             </div>
-            <div className={scss.actions_wrapper}>
+            {/* <div className={scss.actions_wrapper}>
                 <div className={scss.price_button}>
                     <Button onClick={handleSaveChanges} type="button">
                         Сохранить
@@ -104,7 +107,7 @@ export const SubConstructor: React.FC<SubConstructorProps> = ({
                         />
                     </div>
                 }
-            </div>
+            </div>*/}
             {loading && <Spinner />}
         </>
     );

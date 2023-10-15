@@ -10,7 +10,7 @@ export const PreviewRowsList: React.FC<PreviewRowsListProps> = ({
     data,
 }) => {
     if (data.length === 0) {
-        return <div className={scss.empty}>Здесь будут ваш инвентарь</div>;
+        return <div className={scss.empty}>Здесь будет ваш инвентарь</div>;
     }
     return (
         <div className={scss.preview_wrapper}>

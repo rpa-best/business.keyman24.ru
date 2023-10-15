@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ArrowSvg from '/public/svg/arrow.svg';
 import { List } from 'components/PickList/List';
@@ -46,7 +46,8 @@ export const PickList = ({
     function handleClick(
         elem: DefaultElem,
         arr: DefaultElem[],
-        set: (arr: DefaultElem[]) => void
+        set: (arr: DefaultElem[]) => void,
+        event: React.MouseEvent<HTMLLIElement, MouseEvent>
     ) {
         const data = addSelected(arr, elem);
         set(data);
@@ -144,13 +145,14 @@ export const PickList = ({
                     selected={sourceSelected}
                     items={source}
                     title={leftTitle}
-                    handleItemClick={(elem) =>
+                    handleItemClick={(elem, event) => {
                         handleClick(
                             elem,
                             sourceSelected as DefaultElem[],
-                            setSourceSelected
-                        )
-                    }
+                            setSourceSelected,
+                            event
+                        );
+                    }}
                 />
                 <ul className={scss.actions_separator_wrapper}>
                     <li
@@ -172,13 +174,14 @@ export const PickList = ({
                     title={rightTitle}
                     selected={targetSelected}
                     items={target as DefaultElem[]}
-                    handleItemClick={(elem) =>
+                    handleItemClick={(elem, event) => {
                         handleClick(
                             elem,
                             targetSelected as DefaultElem[],
-                            setTargetSelected
-                        )
-                    }
+                            setTargetSelected,
+                            event
+                        );
+                    }}
                 />
             </div>
             {loading && <Spinner />}

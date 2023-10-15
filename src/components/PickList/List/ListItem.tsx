@@ -8,7 +8,10 @@ import scss from 'components/PickList/List/List.module.scss';
 interface ListItemProps {
     selected?: DefaultElem[];
     item: DefaultElem;
-    handleItemClick: (elem: DefaultElem) => void;
+    handleItemClick: (
+        elem: DefaultElem,
+        event: React.MouseEvent<HTMLLIElement, MouseEvent>
+    ) => void;
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -26,7 +29,10 @@ export const ListItem: React.FC<ListItemProps> = ({
     }
 
     return (
-        <li onClick={() => handleItemClick(item)} className={listItemClassname}>
+        <li
+            onClick={(event) => handleItemClick(item, event)}
+            className={listItemClassname}
+        >
             <div className={scss.elem_wrapper}>
                 {item?.content ? (
                     <p className={scss.elem_name}>{item.content}</p>

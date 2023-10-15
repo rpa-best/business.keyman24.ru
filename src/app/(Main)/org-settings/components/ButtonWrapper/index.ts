@@ -1,1 +1,1 @@
-export { SettingsButton } from './SettingsButton';
+export { NavButtons } from './SettingsButton';

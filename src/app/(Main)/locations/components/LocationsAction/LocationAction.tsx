@@ -109,7 +109,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
     return (
         <>
             <form onSubmit={handleSubmit} className={scss.edit_form_location}>
-                <h2 className={scss.title}>Рабочее место / Добавление</h2>
+                <h2 className={scss.title}>Локация / Добавление</h2>
                 <div className={scss.input}>
                     <Input
                         label="Название"
