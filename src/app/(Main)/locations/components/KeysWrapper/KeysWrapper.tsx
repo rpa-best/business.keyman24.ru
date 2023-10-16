@@ -152,7 +152,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     </>
                 </Modal>
                 <NotificationToast>
-                    <ServiceChangeToast count={total} slug="Inventory" />
+                    <ServiceChangeToast count={total} slug="Key" />
                 </NotificationToast>
                 {loading && <Spinner />}
             </div>

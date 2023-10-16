@@ -36,7 +36,7 @@ export const NavButtons = () => {
                 )}
             </Link>
             <Link
-                href="org-settings/bill"
+                href="/org-settings/bill"
                 className={
                     !org ? scss.button_wrapper_active : scss.button_wrapper
                 }

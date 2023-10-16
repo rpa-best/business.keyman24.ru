@@ -88,7 +88,7 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
                 />
             </Modal>
             <NotificationToast syncWithModal>
-                <ServiceChangeToast count={1} slug="Object" />
+                <ServiceChangeToast count={1} slug="ObjectInLocation" />
             </NotificationToast>
             {loading && <Spinner />}
         </>
