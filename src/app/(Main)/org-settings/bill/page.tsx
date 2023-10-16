@@ -29,6 +29,18 @@ const BillPage = async () => {
 
     const price = await getServerPrice(rateBody);
 
+    function addDays(date: Date, days: number) {
+        const result = new Date(date);
+        result.setDate(date.getDate() + days);
+        return result.toLocaleDateString('ru');
+    }
+
+    const today = new Date();
+
+    const days = +(org.balance / price.cost).toFixed(0);
+
+    const enoughUntil = addDays(today, days);
+
     return (
         <div className={scss.page_layout}>
             <div className={scss.bill_balance_actions}>
@@ -41,7 +53,8 @@ const BillPage = async () => {
             <p className={scss.bill_balance}>
                 Текущая цена:{' '}
                 <span className={scss.balance_count}>{price.cost} ₽ </span> /
-                месяц
+                день | хватит до{' '}
+                <span className={scss.balance_count}>{enoughUntil}</span>
             </p>
             <SubConstructor />
             <Modal>
