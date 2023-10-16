@@ -1,14 +1,13 @@
 'use client';
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
-import { usePathname, useRouter } from 'next/navigation';
 
 import scss from './Nav.module.scss';
-import Link from 'next/link';
 
 export const Nav = () => {
-    const router = useRouter();
     const path = usePathname();
 
     return (

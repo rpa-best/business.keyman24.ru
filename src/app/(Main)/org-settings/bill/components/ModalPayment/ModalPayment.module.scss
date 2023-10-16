@@ -1,0 +1,19 @@
+@import "scss/utils";
+
+.title {
+  @include MontserratSemiBold(24px);
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  width: 400px;
+  @include phone {
+    width: 100%;
+  }
+}
+
+.form_button {
+  margin-top: 10px;
+}

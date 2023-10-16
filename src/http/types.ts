@@ -81,6 +81,8 @@ export type GetHistory = (orgId: number) => Promise<IResponse<IBalanceHistory>>;
 
 export type UpdatePrice = (body: IRate[]) => Promise<void>;
 
+export type TopUpBalance = (summa: number) => Promise<{ word: string }>;
+
 export interface ILevel {
     id: number;
     name: string;
