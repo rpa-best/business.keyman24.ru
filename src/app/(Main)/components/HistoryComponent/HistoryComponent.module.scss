@@ -1,5 +1,15 @@
 @import "scss/utils";
 
+.charts_button {
+  margin-left: 30px;
+  @include phoneOrTablet {
+    margin-bottom: 20px!important;
+  }
+  @include phone {
+    margin: 0 auto;
+  }
+}
+
 .charts_wrapper {
   height: 500px;
   display: flex;
@@ -28,6 +38,18 @@
 
 .bar_chart_wrapper {
   @extend .charts;
+}
+
+.bar_chart_solo {
+  @extend .charts;
+  width: 70%;
+  @include thousendWidth {
+    width: 80%;
+    margin: 0 auto;
+  }
+  @include phoneOrTablet {
+    width: 100%;
+  }
 }
 
 .pie_chart_wrapper {

@@ -8,23 +8,27 @@ import { HistoryComponent } from 'app/(Main)/components/HistoryComponent';
 import scss from './KeyHistoryPage.module.scss';
 
 interface KeyPageProps {
-    searchParams: { offset: string };
+    searchParams: { offset: string; register: boolean };
     params: {
         id: string;
     };
 }
 
-const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
+const InventoryPage: React.FC<KeyPageProps> = async ({
+    params,
+    searchParams,
+}) => {
     const cookieStore = cookies();
 
     const offset = searchParams.offset ?? 0;
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const keyHistory = await getInventoryHistory(
+    const inventoryHistory = await getInventoryHistory(
         +orgId as number,
         +params.id,
-        +offset
+        +offset,
+        searchParams.register
     );
 
     return (
@@ -33,9 +37,13 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
                 <h1>История инвентаря {params.id}</h1>
                 <BackButton>Назад</BackButton>
             </div>
-            <HistoryComponent type="Inventory" keyHistory={keyHistory} />
+            <HistoryComponent
+                register={searchParams.register}
+                type="Inventory"
+                keyHistory={inventoryHistory}
+            />
         </div>
     );
 };
 
-export default KeyPage;
+export default InventoryPage;

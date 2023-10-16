@@ -231,7 +231,7 @@ export const getKeyHistory: T.GetKeyHistory = async (
 
     const res: AxiosResponse<ReturnType<typeof getKeyHistory>> =
         await $serverAuth.get(
-            `business/${orgId}/location/${locId}/object/${objId}/inventory/${keyId}/history/`,
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/${keyId}/history/?type=key&ordering=-date`,
             { params: query }
         );
 
