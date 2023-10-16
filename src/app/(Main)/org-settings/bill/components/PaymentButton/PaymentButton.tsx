@@ -2,19 +2,15 @@
 import React from 'react';
 
 import { Button } from 'components/UI/Buttons/Button';
-
-import Link from 'next/link';
+import { useModalStore } from 'store/modalVisibleStore';
 
 export const PaymentButton = () => {
+    const [setModalVisible] = useModalStore((state) => [state.setVisible]);
     return (
-        <Link
-            href="http://localhost:3000/pdf/pdf.pdf"
-            download="pdf"
-            style={{ width: 'max-content' }}
-        >
-            <Button onClick={() => {}} type="button">
+        <div style={{ width: 'max-content' }}>
+            <Button onClick={() => setModalVisible(true)} type="button">
                 Пополнить
             </Button>
-        </Link>
+        </div>
     );
 };

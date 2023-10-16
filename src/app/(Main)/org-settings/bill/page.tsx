@@ -6,6 +6,8 @@ import { IRate } from 'http/types';
 
 import scss from './Bill.module.scss';
 import { PaymentButton } from 'app/(Main)/org-settings/bill/components/PaymentButton/PaymentButton';
+import { Modal } from 'components/Modal';
+import { ModalPayment } from 'app/(Main)/org-settings/bill/components/ModalPayment';
 
 const BillPage = async () => {
     const cookieStore = cookies();
@@ -36,13 +38,15 @@ const BillPage = async () => {
                 </p>
                 <PaymentButton />
             </div>
-
             <p className={scss.bill_balance}>
                 Текущая цена:{' '}
                 <span className={scss.balance_count}>{price.cost} ₽ </span> /
                 месяц
             </p>
-            <SubConstructor defaultPrice={price.cost} />
+            <SubConstructor />
+            <Modal>
+                <ModalPayment />
+            </Modal>
         </div>
     );
 };

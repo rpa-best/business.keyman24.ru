@@ -77,3 +77,15 @@ export const getServerHistory: T.GetHistory = async (orgId) => {
 
     return res.data;
 };
+
+export const topUpBalance: T.TopUpBalance = async (summa) => {
+    const body = {
+        summa,
+        org: orgId,
+    };
+    const res = await $clientAuth.post(
+        `business/${orgId}/service/payment-doc/`,
+        body
+    );
+    return res.data;
+};
