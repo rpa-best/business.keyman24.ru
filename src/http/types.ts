@@ -1,4 +1,5 @@
 import { IOrganization, IUser } from 'store/types';
+import { boolean } from 'zod';
 
 export interface IUserAuthRequest {
     username: string;
@@ -134,7 +135,7 @@ export interface IInventoryHistory {
     card: string;
     comment: string;
     image: string;
-    inventory: number;
+    inventory: IInventory;
 }
 
 export interface IGroupPermission {
@@ -497,7 +498,8 @@ export type GetClientInventories = () => Promise<IResponse<IInventory>>;
 export type GetInventoryHistory = (
     orgId: number,
     inventoryId: number,
-    offset: number
+    offset: number,
+    register?: boolean
 ) => Promise<IResponse<IInventoryHistory>>;
 
 export type GetKeyHistory = (

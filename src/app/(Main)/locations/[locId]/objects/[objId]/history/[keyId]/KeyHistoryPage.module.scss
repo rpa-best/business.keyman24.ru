@@ -2,7 +2,7 @@
 
 
 .custom_title_wrapper {
-  width: calc(100% - 90px);
+  width: calc(100% - 60px);
   margin: 40px auto 0;
   @extend .page_title_with_table_back_button;
   @include phoneOrTablet {

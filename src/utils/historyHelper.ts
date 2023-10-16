@@ -3,9 +3,20 @@ import { getObjValue } from 'utils/getObjProperty';
 
 export const formatDateHistory = (keyHistory: IInventoryHistory[]) => {
     return keyHistory.map((h) => {
-        const date = new Date(
+        const dateString = h.date;
+        const parts = dateString.split(' ');
+        const datePart = parts[0].split('.');
+        const timePart = parts[1].split(':');
+        const year = parseInt(datePart[2], 10);
+        const month = parseInt(datePart[1], 10) - 1;
+        const day = parseInt(datePart[0], 10);
+        const hours = parseInt(timePart[0], 10);
+        const minutes = parseInt(timePart[1], 10);
+        const seconds = parseInt(timePart[2], 10);
+        const date = new Date(year, month, day, hours, minutes, seconds);
+        /* const date = new Date(
             `${h.date.slice(3, 5)}.${h.date.slice(0, 2)}.${h.date.slice(6)}`
-        );
+        );*/
         return {
             ...h,
             date: date,
@@ -25,19 +36,22 @@ export const getBarGroupData = (
 ): [string[], number[]] => {
     const units: { unit: string; hours: number }[] = [];
 
-    for (const item of cloneHistory) {
+    cloneHistory.forEach((item, index) => {
         if (item.mode) {
-            const passed = cloneHistory.find((i) => i.id === item.id + 1);
+            const passed = cloneHistory[index - 1];
             const date = item.date.getTime();
             const passedDate = passed ? passed.date.getTime() : Date.now();
-            const differenceInHours = (passedDate - date) / 1000 / 3600;
+            const difference = passedDate - date;
+            const secondsDifference = difference / 1000;
+            const minutesDifference = secondsDifference / 60;
+            const hoursDifference = minutesDifference / 60;
 
             units.push({
                 unit: getObjValue(item, unitPath),
-                hours: differenceInHours,
+                hours: +hoursDifference.toFixed(1),
             });
         }
-    }
+    });
 
     interface SummarizedData {
         unit: string;

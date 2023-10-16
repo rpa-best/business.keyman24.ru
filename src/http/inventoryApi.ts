@@ -34,15 +34,19 @@ export const getClientInventories: T.GetClientInventories = async () => {
 export const getInventoryHistory: T.GetInventoryHistory = async (
     orgId,
     inventoryId,
-    offset
+    offset,
+    register
 ) => {
     const query = new URLSearchParams();
     query.set('limit', '30');
+    register
+        ? query.set('type', 'register_inventory')
+        : query.set('type', 'inventory');
     offset ? query.set('offset', offset.toString()) : '';
 
     const res: AxiosResponse<ReturnType<typeof getInventoryHistory>> =
         await $serverAuth.get(
-            `business/${orgId}/inventory/${inventoryId}/history`,
+            `business/${orgId}/inventory/${inventoryId}/history?ordering=-date`,
             { params: query }
         );
 
