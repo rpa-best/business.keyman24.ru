@@ -7,7 +7,7 @@ import { DefaultElem, PickListProps } from 'components/PickList/types';
 import clsx from 'clsx';
 import { Spinner } from 'components/Spinner';
 import { toast } from 'react-toastify';
-import { sortArr } from 'utils/sortPickListArrays';
+import { sortArr, sortByCustomDesc } from 'utils/sortPickListArrays';
 import { AxiosError } from 'axios';
 import { errorToastOptions } from 'config/toastConfig';
 
@@ -26,6 +26,7 @@ export const PickList = ({
     setLoading,
     loading,
     setRefresh,
+    sortByCustom,
 }: PickListProps) => {
     const [visibility, setVisibility] = useState(visible);
 
@@ -36,11 +37,19 @@ export const PickList = ({
     const [targetSelected, setTargetSelected] = useState<DefaultElem[]>([]);
 
     useEffect(() => {
-        setSource(sortArr(available));
+        if (sortByCustom) {
+            setSource(sortByCustomDesc(available));
+        } else {
+            setSource(sortArr(available));
+        }
     }, [available]);
 
     useEffect(() => {
-        setTarget(sortArr(selected));
+        if (sortByCustom) {
+            setTarget(sortByCustomDesc(selected));
+        } else {
+            setTarget(sortArr(selected));
+        }
     }, [selected]);
 
     function handleClick(

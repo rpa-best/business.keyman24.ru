@@ -21,6 +21,7 @@ export interface PickListProps {
     setRefresh: Dispatch<SetStateAction<boolean>>;
     handleArrowLeft: (arr: DefaultElem[]) => Promise<void>;
     handleArrowRight: (arr: DefaultElem[]) => Promise<DefaultElem[]>;
+    sortByCustom?: boolean;
 }
 
 export interface ListProps {
