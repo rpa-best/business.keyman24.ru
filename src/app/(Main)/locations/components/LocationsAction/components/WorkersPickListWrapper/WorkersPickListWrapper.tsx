@@ -37,13 +37,17 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
                     (worker) => worker.worker.id === w.id
                 );
             });
-
             const source = filteredWorkers.map((el) => {
-                return { ...el, uuid: v4() };
+                return { ...el, uuid: v4(), customDesc: el.org.name };
             });
 
             const target = locationWorkers.results.map((w) => {
-                return { ...w, name: w.worker.name, uuid: v4() };
+                return {
+                    ...w,
+                    name: w.worker.name,
+                    uuid: v4(),
+                    customDesc: w.worker.org.name,
+                };
             });
 
             return { source, target };
@@ -80,6 +84,7 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
     return (
         <>
             <PickList
+                sortByCustom
                 hidden
                 handleArrowLeft={handleArrowLeft as any}
                 handleArrowRight={handleArrowRight as any}

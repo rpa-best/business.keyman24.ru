@@ -21,3 +21,25 @@ export function sortArr(arr: DefaultElem[]) {
         return 1;
     });
 }
+
+export function sortByCustomDesc(arr: DefaultElem[]) {
+    if (arr?.length === 0 || !arr) {
+        return [];
+    }
+    return arr.sort((a, b) => {
+        // Сравниваем значения поля "name" без учета регистра
+        if (a.customDesc && b.customDesc) {
+            const nameA = a.customDesc.toLowerCase();
+            const nameB = b.customDesc.toLowerCase();
+
+            if (nameA < nameB) {
+                return -1;
+            } else if (nameA > nameB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        return 1;
+    });
+}

@@ -24,8 +24,6 @@ export const ServiceChangeToast = memo(function ServiceChangeToast({
         return el.slug === slug;
     });
 
-    console.log(fields);
-
     const price = field?.notLimited
         ? field.costNotLimited
         : count * (field as IField).cost;

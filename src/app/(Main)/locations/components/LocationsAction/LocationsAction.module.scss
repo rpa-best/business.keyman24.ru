@@ -5,6 +5,17 @@
   @extend .edit_form;
   @include fullHd {
     max-height: 750px;
+    width: 850px;
+  }
+  width: 700px;
+  @include thousendWidth {
+    width: 575px;
+  }
+  @include phoneOrTablet {
+    width: 410px;
+  }
+  @include phone {
+    width: 100%;
   }
   max-height: 550px;
 }
