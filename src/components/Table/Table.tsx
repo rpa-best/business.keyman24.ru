@@ -64,14 +64,6 @@ export const Table = memo(function MemoTable({
 
     const handlePaginatorClick = (page: number) => {
         setCurrentPage(page);
-        paginatorData &&
-            router.replace(
-                `${pathname}/?offset=${(page - 1) * paginatorData?.offset}`
-            );
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 200);
     };
 
     useEffect(() => {
@@ -175,6 +167,7 @@ export const Table = memo(function MemoTable({
                 </div>
                 {paginatorData && !tabletBreak && (
                     <Paginator
+                        offset={paginatorData.offset}
                         countPages={totalPages as number}
                         currentPage={currentPage}
                         handlePaginatorClick={handlePaginatorClick}
@@ -183,6 +176,7 @@ export const Table = memo(function MemoTable({
             </div>
             {paginatorData && tabletBreak && (
                 <Paginator
+                    offset={paginatorData.offset}
                     countPages={totalPages as number}
                     currentPage={currentPage}
                     handlePaginatorClick={handlePaginatorClick}

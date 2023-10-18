@@ -9,6 +9,7 @@ export const Paginator: React.FC<PaginatorProps> = ({
     handlePaginatorClick,
     currentPage,
     countPages,
+    offset,
 }) => {
     const artificialPagesArr = Array.from(
         { length: countPages },
@@ -21,6 +22,7 @@ export const Paginator: React.FC<PaginatorProps> = ({
                 if (countPages <= 5) {
                     return (
                         <PaginatorButton
+                            offset={offset}
                             key={index}
                             currentPage={currentPage}
                             pageNumber={pageNumber}
@@ -32,6 +34,7 @@ export const Paginator: React.FC<PaginatorProps> = ({
                 } else if (index === 0 || index === countPages - 1) {
                     return (
                         <PaginatorButton
+                            offset={offset}
                             key={index}
                             currentPage={currentPage}
                             pageNumber={pageNumber}
@@ -48,6 +51,7 @@ export const Paginator: React.FC<PaginatorProps> = ({
                         <React.Fragment key={index}>
                             {currentPage > 3 && index === currentPage - 2 && (
                                 <PaginatorButton
+                                    offset={offset}
                                     currentPage={currentPage}
                                     pageNumber={pageNumber}
                                     handlePaginatorClick={handlePaginatorClick}
@@ -55,6 +59,7 @@ export const Paginator: React.FC<PaginatorProps> = ({
                                 />
                             )}
                             <PaginatorButton
+                                offset={offset}
                                 key={index}
                                 currentPage={currentPage}
                                 pageNumber={pageNumber}
@@ -64,6 +69,7 @@ export const Paginator: React.FC<PaginatorProps> = ({
                             </PaginatorButton>
                             {index + 1 === currentPage + 1 && (
                                 <PaginatorButton
+                                    offset={offset}
                                     currentPage={currentPage}
                                     pageNumber={pageNumber}
                                     handlePaginatorClick={handlePaginatorClick}
