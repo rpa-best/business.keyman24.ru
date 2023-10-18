@@ -21,12 +21,17 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
 
     const history = await getServerHistory(+orgId);
 
+    const cloneHistory = history.results.map((el) => {
+        const typeName = el.type === 'service' ? 'Списание' : 'Пополнение';
+        return { ...el, typeName };
+    });
+
     return (
         <div>
             <HistoryButtonsWrapper />
-            <Table tableData={history.results} setTableData={[] as any}>
+            <Table tableData={cloneHistory} setTableData={[] as any}>
                 <Column sortable header="Дата" field="date" />
-                <Column sortable header="Тип операции" field="type" />
+                <Column sortable header="Тип операции" field="typeName" />
                 <Column sortable header="Количество" field="cost" />
             </Table>
         </div>
