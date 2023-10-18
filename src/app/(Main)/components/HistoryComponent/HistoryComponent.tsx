@@ -53,19 +53,19 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
 
     return (
         <>
+            {type !== 'Keys' && (
+                <div
+                    className={scss.charts_button}
+                    style={{
+                        width: 'max-content',
+                        marginBottom: register ? '0' : '20px',
+                    }}
+                >
+                    <LocationButton />
+                </div>
+            )}
             {barData?.length !== 0 ? (
                 <>
-                    {type !== 'Keys' && (
-                        <div
-                            className={scss.charts_button}
-                            style={{
-                                width: 'max-content',
-                                marginBottom: register ? '0' : '20px',
-                            }}
-                        >
-                            <LocationButton />
-                        </div>
-                    )}
                     <div className={scss.charts_wrapper}>
                         <div
                             className={

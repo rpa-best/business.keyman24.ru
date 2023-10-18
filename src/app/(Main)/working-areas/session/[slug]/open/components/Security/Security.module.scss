@@ -11,18 +11,16 @@
   }
 }
 
-.worker_info_wrapper {
+.worker_info_wrapper_custom {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   background-color: $dark-main;
   border-radius: 40px;
-  @include fullHd {
-    width: 43%;
-  }
-  width: 50%;
+  max-width: 50%;
   @include thousendTwoWidth {
+    max-width: 100%;
     width: 100%;
   }
 }
@@ -40,6 +38,7 @@
 .working_view_card {
   @include fullHd {
     width: 45%;
+    max-width: 45%;
   }
   flex-grow: 1.5;
 }

@@ -89,7 +89,9 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     e.response.data.error[0].slug ===
                     'inventory_not_given_to_this_worker'
                 ) {
-                    errors.code = 'У этого работника нет такого инвентаря';
+                    errors.code = `У этого работника нет такого ${
+                        type === 'keys' ? 'ключа' : 'инвентаря'
+                    }`;
                 }
 
                 if (
