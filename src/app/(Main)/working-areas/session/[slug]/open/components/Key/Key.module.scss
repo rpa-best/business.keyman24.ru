@@ -49,6 +49,10 @@
 }
 
 .worker_empty_wrapper {
+  @include fullHd {
+    min-width: 50%;
+  }
+  min-width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;

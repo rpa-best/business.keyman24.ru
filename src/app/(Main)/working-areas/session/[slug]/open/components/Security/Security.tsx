@@ -125,7 +125,7 @@ export const Security: React.FC<SecurityProps> = ({
                 </div>
                 <div className={scss.working_view_wrapper}>
                     {worker?.id ? (
-                        <div className={scss.worker_info_wrapper}>
+                        <div className={scss.worker_info_wrapper_custom}>
                             <WorkerInfoCard
                                 halfScreen
                                 worker={worker as IWorker}

@@ -8,6 +8,7 @@ import scss from './Bill.module.scss';
 import { PaymentButton } from 'app/(Main)/org-settings/bill/components/PaymentButton/PaymentButton';
 import { Modal } from 'components/Modal';
 import { ModalPayment } from 'app/(Main)/org-settings/bill/components/ModalPayment';
+import { AxiosError } from 'axios';
 
 const BillPage = async () => {
     const cookieStore = cookies();
@@ -27,7 +28,11 @@ const BillPage = async () => {
         };
     });
 
-    const price = await getServerPrice(rateBody);
+    const price = (await getServerPrice(rateBody).catch((e) => {
+        if (e instanceof AxiosError) {
+            console.log(e.response?.data);
+        }
+    })) ?? { cost: 1000 };
 
     function addDays(date: Date, days: number) {
         const result = new Date(date);
