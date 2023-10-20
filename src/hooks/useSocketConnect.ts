@@ -71,6 +71,8 @@ export const useSocketConnect: SocketConnectFunc = ({
                 toast('Работник уже в локации', errorToastOptions);
             } else if (message.data.error.slug === 'worker_not_in_location') {
                 toast('Работник не в локации', errorToastOptions);
+            } else if (message.data.error.slug === 'has_not_given_inventory') {
+                toast('Работник не сдал экипировку', errorToastOptions);
             } else {
                 toast('Ошибка', errorToastOptions);
             }
