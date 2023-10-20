@@ -3,7 +3,6 @@ import { $serverAuth } from 'http/serverIndex';
 import { AxiosError, AxiosResponse } from 'axios';
 import UniversalCookies from 'universal-cookie';
 import { $clientAuth } from 'http/clientIndex';
-import FormData from 'form-data';
 import { toast } from 'react-toastify';
 import { errorToastOptions } from 'config/toastConfig';
 
@@ -11,22 +10,59 @@ const cookie = new UniversalCookies();
 
 const orgId = cookie.get('orgId');
 
-export const getInventories: T.GetInventories = async (orgId, offset) => {
+export const getInventories: T.GetInventories = async (
+    orgId,
+    offset,
+    name,
+    location
+) => {
     const query = new URLSearchParams();
     query.set('limit', '25');
-    offset ? query.set('offset', offset.toString()) : '';
+    query.set('offset', offset.toString());
+
+    if (location) {
+        if (location === 'Все') {
+            query.delete('location');
+        } else {
+            query.set('location', location);
+        }
+    }
+
+    if (name) {
+        if (name === 'Все') {
+            query.delete('search');
+        } else {
+            query.set('search', name);
+        }
+    }
 
     const res: AxiosResponse<ReturnType<typeof getInventories>> =
-        await $serverAuth.get(`business/${orgId}/inventory/?type=inventory`, {
-            params: query,
-        });
+        await $serverAuth.get(
+            `business/${orgId}/inventory/?type=inventory&ordering=-date`,
+            {
+                params: query,
+            }
+        );
 
     return res.data;
 };
 
-export const getClientInventories: T.GetClientInventories = async () => {
+export const getClientInventories: T.GetClientInventories = async (name) => {
+    const query = new URLSearchParams();
+    const searchName = decodeURI(name);
+
+    if (name) {
+        if (searchName === 'Все') {
+            query.delete('search');
+        } else {
+            query.set('search', searchName);
+        }
+    }
     const res: AxiosResponse<ReturnType<T.GetInventories>> =
-        await $clientAuth.get(`business/${orgId}/inventory/?type=inventory`);
+        await $clientAuth.get(
+            `business/${orgId}/inventory/?type=inventory&ordering=-date`,
+            { params: query }
+        );
 
     return res.data;
 };

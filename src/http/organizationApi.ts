@@ -73,7 +73,9 @@ export const updateSub: T.UpdatePrice = async (body) => {
 
 export const getServerHistory: T.GetHistory = async (orgId) => {
     const res: AxiosResponse<ReturnType<typeof getServerHistory>> =
-        await $serverAuth.get(`business/${orgId}/balance-history/`);
+        await $serverAuth.get(
+            `business/${orgId}/balance-history/?ordering=-date`
+        );
 
     return res.data;
 };

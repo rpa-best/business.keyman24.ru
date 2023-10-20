@@ -5,7 +5,7 @@ import ExitSvg from '/public/svg/x.svg';
 import scss from 'app/(Main)/inventory/components/SelectLocationTippy/SelectLocationInput.module.scss';
 
 interface LocationListItemProps {
-    location: ILocation;
+    location: { id: number; name: string };
     deleteOne: (v: number) => void;
 }
 

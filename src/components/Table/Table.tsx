@@ -155,7 +155,6 @@ export const Table = memo(function MemoTable({
                                             setTableData={setTableData}
                                             handleEditClick={handleEditClick}
                                             headers={headers}
-                                            key={index}
                                             item={item}
                                         />
                                     </div>

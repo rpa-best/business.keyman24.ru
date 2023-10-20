@@ -8,18 +8,20 @@ import { cookies } from 'next/headers';
 import scss from './inventory.module.scss';
 
 interface InventoryPageProps {
-    searchParams: { offset: string };
+    searchParams: { offset: string; name: string; location: string };
 }
 
 const InventoryPage: React.FC<InventoryPageProps> = async ({
     searchParams,
 }) => {
     const offset = searchParams.offset ?? 0;
+    const name = searchParams.name ?? 'Все';
+    const location = searchParams.location ?? 'Все';
 
     const cookieStore = cookies();
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const inventories = await getInventories(+orgId, +offset);
+    const inventories = await getInventories(+orgId, +offset, name, location);
 
     const modifiedInventory: IModifiedInventory[] = inventories.results.map(
         (i) => {

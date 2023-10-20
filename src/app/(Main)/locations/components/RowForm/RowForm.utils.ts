@@ -5,7 +5,10 @@ export const RowFormValidate = (values: FormValues) => {
 
     if (!values.count) {
         errors.count = 'Введите количество';
+    } else if (values.count.toString().indexOf('-') !== -1) {
+        errors.count = 'Значение не может быть отрицательным';
     }
+
     if (!values.room) {
         errors.room = 'Укажите наименование';
     }

@@ -72,6 +72,7 @@
   display: flex;
   flex-direction: row;
   overflow-x: auto;
+  border-bottom: 1px solid $gray;
   &::-webkit-scrollbar {
       display: none;
   }
@@ -86,6 +87,7 @@
   width: 33%;
   font-size: 17px!important;
   min-width: 250px;
+  border-bottom: none!important;
   &:first-child {
     padding-left: 46px;
     @include thousendWidth {
@@ -121,6 +123,7 @@
     background-color: $additional-dark;
     & .table_td{
       @include phone {
+        transition: .1s all ease-in-out;
         background-color: inherit;
       }
     }
@@ -130,9 +133,11 @@
 .table_row {
   width: 100%;
   display: flex;
-
+  align-items: center;
   &:hover .actions_wrapper {
-    opacity: 1;
+    & svg {
+      opacity: 1;
+    }
   }
 }
 
@@ -146,14 +151,28 @@
 
 .table_headers_more_3 {
   width: 25%!important;
+  @include thousendTwoWidth {
+    min-width: 130px!important;
+  }
   @include thousendWidth {
+    font-size: 15px!important;
+  }
+  @include phoneOrTablet {
+    font-size: 16px!important;
     min-width: 150px!important;
   }
 }
 
 .table_td_more_3 {
   width: 25%!important;
+  @include thousendTwoWidth {
+    min-width: 130px!important;
+  }
   @include thousendWidth {
+    font-size: 15px!important;
+  }
+  @include phoneOrTablet {
+    font-size: 16px!important;
     min-width: 150px!important;
   }
 }
@@ -166,6 +185,7 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid $gray;
+  background-color: inherit;
   @include laptopWidth {
     min-height: 65px;
   }
@@ -318,29 +338,47 @@
 
 
 .actions_wrapper {
+  position: absolute;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   column-gap: 20px;
-  transition: .2s all ease-in-out;
   padding-right: 5%;
-  opacity: 0;
   background-color: inherit;
-  padding-left: 20px;
+  padding-left: 10px;
+
+
   @include phoneOrTablet {
     height: 100%;
-    width: 100%;
+    width: max-content;
+    right: -60px;
+    top: 1px;
+    border-bottom: 1px solid $gray;
+    & svg {
+      opacity: 1;
+    }
   }
   @include phone {
     column-gap: 10px;
   }
 }
 
+.custom_svg {
+  @extend .svg;
+  opacity: 0;
+}
+.custom_svg_without_edit {
+  @extend .custom_svg;
+  margin-right: 20px;
+}
+
 .headers_button_wrapper {
   max-height: 45px;
-  margin-left: 5%;
   margin-right: 5%;
+  margin-left: 5%;
 }
+
 
 .header_name_wrapper {
   display: flex;

@@ -90,20 +90,24 @@ export const getLocationKeys: T.GetLocationKeys = async (
     orgId,
     locId,
     objId,
-    { full, offset }
+    { offset, name }
 ) => {
     const query = new URLSearchParams();
     query.set('limit', '25');
     offset && query.set('offset', offset);
 
-    const config: AxiosRequestConfig = {
-        params: !full ? query : undefined,
-    };
+    if (name) {
+        if (decodeURI(name) === 'Все') {
+            query.delete('search');
+        } else {
+            query.set('search', name);
+        }
+    }
 
     const res: AxiosResponse<ReturnType<T.GetLocationKeys>> =
         await $serverAuth.get(
             `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=-date&type=keys`,
-            config
+            { params: query }
         );
 
     return res.data;

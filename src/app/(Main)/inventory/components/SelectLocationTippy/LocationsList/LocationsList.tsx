@@ -5,7 +5,7 @@ import { LocationListItem } from 'app/(Main)/inventory/components/SelectLocation
 
 import scss from 'app/(Main)/inventory/components/SelectLocationTippy/SelectLocationInput.module.scss';
 interface LocationsListProps {
-    locations: ILocation[];
+    locations: { id: number; name: string }[];
     deleteOne: (v: number) => void;
 }
 
