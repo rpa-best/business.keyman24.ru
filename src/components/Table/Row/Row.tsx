@@ -8,6 +8,7 @@ import EditSvg from '/public/svg/edit.svg';
 import { ColumnRowProps } from 'components/Table/types';
 
 import scss from 'components/Table/Table.module.scss';
+import { useResizeWidth } from 'hooks/useResizeWidth';
 
 export const Row: React.FC<ColumnRowProps> = ({
     item,
@@ -58,36 +59,46 @@ export const Row: React.FC<ColumnRowProps> = ({
     return textArr.map((el, index) => {
         const lastElem = textArr.length - 1 === index;
         return (
-            <div className={tableTdClassName} key={index}>
-                <p
-                    className={textClass}
-                    onClick={
-                        stopPropagation
-                            ? (event) => event.stopPropagation()
-                            : undefined
-                    }
+            <>
+                <div
+                    style={lastElem ? { position: 'relative' } : undefined}
+                    className={tableTdClassName}
+                    key={index}
                 >
-                    {el}
-                </p>
-                {lastElem && needActions && (
-                    <div className={scss.actions_wrapper}>
-                        {handleEditClick && (
-                            <EditSvg
-                                onClick={(e: MouseEvent) =>
-                                    handleClick(e, handleEditClick)
-                                }
-                                className={scss.svg}
-                            />
-                        )}
-                        {handleDeleteClick && (
-                            <DeleteSvg
-                                onClick={onDeleteClick}
-                                className={scss.svg}
-                            />
-                        )}
-                    </div>
-                )}
-            </div>
+                    <p
+                        className={textClass}
+                        onClick={
+                            stopPropagation
+                                ? (event) => event.stopPropagation()
+                                : undefined
+                        }
+                    >
+                        {el}
+                    </p>
+                    {lastElem && needActions && (
+                        <div className={scss.actions_wrapper}>
+                            {handleEditClick && (
+                                <EditSvg
+                                    onClick={(e: MouseEvent) =>
+                                        handleClick(e, handleEditClick)
+                                    }
+                                    className={scss.custom_svg}
+                                />
+                            )}
+                            {handleDeleteClick && (
+                                <DeleteSvg
+                                    onClick={onDeleteClick}
+                                    className={
+                                        handleEditClick
+                                            ? scss.custom_svg
+                                            : scss.custom_svg_without_edit
+                                    }
+                                />
+                            )}
+                        </div>
+                    )}
+                </div>
+            </>
         );
     });
 };

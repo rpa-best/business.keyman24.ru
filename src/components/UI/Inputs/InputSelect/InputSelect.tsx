@@ -28,6 +28,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     size = 'medium',
     needErrorLabel = true,
     listValues,
+    showPrevValue = true,
 }) => {
     const opacity = useSpring(0);
 
@@ -73,11 +74,16 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
 
     const onClickOutside = () => {
         setVisible(!visible);
-        setInputValue(prevValue.current);
+        if (showPrevValue) {
+            setInputValue(prevValue.current);
+        }
         if (setFieldTouched) {
             setFieldTouched(name, true);
         }
     };
+
+    const offset: [number, number] =
+        label && needErrorLabel ? [0, -10] : [0, 0];
 
     const arrowClassname = clsx({
         [scss.input_arrow_svg]: true,
@@ -89,7 +95,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
         [scss.field]: size === 'medium' && !label,
         [scss.field_big]: size === 'big' && !label,
         [scss.field_with_label_big]: size === 'big' && label,
-        [scss.field_with_label]: size === 'medium' && label,
+        [scss.field_with_label]: size === 'medium' && label && needErrorLabel,
     });
 
     const labelErrorClass = clsx({
@@ -118,7 +124,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
             visible={visible}
             placement="bottom"
             onClickOutside={onClickOutside}
-            offset={label ? [0, -10] : [0, 0]}
+            offset={offset}
             render={(attrs) => (
                 <InputSelectList
                     {...attrs}

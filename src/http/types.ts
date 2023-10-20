@@ -490,10 +490,14 @@ export type DeletePermGroupPermissions = (
 
 export type GetInventories = (
     orgId: number,
-    offset?: number
+    offset: number,
+    name: string,
+    location: string
 ) => Promise<IResponse<IInventory>>;
 
-export type GetClientInventories = () => Promise<IResponse<IInventory>>;
+export type GetClientInventories = (
+    name: string
+) => Promise<IResponse<IInventory>>;
 
 export type GetInventoryHistory = (
     orgId: number,
@@ -600,7 +604,7 @@ export type GetLocationKeys = (
     objId: number,
     params: {
         offset?: string;
-        full?: boolean;
+        name: string;
     }
 ) => Promise<IResponse<LocKeysResponse>>;
 

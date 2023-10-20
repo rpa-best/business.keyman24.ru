@@ -62,14 +62,13 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({
             {lastChild && buttonData?.text && (
                 <div className={scss.headers_button_wrapper}>
                     <Button
-                        nowrap={true}
                         onClick={
                             ((e: MouseEvent) =>
                                 handleClick(e, buttonData?.onClick)) as any
                         }
                         type="button"
                     >
-                        {buttonData?.text as string}
+                        {buttonData.text}
                     </Button>
                 </div>
             )}

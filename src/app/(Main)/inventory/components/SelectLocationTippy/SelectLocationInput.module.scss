@@ -2,18 +2,22 @@
 
 .tippy_button {
   max-height: 100%;
-  width: 100%;
+  height: 45px;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
   padding: 11px 40px;
-  color: white;
+  margin-top: 5px;
+  color: $dark-main;
   border-radius: 12px;
-  background-color: $accent-color;
+  background-color: white;
   cursor: pointer;
   transition: .2s all ease-in-out;
   &:hover {
-    background-color: #2BBB86;
+    background-color: transparentize(white, 0.1);
   }
   &:active {
-    background-color: #25A476;
+    background-color: transparentize(white, 0.2);
   }
   &:disabled {
     background-color: gray;
@@ -21,15 +25,36 @@
   }
   @include thousendWidth {
     padding: 10px 25px ;
+    width: 250px;
   }
   @include phoneOrTablet {
-    width: 100%;
-    padding: 8px 30px ;
+    height: 45px;
+    padding: 12px 30px ;
+  }
+  @include smallTablet {
+    height: 45px;
+    width: 200px;
+    padding: 12px 20px;
+    white-space: nowrap;
+  }
+  @include phone {
+    height: 40px;
   }
 }
 
 .tippy_wrapper {
   position: relative;
+  @include thousendWidth {
+    width: 100%;
+  }
+  @include phoneOrTablet {
+    width: max-content;
+  }
+}
+
+.tippy_desc {
+  @include MontserratRegular(16px);
+  color: $gray;
 }
 
 .tippy_title {
@@ -48,6 +73,9 @@
   background-color: $additional-dark;
   box-shadow: 0 0 0 .4px white;
   border-radius: 10px;
+  @include phone {
+    width: 300px;
+  }
 }
 
 .locations {

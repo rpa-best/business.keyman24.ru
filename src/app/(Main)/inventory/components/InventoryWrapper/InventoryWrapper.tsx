@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
@@ -13,8 +13,11 @@ import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { InventoryModal } from 'app/(Main)/inventory/components/InventoryModal';
 import { Spinner } from 'components/Spinner';
-import { deleteInventoryItem, getInventoryImage } from 'http/inventoryApi';
-import { Button } from 'components/UI/Buttons/Button';
+import {
+    deleteInventoryItem,
+    getClientInventories,
+    getInventoryImage,
+} from 'http/inventoryApi';
 import { IData } from 'app/(Main)/locations/types';
 import { IInventoryImage } from 'http/types';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
@@ -61,12 +64,11 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         setLoading(true);
         setVisible(true);
         setType('edit');
-        const selectedInventory = inventory.find((i) => i.id === id);
+        const selectedInventory = generatedData.find((i) => i.id === id);
         setSelectedItem(selectedInventory);
         await getInventoryImage(id).then((d) => {
             setSelectedItemImage(d.results);
         });
-
         setLoading(false);
     };
 
@@ -94,46 +96,29 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     return (
         <>
             <div className={scss.keys}>
-                <div className={scss.key_generate_button}>
-                    {inventory.length === 0 && (
-                        <Button
-                            onClick={() => {
-                                setModalType('more');
-                                setVisible(true);
-                            }}
-                            type="button"
-                        >
-                            Сгенерировать инвентарь
-                        </Button>
-                    )}
-                </div>
-                {generatedData.length !== 0 && (
-                    <ActionsButtons
-                        setVisible={setVisible}
-                        setModalType={setModalType}
-                    />
-                )}
+                <ActionsButtons
+                    setVisible={setVisible}
+                    setModalType={setModalType}
+                />
             </div>
-            {inventory?.length !== 0 && (
-                <Table
-                    buttonData={{
-                        onClick: handleTableButtonClick,
-                        text: 'Добавить',
-                    }}
-                    handleEditClick={handleEditClick}
-                    handleRowClick={handleRowClick}
-                    handleDeleteClick={handleDeleteClick}
-                    tableData={generatedData}
-                    setTableData={setGeneratedData}
-                    paginatorData={{ offset: 25, countItems: count }}
-                    stopPropagation
-                >
-                    <Column sortable header="номер" field="number" />
-                    <Column sortable header="Наименование" field="name" />
-                    <Column sortable header="Штрихкод" field="codeNumber" />
-                    <Column sortable header="Локация" field="location" />
-                </Table>
-            )}
+            <Table
+                buttonData={{
+                    onClick: handleTableButtonClick,
+                    text: 'Добавить',
+                }}
+                handleEditClick={handleEditClick}
+                handleRowClick={handleRowClick}
+                handleDeleteClick={handleDeleteClick}
+                tableData={generatedData}
+                setTableData={setGeneratedData}
+                paginatorData={{ offset: 25, countItems: count }}
+                stopPropagation
+            >
+                <Column sortable header="номер" field="number" />
+                <Column sortable header="Наименование" field="name" />
+                <Column sortable header="Штрихкод" field="codeNumber" />
+                <Column sortable header="Локация" field="location" />
+            </Table>
             {modalType === 'more' && (
                 <Modal syncWithNote>
                     <MoreInventoryModal

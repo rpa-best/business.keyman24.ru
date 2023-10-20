@@ -9,18 +9,20 @@ import scss from 'app/(Main)/locations/locations.module.scss';
 
 interface KeyPageProps {
     params: { locId: string; objId: string };
-    searchParams: { offset: string };
+    searchParams: { offset: string; name: string };
 }
 
 const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
     const cookieStore = cookies();
 
     const offset = searchParams.offset ?? 0;
+    const name = searchParams.name ?? encodeURI('Все');
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
     const keys = await getLocationKeys(+orgId, +params.locId, +params.objId, {
         offset,
+        name,
     });
 
     return (

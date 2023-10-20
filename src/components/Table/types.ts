@@ -54,6 +54,7 @@ export interface PaginatorProps {
     countPages: number;
     currentPage: number;
     handlePaginatorClick: (page: number) => void;
+    offset: number;
 }
 
 export interface ColumnRowProps {

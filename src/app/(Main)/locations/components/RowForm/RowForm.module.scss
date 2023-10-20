@@ -22,9 +22,6 @@
     flex-direction: column-reverse;
     justify-content: space-between;
   }
-  @include thousendWidth {
-    flex-direction: row;
-  }
   @include phoneOrTablet {
     flex-direction: column-reverse;
   }
@@ -33,33 +30,29 @@
 
 .input_name {
   padding-top: 10px;
-  width: 65%;
+  width: 50%;
+  min-height: 75px;
   @include laptopWidth {
     width: 100%;
   }
-  @include thousendWidth {
+  @include phone {
     padding-top: 0;
-    width: 65%;
-  }
-  @include phoneOrTablet {
-    padding-top: 5px;
-    width: 100%;
   }
 }
 
 .input_count {
   padding-top: 10px;
-  width: 35%;
+  width: 45%;
+  min-height: 75px;
   @include laptopWidth {
     width: 100%;
-  }
-  @include thousendWidth {
-    padding-top: 0;
-    width: 30%;
   }
   @include phoneOrTablet {
     padding-top: 10px;
     width: 100%;
+  }
+  @include phone {
+    padding-top: 0;
   }
 }
 
@@ -68,5 +61,8 @@
   margin: 20px auto 0;
   @include phoneOrTablet {
     width: 100%;
+  }
+  @include phone {
+    margin-top: 10px;
   }
 }

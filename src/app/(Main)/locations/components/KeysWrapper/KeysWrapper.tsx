@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import {
+    useParams,
+    usePathname,
+    useRouter,
+    useSearchParams,
+} from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
@@ -9,7 +14,11 @@ import { Column } from 'components/Table/Column';
 import { IData } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
-import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
+import {
+    createLocationKeys,
+    deleteLocationKey,
+    getLocationClientKeys,
+} from 'http/locationsApi';
 import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
@@ -19,6 +28,7 @@ import { NotificationToast } from 'components/NotificationConfirm';
 import revalidate from 'utils/revalidate';
 
 import scss from './KeysWrapper.module.scss';
+import { NameInputSelect } from 'app/(Main)/components/NameInputSelect';
 
 interface KeysWrapperProps {
     count: number;
@@ -34,15 +44,15 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
 
-    const [data, setData] = useState<IData[]>([]);
-    const [generatedData, setGeneratedData] = useState<LocKeysResponse[]>([]);
+    const [previewKeys, setPreviewKeys] = useState<IData[]>([]);
+    const [generatedKeys, setGeneratedKeys] = useState<LocKeysResponse[]>([]);
 
-    const total = data.reduce((accumulator, currentValue) => {
+    const total = previewKeys.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.count;
     }, 0);
 
     useEffect(() => {
-        setGeneratedData(keys);
+        setGeneratedKeys(keys);
     }, [keys]);
 
     const handleTableButtonClick = () => {
@@ -50,7 +60,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleDeleteOneData = (id: string) => {
-        setData((d) => d.filter((dat) => dat.id !== id));
+        setPreviewKeys((d) => d.filter((dat) => dat.id !== id));
     };
 
     const handleDeleteClick = async (id: number) => {
@@ -64,13 +74,12 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
 
     const handleGenerateClick = async () => {
         setLoading(true);
-        const body: LocKeyBody[] = data.map((d) => {
+        const body: LocKeyBody[] = previewKeys.map((d) => {
             return { name: d.category, count: d.count };
         });
-
         createLocationKeys(+params.locId, +params.objId, body)
             .then(() => {
-                setData([]);
+                setPreviewKeys([]);
             })
             .finally(() => {
                 revalidate(pathName);
@@ -86,63 +95,56 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     return (
         <>
             <div className={scss.keys}>
-                <div className={scss.key_generate_button}>
-                    {keys.length === 0 && (
-                        <Button onClick={handleTableButtonClick} type="button">
-                            Сгенерировать ключи
-                        </Button>
-                    )}
-                </div>
-                {generatedData.length !== 0 && (
-                    <>
-                        <div className={scss.actions_buttons_wrapper}>
-                            <div className={scss.action_button_solo}>
+                <>
+                    <div className={scss.actions_buttons_wrapper}>
+                        <div className={scss.action_button_solo}>
+                            <div className={scss.download_button}>
                                 <Button onClick={() => {}} type="button">
                                     Скачать наклейки ШК
                                 </Button>
                             </div>
+                            <div className={scss.filter_input}>
+                                <NameInputSelect type="key" />
+                            </div>
                         </div>
-                        <div className={scss.keys_table_layout}>
-                            <Table
-                                buttonData={{
-                                    text: 'Генерация ключей',
-                                    onClick: () => handleTableButtonClick(),
-                                }}
-                                paginatorData={{
-                                    offset: 25,
-                                    countItems: count,
-                                }}
-                                handleRowClick={handleRowClick}
-                                handleDeleteClick={handleDeleteClick}
-                                tableData={generatedData}
-                                setTableData={setGeneratedData}
-                                stopPropagation
-                            >
-                                <Column
-                                    header="Название"
-                                    field="name"
-                                    sortable
-                                />
-                                <Column header="Код" field="codeNumber" />
-                            </Table>
-                        </div>
-                    </>
-                )}
+                    </div>
+                    <div className={scss.keys_table_layout}>
+                        <Table
+                            buttonData={{
+                                text: 'Генерация ключей',
+                                onClick: () => handleTableButtonClick(),
+                            }}
+                            paginatorData={{
+                                offset: 25,
+                                countItems: count,
+                            }}
+                            handleRowClick={handleRowClick}
+                            handleDeleteClick={handleDeleteClick}
+                            tableData={generatedKeys}
+                            setTableData={setGeneratedKeys}
+                            stopPropagation
+                        >
+                            <Column header="Название" field="name" sortable />
+                            <Column header="Код" field="codeNumber" />
+                        </Table>
+                    </div>
+                </>
+
                 <Modal syncWithNote>
                     <>
                         <h2 className={scss.actions_data_title}>
                             Генерация ключей
                         </h2>
                         <div className={scss.actions_wrapper}>
-                            <RowForm setData={setData} />
+                            <RowForm setData={setPreviewKeys} />
                             <PreviewRowsList
                                 deleteOne={handleDeleteOneData}
-                                data={data}
+                                data={previewKeys}
                             />
                         </div>
                         <div className={scss.button_wrapper}>
                             <Button
-                                disabled={data.length === 0}
+                                disabled={previewKeys.length === 0}
                                 type="button"
                                 onClick={() => handleGenerateClick()}
                             >
