@@ -28,11 +28,7 @@ const BillPage = async () => {
         };
     });
 
-    const price = (await getServerPrice(rateBody).catch((e) => {
-        if (e instanceof AxiosError) {
-            null;
-        }
-    })) ?? { cost: 1000 };
+    const price = await getServerPrice(rateBody);
 
     function addDays(date: Date, days: number) {
         const result = new Date(date);
