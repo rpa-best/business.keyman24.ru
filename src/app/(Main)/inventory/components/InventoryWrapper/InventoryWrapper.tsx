@@ -120,7 +120,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 <Column sortable header="Локация" field="location" />
             </Table>
             {modalType === 'more' && (
-                <Modal syncWithNote>
+                <Modal>
                     <MoreInventoryModal
                         setData={setRowFormData}
                         data={rowFormData}
@@ -130,7 +130,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 </Modal>
             )}
             {modalType === 'one' && (
-                <Modal syncWithNote>
+                <Modal>
                     <InventoryModal
                         setLoading={setLoading}
                         setInventoryData={setGeneratedData}

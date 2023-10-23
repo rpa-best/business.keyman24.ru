@@ -119,7 +119,8 @@ export const TippyContent: React.FC<TippyContentProps> = ({
 
         const locationIds = selectedLocations
             .map((el) => el.id.toString())
-            .join(' ');
+            .join(',');
+        console.log(locationIds);
         if (!locationIds) {
             searchHelper.getParams.delete('location');
         } else {

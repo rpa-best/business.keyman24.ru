@@ -20,12 +20,10 @@ export const NotificationToast: React.FC<NotificationToast> = ({
     children,
     syncWithModal,
 }) => {
-    const [fields] = useConstructorStore((state) => [state.fields]);
     const { phoneBreak } = useResizeWidth();
     const [modalVisible] = useModalStore((state) => [state.visible]);
     const [visible] = useNotificationStore((state) => [state.visible]);
     const [setVisible] = useNotificationStore((state) => [state.setVisible]);
-    const [visibleNote] = useNotificationStore((state) => [state.visible]);
 
     useEffect(() => {
         if (syncWithModal) {
@@ -36,10 +34,6 @@ export const NotificationToast: React.FC<NotificationToast> = ({
             }
         }
     }, [modalVisible, setVisible, syncWithModal, visible]);
-
-    if (fields?.length === 0 || !fields) {
-        return null;
-    }
 
     return (
         <AnimatePresence>

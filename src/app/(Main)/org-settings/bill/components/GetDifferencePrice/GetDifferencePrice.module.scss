@@ -1,14 +1,16 @@
 @import "scss/utils";
 
+.default_text {
+  @include MontserratRegular(16px);
+
+}
+
 .bigger {
   @include fullHd {
-    font-size: 24px;
+    font-size: 20px;
   }
-  @include MontserratRegular(20px);
+  @include MontserratRegular(18px);
   color: red;
-  @include phoneOrTablet {
-    font-size: 18px;
-  }
 }
 
 .smaller {

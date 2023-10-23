@@ -12,8 +12,6 @@ import { useNotificationStore } from 'store/notificationStore';
 import scss from './RowForm.module.scss';
 
 export const RowForm: React.FC<RowFormProps> = ({ setData }) => {
-    const [setVisible] = useNotificationStore((state) => [state.setVisible]);
-
     const onSubmit = (values: FormValues) => {
         const newObj = [
             {
@@ -43,7 +41,6 @@ export const RowForm: React.FC<RowFormProps> = ({ setData }) => {
         validate: RowFormValidate,
         onSubmit: async (values, { resetForm }) => {
             onSubmit(values);
-            setVisible(true);
             resetForm();
         },
     });
