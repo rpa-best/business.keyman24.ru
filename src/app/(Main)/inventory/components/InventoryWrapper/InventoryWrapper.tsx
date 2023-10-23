@@ -25,6 +25,7 @@ import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module
 import { toast } from 'react-toastify';
 import { ToastPrice } from 'components/ToastPrice';
 import { usePriceBySlug } from 'hooks/usePrice';
+import { priceToastConfig } from 'config/toastConfig';
 
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
@@ -125,6 +126,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         setSelectedItem(undefined);
         setSelectedItemImage(undefined);
         setVisible(true);
+        toast(<ToastPrice price={priceByOne} />, priceToastConfig);
     };
 
     return (
