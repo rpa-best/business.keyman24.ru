@@ -14,6 +14,10 @@ import { Spinner } from 'components/Spinner';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import { NotificationToast } from 'components/NotificationConfirm';
 import revalidate from 'utils/revalidate';
+import { usePriceBySlug } from 'hooks/usePrice';
+import { toast } from 'react-toastify';
+import { ToastPrice } from 'components/ToastPrice';
+import { priceToastConfig } from 'config/toastConfig';
 
 interface ObjectsTableWrapper {
     modifiedObjects: IObject[];
@@ -35,6 +39,8 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     const [loading, setLoading] = useState(false);
     const [formType, setFormType] = useState<'create' | 'edit'>('create');
 
+    const price = usePriceBySlug('ObjectInLocation');
+
     const handleRowClick = (id: number) => {
         router.push(`${pathname}/${id}`);
     };
@@ -43,6 +49,7 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
         setSelectedObject(undefined);
         setFormType('create');
         setVisible(true);
+        toast(<ToastPrice price={price} />, priceToastConfig);
     };
 
     const handleEditClick = (id: number) => {
@@ -87,9 +94,6 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
                     type={formType}
                 />
             </Modal>
-            <NotificationToast syncWithModal>
-                <ServiceChangeToast count={1} slug="ObjectInLocation" />
-            </NotificationToast>
             {loading && <Spinner />}
         </>
     );

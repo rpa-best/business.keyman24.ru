@@ -31,9 +31,6 @@ export const LocationAction: React.FC<LocationActionProps> = ({
     const path = usePathname();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [setNoteVisible] = useNotificationStore((state) => [
-        state.setVisible,
-    ]);
 
     const onSubmit = (values: LocationFormValues) => {
         setLoading(true);
@@ -81,12 +78,6 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                 });
         }
     };
-
-    useEffect(() => {
-        if (formType === 'edit') {
-            setNoteVisible(false);
-        }
-    }, [setNoteVisible, formType]);
 
     const {
         values,

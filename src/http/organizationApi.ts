@@ -61,12 +61,30 @@ export const getPrice: T.GetPrice = async (body) => {
     return res.data;
 };
 
+export const getPriceBySlug: T.GetPriceBySlug = async (slug) => {
+    const res: AxiosResponse<ReturnType<typeof getPriceBySlug>> =
+        await $clientAuth.get(`business/${orgId}/service/service-rate/${slug}`);
+
+    return res.data;
+};
+
+export const getServerPriceBySlug: T.GetServerPriceBySlug = async (
+    orgId,
+    slug
+) => {
+    const res: AxiosResponse<ReturnType<typeof getServerPriceBySlug>> =
+        await $serverAuth.get(`business/${orgId}/service/service-rate/${slug}`);
+
+    return res.data;
+};
+
 export const getServerPrice: T.GetPrice = async (body) => {
     const res: AxiosResponse<ReturnType<typeof getPrice>> =
         await $serverAuth.post('account/service-rate-calc/', body);
 
     return res.data;
 };
+
 export const updateSub: T.UpdatePrice = async (body) => {
     await $clientAuth.patch(`business/${orgId}/service/subscription/`, body);
 };

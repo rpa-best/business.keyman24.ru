@@ -95,8 +95,10 @@ export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
     return link;
 };
 
-export const allowedPath: T.AllowedPath = async (path, org) => {
-    const res = await $clientAuth.head(`business/${org}/${path}`);
+export const allowedPath: T.AllowedPath = async (path, org, query) => {
+    const res = await $clientAuth.head(`business/${org}/${path}`, {
+        params: query,
+    });
     return res.status === 200;
 };
 

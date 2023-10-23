@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
     useParams,
     usePathname,
@@ -29,6 +29,10 @@ import revalidate from 'utils/revalidate';
 
 import scss from './KeysWrapper.module.scss';
 import { NameInputSelect } from 'app/(Main)/components/NameInputSelect';
+import { usePriceBySlug } from 'hooks/usePrice';
+import { toast } from 'react-toastify';
+import { ToastPrice } from 'components/ToastPrice';
+import { priceToastConfig } from 'config/toastConfig';
 
 interface KeysWrapperProps {
     count: number;
@@ -47,9 +51,42 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const [previewKeys, setPreviewKeys] = useState<IData[]>([]);
     const [generatedKeys, setGeneratedKeys] = useState<LocKeysResponse[]>([]);
 
-    const total = previewKeys.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.count;
-    }, 0);
+    const totalPositions = useMemo(() => {
+        return previewKeys.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue.count;
+        }, 0);
+    }, [previewKeys]);
+
+    const toastId = useRef<string | number | null>(null);
+
+    const priceByOne = usePriceBySlug('Key');
+
+    const totalPrice = useMemo(() => {
+        return totalPositions * priceByOne;
+    }, [priceByOne, totalPositions]);
+
+    useEffect(() => {
+        if (totalPrice > 0) {
+            if (toastId.current) {
+                toast.update(toastId.current, {
+                    render: <ToastPrice price={totalPrice} />,
+                });
+            } else {
+                toastId.current = toast.info(
+                    <ToastPrice price={totalPrice} />,
+                    {
+                        position: 'top-right',
+                        autoClose: false,
+                    }
+                );
+            }
+        } else {
+            toast.dismiss();
+            toastId.current = null;
+        }
+    }, [totalPrice, toastId.current]);
+
+    console.log(toastId.current);
 
     useEffect(() => {
         setGeneratedKeys(keys);
@@ -130,7 +167,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     </div>
                 </>
 
-                <Modal syncWithNote>
+                <Modal>
                     <>
                         <h2 className={scss.actions_data_title}>
                             Генерация ключей
@@ -153,9 +190,6 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                         </div>
                     </>
                 </Modal>
-                <NotificationToast>
-                    <ServiceChangeToast count={total} slug="Key" />
-                </NotificationToast>
                 {loading && <Spinner />}
             </div>
         </>

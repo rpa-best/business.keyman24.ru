@@ -78,6 +78,15 @@ export type GetPrice = (
     body: IRate[]
 ) => Promise<{ body: string[]; cost: number }>;
 
+export type GetPriceBySlug = (
+    slug: string
+) => Promise<{ costNotLimited: number; cost: number }>;
+
+export type GetServerPriceBySlug = (
+    orgId: number,
+    slug: string
+) => Promise<{ costNotLimited: number; cost: number }>;
+
 export type GetHistory = (orgId: number) => Promise<IResponse<IBalanceHistory>>;
 
 export type UpdatePrice = (body: IRate[]) => Promise<void>;
@@ -554,7 +563,11 @@ export type HeadCheckMiddleWare = (
     orgId: number
 ) => Promise<string | void>;
 
-export type AllowedPath = (path: string, org: string) => Promise<boolean>;
+export type AllowedPath = (
+    path: string,
+    org: string,
+    query?: any
+) => Promise<boolean>;
 
 export type GetGroupAdminOrgPermissions = (
     orgId: number

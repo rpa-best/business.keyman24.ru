@@ -38,11 +38,13 @@ export const getInventories: T.GetInventories = async (
 
     const res: AxiosResponse<ReturnType<typeof getInventories>> =
         await $serverAuth.get(
-            `business/${orgId}/inventory/?type=inventory&ordering=-date`,
+            `business/${orgId}/inventory/?type=inventory&ordering=-id`,
             {
                 params: query,
             }
         );
+
+    console.log(res);
 
     return res.data;
 };
@@ -60,7 +62,7 @@ export const getClientInventories: T.GetClientInventories = async (name) => {
     }
     const res: AxiosResponse<ReturnType<T.GetInventories>> =
         await $clientAuth.get(
-            `business/${orgId}/inventory/?type=inventory&ordering=-date`,
+            `business/${orgId}/inventory/?type=inventory&ordering=id`,
             { params: query }
         );
 

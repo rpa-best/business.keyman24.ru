@@ -15,6 +15,10 @@ import { IOrganization } from 'store/types';
 import { NotificationToast } from 'components/NotificationConfirm';
 import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import revalidate from 'utils/revalidate';
+import { toast } from 'react-toastify';
+import { usePriceBySlug } from 'hooks/usePrice';
+import { priceToastConfig, warningToastConfig } from 'config/toastConfig';
+import { ToastPrice } from 'components/ToastPrice';
 
 interface TableWrapperProps {
     tableRows: ILocation[];
@@ -43,10 +47,13 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     const [formType, setFormType] = useState<'create' | 'edit'>('create');
     const [loading, setLoading] = useState(false);
 
+    const price = usePriceBySlug('Location');
+
     const handleAddClick = () => {
         setFormType('create');
         setEditableLocation(null);
         setVisible(true);
+        toast(<ToastPrice price={price} />, priceToastConfig);
     };
 
     const handleEditClick = (id: number) => {
@@ -98,7 +105,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
                     formType={formType}
                 />
             </Modal>
-            <NotificationToast syncWithModal>
+            <NotificationToast>
                 <ServiceChangeToast count={1} slug="Location" />
             </NotificationToast>
             {loading && <Spinner />}

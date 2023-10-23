@@ -1,32 +1,20 @@
-import { IField } from 'store/useConstructorStore';
-import { useEffect, useRef, useState } from 'react';
-import { IRate } from 'http/types';
-import { getPrice } from 'http/organizationApi';
-import { useDebounce } from 'hooks/useDebounce';
+import { useEffect, useState } from 'react';
 
-type UsePriceType = (fields: IField[], delayMs: number) => number;
+import { getPriceBySlug } from 'http/organizationApi';
 
-export const usePrice: UsePriceType = (fields, delayMs) => {
+type UsePriceType = (slug: string) => number;
+
+export const usePriceBySlug: UsePriceType = (slug) => {
     const [price, setPrice] = useState<number>();
 
-    const rateBody: IRate[] | null =
-        fields[0] !== undefined
-            ? fields.map((item) => {
-                  return {
-                      id: item.id,
-                      value: +item.count,
-                      key: item.slug,
-                      not_limited: item.notLimited,
-                  };
-              })
-            : null;
-
-    useDebounce(async () => {
-        rateBody !== null &&
-            (await getPrice(rateBody).then((d) => {
-                setPrice(d.cost);
-            }));
-    }, delayMs);
+    useEffect(() => {
+        const fetchData = async () => {
+            return await getPriceBySlug(slug);
+        };
+        fetchData().then((d) => {
+            setPrice(d.cost);
+        });
+    }, [slug]);
 
     return price as number;
 };

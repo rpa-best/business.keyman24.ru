@@ -8,31 +8,15 @@ import { useModalStore } from 'store/modalVisibleStore';
 
 import scss from './Modal.module.scss';
 import { useNotificationStore } from 'store/notificationStore';
+import { toast } from 'react-toastify';
 
 interface ModalProps {
     children: React.ReactElement;
-    syncWithNote?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({
-    children,
-    syncWithNote = false,
-}) => {
+export const Modal: React.FC<ModalProps> = ({ children }) => {
     const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [setNoteVisible] = useNotificationStore((state) => [
-        state.setVisible,
-    ]);
-
-    useEffect(() => {
-        if (syncWithNote) {
-            if (visible) {
-                setNoteVisible(true);
-            } else {
-                setNoteVisible(false);
-            }
-        }
-    }, [setNoteVisible, syncWithNote, visible]);
 
     useEffect(() => {
         if (visible) {
@@ -49,7 +33,10 @@ export const Modal: React.FC<ModalProps> = ({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    onClick={() => setVisible(false)}
+                    onClick={() => {
+                        setVisible(false);
+                        toast.dismiss();
+                    }}
                     className={scss.modal_background}
                 >
                     <motion.div
@@ -62,6 +49,7 @@ export const Modal: React.FC<ModalProps> = ({
                         <ExitSvg
                             onClick={() => {
                                 setVisible(false);
+                                toast.dismiss();
                             }}
                             className={scss.exit_svg}
                         />

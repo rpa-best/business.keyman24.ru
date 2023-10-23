@@ -23,3 +23,8 @@ export const warningToastConfig: ToastOptions = {
     type: 'warning',
     theme: 'colored',
 };
+export const priceToastConfig: ToastOptions = {
+    position: 'top-right',
+    autoClose: 5000,
+    type: 'info',
+};
