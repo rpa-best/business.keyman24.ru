@@ -44,8 +44,6 @@ export const getInventories: T.GetInventories = async (
             }
         );
 
-    console.log(res);
-
     return res.data;
 };
 

@@ -25,7 +25,6 @@ export interface EditWorkingAreaProps {
 
 export interface AreasTableWrapperProps {
     workingAreas: IModfiedWorkingArea[];
-    initialAreas: IWorkingArea[];
     locations: ILocation[];
     workingTypes: IType[];
 }

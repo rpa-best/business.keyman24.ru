@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-    useParams,
-    usePathname,
-    useRouter,
-    useSearchParams,
-} from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
@@ -14,25 +9,18 @@ import { Column } from 'components/Table/Column';
 import { IData } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
-import {
-    createLocationKeys,
-    deleteLocationKey,
-    getLocationClientKeys,
-} from 'http/locationsApi';
+import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
 import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
-import { ServiceChangeToast } from 'components/ServiceChangeToast';
-import { NotificationToast } from 'components/NotificationConfirm';
 import revalidate from 'utils/revalidate';
-
-import scss from './KeysWrapper.module.scss';
 import { NameInputSelect } from 'app/(Main)/components/NameInputSelect';
 import { usePriceBySlug } from 'hooks/usePrice';
 import { toast } from 'react-toastify';
 import { ToastPrice } from 'components/ToastPrice';
-import { priceToastConfig } from 'config/toastConfig';
+
+import scss from './KeysWrapper.module.scss';
 
 interface KeysWrapperProps {
     count: number;
@@ -45,6 +33,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const pathName = usePathname();
     const params = useParams();
 
+    const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
 
@@ -86,7 +75,11 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         }
     }, [totalPrice, toastId.current]);
 
-    console.log(toastId.current);
+    useEffect(() => {
+        if (!visible) {
+            toastId.current = null;
+        }
+    }, [visible]);
 
     useEffect(() => {
         setGeneratedKeys(keys);

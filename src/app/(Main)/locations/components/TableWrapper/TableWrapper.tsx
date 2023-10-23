@@ -12,12 +12,10 @@ import { LocationAction } from 'app/(Main)/locations/components/LocationsAction'
 import { ILocation } from 'http/types';
 import { useModalStore } from 'store/modalVisibleStore';
 import { IOrganization } from 'store/types';
-import { NotificationToast } from 'components/NotificationConfirm';
-import { ServiceChangeToast } from 'components/ServiceChangeToast';
 import revalidate from 'utils/revalidate';
 import { toast } from 'react-toastify';
 import { usePriceBySlug } from 'hooks/usePrice';
-import { priceToastConfig, warningToastConfig } from 'config/toastConfig';
+import { priceToastConfig } from 'config/toastConfig';
 import { ToastPrice } from 'components/ToastPrice';
 
 interface TableWrapperProps {
@@ -105,9 +103,6 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
                     formType={formType}
                 />
             </Modal>
-            <NotificationToast>
-                <ServiceChangeToast count={1} slug="Location" />
-            </NotificationToast>
             {loading && <Spinner />}
         </>
     );
