@@ -31,7 +31,6 @@ const WorkingAreasPage = async () => {
             <h2 className={scss.working_title}>Рабочее место / Список</h2>
             <AreasTableWrapper
                 locations={locations.results}
-                initialAreas={workingAreas.results}
                 workingTypes={workingAreaTypes.results}
                 workingAreas={modifiedWorkingAreas}
             />

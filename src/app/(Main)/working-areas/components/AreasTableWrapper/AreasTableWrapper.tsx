@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
@@ -14,15 +14,15 @@ import { Modal } from 'components/Modal';
 import { EditWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea';
 import { deleteWorkingArea } from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
-import { ServiceChangeToast } from 'components/ServiceChangeToast';
-import { NotificationToast } from 'components/NotificationConfirm';
-import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
+import { usePriceBySlug } from 'hooks/usePrice';
+import { toast } from 'react-toastify';
+import { ToastPrice } from 'components/ToastPrice';
+import { priceToastConfig } from 'config/toastConfig';
 
 export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     workingAreas,
     workingTypes,
-    initialAreas,
     locations,
 }) => {
     const pathName = usePathname();
@@ -36,9 +36,8 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const [loading, setLoading] = useState(false);
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [setNoteVisible] = useNotificationStore((state) => [
-        state.setVisible,
-    ]);
+
+    const price = usePriceBySlug('WorkingArea');
 
     const handleRowClick = (id: number) => {
         const slug = workingAreasData.find((area) => area.id === id);
@@ -60,16 +59,18 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
         setVisible(true);
     };
 
+    const handleAddClick = () => {
+        setFormType('create');
+        setVisible(true);
+        setEditableArea(undefined);
+        toast(<ToastPrice price={price} />, priceToastConfig);
+    };
+
     return (
         <>
             <Table
                 buttonData={{
-                    onClick: () => {
-                        setFormType('create');
-                        setVisible(true);
-                        setNoteVisible(true);
-                        setEditableArea(undefined);
-                    },
+                    onClick: () => handleAddClick(),
                     text: 'Добавить',
                 }}
                 handleRowClick={handleRowClick}
@@ -100,9 +101,6 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                     types={workingTypes}
                 />
             </Modal>
-            <NotificationToast syncWithModal>
-                <ServiceChangeToast count={1} slug="WorkingArea" />
-            </NotificationToast>
             {loading && <Spinner />}
         </>
     );

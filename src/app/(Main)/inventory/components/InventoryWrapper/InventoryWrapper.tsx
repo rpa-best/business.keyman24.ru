@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
@@ -13,20 +13,18 @@ import { Modal } from 'components/Modal';
 import { useModalStore } from 'store/modalVisibleStore';
 import { InventoryModal } from 'app/(Main)/inventory/components/InventoryModal';
 import { Spinner } from 'components/Spinner';
-import {
-    deleteInventoryItem,
-    getClientInventories,
-    getInventoryImage,
-} from 'http/inventoryApi';
+import { deleteInventoryItem, getInventoryImage } from 'http/inventoryApi';
 import { IData } from 'app/(Main)/locations/types';
 import { IInventoryImage } from 'http/types';
-import { ServiceChangeToast } from 'components/ServiceChangeToast';
-import { NotificationToast } from 'components/NotificationConfirm';
+
 import { ActionsButtons } from 'app/(Main)/inventory/components/ActionsButtons';
 import { MoreInventoryModal } from 'app/(Main)/inventory/components/MoreInventoryModal';
 import revalidate from 'utils/revalidate';
 
 import scss from 'app/(Main)/locations/components/KeysWrapper/KeysWrapper.module.scss';
+import { toast } from 'react-toastify';
+import { ToastPrice } from 'components/ToastPrice';
+import { usePriceBySlug } from 'hooks/usePrice';
 
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
@@ -39,7 +37,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     const [modalType, setModalType] = useState<'one' | 'more'>('one');
     const [type, setType] = useState<'create' | 'edit'>('create');
 
-    const [setNoteVisible] = useModalStore((state) => [state.setVisible]);
+    const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
 
@@ -52,9 +50,46 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     );
     const [rowFormData, setRowFormData] = useState<IData[]>([]);
 
-    const total = rowFormData.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.count;
-    }, 0);
+    const toastId = useRef<string | number | null>();
+
+    const totalPositions = useMemo(() => {
+        return rowFormData.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue.count;
+        }, 0);
+    }, [rowFormData]);
+
+    const priceByOne = usePriceBySlug('Inventory');
+
+    const totalPrice = useMemo(() => {
+        return totalPositions * priceByOne;
+    }, [priceByOne, totalPositions]);
+
+    useEffect(() => {
+        if (totalPrice > 0) {
+            if (toastId.current) {
+                toast.update(toastId.current, {
+                    render: <ToastPrice price={totalPrice} />,
+                });
+            } else {
+                toastId.current = toast.info(
+                    <ToastPrice price={totalPrice} />,
+                    {
+                        position: 'top-right',
+                        autoClose: false,
+                    }
+                );
+            }
+        } else {
+            toast.dismiss();
+            toastId.current = null;
+        }
+    }, [totalPrice, toastId.current]);
+
+    useEffect(() => {
+        if (!visible) {
+            toastId.current = null;
+        }
+    }, [visible]);
 
     useEffect(() => {
         setGeneratedData(inventory);
@@ -90,7 +125,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         setSelectedItem(undefined);
         setSelectedItemImage(undefined);
         setVisible(true);
-        setNoteVisible(true);
     };
 
     return (
@@ -125,7 +159,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                         setData={setRowFormData}
                         data={rowFormData}
                         setLoading={setLoading}
-                        total={total}
+                        total={totalPrice}
                     />
                 </Modal>
             )}
@@ -141,12 +175,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     />
                 </Modal>
             )}
-            <NotificationToast>
-                <ServiceChangeToast
-                    count={modalType === 'one' ? 1 : total}
-                    slug="Inventory"
-                />
-            </NotificationToast>
             {loading && <Spinner />}
         </>
     );

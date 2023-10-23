@@ -11,8 +11,6 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { IObject } from 'http/types';
 import { deleteLocationObject } from 'http/locationsApi';
 import { Spinner } from 'components/Spinner';
-import { ServiceChangeToast } from 'components/ServiceChangeToast';
-import { NotificationToast } from 'components/NotificationConfirm';
 import revalidate from 'utils/revalidate';
 import { usePriceBySlug } from 'hooks/usePrice';
 import { toast } from 'react-toastify';

@@ -30,7 +30,7 @@ const BillPage = async () => {
 
     const price = (await getServerPrice(rateBody).catch((e) => {
         if (e instanceof AxiosError) {
-            console.log(e.response?.data);
+            null;
         }
     })) ?? { cost: 1000 };
 
