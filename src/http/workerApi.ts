@@ -1,6 +1,6 @@
 import * as T from './types';
 import { $clientAuth } from 'http/clientIndex';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
 import Cookies from 'universal-cookie';
 
@@ -8,7 +8,7 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async () => {
+export const getWorkers: T.GetWorkers = async (orgId) => {
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
         `business/${orgId}/worker/`
     );

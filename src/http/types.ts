@@ -749,7 +749,7 @@ export type SendSessionAction = (
     }
 ) => Promise<SessionLogResponse>;
 
-export type GetWorkers = () => Promise<IResponse<IWorker>>;
+export type GetWorkers = (orgId?: number) => Promise<IResponse<IWorker>>;
 
 export type GetWorkerPlan = (
     orgId: number,

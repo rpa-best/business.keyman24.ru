@@ -63,19 +63,7 @@ export const useSocketConnect: SocketConnectFunc = ({
     useEffect(() => {
         const { message } = socketStore;
         if (message?.type === 'error') {
-            if (message?.data.error.slug === 'worker_not_found') {
-                toast('Работник не найден', errorToastOptions);
-            } else if (
-                message?.data.error.slug === 'worker_already_in_location'
-            ) {
-                toast('Работник уже в локации', errorToastOptions);
-            } else if (message.data.error.slug === 'worker_not_in_location') {
-                toast('Работник не в локации', errorToastOptions);
-            } else if (message.data.error.slug === 'has_not_given_inventory') {
-                toast('Работник не сдал экипировку', errorToastOptions);
-            } else {
-                toast('Ошибка', errorToastOptions);
-            }
+            toast(message?.data.error[0].name, errorToastOptions);
         }
     }, [socketStore.message]);
 

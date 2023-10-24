@@ -82,15 +82,10 @@ export const Register: React.FC<RegisterProps> = ({
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
-                        if (
-                            e.response?.data.error[0].slug ===
-                            'card_not_given_to_this_worker'
-                        ) {
-                            toast(
-                                'Эта карта выдана другому сотруднику',
-                                errorToastOptions
-                            );
-                        }
+                        toast(
+                            e.response?.data.error[0].name,
+                            errorToastOptions
+                        );
                     }
                 })
                 .finally(() => {
@@ -134,7 +129,7 @@ export const Register: React.FC<RegisterProps> = ({
         setLoading(true);
         setSelectedOrg(org);
         const fetchData = async () => {
-            return await getWorkers();
+            return await getWorkers(org.id);
         };
         fetchData()
             .then((d) => setWorkers(d.results))
