@@ -41,9 +41,6 @@ export const Table = memo(function MemoTable({
     stopPropagation,
     prefetch,
 }: TableProps) {
-    const router = useRouter();
-    const pathname = usePathname();
-
     const [loading, setLoading] = useState(false);
 
     const [headers, setHeaders] = useState<IHeader[]>([]);

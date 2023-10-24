@@ -47,10 +47,11 @@ export const BarChart: React.FC<ChartProps> = ({
                 borderWidth: 1,
                 barPercentage: 0.5,
                 barThickness: 'flex',
-                minBarLength: 30,
+                minBarLength: 5,
                 hoverBackgroundColor: '#308D92',
             },
         ],
     };
+
     return <Bar className={scss.container} options={options} data={dataSet} />;
 };
