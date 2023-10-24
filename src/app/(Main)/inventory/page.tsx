@@ -21,24 +21,24 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
     const cookieStore = cookies();
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const inventories = await getInventories(+orgId, +offset, name, location);
+    /*    const inventories = await getInventories(+orgId, +offset, name, location);
 
     const modifiedInventory: IModifiedInventory[] = inventories.results.map(
         (i) => {
             const location = i.location === null ? '-' : `${i.location.name}`;
             return { ...i, type: i.type.name, location: location };
         }
-    );
+    );*/
 
     return (
         <div className={scss.children_with_table}>
             <div className={scss.title_wrapper}>
                 <h2 className={scss.title_text_wrapper}>Инвентарь</h2>
             </div>
-            <InventoryWrapper
+            {/*            <InventoryWrapper
                 count={inventories.count}
                 inventory={modifiedInventory}
-            />
+            />*/}
         </div>
     );
 };
