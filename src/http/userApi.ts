@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
 import { $clientAuth, $host } from 'http/clientIndex';
 import * as T from 'http/types';
@@ -99,10 +99,5 @@ export const allowedPath: T.AllowedPath = async (path, org) => {
     const res = await $clientAuth.head(
         `business/${org}/${path}?offset=0&limit=1`
     );
-    return res.status === 200;
-};
-
-export const allowedPathServer: T.AllowedPath = async (path, org) => {
-    const res = await $serverAuth.head(`business/${org}/${path}`);
     return res.status === 200;
 };
