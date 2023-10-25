@@ -20,7 +20,6 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     children,
     tableRows,
 }) => {
-    const router = useRouter();
     const params = useParams();
 
     const itsRegisterInventory =
@@ -31,7 +30,10 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             return;
         }
         const workerId = tableRows.find((el) => el.id === id)?.worker.id;
-        router.push(`/workers/${workerId}?which=docs`);
+        window.open(
+            `https://${window.location.host}/workers/${workerId}?which=docs`,
+            '_blank'
+        );
     };
 
     return (
