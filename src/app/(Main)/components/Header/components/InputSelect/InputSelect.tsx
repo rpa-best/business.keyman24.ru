@@ -12,7 +12,6 @@ import Cookies from 'universal-cookie';
 import { useRouter } from 'next/navigation';
 import { SelectList } from 'app/(Main)/components/Header/components/InputSelect/List';
 import clsx from 'clsx';
-import { useAllowedPath } from 'hooks/useDeniedPath';
 
 import scss from './InputSelect.module.scss';
 
