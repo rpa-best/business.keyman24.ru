@@ -145,7 +145,10 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
                     className={scss.input_wrapper}
                 >
                     <input
-                        onFocus={() => setVisible(true)}
+                        onFocus={() => {
+                            setVisible(true);
+                            setInputValue('');
+                        }}
                         tabIndex={tabIndex}
                         autoComplete={autoComplete as string}
                         className={inputClass}

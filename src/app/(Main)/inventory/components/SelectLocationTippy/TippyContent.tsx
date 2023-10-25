@@ -93,6 +93,7 @@ export const TippyContent: React.FC<TippyContentProps> = ({
                 return l.id !== id;
             })
         );
+        setSelectedValue(undefined);
         unsavedChanges.current = true;
     };
 
@@ -137,8 +138,6 @@ export const TippyContent: React.FC<TippyContentProps> = ({
             <div style={{ position: 'relative' }}>
                 <p className={scss.tippy_title}>Укажите локацию</p>
                 <InputSelect
-                    clearable
-                    showPrevValue={false}
                     needErrorLabel={false}
                     placeholder="Выберите локацию"
                     listValues={listValues}
