@@ -8,14 +8,8 @@ import React, {
     useMemo,
     memo,
 } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 
-import {
-    IHeader,
-    ITableContext,
-    TableProps,
-    TableRows,
-} from 'components/Table/types';
+import { IHeader, ITableContext, TableProps } from 'components/Table/types';
 import { Paginator } from 'components/Table/Paginator';
 import { ColumnHeader } from 'components/Table/ColumnHeader';
 import { useResizeWidth } from 'hooks/useResizeWidth';

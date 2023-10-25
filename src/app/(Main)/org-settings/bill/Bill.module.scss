@@ -33,15 +33,13 @@
 
 .service_constructor {
   @include fullHd {
-    display: flex;
-    flex-flow: row wrap;
-    column-gap: 30px;
     & .range_wrapper {
       width: calc(50% - 30px);
     }
   }
   margin: 20px 0;
-  column-count: 2;
+  display: flex;
+  flex-flow: row wrap;
   column-gap: 30px;
   width: 100%;
   background: rgba(255, 255, 255, 0.01);
@@ -75,15 +73,40 @@
 .range_wrapper {
   min-width: calc(50% - 30px);
   margin-bottom: 10px;
-  page-break-inside: avoid;
-  @include thousendWidth {
+  @include phoneOrTablet {
     width: 100%;
   }
 }
 
 .card_item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
   @include MontserratRegular(18px);
   color: white;
+  & svg {
+
+    margin-bottom: 2px;
+    &:hover {
+      color: $accent-color;
+    }
+  }
+}
+
+.tippy {
+  height: 35px;
+  width: max-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $dark-main;
+  border-radius: 5px;
+  & p {
+    @include  MontserratRegular(18px);
+    color: white;
+  }
 }
 
 .price_wrapper {
@@ -105,6 +128,18 @@
   }
   @include phone {
     font-size: 20px;
+  }
+}
+
+.small_price {
+  @include MontserratSemiBold(16px);
+  font-weight: 300;
+  margin-left: 10px;
+  @include phoneOrTablet {
+    font-size: 14px;
+  }
+  & span {
+    color: $accent-color;
   }
 }
 

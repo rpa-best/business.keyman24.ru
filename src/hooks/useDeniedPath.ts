@@ -27,12 +27,6 @@ export const useAllowedPath = (
             return;
         }
         const fetchData = async () => {
-            if (head === 'inventory/') {
-                const params = new URLSearchParams();
-                params.set('offset', '0');
-                params.set('limit', '1');
-                return await allowedPath(head, orgId, params);
-            }
             return await allowedPath(head, orgId);
         };
         if (head === '/') {

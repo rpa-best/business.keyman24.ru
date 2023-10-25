@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/serverIndex';
 import { $clientAuth, $host } from 'http/clientIndex';
 import * as T from 'http/types';
@@ -80,7 +80,7 @@ export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
     orgId
 ) => {
     const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}business/${orgId}/` + path,
+        `${process.env.NEXT_PUBLIC_API_URL}business/${orgId}/${path}?offset=0&limit=1`,
         {
             method: 'HEAD',
             headers: {
@@ -95,14 +95,9 @@ export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
     return link;
 };
 
-export const allowedPath: T.AllowedPath = async (path, org, query) => {
-    const res = await $clientAuth.head(`business/${org}/${path}`, {
-        params: query,
-    });
-    return res.status === 200;
-};
-
-export const allowedPathServer: T.AllowedPath = async (path, org) => {
-    const res = await $serverAuth.head(`business/${org}/${path}`);
+export const allowedPath: T.AllowedPath = async (path, org) => {
+    const res = await $clientAuth.head(
+        `business/${org}/${path}?offset=0&limit=1`
+    );
     return res.status === 200;
 };

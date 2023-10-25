@@ -4,9 +4,9 @@ import { onHide, onMount } from 'utils/TippyHelper';
 import { useSpring } from 'framer-motion';
 import { TippyContent } from 'app/(Main)/inventory/components/SelectLocationTippy/TippyContent';
 import { IInventory } from 'http/types';
+import { useSearchParams } from 'next/navigation';
 
 import scss from './SelectLocationInput.module.scss';
-import { useSearchParams } from 'next/navigation';
 
 export const SelectLocationTippy = ({
     inventory,

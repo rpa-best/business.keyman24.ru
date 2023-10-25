@@ -31,6 +31,11 @@ export const options: ChartOptions<'pie'> = {
     color: 'rgba(255, 255, 255)',
     maintainAspectRatio: true,
     responsive: true,
+    plugins: {
+        legend: {
+            position: 'right',
+        },
+    },
 };
 
 export const PieChart: React.FC<ChartProps> = ({

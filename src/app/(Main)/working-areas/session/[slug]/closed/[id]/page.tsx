@@ -8,6 +8,7 @@ import { BackButton } from 'components/UI/Buttons/BackButton';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 
 import scss from './ClosedPage.module.scss';
+import { TableWrapper } from 'app/(Main)/working-areas/session/[slug]/closed/[id]/TableWrapper';
 
 interface ClosedSessionProps {
     params: { id: string; slug: string };
@@ -74,7 +75,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                 <BackButton skipWord>Назад</BackButton>
             </div>
             {modifiedLog.length !== 0 ? (
-                <Table tableData={modifiedLog} setTableData={[] as any}>
+                <TableWrapper tableRows={modifiedLog}>
                     {!itsRegisterInventory && (
                         <Column header="Работник" field="workerName" />
                     )}
@@ -92,7 +93,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                     ) : (
                         (null as any)
                     )}
-                </Table>
+                </TableWrapper>
             ) : (
                 <h2 className={scss.empty}>
                     В этой сессии ничего не происходило
