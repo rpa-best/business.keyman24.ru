@@ -563,11 +563,7 @@ export type HeadCheckMiddleWare = (
     orgId: number
 ) => Promise<string | void>;
 
-export type AllowedPath = (
-    path: string,
-    org: string,
-    query?: any
-) => Promise<boolean>;
+export type AllowedPath = (path: string, org: string) => Promise<boolean>;
 
 export type GetGroupAdminOrgPermissions = (
     orgId: number

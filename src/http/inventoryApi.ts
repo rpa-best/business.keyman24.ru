@@ -20,6 +20,8 @@ export const getInventories: T.GetInventories = async (
     query.set('limit', '25');
     query.set('offset', offset.toString());
 
+    console.log('test');
+
     if (location) {
         if (location === 'Все') {
             query.delete('location');
