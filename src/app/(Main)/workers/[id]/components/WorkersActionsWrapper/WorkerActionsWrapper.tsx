@@ -39,8 +39,8 @@ export const WorkerActionsWrapper: React.FC<WorkerActionsWrapperProps> = ({
         <>
             {!workerUserData && (
                 <h2 className={scss.tooltip}>
-                    Чтобы выбрать права для сотрудника, нужно заполнить карточку
-                    c данными!
+                    Заполните обязательные поля чтобы создать учетную запись для
+                    сотрудника
                 </h2>
             )}
             <WorkerEditForm

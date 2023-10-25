@@ -40,6 +40,9 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
+
+    const required = workerUser === null ? '*' : '';
+
     const onSubmit = async (values: WorkerFormValuesType) => {
         setLoading(true);
         const tel = values.phone.replace(/[()-]/g, '');
@@ -159,7 +162,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                             autoComplete="new-password"
                             onBlur={handleBlur}
                             placeholder="-"
-                            label="Почта"
+                            label={`Почта${required}`}
                             handleError={touched.username && errors.username}
                             value={values.username}
                             name="username"
@@ -168,7 +171,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                     </div>
                     <div className={scss.worker_card_input_wrapper}>
                         <InputMask
-                            label="Введите номер телефона"
+                            label={`Номер телефона${required}`}
                             name="phone"
                             placeholder="+7(___)___-__-__"
                             handleError={errors.phone}
@@ -193,7 +196,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                             autoComplete="new-password"
                             onBlur={handleBlur}
                             type="password"
-                            label="Пароль"
+                            label={`Пароль${required}`}
                             placeholder="Введите пароль"
                             value={values.password ?? ''}
                             handleError={
@@ -210,7 +213,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                             autoComplete="off"
                             type="password"
                             onBlur={handleBlur}
-                            label="Подтверждение пароля"
+                            label={`Подтвердите пароль${required}`}
                             placeholder="Введите пароль ещё раз"
                             value={values.confirmPassword ?? ''}
                             handleError={
