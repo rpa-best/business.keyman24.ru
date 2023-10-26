@@ -3,11 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 
-import { IOrganization, IUser } from 'store/types';
+import { IUser } from 'store/types';
 import { getOrganizations } from 'http/organizationApi';
 import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
 import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown';
-import { BurgerMenu } from 'app/(Main)/components/Header/components/BurgerMenu';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
 import { getUser } from 'http/userApi';

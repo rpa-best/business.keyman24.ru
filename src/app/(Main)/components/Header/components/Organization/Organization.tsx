@@ -22,16 +22,7 @@ export const Organization: React.FC<OrganizationProps> = ({
     organizations,
     size = 'tablet',
 }) => {
-    const router = useRouter();
     const [path, setPath] = useState(false);
-
-    useEffect(() => {
-        const orgId = cookie.get('orgId');
-        if (!orgId) {
-            cookie.set('orgId', organizations[0]?.id);
-            router.refresh();
-        }
-    }, []);
 
     useEffect(() => {
         if (size === 'pc') {
