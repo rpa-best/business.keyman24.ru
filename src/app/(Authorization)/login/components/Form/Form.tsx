@@ -3,7 +3,11 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { motion } from 'framer-motion';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
 
+import { getClientOrganizations, getOrganizations } from 'http/organizationApi';
 import { Input } from 'components/UI/Inputs/Input';
 import { IFormTypes } from 'app/(Authorization)/login/components/Form/Form.types';
 import { FormValidate } from 'app/(Authorization)/login/components/Form/Form.utils';
@@ -14,8 +18,8 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from 'components/Spinner';
 
 import scss from './Form.module.scss';
-import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
+
+const cookie = new Cookies();
 
 export const Form = () => {
     const [loading, setLoading] = useState(false);
@@ -27,6 +31,9 @@ export const Form = () => {
         setLoading(true);
         userAuth(values)
             .then(() => {
+                getClientOrganizations().then((d) => {
+                    cookie.set('orgId', d[0].id.toString());
+                });
                 router.prefetch('/');
                 getUser().then((user) => {
                     router.replace('/');
