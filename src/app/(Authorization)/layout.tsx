@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import { montserrat } from 'font/montserrat';
 
+import 'react-toastify/dist/ReactToastify.css';
 import 'scss/utils.scss';
 import 'scss/_reset.scss';
 
@@ -18,7 +20,10 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={montserrat.className}>{children}</body>
+            <body className={montserrat.className}>
+                {children}
+                <ToastContainer />
+            </body>
         </html>
     );
 }
