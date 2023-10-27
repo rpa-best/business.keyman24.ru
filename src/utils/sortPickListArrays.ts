@@ -4,8 +4,8 @@ export function sortArr(arr: DefaultElem[]) {
     if (arr?.length === 0 || !arr) {
         return [];
     }
-    return arr.sort((a, b) => {
-        // Сравниваем значения поля "name" без учета регистра
+
+    return [...arr].sort((a, b) => {
         if (a.name && b.name) {
             const nameA = a.name.toLowerCase();
             const nameB = b.name.toLowerCase();
@@ -26,8 +26,8 @@ export function sortByCustomDesc(arr: DefaultElem[]) {
     if (arr?.length === 0 || !arr) {
         return [];
     }
-    return arr.sort((a, b) => {
-        // Сравниваем значения поля "name" без учета регистра
+
+    return [...arr].sort((a, b) => {
         if (a.customDesc && b.customDesc) {
             const nameA = a.customDesc.toLowerCase();
             const nameB = b.customDesc.toLowerCase();

@@ -1,6 +1,13 @@
-export interface IFormTypes {
+export interface ILoginFormTypes {
     username: string;
     password: string;
 }
 
-export interface IFormValidateErrors extends Partial<IFormTypes> {}
+export type IPinCodeFormTypes = string[];
+
+export interface IPassFormTypes {
+    password: string;
+    confirmPassword: string;
+}
+
+export interface IFormValidateErrors extends Partial<ILoginFormTypes> {}

@@ -64,6 +64,13 @@ export type GetUserType = () => Promise<IUser | string | undefined>;
 
 export type UpdateTokens = () => Promise<boolean>;
 
+export type ChangePassword = (
+    pvc: string,
+    email: string,
+    password1: string,
+    password2: string
+) => Promise<boolean>;
+
 export type GetOrganizations = () => Promise<IOrganization[]>;
 
 export type GetOrganizationContractors = (

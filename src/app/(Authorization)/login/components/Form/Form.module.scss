@@ -27,7 +27,7 @@
   width: 510px;
   background:rgba(0, 0, 0, 0.30);
   @include phone {
-    padding: 35px;
+    padding: 35px 25px;
   }
 }
 
@@ -38,6 +38,15 @@
   cursor: pointer;
   @include phone {
     margin-top: 18px;
+  }
+}
+
+.form_send_again {
+  @extend .form_forgot_password;
+  text-decoration: none;
+  margin-top: 10px;
+  @include phone {
+    margin-top: 10px;
   }
 }
 
@@ -64,7 +73,7 @@
   @include MontserratBold(20px);
   letter-spacing: -0.03em;
   margin: 29px 0 10px;
-  padding: 19px 0;
+  padding: 18px 0;
   border-radius: 10px;
   cursor: pointer;
   transition: .2s all ease-in-out;
@@ -88,6 +97,39 @@
   }
 }
 
+.forgot_title {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 25px;
+  & h1 {
+    @include MontserratMediumBold(28px);
+    letter-spacing: -0.02em;
+    margin: 0 auto;
+    @include phone {
+      font-size: 24px;
+    }
+  }
+  & svg {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 0;
+    color: $gray;
+    cursor: pointer;
+    transform: rotate(180deg);
+  }
+}
+
+.pin_description {
+  @include MontserratRegular(16px);
+  color: $gray-semi;
+  margin-bottom: 15px;
+  & span {
+    color: white;
+    text-decoration: underline;
+  }
+}
 
 .accept_description {
   @include MontserratRegular(14px);

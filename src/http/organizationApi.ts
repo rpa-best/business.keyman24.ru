@@ -22,7 +22,7 @@ export const getOrganizations: T.GetOrganizations = async () => {
 
 export const getClientOrganizations: T.GetOrganizations = async () => {
     const response: AxiosResponse<IOrganization[]> = await $clientAuth.get(
-        'business/orgs/'
+        'business/orgs/?limit=1&offset=0'
     );
     if (response.status !== 200) {
         throw new Error('Failed to org/fetchByIdOrg.');

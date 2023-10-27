@@ -73,6 +73,33 @@ export const updateTokens: T.UpdateTokens = async () => {
     }
 };
 
+export const checkEmail = async (email: string) => {
+    const res = await $clientAuth.post(
+        'account/check-email/?place=change_password',
+        {
+            email,
+        }
+    );
+
+    return res.data;
+};
+
+export const changePassword: T.ChangePassword = async (
+    pvc,
+    email: string,
+    password1,
+    password2
+) => {
+    const res = await $clientAuth.post('account/change-password/', {
+        email,
+        password1,
+        password2,
+        pvc,
+    });
+
+    return res.data;
+};
+
 export const headCheckPathsMiddleware: T.HeadCheckMiddleWare = async (
     path,
     link,
