@@ -10,6 +10,10 @@ import { NameInputSelect } from 'app/(Main)/components/NameInputSelect';
 import { getClientInventories } from 'http/inventoryApi';
 import { IInventory, IResponse } from 'http/types';
 import { useSearchParams } from 'next/navigation';
+import FileSaver from 'file-saver';
+import Cookies from 'universal-cookie';
+
+const cookie = new Cookies();
 
 interface ActionsButtonsProps {
     setVisible: (v: boolean) => void;
@@ -21,7 +25,8 @@ export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
     setVisible,
 }) => {
     const searchParams = useSearchParams();
-    const name = searchParams.get('name') ?? encodeURI('Все');
+    const name = searchParams.get('name') ?? 'Все';
+    const location = searchParams.get('location') ?? 'Все';
 
     const [inventories, setInventories] = useState<IResponse<IInventory>>();
 
@@ -35,6 +40,17 @@ export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
         });
     }, [name]);
 
+    const handleDownloadPdf = async () => {
+        getClientInventories(name, location, true).then((d) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(d as any);
+            reader.onloadend = function () {
+                const base64data = reader.result;
+                FileSaver.saveAs(base64data as string, 'Наклейки ШК');
+            };
+        });
+    };
+
     return (
         <>
             <div className={scss.inventory_actions_buttons_wrapper}>
@@ -47,7 +63,11 @@ export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
                     />
                 </div>
                 <div className={scss.generate_button_wrapper}>
-                    <Button nowrap onClick={() => {}} type="button">
+                    <Button
+                        nowrap
+                        onClick={() => handleDownloadPdf()}
+                        type="button"
+                    >
                         Скачать наклейки ШК
                     </Button>
                     <Button
