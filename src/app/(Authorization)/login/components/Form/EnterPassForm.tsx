@@ -21,17 +21,25 @@ import scss from 'app/(Authorization)/login/components/Form/Form.module.scss';
 
 interface EnterPassForm {
     email: string;
-    setTypeAndEmail: (email: string, type: 'login') => void;
+    setTypeAndEmail: (email: string, type: 'forgot' | 'login') => void;
+    setPasswords: React.Dispatch<
+        React.SetStateAction<{ password1: string; password2: string }>
+    >;
 }
 
 export const EnterPassForm: React.FC<EnterPassForm> = ({
     setTypeAndEmail,
+    setPasswords,
     email,
 }) => {
     const [loading, setLoading] = useState(false);
 
     const onSubmit = (values: IPassFormTypes) => {
-        setTypeAndEmail(email, 'login');
+        setTypeAndEmail(email, 'forgot');
+        setPasswords({
+            password1: values.password,
+            password2: values.confirmPassword,
+        });
     };
 
     const {

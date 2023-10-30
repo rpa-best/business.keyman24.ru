@@ -22,7 +22,7 @@ const cookie = new Cookies();
 
 interface LoginFormProps {
     email: string;
-    setTypeAndEmail: (email: string, type: 'forgot') => void;
+    setTypeAndEmail: (email: string, type: 'enterPass') => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
@@ -99,9 +99,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     warningToastConfig
                 );
             } else {
+                setLoading(true);
                 checkEmail(values.username)
                     .then(() => {
-                        setTypeAndEmail(values.username, 'forgot');
+                        setTypeAndEmail(values.username, 'enterPass');
+                        setLoading(false);
                     })
                     .catch((e) => {
                         if (e instanceof AxiosError) {
