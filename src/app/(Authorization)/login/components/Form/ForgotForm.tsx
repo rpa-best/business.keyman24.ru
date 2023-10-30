@@ -11,22 +11,44 @@ import {
 
 import scss from 'app/(Authorization)/login/components/Form/Form.module.scss';
 import { changePassword, checkEmail } from 'http/userApi';
+import { toast } from 'react-toastify';
+import { errorToastOptions, successToastConfig } from 'config/toastConfig';
+import { AxiosError } from 'axios';
 
 interface ForgotFormProps {
     setTypeAndEmail: (email: string, type: 'login' | 'enterPass') => void;
     email: string;
+    passwords: { password1: string; password2: string };
 }
 
 export const ForgotForm: React.FC<ForgotFormProps> = ({
     setTypeAndEmail,
     email,
+    passwords: { password1, password2 },
 }) => {
     const [timer, setTimer] = useState(30);
     const [sended, setSended] = useState(false);
 
     const onSubmit = () => {
-        setTypeAndEmail(email, 'enterPass');
-        /*changePassword(values.join(''), email, 'test', 'test');*/
+        changePassword(values.join(''), email, password1, password2)
+            .then(() => {
+                setTypeAndEmail(email, 'login');
+                toast('Пароль успешно изменён', successToastConfig);
+            })
+            .catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (
+                        e.response?.data.password1[0][0] ===
+                        'Введённый пароль слишком широко распространён.'
+                    ) {
+                        toast(
+                            'Введённый пароль слишком простой',
+                            errorToastOptions
+                        );
+                        setTypeAndEmail(email, 'enterPass');
+                    }
+                }
+            });
     };
 
     const {

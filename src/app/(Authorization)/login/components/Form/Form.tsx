@@ -12,6 +12,10 @@ export const Form = () => {
     const [formType, setFormType] = useState<'login' | 'forgot' | 'enterPass'>(
         'login'
     );
+    const [passwords, setPasswords] = useState({
+        password1: '',
+        password2: '',
+    });
     const [email, setEmail] = useState('');
     const setTypeAndEmail = (email: string, type: typeof formType) => {
         setEmail(email);
@@ -31,12 +35,14 @@ export const Form = () => {
                 return (
                     <ForgotForm
                         setTypeAndEmail={setTypeAndEmail}
+                        passwords={passwords}
                         email={email}
                     />
                 );
             case 'enterPass':
                 return (
                     <EnterPassForm
+                        setPasswords={setPasswords}
                         setTypeAndEmail={setTypeAndEmail}
                         email={email}
                     />
