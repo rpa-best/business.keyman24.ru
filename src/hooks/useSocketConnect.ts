@@ -63,7 +63,7 @@ export const useSocketConnect: SocketConnectFunc = ({
     useEffect(() => {
         const { message } = socketStore;
         if (message?.type === 'error') {
-            toast(message?.data.error[0].name, errorToastOptions);
+            toast(message?.data.error?.name, errorToastOptions);
         }
     }, [socketStore.message]);
 

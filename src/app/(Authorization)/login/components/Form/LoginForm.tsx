@@ -16,7 +16,7 @@ import { IUser } from 'store/types';
 import { LoginFormValidate } from 'app/(Authorization)/login/components/Form/Form.utils';
 
 import scss from 'app/(Authorization)/login/components/Form/Form.module.scss';
-import { warningToastConfig } from 'config/toastConfig';
+import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
 
 const cookie = new Cookies();
 
@@ -79,6 +79,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         handleBlur,
         errors,
         handleSubmit,
+        setFieldTouched,
         setErrors,
         touched,
     } = useFormik<ILoginFormTypes>({
@@ -98,8 +99,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     warningToastConfig
                 );
             } else {
-                setTypeAndEmail(values.username, 'forgot');
-                checkEmail(values.username);
+                checkEmail(values.username)
+                    .then(() => {
+                        setTypeAndEmail(values.username, 'forgot');
+                    })
+                    .catch((e) => {
+                        if (e instanceof AxiosError) {
+                            toast(
+                                e.response?.data.email[0].email.name,
+                                errorToastOptions
+                            );
+                        }
+                    });
             }
         });
     };
