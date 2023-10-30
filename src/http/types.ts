@@ -512,7 +512,9 @@ export type GetInventories = (
 ) => Promise<IResponse<IInventory>>;
 
 export type GetClientInventories = (
-    name: string
+    name: string,
+    location?: string,
+    isPdf?: boolean
 ) => Promise<IResponse<IInventory>>;
 
 export type GetInventoryHistory = (
@@ -626,7 +628,9 @@ export type GetLocationKeys = (
 
 export type GetLocationClientKeys = (
     locId: number,
-    objId: number
+    objId: number,
+    name?: string,
+    pdf?: boolean
 ) => Promise<IResponse<LocKeysResponse>>;
 
 export type CreateLocationKeys = (

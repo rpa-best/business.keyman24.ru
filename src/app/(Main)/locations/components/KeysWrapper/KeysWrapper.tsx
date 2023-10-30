@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import {
+    useParams,
+    usePathname,
+    useRouter,
+    useSearchParams,
+} from 'next/navigation';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { Table } from 'components/Table';
@@ -9,7 +14,11 @@ import { Column } from 'components/Table/Column';
 import { IData } from 'app/(Main)/locations/types';
 import { RowForm } from 'app/(Main)/locations/components/RowForm';
 import { PreviewRowsList } from 'app/(Main)/locations/components/PreviewRowsList';
-import { createLocationKeys, deleteLocationKey } from 'http/locationsApi';
+import {
+    createLocationKeys,
+    deleteLocationKey,
+    getLocationClientKeys,
+} from 'http/locationsApi';
 import { LocKeyBody, LocKeysResponse } from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
@@ -21,6 +30,8 @@ import { toast } from 'react-toastify';
 import { ToastPrice } from 'components/ToastPrice';
 
 import scss from './KeysWrapper.module.scss';
+import { getClientInventories } from 'http/inventoryApi';
+import FileSaver from 'file-saver';
 
 interface KeysWrapperProps {
     count: number;
@@ -30,8 +41,10 @@ interface KeysWrapperProps {
 export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     const pathname = usePathname();
     const router = useRouter();
-    const pathName = usePathname();
     const params = useParams();
+    const query = useSearchParams();
+
+    const name = query.get('name') ?? 'Все';
 
     const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
@@ -112,14 +125,27 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                 setPreviewKeys([]);
             })
             .finally(() => {
-                revalidate(pathName);
+                revalidate(pathname);
                 setLoading(false);
                 setVisible(false);
             });
     };
 
     const handleRowClick = (id: number) => {
-        router.push(`${pathName}/history/${id}`);
+        router.push(`${params}/history/${id}`);
+    };
+
+    const handleDownloadPdf = async () => {
+        getLocationClientKeys(+params.locId, +params.objId, name, true).then(
+            (d) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(d as any);
+                reader.onloadend = function () {
+                    const base64data = reader.result;
+                    FileSaver.saveAs(base64data as string, 'Наклейки ШК');
+                };
+            }
+        );
     };
 
     return (
@@ -129,7 +155,10 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     <div className={scss.actions_buttons_wrapper}>
                         <div className={scss.action_button_solo}>
                             <div className={scss.download_button}>
-                                <Button onClick={() => {}} type="button">
+                                <Button
+                                    onClick={() => handleDownloadPdf()}
+                                    type="button"
+                                >
                                     Скачать наклейки ШК
                                 </Button>
                             </div>

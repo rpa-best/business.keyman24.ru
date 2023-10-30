@@ -47,9 +47,19 @@ export const getInventories: T.GetInventories = async (
     return res.data;
 };
 
-export const getClientInventories: T.GetClientInventories = async (name) => {
+export const getClientInventories: T.GetClientInventories = async (
+    name,
+    location,
+    isPdf = false
+) => {
     const query = new URLSearchParams();
     const searchName = decodeURI(name);
+
+    if (isPdf) {
+        query.set('format', 'pdf');
+    } else {
+        query.delete('format');
+    }
 
     if (name) {
         if (searchName === 'Все') {
@@ -58,10 +68,19 @@ export const getClientInventories: T.GetClientInventories = async (name) => {
             query.set('search', searchName);
         }
     }
+
+    if (location) {
+        if (location === 'Все') {
+            query.delete('location');
+        } else {
+            query.set('location', location);
+        }
+    }
+
     const res: AxiosResponse<ReturnType<T.GetInventories>> =
         await $clientAuth.get(
             `business/${orgId}/inventory/?type=inventory&ordering=id`,
-            { params: query }
+            { params: query, responseType: isPdf ? 'blob' : 'json' }
         );
 
     return res.data;

@@ -115,11 +115,30 @@ export const getLocationKeys: T.GetLocationKeys = async (
 
 export const getLocationClientKeys: T.GetLocationClientKeys = async (
     locId,
-    objId
+    objId,
+    name,
+    pdf
 ) => {
+    const query = new URLSearchParams();
+
+    if (name) {
+        if (decodeURI(name) === 'Все') {
+            query.delete('search');
+        } else {
+            query.set('search', name);
+        }
+    }
+
+    if (pdf) {
+        query.set('format', 'pdf');
+    } else {
+        query.delete('format');
+    }
+
     const res: AxiosResponse<ReturnType<T.GetLocationKeys>> =
         await $clientAuth.get(
-            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name&type=keys`
+            `business/${orgId}/location/${locId}/object/${objId}/inventory/?ordering=name&type=keys`,
+            { params: query, responseType: pdf ? 'blob' : 'json' }
         );
 
     return res.data;
