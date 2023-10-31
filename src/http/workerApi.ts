@@ -8,7 +8,7 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async (orgId) => {
+export const getWorkers: T.GetWorkers = async () => {
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
         `business/${orgId}/worker/`
     );

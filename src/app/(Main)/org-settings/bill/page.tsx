@@ -3,12 +3,11 @@ import { cookies } from 'next/headers';
 import { getOrgById, getServerPrice, getServices } from 'http/organizationApi';
 import { SubConstructor } from 'app/(Main)/org-settings/bill/components/SubConstructor';
 import { IRate } from 'http/types';
-
-import scss from './Bill.module.scss';
 import { PaymentButton } from 'app/(Main)/org-settings/bill/components/PaymentButton/PaymentButton';
 import { Modal } from 'components/Modal';
 import { ModalPayment } from 'app/(Main)/org-settings/bill/components/ModalPayment';
-import { AxiosError } from 'axios';
+
+import scss from './Bill.module.scss';
 
 const BillPage = async () => {
     const cookieStore = cookies();
