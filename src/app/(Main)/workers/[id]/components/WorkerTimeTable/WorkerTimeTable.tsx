@@ -23,11 +23,13 @@ export const WorkerTimeTable: React.FC<WorkerTimeTableProps> = ({ data }) => {
         return item[1].in.length !== 0;
     });
 
+    console.log(test);
+
     const rowData = test.map((i) => {
         const data = `${i[0].slice(8)}.${i[0].slice(5, 7)}.${i[0].slice(0, 4)}`;
         const actions = i[1];
         const actionIn = actions.in.at(-1)?.slice(11, 16);
-        const actionOut = actions.out[0].slice(11, 16);
+        const actionOut = actions?.out[0]?.slice(11, 16);
         return {
             common: [data, actionIn, actionOut, actions.workedTime],
             more: i[1],

@@ -6,6 +6,7 @@ import { BackButton } from 'components/UI/Buttons/BackButton';
 import { HistoryComponent } from 'app/(Main)/components/HistoryComponent';
 
 import scss from './KeyHistoryPage.module.scss';
+import { AxiosError } from 'axios';
 
 interface KeyPageProps {
     searchParams: { offset: string };
