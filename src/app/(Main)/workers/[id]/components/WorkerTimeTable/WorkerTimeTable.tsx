@@ -23,8 +23,6 @@ export const WorkerTimeTable: React.FC<WorkerTimeTableProps> = ({ data }) => {
         return item[1].in.length !== 0;
     });
 
-    console.log(test);
-
     const rowData = test.map((i) => {
         const data = `${i[0].slice(8)}.${i[0].slice(5, 7)}.${i[0].slice(0, 4)}`;
         const actions = i[1];
