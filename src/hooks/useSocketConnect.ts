@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import { getWorkerDocs } from 'http/workerApi';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { useSocketStore } from 'store/useSocketStore';
-import Cookies from 'universal-cookie';
 import revalidate from 'utils/revalidate';
 import { errorToastOptions } from 'config/toastConfig';
-
-const cookie = new Cookies();
 
 type UseSocketConnectProps = {
     setLoading: (b: boolean) => void;
@@ -73,12 +70,6 @@ export const useSocketConnect: SocketConnectFunc = ({
             onSocketSuccess(socketStore.message);
         }
     }, [areaId, sessionId, socketStore.message]);
-
-    useEffect(() => {
-        if (errors) {
-            toast('Документы просрочены', errorToastOptions);
-        }
-    }, [errors]);
 
     return {
         worker: worker as IWorker,
