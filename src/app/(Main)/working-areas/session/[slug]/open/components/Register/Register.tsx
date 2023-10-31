@@ -29,7 +29,7 @@ import { Column } from 'components/Table/Column';
 
 import scss from './Register.module.scss';
 import { AxiosError } from 'axios';
-import { getParamsId } from 'app/(Main)/working-areas/helpers';
+import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import revalidate from 'utils/revalidate';
 import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 
@@ -43,6 +43,10 @@ export const Register: React.FC<RegisterProps> = ({
 }) => {
     const router = useRouter();
     const path = usePathname();
+    const params = useParams();
+
+    const itsRegisterInventory =
+        getParamsType(params.slug) === 'register_inventory';
 
     const [sessionLogData, setSessionLogData] =
         useState<ModifiedRegisterLog[]>(sessionLog);
@@ -55,8 +59,6 @@ export const Register: React.FC<RegisterProps> = ({
 
     const [loading, setLoading] = useState(false);
     const socket = useRef<WebSocket>();
-
-    const params = useParams();
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
@@ -158,6 +160,17 @@ export const Register: React.FC<RegisterProps> = ({
             .finally(() => setLoading(false));
     };
 
+    const handleRowClick = (id: number) => {
+        if (itsRegisterInventory) {
+            return;
+        }
+        const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
+        window.open(
+            `https://${window.location.host}/workers/${workerId}?which=docs`,
+            '_blank'
+        );
+    };
+
     return (
         <div>
             <div className={scss.button_register_wrapper}>
@@ -198,6 +211,7 @@ export const Register: React.FC<RegisterProps> = ({
                     </div>
                     <div className={scss.working_view_table}>
                         <Table
+                            handleRowClick={handleRowClick}
                             tableData={sessionLogData}
                             setTableData={() => {}}
                         >
@@ -209,7 +223,11 @@ export const Register: React.FC<RegisterProps> = ({
                 </div>
             )}
             {!selectedWorker && (
-                <Table tableData={sessionLogData} setTableData={() => {}}>
+                <Table
+                    handleRowClick={handleRowClick}
+                    tableData={sessionLogData}
+                    setTableData={() => {}}
+                >
                     <Column header="Работник" field="workerName" />
                     <Column header="Дата" field="date" />
                     <Column header="Тип" field="modeName" />

@@ -13,7 +13,7 @@ import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { useSocketConnect } from 'hooks/useSocketConnect';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
-import { getParamsId } from 'app/(Main)/working-areas/helpers';
+import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { sendSessionAction } from 'http/workingAreaApi';
 import { useSocketStore } from 'store/useSocketStore';
 import revalidate from 'utils/revalidate';
@@ -29,6 +29,10 @@ export const Security: React.FC<SecurityProps> = ({
 }) => {
     const path = usePathname();
     const router = useRouter();
+    const params = useParams();
+
+    const itsRegisterInventory =
+        getParamsType(params.slug) === 'register_inventory';
 
     const socketStore = useSocketStore((state) => state);
 
@@ -49,8 +53,6 @@ export const Security: React.FC<SecurityProps> = ({
             router.replace(`/working-areas/session/security-${currentAreaId}`);
         }
     }, [socketStore.message]);
-
-    const params = useParams();
 
     useEffect(() => {
         if (socketStore.message?.type === 'success') {
@@ -111,6 +113,17 @@ export const Security: React.FC<SecurityProps> = ({
         );
     };
 
+    const handleRowClick = (id: number) => {
+        if (itsRegisterInventory) {
+            return;
+        }
+        const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
+        window.open(
+            `https://${window.location.host}/workers/${workerId}?which=docs`,
+            '_blank'
+        );
+    };
+
     return (
         <>
             <div className={scss.page_title_with_table_back_button}>
@@ -149,6 +162,7 @@ export const Security: React.FC<SecurityProps> = ({
                     )}
                     <div className={scss.working_view_table}>
                         <Table
+                            handleRowClick={handleRowClick}
                             tableData={sessionLogData}
                             setTableData={setSessionLogData}
                         >

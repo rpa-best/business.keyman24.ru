@@ -70,7 +70,7 @@ export const getSessions: T.GetAreaSessions = async (
     archive ? query.set('is_archive', archive) : '';
     const res: AxiosResponse<ReturnType<T.GetAreaSessions>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/${areaId}/session/?ordering=-status`,
+            `business/${orgId}/working_area/${areaId}/session/?ordering=-end_date`,
             {
                 params: query,
             }

@@ -17,7 +17,7 @@ import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 import { useSocketConnect } from 'hooks/useSocketConnect';
-import { getParamsId } from 'app/(Main)/working-areas/helpers';
+import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { useSocketStore } from 'store/useSocketStore';
 
@@ -32,6 +32,9 @@ export const Key: React.FC<KeyProps> = ({
 }) => {
     const router = useRouter();
     const params = useParams();
+
+    const itsRegisterInventory =
+        getParamsType(params.slug) === 'register_inventory';
 
     const socketStore = useSocketStore((state) => state);
 
@@ -66,6 +69,17 @@ export const Key: React.FC<KeyProps> = ({
             currentSessionId,
             'key-' + getParamsId(params.slug),
             router
+        );
+    };
+
+    const handleRowClick = (id: number) => {
+        if (itsRegisterInventory) {
+            return;
+        }
+        const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
+        window.open(
+            `https://${window.location.host}/workers/${workerId}?which=docs`,
+            '_blank'
         );
     };
 
@@ -117,6 +131,7 @@ export const Key: React.FC<KeyProps> = ({
                 </div>
                 {sessionLog.length !== 0 && (
                     <Table
+                        handleRowClick={handleRowClick}
                         tableData={sessionLogData}
                         setTableData={setSessionLogData}
                     >
