@@ -177,7 +177,6 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                             handleError={errors.phone}
                             value={values.phone}
                             alwaysShowMask={true}
-                            autoFocus={true}
                             mask="+7(999)999-99-99"
                             onBlur={() => setFieldTouched('phone', true)}
                             onChange={(value: string) => {
