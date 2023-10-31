@@ -78,6 +78,7 @@ export const Register: React.FC<RegisterProps> = ({
                     };
                     setSessionLogData((log) => [newLog, ...log]);
                     revalidate(path);
+                    revalidate(`/workers/${selectedWorker?.id}?which=card`);
                     toast('Успешно', successToastConfig);
                 })
                 .catch((e: unknown) => {

@@ -53,7 +53,9 @@ export const Security: React.FC<SecurityProps> = ({
     const params = useParams();
 
     useEffect(() => {
-        setSended(false);
+        if (socketStore.message?.type === 'success') {
+            setSended(false);
+        }
     }, [socketStore.message]);
 
     useEffect(() => {
@@ -62,6 +64,9 @@ export const Security: React.FC<SecurityProps> = ({
             return;
         }
         if (sended) {
+            return;
+        }
+        if (message?.type === 'error') {
             return;
         }
         if (message && workerDocs) {
