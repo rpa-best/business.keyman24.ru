@@ -69,6 +69,7 @@ export const useSocketConnect: SocketConnectFunc = ({
 
     useEffect(() => {
         if (socketStore.message?.type === 'success') {
+            setErrors(false);
             onSocketSuccess(socketStore.message);
         }
     }, [areaId, sessionId, socketStore.message]);
