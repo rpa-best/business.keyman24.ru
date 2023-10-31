@@ -101,7 +101,7 @@ export const WorkerTables: React.FC<WorkerTablesProps> = ({
             {which === 'inventory' && (
                 <TableInventoryWrapper inventory={workerInventory} />
             )}
-            {which === 'time' && <WorkerTimeTable data={time} />}
+            {which === 'time' && <WorkerTimeTable data={time as IWorkerPlan} />}
         </>
     );
 };

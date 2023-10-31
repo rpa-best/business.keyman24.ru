@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 import { IWorkerPlan } from 'http/types';
@@ -9,30 +9,37 @@ import { TimeTableItem } from 'app/(Main)/workers/[id]/components/WorkerTimeTabl
 import scss from './WorkerTimeTable.module.scss';
 
 interface WorkerTimeTableProps {
-    data: IWorkerPlan | null;
+    data: IWorkerPlan;
 }
 
 export const WorkerTimeTable: React.FC<WorkerTimeTableProps> = ({ data }) => {
     const headerRef = useRef<HTMLDivElement>(null);
 
+    const test = useMemo(() => {
+        return Object.entries(data?.plan).filter((item) => {
+            return item[1].in.length !== 0;
+        });
+    }, [data?.plan]);
+
+    const rowData = useMemo(() => {
+        return test?.map((i) => {
+            const data = `${i[0].slice(8)}.${i[0].slice(5, 7)}.${i[0].slice(
+                0,
+                4
+            )}`;
+            const actions = i[1];
+            const actionIn = actions.in.at(-1)?.slice(11, 16);
+            const actionOut = actions?.out[0]?.slice(11, 16);
+            return {
+                common: [data, actionIn, actionOut, actions.workedTime],
+                more: i[1],
+            };
+        });
+    }, [test]);
+
     if (!data) {
         return null;
     }
-
-    const test = Object.entries(data.plan).filter((item) => {
-        return item[1].in.length !== 0;
-    });
-
-    const rowData = test.map((i) => {
-        const data = `${i[0].slice(8)}.${i[0].slice(5, 7)}.${i[0].slice(0, 4)}`;
-        const actions = i[1];
-        const actionIn = actions.in.at(-1)?.slice(11, 16);
-        const actionOut = actions?.out[0]?.slice(11, 16);
-        return {
-            common: [data, actionIn, actionOut, actions.workedTime],
-            more: i[1],
-        };
-    });
 
     const handleBodyScroll = (e: React.UIEvent<HTMLDivElement>) => {
         headerRef.current
