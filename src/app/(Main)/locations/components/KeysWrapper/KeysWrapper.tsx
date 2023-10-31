@@ -132,7 +132,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     };
 
     const handleRowClick = (id: number) => {
-        router.push(`${params}/history/${id}`);
+        router.push(`${pathname}/history/${id}`);
     };
 
     const handleDownloadPdf = async () => {
