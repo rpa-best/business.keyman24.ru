@@ -58,9 +58,11 @@ export interface IBalanceHistory {
 
 export type UserAuthType = (
     body: IUserAuthRequest
-) => Promise<IUserAuthResponse | string | undefined | unknown>;
+) => Promise<IUserAuthResponse>;
 
-export type GetUserType = () => Promise<IUser | string | undefined>;
+export type GetUserType = (
+    access: string
+) => Promise<IUser | string | undefined>;
 
 export type UpdateTokens = () => Promise<boolean>;
 
@@ -421,6 +423,22 @@ export interface LocationWorkerResponse {
     org: number;
     worker: IWorker;
 }
+
+export interface MainCardsData {
+    keyCount: number;
+    inventoryCount: number;
+    workerCount: number;
+    keyTaken: number;
+    inventoryTaken: number;
+    workerTaken: number;
+    keyGiven: number;
+    inventoryGiven: number;
+    workerGiven: number;
+}
+
+export type GetMainCardsStatistics = (
+    orgId: number
+) => Promise<IResponse<MainCardsData>>;
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 

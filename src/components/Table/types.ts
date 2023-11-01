@@ -41,6 +41,7 @@ export interface TableProps {
     paginatorData?: PaginatorData;
     rowClickable?: boolean;
     prefetch?: (id: number) => void;
+    errorRowIds?: number[];
     stopPropagation?: boolean;
 }
 

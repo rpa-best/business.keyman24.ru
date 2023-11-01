@@ -1,12 +1,12 @@
 import * as T from 'http/types';
-import { $serverAuth } from 'http/serverIndex';
+import { $serverAuth } from 'http/indexes/serverIndex';
 import { AxiosError, AxiosResponse } from 'axios';
 import {
     IAdminGroupPermission,
     IAdminPermission,
     IGroupPermission,
 } from 'http/types';
-import { $clientAuth } from 'http/clientIndex';
+import { $clientAuth } from 'http/indexes/clientIndex';
 
 import UniversalCookies from 'universal-cookie';
 

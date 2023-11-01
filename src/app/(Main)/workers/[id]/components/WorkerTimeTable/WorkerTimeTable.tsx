@@ -21,8 +21,6 @@ export const WorkerTimeTable: React.FC<WorkerTimeTableProps> = ({ data }) => {
         });
     }, [data?.plan]);
 
-    console.log(data);
-
     const rowData = useMemo(() => {
         return test?.map((i) => {
             const data = `${i[0].slice(8)}.${i[0].slice(5, 7)}.${i[0].slice(

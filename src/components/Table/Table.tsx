@@ -33,6 +33,7 @@ export const Table = memo(function MemoTable({
     handleEditClick,
     handleDeleteClick,
     stopPropagation,
+    errorRowIds = [],
     prefetch,
 }: TableProps) {
     const [loading, setLoading] = useState(false);
@@ -136,6 +137,13 @@ export const Table = memo(function MemoTable({
                                     <div
                                         onClick={() => onRowClick(item.id)}
                                         key={index}
+                                        style={{
+                                            background: errorRowIds.includes(
+                                                item.id
+                                            )
+                                                ? '#A13535'
+                                                : undefined,
+                                        }}
                                         className={rowClassName}
                                     >
                                         <Row
