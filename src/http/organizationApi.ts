@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
 import * as T from 'http/types';
 import { IOrganization } from 'store/types';
-import { $serverAuth } from 'http/serverIndex';
-import { $clientAuth } from 'http/clientIndex';
+import { $serverAuth } from 'http/indexes/serverIndex';
+import { $clientAuth } from 'http/indexes/clientIndex';
 import UniversalCookies from 'universal-cookie';
 
 const cookie = new UniversalCookies();

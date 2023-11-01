@@ -12,9 +12,10 @@ import { redirect } from 'next/navigation';
 import { getUser } from 'http/userApi';
 import { IService } from 'http/types';
 import { Organization } from 'app/(Main)/components/Header/components/Organization';
+import { HeaderNavTablet } from 'app/(Main)/components/Header/components/HeaderNavTablet/HeaderNavTablet';
+import { cookies } from 'next/headers';
 
 import scss from './Header.module.scss';
-import { HeaderNavTablet } from 'app/(Main)/components/Header/components/HeaderNavTablet/HeaderNavTablet';
 
 interface HeaderProps {
     disabled: boolean;
@@ -22,7 +23,11 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = async ({ disabled, services }) => {
-    const user = await getUser().catch((e: AxiosError) => {
+    const cookieStore = cookies();
+
+    const access = cookieStore.get('access')?.value;
+
+    const user = await getUser(access as string).catch((e: AxiosError) => {
         if (e.response?.status === 401) {
             redirect('/login');
         }

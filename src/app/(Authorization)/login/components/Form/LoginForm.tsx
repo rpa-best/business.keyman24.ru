@@ -37,12 +37,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     const onSubmit = (values: ILoginFormTypes) => {
         setLoading(true);
         userAuth(values)
-            .then(() => {
+            .then((data) => {
                 getClientOrganizations().then((d) => {
                     cookie.set('orgId', d[0].id.toString());
+                    router.prefetch('/');
                 });
-                router.prefetch('/');
-                getUser().then((user) => {
+                getUser(data.access).then((user) => {
                     router.replace('/');
                     setUser(user as IUser);
                 });

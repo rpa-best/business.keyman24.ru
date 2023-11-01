@@ -1,9 +1,8 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { $serverAuth } from 'http/serverIndex';
-import { $clientAuth, $host } from 'http/clientIndex';
+import { $clientAuth, $host } from 'http/indexes/clientIndex';
 import * as T from 'http/types';
-import { IUser } from 'store/types';
 import Cookies from 'universal-cookie';
+import * as process from 'process';
 
 const cookie = new Cookies();
 
@@ -19,31 +18,27 @@ export const userAuth: T.UserAuthType = async (body) => {
         cookie.set('refresh', response.data.refresh);
         cookie.set('access', response.data.access);
 
-        return response.data;
+        return response.data as any;
     } catch (error: unknown) {
         if (error instanceof AxiosError) {
             throw error;
         }
-        return error;
     }
 };
 
-export const getUser: T.GetUserType = async () => {
-    try {
-        const response: AxiosResponse<IUser> = await $serverAuth.get(
-            'account/me/'
-        );
-        return response.data;
-    } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-            if (error.response?.status === 401) {
-                /*if (await updateTokens()) {
-                    return await getUser();
-                } else {*/
-                throw error;
-            }
+export const getUser: T.GetUserType = async (access) => {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}account/me/`,
+        {
+            headers: {
+                Authorization: `Bearer ${access}`,
+            },
+            next: {
+                revalidate: 60,
+            },
         }
-    }
+    );
+    return await response.json();
 };
 
 export const updateTokens: T.UpdateTokens = async () => {

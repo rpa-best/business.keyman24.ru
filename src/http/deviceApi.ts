@@ -1,6 +1,6 @@
 import * as T from './types';
 import UniversalCookies from 'universal-cookie';
-import { $clientAuth } from 'http/clientIndex';
+import { $clientAuth } from 'http/indexes/clientIndex';
 import { AxiosResponse } from 'axios';
 
 const cookie = new UniversalCookies();

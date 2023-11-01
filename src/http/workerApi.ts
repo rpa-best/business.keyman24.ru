@@ -1,7 +1,7 @@
 import * as T from './types';
-import { $clientAuth } from 'http/clientIndex';
+import { $clientAuth } from 'http/indexes/clientIndex';
 import { AxiosResponse } from 'axios';
-import { $serverAuth } from 'http/serverIndex';
+import { $serverAuth } from 'http/indexes/serverIndex';
 import Cookies from 'universal-cookie';
 
 const cookie = new Cookies();

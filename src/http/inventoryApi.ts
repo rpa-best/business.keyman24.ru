@@ -1,8 +1,8 @@
 import * as T from './types';
-import { $serverAuth } from 'http/serverIndex';
+import { $serverAuth } from 'http/indexes/serverIndex';
 import { AxiosError, AxiosResponse } from 'axios';
 import UniversalCookies from 'universal-cookie';
-import { $clientAuth } from 'http/clientIndex';
+import { $clientAuth } from 'http/indexes/clientIndex';
 import { toast } from 'react-toastify';
 import { errorToastOptions } from 'config/toastConfig';
 
