@@ -9,35 +9,75 @@
   height: 40px;
 }
 
+.input_select_many {
+  @extend .input_select;
+  height: 80px;
+}
+
 .pseudo_inputs {
   position: absolute;
+  max-width: 100%;
   display: flex;
+  flex-flow: row wrap;
   top: 3px;
   bottom: 3px;
   left: 3px;
   border-radius: 25px;
-  background-color: $accent-color;
+
+}
+
+.input_radial_wrapper {
+  @extend .input_wrapper;
+  height: max-content;
 }
 
 .pseudo_input {
-  height: 39px;
+  height: 40px;
   width: max-content;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  @include MontserratRegular(18px);
   padding: 0 40px 0 10px;
+
   color: white;
   border-right: 1px solid white;
+  @include phone {
+    height: 35px;
+    padding: 0 35px 0 10px;
+  }
+
   & svg {
     position: absolute;
     width: 14px;
     height: 14px;
     right: 15px;
+    @include phone {
+      right: 10px;
+    }
     color: white;
+
     &:hover {
       color: red;
     }
+  }
+
+  &:first-child {
+    border-radius: 25px 0 0 25px;
+  }
+
+  &:nth-child(2n) {
+    border-radius: 0 25px 25px 0
+  }
+
+  &:nth-child(3n) {
+    border-radius: 25px;
+  }
+
+
+  @include thousendWidth {
+    font-size: 16px;
   }
 }
 
@@ -47,4 +87,25 @@
   border-left: 2px solid $accent-color;
   border-right: 2px solid $accent-color;
   border-bottom: 2px solid $accent-color;
+}
+
+.field_without_label {
+  @extend .field;
+  height: 45px;
+  margin-top: 0;
+}
+
+.field_wout_label_many {
+  @extend .field_without_label;
+  height: 80px;
+}
+
+.field_many {
+  @extend .field_without_label;
+  height: 80px;
+}
+
+.input_select_many {
+  @extend .input_select;
+  height: 80px;
 }

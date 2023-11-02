@@ -24,7 +24,7 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
         name: '',
     } as any);
     const orgListValues = useMemo(() => {
-        return contractors;
+        return [...contractors];
     }, [contractors]);
 
     useEffect(() => {
@@ -69,7 +69,7 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
 
     return (
         <ColorRadialInputSelect
-            placeholder="Филтр по организации"
+            placeholder="Фильтр по организации"
             selectedValues={selectedOrgs}
             handleDeleteOne={handleDeleteOne}
             showPrevValue={true}

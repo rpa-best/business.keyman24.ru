@@ -1,16 +1,16 @@
 'use client';
 
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useSpring } from 'framer-motion';
+import { useSpring, motion } from 'framer-motion';
 import clsx from 'clsx';
+import ExitSvg from '/public/svg/x.svg';
+import { InputSelectList } from './InputSelectList';
 import Tippy from '@tippyjs/react';
 import { onHide, onMount } from 'utils/TippyHelper';
 import ArrowSvg from '/public/svg/arrow.svg';
 import { ColorRadialInputSelectProps } from 'app/(Main)/components/FiltersContainer/components/ColorRadialInputSelect/types';
 
 import scss from './ColorRadialInput.module.scss';
-import ExitSvg from '/public/svg/x.svg';
-import { InputSelectList } from './InputSelectList';
 
 export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     listValues,
@@ -19,11 +19,14 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     value,
     placeholder,
     onChange,
+    bgColor = '#31D79B',
     selectedValues,
     handleDeleteOne,
 }) => {
     const opacity = useSpring(0);
     const [type, setType] = useState<'text' | 'input'>('text');
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [inputValue, setInputValue] = useState(value);
     const [visible, setVisible] = useState(false);
@@ -31,17 +34,19 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
 
     const prevValue = useRef(value);
 
+    console.log(modifiedListValues);
+
     useEffect(() => {
-        if (selectedValues?.length === 1) {
+        if (selectedValues?.length !== 1 && selectedValues) {
             setModifiedListValues(
                 [...listValues].filter((v) => {
-                    return v.name !== value;
+                    return !selectedValues?.some((el) => el.id === v.id);
                 })
             );
         } else {
             setModifiedListValues(
                 [...listValues].filter((v) => {
-                    return !selectedValues?.some((el) => el.id === v.id);
+                    return v.name !== value;
                 })
             );
         }
@@ -53,14 +58,14 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     }, [value]);
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value;
-        setInputValue(inputValue);
+        const inputValue = e.target.value.toLowerCase();
+        setInputValue(e.target.value);
 
         // Фильтруем список на основе inputValue
         const filteredList = listValues.filter(
             (item) =>
-                item.name.includes(inputValue) &&
-                item.name !== prevValue.current
+                item.name.toLowerCase().includes(inputValue) &&
+                item.name.toLowerCase() !== prevValue.current.toLowerCase()
         );
 
         // Устанавливаем отфильтрованный список в modifiedListValues
@@ -87,8 +92,16 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     });
 
     const fieldClass = clsx({
-        [scss.field]: !label,
-        [scss.field_with_label]: label,
+        [scss.field_without_label]: selectedValues
+            ? selectedValues.length <= 2
+            : true,
+        [scss.field_wout_label_many]: selectedValues
+            ? selectedValues.length > 2
+            : false,
+    });
+
+    const wrapperClass = clsx({
+        [scss.input_radial_wrapper]: true,
     });
 
     const labelClass = clsx({
@@ -96,7 +109,10 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     });
 
     const inputClass = clsx({
-        [scss.input_select]: true,
+        [scss.input_select]: selectedValues ? selectedValues.length <= 2 : true,
+        [scss.input_select_many]: selectedValues
+            ? selectedValues.length > 2
+            : false,
     });
 
     return (
@@ -118,19 +134,27 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
                 />
             )}
         >
-            <div className={fieldClass}>
+            <div
+                style={{ height: visible ? '45px' : undefined }}
+                className={fieldClass}
+            >
                 {label && <label className={labelClass}>{label}</label>}
                 <div
                     onClick={() => {
                         setType('input');
                         setInputValue('');
                     }}
-                    className={scss.input_wrapper}
+                    className={wrapperClass}
                 >
                     <input
                         placeholder={
                             prevValue.current ? prevValue.current : placeholder
                         }
+                        style={{
+                            height: visible ? '40px' : undefined,
+                            color: type === 'text' ? 'white' : undefined,
+                        }}
+                        ref={inputRef}
                         onFocus={() => {
                             setVisible(true);
                         }}
@@ -140,14 +164,48 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
                         value={inputValue}
                     />
                     {type === 'text' && (
-                        <div className={scss.pseudo_inputs}>
+                        <div
+                            onClick={() => {
+                                inputRef.current?.focus();
+                                setType('input');
+                            }}
+                            className={scss.pseudo_inputs}
+                        >
+                            {!selectedValues && inputValue && (
+                                <div
+                                    style={{
+                                        backgroundColor: bgColor,
+                                        borderRadius: '25px',
+                                    }}
+                                    className={scss.pseudo_input}
+                                >
+                                    {inputValue}
+                                    <ExitSvg
+                                        onClick={(e: any) => {
+                                            e.stopPropagation();
+                                            handleDeleteOne(0);
+                                        }}
+                                        className={scss.svg}
+                                    />
+                                </div>
+                            )}
                             {selectedValues?.map((el, index) => (
-                                <div key={index} className={scss.pseudo_input}>
+                                <div
+                                    style={{
+                                        backgroundColor: bgColor,
+                                        borderRadius:
+                                            selectedValues?.length === 1
+                                                ? '25px'
+                                                : undefined,
+                                    }}
+                                    key={index}
+                                    className={scss.pseudo_input}
+                                >
                                     {el.name}
                                     <ExitSvg
                                         onClick={(e: any) => {
                                             e.stopPropagation();
-                                            (handleDeleteOne as any)(el.id);
+                                            handleDeleteOne(el.id);
                                         }}
                                         className={scss.svg}
                                     />

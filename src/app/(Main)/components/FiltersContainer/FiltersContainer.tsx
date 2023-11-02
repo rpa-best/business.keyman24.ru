@@ -18,27 +18,41 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
     contractors,
 }) => {
     return (
-        <div className={scss.filter_layout}>
-            <div className={scss.filter}>
-                <div className={scss.filter_header_wrapper}>
-                    <div className={scss.filter_title_wrapper}>
-                        <FiltersSvg />
-                        <h2>Настройки посещений организации</h2>
+        <>
+            <div className={scss.filter_title_wrapper_phone}>
+                <FiltersSvg />
+                <h2>Настройки посещений организации</h2>
+            </div>
+            <div className={scss.filter_layout}>
+                <div className={scss.filter}>
+                    <div className={scss.filter_header_wrapper}>
+                        <div className={scss.filter_title_wrapper}>
+                            <FiltersSvg />
+                            <h2>Настройки посещений организации</h2>
+                        </div>
+                        <div
+                            tabIndex={0}
+                            onClick={() => {}}
+                            className={scss.filter_reset}
+                        >
+                            <ResetSvg />
+                            <p>Сбросить</p>
+                        </div>
                     </div>
+                    <InputFiltersWrapper
+                        contractors={contractors}
+                        defaultOrg={org}
+                    />
                     <div
                         tabIndex={0}
                         onClick={() => {}}
-                        className={scss.filter_reset}
+                        className={scss.filter_phone}
                     >
                         <ResetSvg />
                         <p>Сбросить</p>
                     </div>
                 </div>
-                <InputFiltersWrapper
-                    contractors={contractors}
-                    defaultOrg={org}
-                />
             </div>
-        </div>
+        </>
     );
 };

@@ -9,6 +9,5 @@ interface LineChartProps {
 }
 
 export const LineChart: React.FC<LineChartProps> = ({ chartData }) => {
-    console.log(chartData);
     return <></>;
 };

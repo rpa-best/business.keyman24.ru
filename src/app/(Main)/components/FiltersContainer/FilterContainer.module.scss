@@ -14,12 +14,23 @@
   border-radius: 25px;
   background-color: transparentize($dark-main, 0.1);
   z-index: 1;
+  @include thousendWidth {
+    padding: 20px 17px;
+  }
+  @include phoneOrTablet {
+    border-radius: 0;
+    padding: 16px 20px;
+  }
 }
 
 .filter_header_wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 25px;
+  @include phone {
+    margin-bottom: 0;
+  }
 }
 
 .filter_title_wrapper {
@@ -27,6 +38,10 @@
   align-items: center;
   column-gap: 15px;
   color: white;
+
+  @include phoneOrTablet {
+    display: none;
+  }
 
   & svg {
     @extend .svg;
@@ -46,11 +61,30 @@
   }
 }
 
+.filter_title_wrapper_phone {
+  @extend .filter_title_wrapper;
+  display: none;
+  @include phoneOrTablet {
+    display: flex;
+    font-size: 20px;
+    margin: 0 0 20px 20px;
+  }
+  @include phone {
+    font-size: 18px;
+    column-gap: 20px;
+    align-items: flex-start;
+  }
+}
+
 .filter_reset {
   display: flex;
   column-gap: 10px;
   color: $gray;
   cursor: pointer;
+
+  @include phoneOrTablet {
+    display: none;
+  }
 
   & svg {
     @extend .svg;
@@ -93,6 +127,15 @@
   }
 }
 
+.filter_phone {
+  @extend .filter_reset;
+  display: none;
+  @include phoneOrTablet {
+    display: flex;
+  }
+  margin-top: 20px;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0);
@@ -105,6 +148,13 @@
 .filter_inputs {
   display: flex;
   column-gap: 20px;
+  @include thousendWidth {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+  @include phone {
+    row-gap: 0;
+  }
 }
 
 .filter_wrapper {
