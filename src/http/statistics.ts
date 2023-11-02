@@ -15,3 +15,10 @@ export const getMainCardsStatistics: T.GetMainCardsStatistics = async (
 
     return res.data;
 };
+
+export const getLineChartData: T.GetLineChartData = async (orgId) => {
+    const res: AxiosResponse<ReturnType<typeof getLineChartData>> =
+        await $serverAuth.get(`business/${orgId}/statistics/home/line-chart/`);
+
+    return res.data;
+};

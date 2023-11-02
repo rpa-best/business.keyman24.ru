@@ -1,0 +1,116 @@
+@import "scss/utils";
+
+.filter_layout {
+  background: linear-gradient(transparentize($dark-main, 0.9), transparentize($gray, 0.6));
+  border-radius: 25px;
+  z-index: 0;
+}
+
+.filter {
+  height: calc(100% - 1px);
+  width: calc(100% - 2px);
+  margin: 0 auto;
+  padding: 25px;
+  border-radius: 25px;
+  background-color: transparentize($dark-main, 0.1);
+  z-index: 1;
+}
+
+.filter_header_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter_title_wrapper {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  color: white;
+
+  & svg {
+    @extend .svg;
+    cursor: auto;
+    color: white;
+    @include thousendWidth {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  & h2 {
+    @include MontserratSemiBold(24px);
+    @include thousendWidth {
+      font-size: 18px;
+    }
+  }
+}
+
+.filter_reset {
+  display: flex;
+  column-gap: 10px;
+  color: $gray;
+  cursor: pointer;
+
+  & svg {
+    @extend .svg;
+    width: 18px;
+    height: 18px;
+    color: $gray;
+
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  & p {
+    @include MontserratRegular(18px);
+    transition: .2s all ease-in-out;
+    @include thousendWidth {
+      font-size: 18px;
+    }
+  }
+  &:focus {
+    & svg {
+      animation: rotate .3s ease-in-out;
+    }
+  }
+  &:active {
+    & p {
+      color: $gray-semi;
+    }
+    & svg {
+      color: $gray-semi;
+      animation: none;
+    }
+  }
+
+  &:hover {
+    color: $gray-semi;
+    & svg {
+      color: $gray-semi;
+    }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.filter_inputs {
+  display: flex;
+  column-gap: 20px;
+}
+
+.filter_wrapper {
+  position: relative;
+  width: 100%;
+  & div[data-tippy-root] {
+    width: 100%
+  }
+}

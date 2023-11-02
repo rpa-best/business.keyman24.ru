@@ -45,6 +45,19 @@ export const getOrganizationContractors: T.GetOrganizationContractors = async (
     return response.data;
 };
 
+export const getOrganizationContractorsOnClient: T.GetOrganizationContractorsOnClient =
+    async () => {
+        const response: AxiosResponse<IOrganization[]> = await $clientAuth.get(
+            `business/${orgId}/org`
+        );
+
+        if (response.status !== 200) {
+            throw new Error('Failed to org/fetchByIdOrg.');
+        }
+
+        return response.data;
+    };
+
 export const getOrgById: T.GetOrgById = async (id: number = 1) => {
     const response: AxiosResponse<IOrganization> = await $serverAuth.get(
         `business/orgs/${id}/`

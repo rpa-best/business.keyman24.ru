@@ -1,0 +1,50 @@
+@import "scss/utils";
+@import "components/UI/Inputs/InputSelect/InputSelect.module.scss";
+
+.input_select {
+  @extend .input;
+  background-color: white;
+  border-radius: 25px;
+  letter-spacing: 1px;
+  height: 40px;
+}
+
+.pseudo_inputs {
+  position: absolute;
+  display: flex;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  border-radius: 25px;
+  background-color: $accent-color;
+}
+
+.pseudo_input {
+  height: 39px;
+  width: max-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40px 0 10px;
+  color: white;
+  border-right: 1px solid white;
+  & svg {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    right: 15px;
+    color: white;
+    &:hover {
+      color: red;
+    }
+  }
+}
+
+.input_list {
+  @extend .list_wrapper;
+  border-radius: 25px;
+  border-left: 2px solid $accent-color;
+  border-right: 2px solid $accent-color;
+  border-bottom: 2px solid $accent-color;
+}

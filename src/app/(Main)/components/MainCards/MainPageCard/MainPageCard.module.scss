@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient($dark-main, $gray);
+  background: linear-gradient(transparentize($dark-main, 0.9), transparentize($gray, 0.4));
   border-radius: 25px;
   @include thousendTwoWidth {
     height: 100px;
@@ -23,6 +23,7 @@
 .card_wrapper {
   height: calc(100% - 1px);
   width: calc(100% - 2px);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -46,16 +47,6 @@
       color: $accent-color-darker;
     }
   }
-/*  &:before {
-    content: "";
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    bottom: -5px;
-    left: -5px;
-    background: linear-gradient($dark-main, $gray);
-    border-radius: inherit;
-  }*/
   @include thousendTwoWidth {
     padding: 20px 32px;
   }

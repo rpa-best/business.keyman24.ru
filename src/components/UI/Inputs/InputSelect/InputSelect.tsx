@@ -59,8 +59,10 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
         setInputValue(inputValue);
 
         // Фильтруем список на основе inputValue
-        const filteredList = listValues.filter((item) =>
-            item.name.includes(inputValue)
+        const filteredList = listValues.filter(
+            (item) =>
+                item.name.includes(inputValue) &&
+                item.name !== prevValue.current
         );
 
         // Устанавливаем отфильтрованный список в modifiedListValues
@@ -159,7 +161,9 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
                         autoFocus={autoFocus}
                         id={name}
                         name={name}
-                        placeholder={placeholder}
+                        placeholder={
+                            prevValue.current ? prevValue.current : placeholder
+                        }
                         disabled={disabled}
                     />
                     <Arrow className={arrowClassname} />

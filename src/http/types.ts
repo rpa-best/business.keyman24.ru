@@ -79,6 +79,8 @@ export type GetOrganizationContractors = (
     orgId: number
 ) => Promise<IOrganization[]>;
 
+export type GetOrganizationContractorsOnClient = GetOrganizations;
+
 export type GetOrgById = (id?: number) => Promise<IOrganization>;
 
 export type GetServices = (org: number) => Promise<IService>;
@@ -436,9 +438,26 @@ export interface MainCardsData {
     workerGiven: number;
 }
 
+export interface LineChartObject {
+    [key: string]: {
+        entersCount: number;
+        exitCount: number;
+        uniqueCount: number;
+    };
+}
+
+export interface LineChartData {
+    byHour: LineChartObject;
+    byDay: LineChartObject;
+    byWeek: LineChartObject;
+    byMonth: LineChartObject;
+}
+
 export type GetMainCardsStatistics = (
     orgId: number
 ) => Promise<IResponse<MainCardsData>>;
+
+export type GetLineChartData = (orgId: number) => Promise<LineChartData>;
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 

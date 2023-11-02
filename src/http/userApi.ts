@@ -2,7 +2,6 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { $clientAuth, $host } from 'http/indexes/clientIndex';
 import * as T from 'http/types';
 import Cookies from 'universal-cookie';
-import * as process from 'process';
 
 const cookie = new Cookies();
 
