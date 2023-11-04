@@ -10,6 +10,7 @@ export interface IInputProps {
     type?: HTMLInputElement['type'];
     size?: 'big' | 'medium';
     errorFontColor?: string;
+    rounded?: boolean;
     onBlur?: (
         event: FocusEvent<HTMLInputElement> | FocusEvent<HTMLTextAreaElement>
     ) => void;
@@ -35,6 +36,7 @@ export interface ListProps {
 export interface IInputSelectProps extends Omit<IInputProps, 'onChange'> {
     listValues: { id: number; name: string }[];
     onChange: (item: any) => void;
+    rounded?: boolean;
     setFieldTouched?: (field: string, value: boolean) => void;
     showPrevValue?: boolean;
 }

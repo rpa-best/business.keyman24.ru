@@ -41,19 +41,21 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
     }, [userData]);
 
     useEffect(() => {
-        setFields(
-            subs?.map((item) => ({
-                id: item.id,
-                name: item.key.name,
-                count: item.value.toString(),
-                max: item.key.maxValue.toString(),
-                slug: item.key.modelName,
-                notLimited: item.notLimited,
-                min: '0',
-                costNotLimited: item.key.costNotLimited,
-                cost: item.key.cost,
-            }))
-        );
+        if (subs) {
+            setFields(
+                subs?.map((item) => ({
+                    id: item.id,
+                    name: item.key.name,
+                    count: item.value.toString(),
+                    max: item.key.maxValue.toString(),
+                    slug: item.key.modelName,
+                    notLimited: item.notLimited,
+                    min: '0',
+                    costNotLimited: item.key.costNotLimited,
+                    cost: item.key.cost,
+                }))
+            );
+        }
     }, [subs]);
 
     return (

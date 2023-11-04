@@ -1,0 +1,133 @@
+@import "scss/utils";
+
+.date_picker_wrapper {
+  min-width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  transition: .1s all ease-in-out;
+  & > div {
+    width: 100%;
+  }
+}
+
+.date_picker_wrapper {
+  :global {
+    .react-datepicker-wrapper .react-datepicker__close-icon {
+      &:after {
+        min-width: 24px;
+        min-height: 24px;
+        position: relative;
+        top: 1px;
+        background-color: transparent;
+        color: black;
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.popper_class {
+    z-index: 9999;
+}
+
+.another_date {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 5px 14px rgb(0 0 0 / 15%);
+  :global {
+    .react-datepicker__current-month {
+      padding-bottom: 15px;
+    }
+    .react-datepicker__day-names .react-datepicker__day-name {
+      color: #aaa;
+    }
+    .react-datepicker {
+      background: white;
+      border: none;
+      box-shadow: 0 5px 14px rgb(0 0 0 / 15%);
+      border-radius: 12px;
+    }
+    .react-datepicker__triangle {
+      display: none;
+    }
+    .react-datepicker__header {
+      background: white;
+      border-color: white;
+    }
+    .react-datepicker__day--keyboard-selected {
+      border-radius: 50%;
+      background-color: $accent-color;
+      color: white;
+    }
+    .react-datepicker__day--in-range {
+      border-radius: 50%;
+      background-color: $accent-color;
+      color: white;
+    }
+    .react-datepicker__day--in-selecting-range {
+      border-radius: 50%;
+      background-color: $accent-color;
+      color: white;
+    }
+    .react-datepicker__current-month {
+      text-transform: capitalize;
+    }
+    .react-datepicker__navigation-icon {
+      &:before {
+        border-width: 2px 2px 0 0;
+        height: 6px;
+        width: 6px;
+        border-color: black;
+      }
+    }
+    .react-datepicker__day {
+      &:hover {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.date_picker {
+  width: max-content;
+}
+
+.custom_input {
+  height: 45px;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 30px;
+  background: #fff;
+  border-radius: 25px;
+  box-shadow: 0 5px 14px rgb(0 0 0 / 15%);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
+  transition: .2s all ease-in-out;
+  border: 1px solid transparent;
+  @include phoneOrTablet {
+    padding: 0 20px;
+  }
+  @include phone {
+    height: 40px;
+  }
+  &:hover {
+    border: 1px solid $border-gray;
+  }
+  & button {
+    @include MontserratRegular(16px);
+    @include phone {
+      font-size: 14px;
+    }
+  }
+}
+
+.custom_input_svg {
+  margin-right: 10px;
+  color: $accent-color;
+  min-width: 19px;
+  min-height: 19px;
+}

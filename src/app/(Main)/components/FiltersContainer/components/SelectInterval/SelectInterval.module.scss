@@ -1,0 +1,54 @@
+@import "scss/utils";
+
+.intervals_buttons {
+  position: relative;
+  width: 59%;
+  display: flex;
+  column-gap: 10px;
+  @include thousendTwoWidth {
+    width: 65%
+  }
+  @include thousendWidth {
+    flex-flow: row wrap;
+    row-gap: 10px;
+    width: 55%;
+  }
+  @include phoneOrTablet {
+    width: 100%
+  }
+}
+
+.button {
+  height: 45px;
+  padding: 0 30px;
+  border-radius: 25px;
+  background: white;
+  color: $gray;
+  backdrop-filter: blur(20px);
+  @include MontserratRegular(18px);
+  width: calc(25% - 10px);
+  cursor: pointer;
+  transition: .2s all ease-in-out;
+  &:hover {
+    background: $accent-color;
+    color: white;
+  }
+  @include laptopWidth {
+    padding: 0 25px;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  @include thousendTwoWidth {
+    padding: 0 20px;
+    font-size: 15px;
+  }
+  @include thousendWidth {
+    min-width: calc(50% - 10px);
+  }
+}
+
+.button_active {
+  @extend .button;
+  background: #308D92;
+  color: white;
+}

@@ -1,12 +1,16 @@
 'use client';
 
+import React from 'react';
+
 import FiltersSvg from './svg/filters.svg';
 import ResetSvg from './svg/refresh.svg';
 import { InputFiltersWrapper } from 'app/(Main)/components/FiltersContainer/components/InputFiltersWrapper';
+import { IOrganization } from 'store/types';
+import { SelectInterval } from 'app/(Main)/components/FiltersContainer/components/SelectInterval';
+import { RangeDatePicket } from 'app/(Main)/components/FiltersContainer/components/RangeDatePicker';
 
 import scss from './FilterContainer.module.scss';
-import { IOrganization } from 'store/types';
-import React from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface FiltersContainerProps {
     org: IOrganization;
@@ -17,6 +21,13 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
     org,
     contractors,
 }) => {
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const handleReset = () => {
+        router.replace(pathname);
+    };
+
     return (
         <>
             <div className={scss.filter_title_wrapper_phone}>
@@ -32,7 +43,7 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
                         </div>
                         <div
                             tabIndex={0}
-                            onClick={() => {}}
+                            onClick={() => handleReset()}
                             className={scss.filter_reset}
                         >
                             <ResetSvg />
@@ -43,10 +54,16 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
                         contractors={contractors}
                         defaultOrg={org}
                     />
+                    <div className={scss.time_filters}>
+                        <SelectInterval />
+                        <div className={scss.date_filter}>
+                            <RangeDatePicket />
+                        </div>
+                    </div>
                     <div
                         tabIndex={0}
-                        onClick={() => {}}
-                        className={scss.filter_phone}
+                        onClick={() => handleReset()}
+                        className={scss.filter_reset_phone}
                     >
                         <ResetSvg />
                         <p>Сбросить</p>

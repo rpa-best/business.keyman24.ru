@@ -27,6 +27,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     tabIndex,
     size = 'medium',
     needErrorLabel = true,
+    rounded,
     listValues,
     showPrevValue = true,
 }) => {
@@ -110,10 +111,10 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     });
 
     const inputClass = clsx({
-        [scss.input]: size === 'medium',
-
-        [scss.input_big]: size === 'big',
-
+        [scss.input]: size === 'medium' && !rounded,
+        [scss.input_rounded]: size === 'medium' && rounded,
+        [scss.input_big]: size === 'big' && !rounded,
+        [scss.input_big_rounded]: size === 'big' && rounded,
         [scss.input_error]: handleError,
     });
 

@@ -27,6 +27,12 @@ export const ChangeModeInput = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (!query.get('mode')) {
+            setSelectedMode(FilterData[0]);
+        }
+    }, [query]);
+
     const handleDeleteOne = (id: number) => {
         setSelectedMode(FilterData[0]);
     };

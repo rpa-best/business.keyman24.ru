@@ -11,6 +11,7 @@ import ArrowSvg from '/public/svg/arrow.svg';
 import { ColorRadialInputSelectProps } from 'app/(Main)/components/FiltersContainer/components/ColorRadialInputSelect/types';
 
 import scss from './ColorRadialInput.module.scss';
+import { PseudoInputs } from 'app/(Main)/components/FiltersContainer/components/ColorRadialInputSelect/PseudoInputs';
 
 export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     listValues,
@@ -33,8 +34,6 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     const [modifiedListValues, setModifiedListValues] = useState(listValues);
 
     const prevValue = useRef(value);
-
-    console.log(modifiedListValues);
 
     useEffect(() => {
         if (selectedValues?.length !== 1 && selectedValues) {
@@ -87,17 +86,13 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     };
 
     const arrowClassname = clsx({
-        [scss.input_arrow_svg]: true,
+        [scss.input_arrow_svg]: selectedValues,
+        [scss.input_arrow_svg_single]: !selectedValues,
         [scss.input_arrow_svg_open]: visible,
     });
 
     const fieldClass = clsx({
-        [scss.field_without_label]: selectedValues
-            ? selectedValues.length <= 2
-            : true,
-        [scss.field_wout_label_many]: selectedValues
-            ? selectedValues.length > 2
-            : false,
+        [scss.field_without_label]: true,
     });
 
     const wrapperClass = clsx({
@@ -115,107 +110,75 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
             : false,
     });
 
+    const handleChangeType = () => {
+        setType('input');
+    };
+
+    useEffect(() => {
+        if (type === 'input') {
+            inputRef.current?.focus();
+        }
+    }, [type]);
+
     return (
-        <Tippy
-            onMount={() => onMount(opacity)}
-            onHide={({ unmount }) => onHide({ opacity, unmount })}
-            animation={true}
-            interactive={true}
-            visible={visible}
-            placement="bottom"
-            onClickOutside={onClickOutside}
-            offset={[0, 5]}
-            render={(attrs) => (
-                <InputSelectList
-                    {...attrs}
-                    opacity={opacity}
-                    handleSetData={handleSetData}
-                    list={modifiedListValues}
-                />
-            )}
-        >
-            <div
-                style={{ height: visible ? '45px' : undefined }}
-                className={fieldClass}
-            >
-                {label && <label className={labelClass}>{label}</label>}
-                <div
-                    onClick={() => {
-                        setType('input');
-                        setInputValue('');
-                    }}
-                    className={wrapperClass}
-                >
-                    <input
-                        placeholder={
-                            prevValue.current ? prevValue.current : placeholder
-                        }
-                        style={{
-                            height: visible ? '40px' : undefined,
-                            color: type === 'text' ? 'white' : undefined,
-                        }}
-                        ref={inputRef}
-                        onFocus={() => {
-                            setVisible(true);
-                        }}
-                        autoComplete="new-password"
-                        className={inputClass}
-                        onChange={handleInputChange}
-                        value={inputValue}
+        <>
+            <Tippy
+                onMount={() => onMount(opacity)}
+                onHide={({ unmount }) => onHide({ opacity, unmount })}
+                animation={true}
+                interactive={true}
+                visible={visible}
+                placement="bottom"
+                onClickOutside={onClickOutside}
+                offset={[0, 5]}
+                render={(attrs) => (
+                    <InputSelectList
+                        {...attrs}
+                        opacity={opacity}
+                        handleSetData={handleSetData}
+                        list={modifiedListValues}
                     />
-                    {type === 'text' && (
-                        <div
-                            onClick={() => {
-                                inputRef.current?.focus();
-                                setType('input');
-                            }}
-                            className={scss.pseudo_inputs}
-                        >
-                            {!selectedValues && inputValue && (
-                                <div
-                                    style={{
-                                        backgroundColor: bgColor,
-                                        borderRadius: '25px',
-                                    }}
-                                    className={scss.pseudo_input}
-                                >
-                                    {inputValue}
-                                    <ExitSvg
-                                        onClick={(e: any) => {
-                                            e.stopPropagation();
-                                            handleDeleteOne(0);
-                                        }}
-                                        className={scss.svg}
-                                    />
-                                </div>
-                            )}
-                            {selectedValues?.map((el, index) => (
-                                <div
-                                    style={{
-                                        backgroundColor: bgColor,
-                                        borderRadius:
-                                            selectedValues?.length === 1
-                                                ? '25px'
-                                                : undefined,
-                                    }}
-                                    key={index}
-                                    className={scss.pseudo_input}
-                                >
-                                    {el.name}
-                                    <ExitSvg
-                                        onClick={(e: any) => {
-                                            e.stopPropagation();
-                                            handleDeleteOne(el.id);
-                                        }}
-                                        className={scss.svg}
-                                    />
-                                </div>
-                            ))}
+                )}
+            >
+                <div style={{ height: 'max-content' }}>
+                    <div
+                        style={{
+                            display: type === 'input' ? 'flex' : 'none',
+                        }}
+                        className={fieldClass}
+                    >
+                        {label && <label className={labelClass}>{label}</label>}
+                        <div className={wrapperClass}>
+                            <input
+                                placeholder={
+                                    prevValue.current
+                                        ? prevValue.current
+                                        : placeholder
+                                }
+                                onFocus={() => {
+                                    setVisible(true);
+                                    setInputValue('');
+                                }}
+                                ref={inputRef}
+                                autoComplete="new-password"
+                                className={inputClass}
+                                onChange={handleInputChange}
+                                value={inputValue}
+                            />
                         </div>
+                    </div>
+                    {type === 'text' && (
+                        <PseudoInputs
+                            handleChangeType={handleChangeType}
+                            selectedValues={selectedValues}
+                            inputValue={inputValue}
+                            bgColor={bgColor}
+                            handleDeleteOne={handleDeleteOne}
+                        />
                     )}
                     <ArrowSvg className={arrowClassname} />
                 </div>
-            </div>
-        </Tippy>
+            </Tippy>
+        </>
     );
 };

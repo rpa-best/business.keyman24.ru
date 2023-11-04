@@ -36,6 +36,13 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
         setSelectedOrg(newSelected.at(-1) as IOrganization);
     }, []);
 
+    useEffect(() => {
+        if (!searchParams.get('org')) {
+            setSelectedOrgs([defaultOrg]);
+            setSelectedOrg(defaultOrg);
+        }
+    }, [defaultOrg, searchParams]);
+
     const handleChangeOrgs = (v: IOrganization) => {
         const newOrgs = [...selectedOrgs, v];
         const orgsIds = newOrgs.map((el) => el.id.toString()).join(',');

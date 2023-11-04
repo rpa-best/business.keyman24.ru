@@ -21,6 +21,7 @@ export const Input: React.FC<T.IInputProps> = ({
     disabled,
     tabIndex,
     errorFontColor,
+    rounded,
     label,
     size = 'medium',
     needErrorLabel = true,
@@ -44,13 +45,12 @@ export const Input: React.FC<T.IInputProps> = ({
     });
 
     const inputClass = clsx({
-        [scss.input]: size === 'medium',
-
-        [scss.input_big]: size === 'big',
-
+        [scss.input]: size === 'medium' && !rounded,
+        [scss.input_rounded]: size === 'medium' && rounded,
+        [scss.input_big]: size === 'big' && !rounded,
+        [scss.input_big_rounded]: size === 'big' && rounded,
         [scss.input_error]: handleError,
     });
-
     const handleClearClick = () => {
         onChange('' as any);
     };

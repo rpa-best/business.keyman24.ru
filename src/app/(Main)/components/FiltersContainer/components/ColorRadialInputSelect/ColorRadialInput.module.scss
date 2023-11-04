@@ -14,31 +14,53 @@
   height: 80px;
 }
 
+.pseudo_inputs_container {
+  min-height: 45px;
+  position: relative;
+  background-color: white;
+  border-radius: 25px;
+  padding: 2px;
+  border: 2px solid transparent;
+  @include phone {
+    min-height: 40px;
+  }
+  &:hover {
+    border: 2px solid $gray;
+    transition: .1s all ease-in-out;
+  }
+}
+
 .pseudo_inputs {
-  position: absolute;
   max-width: 100%;
   display: flex;
   flex-flow: row wrap;
-  top: 3px;
-  bottom: 3px;
-  left: 3px;
   border-radius: 25px;
+  cursor: text;
+  padding-right: 30px;
+  @include phone {
+    row-gap: 2px;
+  }
+}
 
+.input_arrow_svg_single {
+  @extend .input_arrow_svg;
+  top: 15px;
 }
 
 .input_radial_wrapper {
   @extend .input_wrapper;
   height: max-content;
+  margin-top: 0;
 }
 
 .pseudo_input {
-  height: 40px;
+  height: 38px;
   width: max-content;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  @include MontserratRegular(18px);
+  @include MontserratRegular(16px);
   padding: 0 40px 0 10px;
 
   color: white;
@@ -75,9 +97,8 @@
     border-radius: 25px;
   }
 
-
   @include thousendWidth {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -91,7 +112,7 @@
 
 .field_without_label {
   @extend .field;
-  height: 45px;
+  height: max-content;
   margin-top: 0;
 }
 
