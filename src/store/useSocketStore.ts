@@ -3,6 +3,7 @@ import * as T from 'store/types';
 
 export const useSocketStore = create<T.ISocketStore>((set) => ({
     socket: null,
+    message: null,
     createConnection: (sessionId, access) => {
         set((state) => {
             if (state.socket) {
@@ -22,11 +23,21 @@ export const useSocketStore = create<T.ISocketStore>((set) => ({
             };
         });
     },
+
+    onClose: ({ callback }) => {
+        set((state) => {
+            if (state.socket) {
+                state.socket.onclose = callback;
+            }
+
+            return state;
+        });
+    },
+
     closeConnection: () => {
         set(({ socket }) => {
             socket?.close();
-            return { socket: null, message: null };
+            return { ...socket, socket: null, message: null };
         });
     },
-    message: null,
 }));

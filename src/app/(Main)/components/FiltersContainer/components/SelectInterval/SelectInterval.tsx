@@ -18,7 +18,7 @@ export const SelectInterval = () => {
 
     const { tabletBreak } = useResizeWidth();
 
-    const currentQuery = query.get('by') ?? 'hour';
+    const currentQuery = query.get('interval') ?? 'byHour';
 
     const currentInputQuery = useMemo(() => {
         return ButtonsData.find((el) => {
@@ -32,8 +32,10 @@ export const SelectInterval = () => {
 
     const handleSelectIntervalChange = (id: number) => {
         const selectedInterval = ButtonsData.find((el) => el.id === id);
-        queryHelper.set('by', selectedInterval?.query as string);
-        router.replace(pathname + `?${queryHelper.getParams}`);
+        queryHelper.set('interval', selectedInterval?.query as string);
+        router.replace(pathname + `?${queryHelper.getParams}`, {
+            scroll: false,
+        });
     };
 
     return (
@@ -43,9 +45,10 @@ export const SelectInterval = () => {
                     <button
                         key={index}
                         onClick={() => {
-                            queryHelper.set('by', el.query);
+                            queryHelper.set('interval', el.query);
                             router.replace(
-                                pathname + `?${queryHelper.getParams}`
+                                pathname + `?${queryHelper.getParams}`,
+                                { scroll: false }
                             );
                         }}
                         className={

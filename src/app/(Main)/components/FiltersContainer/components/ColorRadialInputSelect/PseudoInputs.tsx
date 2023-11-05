@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { PseudoInput } from 'app/(Main)/components/FiltersContainer/components/ColorRadialInputSelect/PseudoInput';
 
 import scss from 'app/(Main)/components/FiltersContainer/components/ColorRadialInputSelect/ColorRadialInput.module.scss';
+import { useResizeWidth } from 'hooks/useResizeWidth';
 
 interface PseudoInputsProps {
     handleChangeType: () => void;
@@ -23,12 +24,19 @@ export const PseudoInputs: React.FC<PseudoInputsProps> = ({
     bgColor,
     handleChangeType,
 }) => {
+    const { tabletBreak, thousandTwoBreak } = useResizeWidth();
+
     const itemCount = useMemo(() => {
         return selectedValues ? selectedValues?.length : 1;
     }, [selectedValues]);
 
+    const limited = itemCount <= 2 && !thousandTwoBreak && !tabletBreak;
+
     return (
-        <div className={scss.pseudo_inputs_container}>
+        <div
+            style={{ maxHeight: limited ? '45px' : undefined }}
+            className={scss.pseudo_inputs_container}
+        >
             <div
                 onClick={() => {
                     handleChangeType();

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { getLineChartData, getMainCardsStatistics } from 'http/statistics';
 import { MainCards } from 'app/(Main)/components/MainCards';
 
-import { LineChart } from 'app/(Main)/components/FiltersContainer/components/LineChart';
+import { LineChart } from 'app/(Main)/components/LineChart';
 import { FiltersContainer } from 'app/(Main)/components/FiltersContainer';
 import {
     getOrganizationContractors,
@@ -13,11 +13,16 @@ import {
 import scss from 'app/(Main)/MainPage.module.scss';
 
 interface DashboardProps {
-    searchParams: { org: string };
+    searchParams: {
+        org: string;
+        date_it: string;
+        date_gt: string;
+        mode?: string;
+    };
 }
 
 export default async function DashboardMain({
-    searchParams: { org },
+    searchParams: { org, date_gt, date_it, mode },
 }: DashboardProps) {
     const cookieStore = cookies();
 
@@ -31,7 +36,22 @@ export default async function DashboardMain({
 
     const allOrgs = await getOrganizationContractors(+orgId);
 
-    const lineChartData = await getLineChartData(+orgId);
+    const orgQuery = org ?? orgs[0].id;
+
+    const dateItQuery = date_it ?? new Date().toLocaleDateString();
+
+    const dateGtQuery =
+        date_gt ??
+        new Date(
+            new Date().setMonth(new Date().getMonth() + 1)
+        ).toLocaleDateString();
+
+    const lineChartData = await getLineChartData(+orgId, {
+        orgs: orgQuery,
+        date_gt: dateGtQuery,
+        date_it: dateItQuery,
+        mode,
+    });
 
     return (
         <div className={scss.children_with_table}>
@@ -40,8 +60,8 @@ export default async function DashboardMain({
                 <div className={scss.short_info_wrapper}>
                     {/* <MainCards statistics={mainCardsStatistics.results[0]} />*/}
                 </div>
-                <LineChart chartData={lineChartData} />
                 <FiltersContainer contractors={allOrgs} org={orgs[0]} />
+                <LineChart chartData={lineChartData} />
             </div>
         </div>
     );

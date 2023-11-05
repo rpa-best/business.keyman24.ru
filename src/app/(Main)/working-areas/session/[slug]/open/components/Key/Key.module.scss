@@ -7,12 +7,33 @@
   justify-content: center;
 }
 
-.button_wrapper {
-  width: max-content;
-  margin-right: auto;
+.buttons_wrapper {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
+  & button {
+    width: max-content;
+  }
 }
 
+.errors_log {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 900;
+  background-color: $dark-main;
+  padding: 0 40px;
+}
+
+.back_button {
+  width: max-content;
+  margin-left: auto;
+  margin-top: 20px;
+}
 
 .key_content {
   display: flex;

@@ -20,6 +20,7 @@ import revalidate from 'utils/revalidate';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
+import { SecurityErrorLog } from 'app/(Main)/working-areas/session/[slug]/open/components/Security/SecurityErrorLog';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -36,6 +37,7 @@ export const Security: React.FC<SecurityProps> = ({
 
     const socketStore = useSocketStore((state) => state);
 
+    const [viewPage, setViewPage] = useState(false);
     const [sessionLogData, setSessionLogData] =
         useState<typeof sessionLog>(sessionLog);
 
@@ -49,10 +51,27 @@ export const Security: React.FC<SecurityProps> = ({
     });
 
     useEffect(() => {
-        if (!socketStore.message) {
+        if (socketStore.socket) {
+            if (socketStore.socket.readyState !== 1) {
+                router.replace(
+                    `/working-areas/session/security-${currentAreaId}`
+                );
+            }
+        } else {
             router.replace(`/working-areas/session/security-${currentAreaId}`);
         }
-    }, [socketStore.message]);
+    }, [currentAreaId, socketStore.socket]);
+
+    useEffect(() => {
+        socketStore.onClose = () => {
+            revalidate(
+                '/working-areas/session/' +
+                    'security-' +
+                    getParamsId(params.slug)
+            );
+            router.replace(`/working-areas/session/security-${currentAreaId}`);
+        };
+    }, [currentAreaId, socketStore]);
 
     useEffect(() => {
         if (socketStore.message?.type === 'success') {
@@ -135,45 +154,60 @@ export const Security: React.FC<SecurityProps> = ({
                     Назад
                 </BackButton>
             </div>
-            <div>
-                <div className={scss.button_wrapper}>
-                    <Button onClick={() => onCloseSessionClick()} type="button">
-                        Завершить сессию
-                    </Button>
-                </div>
-                <div className={scss.working_view_wrapper}>
-                    {worker?.id ? (
-                        <div className={scss.worker_info_wrapper_custom}>
-                            <WorkerInfoCard
-                                halfScreen
-                                worker={worker as IWorker}
-                                workerDocs={workerDocs as IWorkerDocs[]}
-                            />
-                        </div>
-                    ) : (
-                        <div className={scss.worker_empty_wrapper}>
-                            <h2 className={scss.spinner_header}>
-                                Ожидание работника
-                            </h2>
-                            <div className={scss.spinner}>
-                                <SpinnerFit />
-                            </div>
-                        </div>
-                    )}
-                    <div className={scss.working_view_table}>
-                        <Table
-                            handleRowClick={handleRowClick}
-                            tableData={sessionLogData}
-                            setTableData={setSessionLogData}
+            {!viewPage ? (
+                <div>
+                    <div className={scss.buttons_wrapper}>
+                        <Button
+                            onClick={() => onCloseSessionClick()}
+                            type="button"
                         >
-                            <Column header="Работник" field="workerName" />
-                            <Column header="Дата" field="date" />
-                            <Column header="Тип" field="modeName" />
-                        </Table>
+                            Завершить сессию
+                        </Button>
+                        <div>
+                            <Button
+                                onClick={() => setViewPage(true)}
+                                type="button"
+                            >
+                                Лог ошибок
+                            </Button>
+                        </div>
                     </div>
+                    <div className={scss.working_view_wrapper}>
+                        {worker?.id ? (
+                            <div className={scss.worker_info_wrapper_custom}>
+                                <WorkerInfoCard
+                                    halfScreen
+                                    worker={worker as IWorker}
+                                    workerDocs={workerDocs as IWorkerDocs[]}
+                                />
+                            </div>
+                        ) : (
+                            <div className={scss.worker_empty_wrapper}>
+                                <h2 className={scss.spinner_header}>
+                                    Ожидание работника
+                                </h2>
+                                <div className={scss.spinner}>
+                                    <SpinnerFit />
+                                </div>
+                            </div>
+                        )}
+                        <div className={scss.working_view_table}>
+                            <Table
+                                handleRowClick={handleRowClick}
+                                tableData={sessionLogData}
+                                setTableData={setSessionLogData}
+                            >
+                                <Column header="Работник" field="workerName" />
+                                <Column header="Дата" field="date" />
+                                <Column header="Тип" field="modeName" />
+                            </Table>
+                        </div>
+                    </div>
+                    {loading && <Spinner />}
                 </div>
-                {loading && <Spinner />}
-            </div>
+            ) : (
+                <SecurityErrorLog handleBackButton={() => setViewPage(false)} />
+            )}
         </>
     );
 };

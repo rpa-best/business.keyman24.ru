@@ -35,6 +35,10 @@ export const ChangeModeInput = () => {
 
     const handleDeleteOne = (id: number) => {
         setSelectedMode(FilterData[0]);
+        searchHelper.getParams.delete('mode');
+        router.replace(pathname + `?${searchHelper.getParams}`, {
+            scroll: false,
+        });
     };
 
     const handleChangeMode = (v: typeof selectedMode) => {
@@ -42,17 +46,23 @@ export const ChangeModeInput = () => {
         switch (v.name) {
             case 'Входы': {
                 searchHelper.set('mode', 'true');
-                router.replace(pathname + `?${searchHelper.getParams}`);
+                router.replace(pathname + `?${searchHelper.getParams}`, {
+                    scroll: false,
+                });
                 break;
             }
             case 'Выходы': {
                 searchHelper.set('mode', 'false');
-                router.replace(pathname + `?${searchHelper.getParams}`);
+                router.replace(pathname + `?${searchHelper.getParams}`, {
+                    scroll: false,
+                });
                 break;
             }
             case 'Уникальные посещения': {
                 searchHelper.getParams.delete('mode');
-                router.replace(pathname + `?${searchHelper.getParams}`);
+                router.replace(pathname + `?${searchHelper.getParams}`, {
+                    scroll: false,
+                });
             }
         }
     };

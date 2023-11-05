@@ -25,7 +25,7 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
     const router = useRouter();
 
     const handleReset = () => {
-        router.replace(pathname);
+        router.replace(pathname, { scroll: false });
     };
 
     return (

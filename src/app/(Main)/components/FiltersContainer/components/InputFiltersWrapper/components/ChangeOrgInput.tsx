@@ -48,7 +48,9 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
         const orgsIds = newOrgs.map((el) => el.id.toString()).join(',');
 
         searchHelper.set('org', orgsIds);
-        router.replace(pathname + `?${searchHelper.getParams}`);
+        router.replace(pathname + `?${searchHelper.getParams}`, {
+            scroll: false,
+        });
 
         setSelectedOrgs([...selectedOrgs, v]);
         setSelectedOrg(v);
@@ -60,7 +62,9 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
             setSelectedOrgs([defaultOrg]);
 
             searchHelper.set('org', defaultOrg.id.toString());
-            router.replace(pathname + `?${searchHelper.getParams}`);
+            router.replace(pathname + `?${searchHelper.getParams}`, {
+                scroll: false,
+            });
             return;
         }
         const copyArray = selectedOrgs;
@@ -68,7 +72,9 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
         const orgsIds = newOrgs.map((el) => el.id.toString()).join(',');
 
         searchHelper.set('org', orgsIds);
-        router.replace(pathname + `?${searchHelper.getParams}`);
+        router.replace(pathname + `?${searchHelper.getParams}`, {
+            scroll: false,
+        });
 
         setSelectedOrgs(selectedOrgs.filter((el) => el.id !== id));
         setSelectedOrg(newOrgs.at(-1) as IOrganization);

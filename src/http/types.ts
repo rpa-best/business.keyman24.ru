@@ -457,7 +457,17 @@ export type GetMainCardsStatistics = (
     orgId: number
 ) => Promise<IResponse<MainCardsData>>;
 
-export type GetLineChartData = (orgId: number) => Promise<LineChartData>;
+interface QueryType {
+    orgs: string;
+    date_it: string;
+    date_gt: string;
+    mode?: string;
+}
+
+export type GetLineChartData = (
+    orgId: number,
+    query: QueryType
+) => Promise<LineChartData>;
 
 export type GetOrgPermissions = (orgId: number) => Promise<IPermission[]>;
 
