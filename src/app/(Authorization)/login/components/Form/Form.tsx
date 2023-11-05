@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { LoginForm } from 'app/(Authorization)/login/components/Form/LoginForm';
 import { ForgotForm } from 'app/(Authorization)/login/components/Form/ForgotForm';
+import { EnterPassForm } from 'app/(Authorization)/login/components/Form/EnterPassForm';
+import Cookies from 'universal-cookie';
 
 import scss from './Form.module.scss';
-import { EnterPassForm } from 'app/(Authorization)/login/components/Form/EnterPassForm';
+
+const cookie = new Cookies();
 
 export const Form = () => {
     const [formType, setFormType] = useState<'login' | 'forgot' | 'enterPass'>(
@@ -21,6 +24,12 @@ export const Form = () => {
         setEmail(email);
         setFormType(type);
     };
+
+    useEffect(() => {
+        cookie.remove('orgId');
+        cookie.remove('access');
+        cookie.remove('refresh');
+    }, []);
 
     function getForm() {
         switch (formType) {

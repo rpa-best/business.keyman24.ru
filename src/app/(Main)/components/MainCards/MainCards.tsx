@@ -33,14 +33,7 @@ export const MainCards: React.FC<MainCardsProps> = ({ statistics }) => {
                 Icon: EmployeeSvg,
             },
         ];
-    }, [
-        statistics.inventoryCount,
-        statistics.inventoryTaken,
-        statistics.keyCount,
-        statistics.keyTaken,
-        statistics.workerCount,
-        statistics.workerTaken,
-    ]);
+    }, [statistics]);
 
     return (
         <>

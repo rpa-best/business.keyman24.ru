@@ -3,6 +3,7 @@
 
 .edit_form_location {
   @extend .edit_form;
+  row-gap: 0;
   @include fullHd {
     max-height: 750px;
     width: 850px;

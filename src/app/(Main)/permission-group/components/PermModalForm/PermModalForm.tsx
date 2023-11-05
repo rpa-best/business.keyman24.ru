@@ -106,7 +106,14 @@ export const PermModalForm: React.FC<IFormProps> = ({
                     : 'Группа прав доступа / добавление'}
             </h2>
             <form className={scss.form} onSubmit={handleSubmit}>
-                <div>
+                <div
+                    style={{
+                        marginBottom:
+                            adminPermission && formType === 'edit'
+                                ? '10px'
+                                : undefined,
+                    }}
+                >
                     <Input
                         value={values.name}
                         disabled={adminPermission && formType === 'edit'}
@@ -117,9 +124,9 @@ export const PermModalForm: React.FC<IFormProps> = ({
                         onBlur={handleBlur}
                     />
                 </div>
-                <div className={scss.select_wrapper}>
-                    {!adminPermission ||
-                        (formType === 'create' && (
+                {!adminPermission ||
+                    (formType === 'create' && (
+                        <div className={scss.select_wrapper}>
                             <InputSelect
                                 setFieldTouched={setFieldTouched}
                                 listValues={level}
@@ -132,8 +139,8 @@ export const PermModalForm: React.FC<IFormProps> = ({
                                 value={values.level?.name as string}
                                 name="level"
                             />
-                        ))}
-                </div>
+                        </div>
+                    ))}
                 {!adminPermission && (
                     <Button
                         disabled={!isValid}

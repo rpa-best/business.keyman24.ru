@@ -3,6 +3,7 @@
 .edit_form {
   display: flex;
   flex-direction: column;
+  row-gap: 20px;
   overflow-y: auto;
   padding-right: 10px;
   @include fullHd {

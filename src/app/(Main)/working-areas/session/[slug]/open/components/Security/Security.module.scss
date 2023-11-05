@@ -25,6 +25,34 @@
   }
 }
 
+.worker_card_image_wrapper {
+  @include fullHd {
+    width: 100%;
+    height: 100%;
+    max-width: 180px;
+    max-height: 180px;
+    min-width: 180px;
+    min-height: 180px;
+  }
+  width: 100%;
+  height: 100%;
+  min-width: 160px;
+  min-height: 160px;
+  max-width: 160px;
+  max-height: 160px;
+  @include phone {
+    max-width: 140px;
+    min-width: 140px;
+  }
+  position: relative;
+}
+
+.worker_info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
 .working_view_wrapper {
   display: flex;
   justify-content: space-between;
@@ -51,5 +79,78 @@
   width: 50%;
   @include thousendTwoWidth {
     width: 100%;
+  }
+}
+
+.error_worker {
+  & h2 {
+    @include MontserratSemiBold(42px);
+    color: white;
+    margin: 40px 0 20px;
+  }
+}
+
+.error_worker_card {
+  display: flex;
+  column-gap: 20px;
+}
+
+.worker_info {
+  display: flex;
+  flex-direction: column;
+}
+
+.worker_info_item {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.worker_info_item_desc {
+  @include MontserratRegular(24px);
+  color: $gray;
+}
+
+.worker_info_item_name {
+  @include MontserratRegular(32px);
+  color: white;
+}
+
+.worker_errors_log {
+  margin-top: 40px;
+  & h2 {
+    @include MontserratSemiBold(42px);
+    color: white;
+    margin: 20px 0
+  }
+}
+
+.error_log_table {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.log_table_headers {
+  display: flex;
+  justify-content: space-between;
+  & p {
+    @include MontserratRegular(24px);
+    color: $gray;
+  }
+}
+
+.log_table_body {
+  display: flex;
+  flex-direction: column;
+}
+
+.log_table_body_item {
+  display: flex;
+  justify-content: space-between;
+
+  & p {
+    @include MontserratRegular(32px);
+    color: white;
   }
 }

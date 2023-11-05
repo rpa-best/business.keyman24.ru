@@ -22,15 +22,3 @@ $serverAuth.interceptors.response.use((res) => {
     if (res.data) snakeToCamelCaseDeep(res.data);
     return res;
 });
-
-$serverAuth.interceptors.response.use(
-    (res) => {
-        return res;
-    },
-    (error) => {
-        if (error.response.status === 403) {
-            /*redirect('/');*/
-        }
-        return Promise.reject(error);
-    }
-);

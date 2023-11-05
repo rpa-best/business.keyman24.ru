@@ -27,6 +27,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     tabIndex,
     size = 'medium',
     needErrorLabel = true,
+    rounded,
     listValues,
     showPrevValue = true,
 }) => {
@@ -59,8 +60,10 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
         setInputValue(inputValue);
 
         // Фильтруем список на основе inputValue
-        const filteredList = listValues.filter((item) =>
-            item.name.includes(inputValue)
+        const filteredList = listValues.filter(
+            (item) =>
+                item.name.includes(inputValue) &&
+                item.name !== prevValue.current
         );
 
         // Устанавливаем отфильтрованный список в modifiedListValues
@@ -108,10 +111,10 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
     });
 
     const inputClass = clsx({
-        [scss.input]: size === 'medium',
-
-        [scss.input_big]: size === 'big',
-
+        [scss.input]: size === 'medium' && !rounded,
+        [scss.input_rounded]: size === 'medium' && rounded,
+        [scss.input_big]: size === 'big' && !rounded,
+        [scss.input_big_rounded]: size === 'big' && rounded,
         [scss.input_error]: handleError,
     });
 
@@ -159,7 +162,9 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
                         autoFocus={autoFocus}
                         id={name}
                         name={name}
-                        placeholder={placeholder}
+                        placeholder={
+                            prevValue.current ? prevValue.current : placeholder
+                        }
                         disabled={disabled}
                     />
                     <Arrow className={arrowClassname} />

@@ -14,6 +14,9 @@ import { getServices } from 'http/organizationApi';
 import { Notification } from 'app/(Main)/components/Notification';
 
 import scss from 'app/(Main)/MainPage.module.scss';
+import { AxiosError } from 'axios';
+import { redirect } from 'next/navigation';
+import { IService } from 'http/types';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
@@ -29,9 +32,15 @@ export default async function RootLayout({
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const services = await getServices(+orgId).catch((e) => e);
+    const services = (await getServices(+orgId).catch((e) => {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 401) {
+                redirect('/login');
+            }
+        }
+    })) as IService;
 
-    const disabled = services ? services.status === 'notActive' : false;
+    const disabled = services ? services?.status === 'notActive' : false;
 
     return (
         <html lang="en">

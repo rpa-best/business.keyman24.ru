@@ -1,0 +1,211 @@
+@import "scss/utils";
+
+.filter_layout {
+  background: linear-gradient(transparentize($dark-main, 0.9), transparentize($gray, 0.6));
+  border-radius: 25px;
+  z-index: 0;
+}
+
+.filter {
+  height: calc(100% - 1px);
+  width: calc(100% - 2px);
+  margin: 0 auto;
+  padding: 25px;
+  border-radius: 25px;
+  background-color: transparentize($dark-main, 0.1);
+  z-index: 1;
+  @include thousendWidth {
+    padding: 20px 17px;
+  }
+  @include phoneOrTablet {
+    border-radius: 0;
+    padding: 16px 20px;
+  }
+}
+
+.filter_header_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  @include phone {
+    margin-bottom: 0;
+  }
+}
+
+.filter_title_wrapper {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  color: white;
+
+  @include phoneOrTablet {
+    display: none;
+  }
+
+  & svg {
+    @extend .svg;
+    cursor: auto;
+    color: white;
+    @include thousendWidth {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  & h2 {
+    @include MontserratSemiBold(24px);
+    @include thousendWidth {
+      font-size: 18px;
+    }
+  }
+}
+
+.filter_title_wrapper_phone {
+  @extend .filter_title_wrapper;
+  display: none;
+  @include phoneOrTablet {
+    display: flex;
+    font-size: 20px;
+    margin: 0 0 20px 20px;
+  }
+  @include phone {
+    font-size: 18px;
+    column-gap: 20px;
+    align-items: flex-start;
+  }
+}
+
+.filter_reset {
+  display: flex;
+  column-gap: 10px;
+  color: $gray;
+  cursor: pointer;
+
+  @include phoneOrTablet {
+    display: none;
+  }
+
+  & svg {
+    @extend .svg;
+    width: 18px;
+    height: 18px;
+    color: $gray;
+
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  & p {
+    @include MontserratRegular(18px);
+    transition: .2s all ease-in-out;
+    @include thousendWidth {
+      font-size: 18px;
+    }
+  }
+
+  &:focus {
+    & svg {
+      animation: rotate .3s ease-in-out;
+    }
+  }
+
+  &:active {
+    & p {
+      color: $gray-semi;
+    }
+
+    & svg {
+      color: $gray-semi;
+      animation: none;
+    }
+  }
+
+  &:hover {
+    color: $gray-semi;
+
+    & svg {
+      color: $gray-semi;
+    }
+  }
+}
+
+.time_filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 20px;
+  margin-top: 15px;
+  @include laptopWidth {
+    column-gap: 15px;
+  }
+  @include thousendTwoWidth {
+    column-gap: 0;
+  }
+  @include phoneOrTablet {
+    margin-top: 10px;
+    column-gap: 10px;
+  }
+  @include phone {
+    margin-top: 5px;
+  }
+}
+
+.date_filter {
+  width: 100%;
+  @include thousendWidth {
+    width: 50%;
+  }
+  @include phoneOrTablet {
+    min-width: 50%;
+  }
+  @include phone {
+    margin-top: 5px;
+  }
+}
+
+
+.filter_reset_phone {
+  @extend .filter_reset;
+  display: none;
+  @include phoneOrTablet {
+    display: flex;
+  }
+  margin-top: 20px;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.filter_inputs {
+  display: flex;
+  column-gap: 10px;
+  @include thousendWidth {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+  @include phone {
+    row-gap: 5px;
+  }
+}
+
+.filter_wrapper {
+
+  position: relative;
+  width: 100%;
+
+  &:nth-of-type(2) {
+    max-height: 45px;
+  }
+
+  & div[data-tippy-root] {
+    width: 100%
+  }
+}

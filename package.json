@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-barcode": "^1.4.6",
     "react-chartjs-2": "^5.2.0",
+    "react-datepicker": "^4.21.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-input-mask": "^3.0.0-alpha.2",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.12",
     "@svgr/webpack": "^8.0.1",
+    "@types/react-datepicker": "^4.19.1",
     "@types/react-input-mask": "^3.0.3",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^6.2.1",

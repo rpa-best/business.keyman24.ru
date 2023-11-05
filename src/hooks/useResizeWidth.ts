@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 const tabletBreakpoint = 769;
 const pcBreakpoint = 1024;
+const thousandPcBreakPoint = 1200;
 const laptopBreakpoint = 1440;
 const phoneBreak = 480;
 
@@ -25,5 +26,6 @@ export const useResizeWidth = () => {
         pcBreak: (width as number) <= pcBreakpoint,
         laptopBreak: (width as number) <= laptopBreakpoint,
         phoneBreak: (width as number) <= phoneBreak,
+        thousandTwoBreak: (width as number) <= thousandPcBreakPoint,
     };
 };
