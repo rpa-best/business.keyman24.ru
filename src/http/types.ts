@@ -461,7 +461,6 @@ interface QueryType {
     orgs: string;
     date_it: string;
     date_gt: string;
-    mode?: string;
 }
 
 export type GetLineChartData = (

@@ -17,10 +17,12 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { sendSessionAction } from 'http/workingAreaApi';
 import { useSocketStore } from 'store/useSocketStore';
 import revalidate from 'utils/revalidate';
+import { SecurityErrorLog } from 'app/(Main)/working-areas/session/[slug]/open/components/Security/SecurityErrorLog';
+import { updateOrg } from 'http/organizationApi';
+
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
-import { SecurityErrorLog } from 'app/(Main)/working-areas/session/[slug]/open/components/Security/SecurityErrorLog';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -143,6 +145,13 @@ export const Security: React.FC<SecurityProps> = ({
         );
     };
 
+    const handleUpdateClick = async () => {
+        setLoading(true);
+        await updateOrg().finally(() => {
+            setLoading(false);
+        });
+    };
+
     return (
         <>
             <div className={scss.page_title_with_table_back_button}>
@@ -163,12 +172,18 @@ export const Security: React.FC<SecurityProps> = ({
                         >
                             Завершить сессию
                         </Button>
-                        <div>
+                        <div className={scss.utils_buttons}>
                             <Button
                                 onClick={() => setViewPage(true)}
                                 type="button"
                             >
                                 Лог ошибок
+                            </Button>
+                            <Button
+                                onClick={() => handleUpdateClick()}
+                                type="button"
+                            >
+                                Обновить данные
                             </Button>
                         </div>
                     </div>
