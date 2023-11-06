@@ -132,3 +132,12 @@ export const topUpBalance: T.TopUpBalance = async (summa) => {
     );
     return res.data;
 };
+
+export const updateOrg = async () => {
+    const res = await $clientAuth.post(
+        `business/orgs/${orgId}/org_update/`,
+        {}
+    );
+
+    return res.data;
+};

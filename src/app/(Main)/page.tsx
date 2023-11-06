@@ -11,18 +11,18 @@ import {
 } from 'http/organizationApi';
 
 import scss from 'app/(Main)/MainPage.module.scss';
+import { formatDate } from 'utils/formatDate';
 
 interface DashboardProps {
     searchParams: {
         org: string;
         date_it: string;
         date_gt: string;
-        mode?: string;
     };
 }
 
 export default async function DashboardMain({
-    searchParams: { org, date_gt, date_it, mode },
+    searchParams: { org, date_gt, date_it },
 }: DashboardProps) {
     const cookieStore = cookies();
 
@@ -38,19 +38,16 @@ export default async function DashboardMain({
 
     const orgQuery = org ?? orgs[0].id;
 
-    const dateItQuery = date_it ?? new Date().toLocaleDateString();
+    const dateItQuery = date_it ?? formatDate(new Date());
 
     const dateGtQuery =
         date_gt ??
-        new Date(
-            new Date().setMonth(new Date().getMonth() + 1)
-        ).toLocaleDateString();
+        formatDate(new Date(new Date().setMonth(new Date().getMonth() + 1)));
 
     const lineChartData = await getLineChartData(+orgId, {
         orgs: orgQuery,
         date_gt: dateGtQuery,
         date_it: dateItQuery,
-        mode,
     });
 
     return (

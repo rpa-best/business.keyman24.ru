@@ -2,6 +2,7 @@ import { PickDate } from 'components/PickDate';
 import React, { useMemo } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SearchParamsHelper } from 'utils/searchParamsHelper';
+import { formatDate } from 'utils/formatDate';
 
 export const RangeDatePicket = () => {
     const pathname = usePathname();
@@ -12,23 +13,14 @@ export const RangeDatePicket = () => {
     const start = query.get('date_it');
 
     const startQuery = useMemo(() => {
-        return start
-            ? new Date(
-                  `${start?.slice(6)}-${start?.slice(3, 5)}-${start?.slice(
-                      0,
-                      2
-                  )}`
-              )
-            : new Date();
+        return start ? new Date(start) : new Date();
     }, [start]);
 
     const end = query.get('date_gt');
 
     const endQuery = useMemo(() => {
         return end
-            ? new Date(
-                  `${end?.slice(6)}-${end?.slice(3, 5)}-${end?.slice(0, 2)}`
-              )
+            ? new Date(end)
             : new Date(new Date().setMonth(new Date().getMonth() + 1));
     }, [end]);
 
@@ -38,7 +30,7 @@ export const RangeDatePicket = () => {
             router.replace(pathname + `?${queryHelper.getParams}`);
             return;
         }
-        queryHelper.set(query, d.toLocaleDateString());
+        queryHelper.set(query, formatDate(d));
         router.replace(pathname + `?${queryHelper.getParams}`);
     };
     return (
