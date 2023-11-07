@@ -433,9 +433,6 @@ export interface MainCardsData {
     keyTaken: number;
     inventoryTaken: number;
     workerTaken: number;
-    keyGiven: number;
-    inventoryGiven: number;
-    workerGiven: number;
 }
 
 export interface LineChartObject {
@@ -453,9 +450,7 @@ export interface LineChartData {
     byMonth: LineChartObject;
 }
 
-export type GetMainCardsStatistics = (
-    orgId: number
-) => Promise<IResponse<MainCardsData>>;
+export type GetMainCardsStatistics = (orgId: number) => Promise<MainCardsData>;
 
 interface QueryType {
     orgs: string;

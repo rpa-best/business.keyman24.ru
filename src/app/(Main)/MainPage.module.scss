@@ -48,6 +48,7 @@
   display: flex;
   justify-content: space-between;
   column-gap: 24px;
+  margin-bottom: 20px;
   @include thousendTwoWidth {
     column-gap: 20px;
   }
