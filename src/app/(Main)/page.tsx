@@ -28,9 +28,7 @@ export default async function DashboardMain({
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    /*
     const mainCardsStatistics = await getMainCardsStatistics(+orgId);
-*/
 
     const orgs = await getOrganizations();
 
@@ -39,6 +37,8 @@ export default async function DashboardMain({
     const orgQuery = org ?? orgs[0].id;
 
     const dateLtQuery = date_lt ?? formatDate(new Date());
+
+    console.log(mainCardsStatistics);
 
     const dateGtQuery =
         date_gt ??
@@ -55,7 +55,7 @@ export default async function DashboardMain({
             <div className={scss.home_wrapper}>
                 <h1 className={scss.page_title_with_table}>Главное меню</h1>
                 <div className={scss.short_info_wrapper}>
-                    {/* <MainCards statistics={mainCardsStatistics.results[0]} />*/}
+                    <MainCards statistics={mainCardsStatistics} />
                 </div>
                 <FiltersContainer contractors={allOrgs} org={orgs[0]} />
                 <LineChart chartData={lineChartData} />
