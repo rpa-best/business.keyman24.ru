@@ -23,6 +23,8 @@ import { updateOrg } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
+import { toast } from 'react-toastify';
+import { successToastConfig } from 'config/toastConfig';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -148,6 +150,7 @@ export const Security: React.FC<SecurityProps> = ({
     const handleUpdateClick = async () => {
         setLoading(true);
         await updateOrg().finally(() => {
+            toast('Обновление началось', successToastConfig);
             setLoading(false);
         });
     };

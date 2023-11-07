@@ -459,7 +459,7 @@ export type GetMainCardsStatistics = (
 
 interface QueryType {
     orgs: string;
-    date_it: string;
+    date_lt: string;
     date_gt: string;
 }
 

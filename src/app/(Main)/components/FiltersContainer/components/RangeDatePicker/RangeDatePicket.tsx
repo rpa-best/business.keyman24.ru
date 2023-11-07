@@ -10,7 +10,7 @@ export const RangeDatePicket = () => {
     const query = useSearchParams();
     const queryHelper = new SearchParamsHelper(query.entries);
 
-    const start = query.get('date_it');
+    const start = query.get('date_lt');
 
     const startQuery = useMemo(() => {
         return start ? new Date(start) : new Date();
@@ -38,10 +38,10 @@ export const RangeDatePicket = () => {
             start={startQuery}
             end={endQuery}
             setStart={(d) => {
-                handleChangeDate(d, 'date_it');
+                handleChangeDate(d, 'date_gt');
             }}
             setEnd={(d) => {
-                handleChangeDate(d, 'date_gt');
+                handleChangeDate(d, 'date_lt');
             }}
         />
     );

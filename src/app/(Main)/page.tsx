@@ -16,13 +16,13 @@ import { formatDate } from 'utils/formatDate';
 interface DashboardProps {
     searchParams: {
         org: string;
-        date_it: string;
+        date_lt: string;
         date_gt: string;
     };
 }
 
 export default async function DashboardMain({
-    searchParams: { org, date_gt, date_it },
+    searchParams: { org, date_gt, date_lt },
 }: DashboardProps) {
     const cookieStore = cookies();
 
@@ -38,7 +38,7 @@ export default async function DashboardMain({
 
     const orgQuery = org ?? orgs[0].id;
 
-    const dateItQuery = date_it ?? formatDate(new Date());
+    const dateLtQuery = date_lt ?? formatDate(new Date());
 
     const dateGtQuery =
         date_gt ??
@@ -47,7 +47,7 @@ export default async function DashboardMain({
     const lineChartData = await getLineChartData(+orgId, {
         orgs: orgQuery,
         date_gt: dateGtQuery,
-        date_it: dateItQuery,
+        date_lt: dateLtQuery,
     });
 
     return (
