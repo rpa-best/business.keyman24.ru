@@ -7,10 +7,10 @@ import ResetSvg from './svg/refresh.svg';
 import { InputFiltersWrapper } from 'app/(Main)/components/FiltersContainer/components/InputFiltersWrapper';
 import { IOrganization } from 'store/types';
 import { SelectInterval } from 'app/(Main)/components/FiltersContainer/components/SelectInterval';
-import { RangeDatePicket } from 'app/(Main)/components/FiltersContainer/components/RangeDatePicker';
+import { usePathname, useRouter } from 'next/navigation';
+import { DatePicker } from 'app/(Main)/components/FiltersContainer/components/DatePicker';
 
 import scss from './FilterContainer.module.scss';
-import { usePathname, useRouter } from 'next/navigation';
 
 interface FiltersContainerProps {
     org: IOrganization;
@@ -56,9 +56,7 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
                     />
                     <div className={scss.time_filters}>
                         <SelectInterval />
-                        <div className={scss.date_filter}>
-                            <RangeDatePicket />
-                        </div>
+                        <DatePicker />
                     </div>
                     <div
                         tabIndex={0}

@@ -6,12 +6,7 @@
   display: flex;
   justify-content: flex-start;
   transition: .1s all ease-in-out;
-  & > div {
-    width: 100%;
-  }
-}
 
-.date_picker_wrapper {
   :global {
     .react-datepicker-wrapper .react-datepicker__close-icon {
       &:after {
@@ -24,8 +19,12 @@
         font-size: 20px;
       }
     }
+    .react-datepicker-wrapper {
+      width: 100%;
+    }
   }
 }
+
 
 .popper_class {
     z-index: 9999;
@@ -42,11 +41,16 @@
     .react-datepicker__day-names .react-datepicker__day-name {
       color: #aaa;
     }
+
     .react-datepicker {
       background: white;
       border: none;
       box-shadow: 0 5px 14px rgb(0 0 0 / 15%);
       border-radius: 12px;
+    }
+    .react-datepicker__header {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
     }
     .react-datepicker__triangle {
       display: none;
@@ -55,10 +59,17 @@
       background: white;
       border-color: white;
     }
-    .react-datepicker__day--keyboard-selected {
-      border-radius: 50%;
+    .react-datepicker__day--selected {
       background-color: $accent-color;
-      color: white;
+      border-radius: 50%;
+    }
+    .react-datepicker__day--keyboard-selected {
+      background-color: inherit;
+      color: inherit;
+
+      &:hover {
+        background-color: $accent-color;
+      }
     }
     .react-datepicker__day--in-range {
       border-radius: 50%;
@@ -93,6 +104,16 @@
   width: max-content;
 }
 
+.clear_button {
+  &:after {
+    font-size: 32px!important;
+    right: 5px;
+    @include phone {
+      right: 0;
+    }
+  }
+}
+
 .custom_input {
   height: 45px;
   min-width: 100%;
@@ -113,6 +134,7 @@
   }
   @include phone {
     height: 40px;
+    padding: 0 20px;
   }
   &:hover {
     border: 1px solid $border-gray;
@@ -125,9 +147,39 @@
   }
 }
 
+.custom_input_single {
+  @extend .custom_input;
+  padding: 0 0 0 60px;
+  letter-spacing: 1px;
+  &:focus-visible {
+    outline: none;
+  }
+  @include phoneOrTablet {
+    padding: 0 0 0 50px ;
+    max-width: 40vw;
+  }
+  @include phone {
+    padding: 0 0 0 50px ;
+    max-width: 41vw;
+  }
+}
+
 .custom_input_svg {
   margin-right: 10px;
   color: $accent-color;
   min-width: 19px;
   min-height: 19px;
+  @include phone {
+    margin-right: 0;
+  }
+}
+
+.custom_input_svg_single {
+  @extend .custom_input_svg;
+  position: absolute;
+  left: 32px;
+  top: calc(50% - 9.5px);
+  @include phoneOrTablet {
+    left: 20px;
+  }
 }

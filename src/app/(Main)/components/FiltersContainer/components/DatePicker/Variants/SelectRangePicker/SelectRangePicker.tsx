@@ -1,27 +1,27 @@
-import { PickDate } from 'components/PickDate';
 import React, { useMemo } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SearchParamsHelper } from 'utils/searchParamsHelper';
 import { formatDate } from 'utils/formatDate';
+import { RangeDatePicker } from 'components/RangeDatePicker/RangeDatePicker';
 
-export const RangeDatePicket = () => {
+export const SelectRangePicker = () => {
     const pathname = usePathname();
     const router = useRouter();
     const query = useSearchParams();
     const queryHelper = new SearchParamsHelper(query.entries);
 
-    const start = query.get('date_lt');
+    const start = query.get('date_gt');
 
     const startQuery = useMemo(() => {
-        return start ? new Date(start) : new Date();
+        return start
+            ? new Date(start)
+            : new Date(new Date().setMonth(new Date().getMonth() - 1));
     }, [start]);
 
-    const end = query.get('date_gt');
+    const end = query.get('date_lt');
 
     const endQuery = useMemo(() => {
-        return end
-            ? new Date(end)
-            : new Date(new Date().setMonth(new Date().getMonth() + 1));
+        return end ? new Date(end) : new Date();
     }, [end]);
 
     const handleChangeDate = (d: Date, query: string) => {
@@ -31,10 +31,12 @@ export const RangeDatePicket = () => {
             return;
         }
         queryHelper.set(query, formatDate(d));
-        router.replace(pathname + `?${queryHelper.getParams}`);
+        router.replace(pathname + `?${queryHelper.getParams}`, {
+            scroll: false,
+        });
     };
     return (
-        <PickDate
+        <RangeDatePicker
             start={startQuery}
             end={endQuery}
             setStart={(d) => {
