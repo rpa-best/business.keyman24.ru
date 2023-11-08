@@ -1,1 +1,1 @@
-export { PickDate } from 'components/PickDate/PickDate';
+export { RangeDatePicker } from './RangeDatePicker';
