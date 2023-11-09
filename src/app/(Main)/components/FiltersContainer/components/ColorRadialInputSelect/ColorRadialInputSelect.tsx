@@ -176,7 +176,10 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
                             handleDeleteOne={handleDeleteOne}
                         />
                     )}
-                    <ArrowSvg className={arrowClassname} />
+                    <ArrowSvg
+                        onClick={() => handleChangeType()}
+                        className={arrowClassname}
+                    />
                 </div>
             </Tippy>
         </>

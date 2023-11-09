@@ -1,5 +1,5 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { forwardRef, MouseEventHandler, useMemo, useState } from 'react';
+import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import ru from 'date-fns/locale/ru';
 import Input from 'react-input-mask';
@@ -12,6 +12,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import scss from 'components/RangeDatePicker/PickDate.module.scss';
 import { toast } from 'react-toastify';
 import { warningToastConfig } from 'config/toastConfig';
+import { getYear, setYear } from 'date-fns';
 
 export const SingleDayPicker = () => {
     const pathname = usePathname();
@@ -46,6 +47,7 @@ export const SingleDayPicker = () => {
                 dateFormat="dd.MM.yyyy"
                 calendarClassName={scss.another_date}
                 selected={selectedValue}
+                disabledKeyboardNavigation
                 onChange={(date) => {
                     if ((date as Date) > new Date()) {
                         toast(
@@ -57,6 +59,7 @@ export const SingleDayPicker = () => {
                     handleChangeDate(date as Date, 'date_lt');
                     handleChangeDate(date as Date, 'date_gt');
                 }}
+                maxDate={new Date()}
                 customInput={
                     <Input
                         className={scss.custom_input_single}

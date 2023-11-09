@@ -63,13 +63,8 @@
       background-color: $accent-color;
       border-radius: 50%;
     }
-    .react-datepicker__day--keyboard-selected {
-      background-color: inherit;
-      color: inherit;
-
-      &:hover {
-        background-color: $accent-color;
-      }
+    .react-datepicker__month-text--in-range {
+      background-color: $accent-color;
     }
     .react-datepicker__day--in-range {
       border-radius: 50%;
@@ -78,6 +73,10 @@
     }
     .react-datepicker__day--in-selecting-range {
       border-radius: 50%;
+      background-color: $accent-color;
+      color: white;
+    }
+    .react-datepicker__month-text--in-selecting-range {
       background-color: $accent-color;
       color: white;
     }
@@ -108,8 +107,14 @@
   &:after {
     font-size: 32px!important;
     right: 5px;
+    transition: .2s all ease-in-out;
     @include phone {
       right: 0;
+    }
+  }
+  &:hover {
+    &:after {
+      color: $gray!important;
     }
   }
 }

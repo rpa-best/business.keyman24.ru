@@ -9,12 +9,15 @@ import ru from 'date-fns/locale/ru';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import scss from './PickDate.module.scss';
+import { getMonth, getYear, setDate, setMonth, setYear } from 'date-fns';
 
 interface PickDateProps {
     start: Date;
     end: Date;
     setStart: (o: Date) => void;
     setEnd: (o: Date) => void;
+    showWeek?: boolean;
+    selectMonth?: boolean;
 }
 
 export const RangeDatePicker = ({
@@ -22,6 +25,8 @@ export const RangeDatePicker = ({
     start,
     setStart,
     setEnd,
+    showWeek,
+    selectMonth = false,
 }: PickDateProps) => {
     const query = useSearchParams();
 
@@ -33,6 +38,14 @@ export const RangeDatePicker = ({
 
     const onChange = (dates: Date[]) => {
         const [start, end] = dates;
+        if (selectMonth) {
+            if (getMonth(end) === getMonth(Date.now())) {
+                setStartDate(start);
+                setEndDate(new Date());
+                return;
+            }
+        }
+
         if (+start > Date.now()) {
             toast('Дата не может быть больше сегодняшней', warningToastConfig);
             return;
@@ -50,11 +63,20 @@ export const RangeDatePicker = ({
         if (/-$/.test(value.trim())) {
             visibleValue = value.replace(/\//g, '.').replace(/-/g, '').trim();
         }
+
+        const slicedValue = selectMonth
+            ? visibleValue
+                  .replace(/\s/g, '')
+                  .split('-')
+                  .map((el) => el.slice(3))
+                  .join(' - ')
+            : visibleValue;
+
         return (
             <div onClick={onClick} className={scss.custom_input} ref={ref}>
                 <CalendarSvg className={scss.custom_input_svg} />
                 <button style={{ cursor: 'pointer' }}>
-                    {visibleValue ? visibleValue : 'Другая дата'}
+                    {visibleValue ? slicedValue : 'Другая дата'}
                 </button>
             </div>
         );
@@ -69,10 +91,12 @@ export const RangeDatePicker = ({
 
     useEffect(() => {
         if (!startDate && !endDate) {
+            const difference = selectMonth ? 6 : showWeek ? 2 : 1;
             const newEnd = new Date();
-            const newStart = new Date(
-                new Date().setMonth(new Date().getMonth() - 1)
-            );
+
+            const newStart = selectMonth
+                ? setDate(setMonth(Date.now(), getMonth(Date.now()) - 6), 1)
+                : setMonth(Date.now(), getMonth(Date.now()) - difference);
 
             setStart(newStart);
             setStartDate(newStart);
@@ -103,11 +127,15 @@ export const RangeDatePicker = ({
                     setStart(startDate);
                     setEnd(endDate);
                 }}
+                maxDate={new Date()}
+                disabledKeyboardNavigation
                 clearButtonClassName={scss.clear_button}
                 selected={null}
+                showMonthYearPicker={selectMonth}
                 startDate={startDate}
                 endDate={endDate}
                 portalId="root"
+                showWeekNumbers={showWeek}
                 selectsRange
             />
         </div>

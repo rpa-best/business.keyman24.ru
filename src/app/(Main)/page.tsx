@@ -58,6 +58,25 @@ export default async function DashboardMain({
             dateLtQuery = date_lt ?? formatDate(new Date());
             break;
         }
+        case 'byWeek': {
+            dateGtQuery =
+                date_gt ??
+                formatDate(
+                    new Date(new Date().setMonth(new Date().getMonth() - 2))
+                );
+            dateLtQuery = date_lt ?? formatDate(new Date());
+            break;
+        }
+        case 'byMonth': {
+            dateGtQuery =
+                date_gt ??
+                formatDate(
+                    new Date(new Date().setMonth(new Date().getMonth() - 6))
+                );
+            dateLtQuery = date_lt ?? formatDate(new Date());
+            break;
+        }
+
         default: {
             dateGtQuery = formatDate(new Date());
             dateLtQuery = formatDate(new Date());
