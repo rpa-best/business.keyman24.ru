@@ -14,24 +14,14 @@ export const ChangeModeInput = () => {
     const [selectedMode, setSelectedMode] = useState<{
         id: number;
         name: string;
-    }>({ id: -1, name: '' });
+        query: string;
+    }>({ id: -1, name: '', query: '' });
 
     useEffect(() => {
-        const mode = query.get('mode');
-        if (mode === 'true') {
-            setSelectedMode(FilterData[1]);
-        } else if (mode === 'false') {
-            setSelectedMode(FilterData.at(-1) as any);
-        } else {
-            setSelectedMode(FilterData[0]);
-        }
+        const mode = query.get('mode') ?? 'uniqueCount';
+        const currentMode = FilterData.find((el) => el.query === mode);
+        setSelectedMode(currentMode as typeof selectedMode);
     }, []);
-
-    useEffect(() => {
-        if (!query.get('mode')) {
-            setSelectedMode(FilterData[0]);
-        }
-    }, [query]);
 
     const handleDeleteOne = (id: number) => {
         setSelectedMode(FilterData[0]);
@@ -43,28 +33,10 @@ export const ChangeModeInput = () => {
 
     const handleChangeMode = (v: typeof selectedMode) => {
         setSelectedMode(v);
-        switch (v.name) {
-            case 'Входы': {
-                searchHelper.set('mode', 'true');
-                router.replace(pathname + `?${searchHelper.getParams}`, {
-                    scroll: false,
-                });
-                break;
-            }
-            case 'Выходы': {
-                searchHelper.set('mode', 'false');
-                router.replace(pathname + `?${searchHelper.getParams}`, {
-                    scroll: false,
-                });
-                break;
-            }
-            case 'Уникальные посещения': {
-                searchHelper.getParams.delete('mode');
-                router.replace(pathname + `?${searchHelper.getParams}`, {
-                    scroll: false,
-                });
-            }
-        }
+        searchHelper.set('mode', FilterData[v.id].query);
+        router.replace(pathname + `?${searchHelper.getParams}`, {
+            scroll: false,
+        });
     };
 
     return (

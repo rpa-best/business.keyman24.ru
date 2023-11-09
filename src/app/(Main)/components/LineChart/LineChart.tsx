@@ -24,45 +24,34 @@ interface LineChartProps {
 }
 
 type QueryIntervalType = 'byHour' | 'byWeek' | 'byMonth' | 'byDay';
-type QueryModeType = 'true' | 'false' | undefined;
+type QueryModeType = 'uniqueCount' | 'exitCount' | 'entersCount';
 
 export const LineChart: React.FC<LineChartProps> = ({ chartData }) => {
     const query = useSearchParams();
 
     const interval = (query.get('interval') as QueryIntervalType) ?? 'byHour';
-    const mode = query.get('interval') as QueryModeType;
+    const mode = (query.get('mode') as QueryModeType) ?? 'uniqueCount';
 
-    const intervalQuery =
-        interval === 'byHour'
-            ? 'По часам'
-            : interval === 'byWeek'
-            ? 'По неделям'
-            : interval === 'byMonth'
-            ? 'По месяцам'
-            : 'По дням';
-
-    const modeQuery =
-        mode === 'true'
-            ? 'entersCount'
-            : mode === 'false'
-            ? 'exitCount'
-            : 'uniqueCount';
+    const modeDesc =
+        mode === 'uniqueCount'
+            ? 'Уникальные посещения'
+            : mode === 'entersCount'
+            ? 'Входы'
+            : 'Выходы';
 
     const labels = Object.keys(chartData[interval]);
+
+    console.log(Object.values(chartData[interval])[0][mode]);
 
     const dataSet: ChartData<'line'> = {
         labels: labels,
         datasets: [
             {
-                label: intervalQuery,
-                data: Object.values(chartData[interval]).map(
-                    (el) => el[modeQuery]
-                ),
+                label: modeDesc,
+                data: Object.values(chartData[interval]).map((el) => el[mode]),
             },
         ],
     };
-
-    //console.log(chartData);
 
     return <Line className={scss.line_chart_wrapper} data={dataSet} />;
 };
