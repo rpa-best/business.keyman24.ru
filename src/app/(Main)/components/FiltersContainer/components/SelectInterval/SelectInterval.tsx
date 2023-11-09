@@ -16,7 +16,7 @@ export const SelectInterval = () => {
     const router = useRouter();
     const queryHelper = new SearchParamsHelper(query.entries);
 
-    const currentQuery = query.get('interval') ?? 'byHour';
+    const currentQuery = query.get('interval') ?? 'byDay';
 
     const currentInputQuery = useMemo(() => {
         return ButtonsData.find((el) => {
