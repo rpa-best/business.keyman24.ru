@@ -18,11 +18,12 @@ interface DashboardProps {
         org: string;
         date_lt: string;
         date_gt: string;
+        interval: string;
     };
 }
 
 export default async function DashboardMain({
-    searchParams: { org, date_gt, date_lt },
+    searchParams: { org, date_gt, date_lt, interval },
 }: DashboardProps) {
     const cookieStore = cookies();
 
@@ -34,15 +35,53 @@ export default async function DashboardMain({
 
     const allOrgs = await getOrganizationContractors(+orgId);
 
+    const intervalQuery = interval ?? 'byHour';
+
     const orgQuery = org ?? orgs[0].id;
 
-    const dateLtQuery = date_lt ?? formatDate(new Date());
+    let dateGtQuery;
 
-    console.log(mainCardsStatistics);
+    let dateLtQuery;
 
-    const dateGtQuery =
-        date_gt ??
-        formatDate(new Date(new Date().setMonth(new Date().getMonth() + 1)));
+    switch (intervalQuery) {
+        case 'byHour': {
+            dateGtQuery = formatDate(new Date());
+            dateLtQuery = formatDate(new Date());
+            break;
+        }
+        case 'byDay': {
+            dateGtQuery =
+                date_gt ??
+                formatDate(
+                    new Date(new Date().setMonth(new Date().getMonth() - 1))
+                );
+            dateLtQuery = date_lt ?? formatDate(new Date());
+            break;
+        }
+        case 'byWeek': {
+            dateGtQuery =
+                date_gt ??
+                formatDate(
+                    new Date(new Date().setMonth(new Date().getMonth() - 2))
+                );
+            dateLtQuery = date_lt ?? formatDate(new Date());
+            break;
+        }
+        case 'byMonth': {
+            dateGtQuery =
+                date_gt ??
+                formatDate(
+                    new Date(new Date().setMonth(new Date().getMonth() - 6))
+                );
+            dateLtQuery = date_lt ?? formatDate(new Date());
+            break;
+        }
+
+        default: {
+            dateGtQuery = formatDate(new Date());
+            dateLtQuery = formatDate(new Date());
+        }
+    }
 
     const lineChartData = await getLineChartData(+orgId, {
         orgs: orgQuery,

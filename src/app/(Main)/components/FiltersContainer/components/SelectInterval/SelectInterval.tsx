@@ -16,8 +16,6 @@ export const SelectInterval = () => {
     const router = useRouter();
     const queryHelper = new SearchParamsHelper(query.entries);
 
-    const { tabletBreak } = useResizeWidth();
-
     const currentQuery = query.get('interval') ?? 'byHour';
 
     const currentInputQuery = useMemo(() => {
@@ -33,6 +31,8 @@ export const SelectInterval = () => {
     const handleSelectIntervalChange = (id: number) => {
         const selectedInterval = ButtonsData.find((el) => el.id === id);
         queryHelper.set('interval', selectedInterval?.query as string);
+        queryHelper.getParams.delete('date_gt');
+        queryHelper.getParams.delete('date_lt');
         router.replace(pathname + `?${queryHelper.getParams}`, {
             scroll: false,
         });
@@ -40,16 +40,12 @@ export const SelectInterval = () => {
 
     return (
         <div className={scss.intervals_buttons}>
-            {!tabletBreak ? (
-                ButtonsData.map((el, index) => (
+            <div className={scss.buttons}>
+                {ButtonsData.map((el, index) => (
                     <button
                         key={index}
                         onClick={() => {
-                            queryHelper.set('interval', el.query);
-                            router.replace(
-                                pathname + `?${queryHelper.getParams}`,
-                                { scroll: false }
-                            );
+                            handleSelectIntervalChange(el.id);
                         }}
                         className={
                             currentQuery === el.query
@@ -59,8 +55,9 @@ export const SelectInterval = () => {
                     >
                         {el.text}
                     </button>
-                ))
-            ) : (
+                ))}
+            </div>
+            <div className={scss.buttons_tablet}>
                 <InputSelect
                     rounded
                     needErrorLabel={false}
@@ -69,7 +66,7 @@ export const SelectInterval = () => {
                     onChange={(v) => handleSelectIntervalChange(v.id)}
                     listValues={inputSelectData}
                 />
-            )}
+            </div>
         </div>
     );
 };

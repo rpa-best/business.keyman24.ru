@@ -3,8 +3,7 @@
 .intervals_buttons {
   position: relative;
   width: 59%;
-  display: flex;
-  column-gap: 10px;
+
   @include thousendTwoWidth {
     width: 65%
   }
@@ -14,7 +13,27 @@
     width: 55%;
   }
   @include phoneOrTablet {
-    width: 100%
+    width: calc(50% - 5px)
+  }
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  column-gap: 10px;
+  @include thousendWidth {
+    flex-flow: row wrap;
+    row-gap: 10px;
+  }
+  @include phoneOrTablet {
+    display: none;
+  }
+}
+
+.buttons_tablet {
+  display: none;
+  @include phoneOrTablet {
+    display: initial;
   }
 }
 

@@ -62,5 +62,7 @@ export const LineChart: React.FC<LineChartProps> = ({ chartData }) => {
         ],
     };
 
+    //console.log(chartData);
+
     return <Line className={scss.line_chart_wrapper} data={dataSet} />;
 };

@@ -144,6 +144,7 @@
     column-gap: 0;
   }
   @include phoneOrTablet {
+    align-items: flex-start;
     margin-top: 10px;
     column-gap: 10px;
   }
@@ -153,12 +154,12 @@
 }
 
 .date_filter {
-  width: 100%;
+  width: 50%;
   @include thousendWidth {
     width: 50%;
   }
   @include phoneOrTablet {
-    min-width: 50%;
+    width: calc(50% - 5px)
   }
   @include phone {
     margin-top: 5px;
@@ -167,6 +168,7 @@
 
 
 .filter_reset_phone {
+  width: max-content;
   @extend .filter_reset;
   display: none;
   @include phoneOrTablet {
