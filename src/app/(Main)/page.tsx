@@ -35,7 +35,7 @@ export default async function DashboardMain({
 
     const allOrgs = await getOrganizationContractors(+orgId);
 
-    const intervalQuery = interval ?? 'byHour';
+    const intervalQuery = interval ?? 'byDay';
 
     const orgQuery = org ?? orgs[0].id;
 

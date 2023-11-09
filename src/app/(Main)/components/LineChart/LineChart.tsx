@@ -41,8 +41,6 @@ export const LineChart: React.FC<LineChartProps> = ({ chartData }) => {
 
     const labels = Object.keys(chartData[interval]);
 
-    console.log(Object.values(chartData[interval])[0][mode]);
-
     const dataSet: ChartData<'line'> = {
         labels: labels,
         datasets: [

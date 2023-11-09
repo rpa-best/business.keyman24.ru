@@ -21,7 +21,7 @@ export const ChangeModeInput = () => {
         const mode = query.get('mode') ?? 'uniqueCount';
         const currentMode = FilterData.find((el) => el.query === mode);
         setSelectedMode(currentMode as typeof selectedMode);
-    }, []);
+    }, [query]);
 
     const handleDeleteOne = (id: number) => {
         setSelectedMode(FilterData[0]);
