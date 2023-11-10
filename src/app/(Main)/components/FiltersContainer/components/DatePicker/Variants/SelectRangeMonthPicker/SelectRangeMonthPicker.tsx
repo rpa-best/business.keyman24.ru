@@ -3,6 +3,7 @@ import { RangeDatePicker } from 'components/RangeDatePicker';
 import React, { useMemo } from 'react';
 import { SearchParamsHelper } from 'utils/searchParamsHelper';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { setDate } from 'date-fns';
 
 export const SelectRangeMonthPicker = () => {
     const query = useSearchParams();
@@ -15,7 +16,10 @@ export const SelectRangeMonthPicker = () => {
     const startQuery = useMemo(() => {
         return start
             ? new Date(start)
-            : new Date(new Date().setMonth(new Date().getMonth() - 6));
+            : setDate(
+                  new Date(new Date().setMonth(new Date().getMonth() - 1)),
+                  1
+              );
     }, [start]);
 
     const end = query.get('date_lt');
@@ -23,6 +27,7 @@ export const SelectRangeMonthPicker = () => {
     const endQuery = useMemo(() => {
         return end ? new Date(end) : new Date();
     }, [end]);
+
     const handleChangeDate = (d: Date, query: string) => {
         if (!d) {
             queryHelper.getParams.delete(query);
@@ -34,6 +39,7 @@ export const SelectRangeMonthPicker = () => {
             scroll: false,
         });
     };
+
     return (
         <RangeDatePicker
             selectMonth

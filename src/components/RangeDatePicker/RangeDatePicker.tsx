@@ -40,10 +40,13 @@ export const RangeDatePicker = ({
         const [start, end] = dates;
         if (selectMonth) {
             if (getMonth(end) === getMonth(Date.now())) {
-                setStartDate(start);
+                setStartDate(setDate(start, 1));
                 setEndDate(new Date());
                 return;
             }
+            setStartDate(setDate(start, 1));
+            setEndDate(end);
+            return;
         }
 
         if (+start > Date.now()) {

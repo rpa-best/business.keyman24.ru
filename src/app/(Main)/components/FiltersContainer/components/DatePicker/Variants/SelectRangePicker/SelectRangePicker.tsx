@@ -14,7 +14,7 @@ export const SelectRangePicker = ({ showWeek }: { showWeek?: boolean }) => {
     const start = query.get('date_gt');
 
     const startQuery = useMemo(() => {
-        const difference = showWeek ? +2 : +1;
+        const difference = 1;
         return start
             ? new Date(start)
             : new Date(new Date().setMonth(new Date().getMonth() - difference));

@@ -34,10 +34,18 @@ export const SingleDayPicker = () => {
             return;
         }
         setSelectedValue(d);
-        queryHelper.set(query, formatDate(d));
-        router.replace(pathname + `?${queryHelper.getParams}`, {
-            scroll: false,
-        });
+        const formatedDate = formatDate(d);
+        if (query === 'date_lt') {
+            queryHelper.set(query, formatedDate + ' 23:59:59');
+            router.replace(pathname + `?${queryHelper.getParams}`, {
+                scroll: false,
+            });
+        } else {
+            queryHelper.set(query, formatedDate + ' 00:00:00');
+            router.replace(pathname + `?${queryHelper.getParams}`, {
+                scroll: false,
+            });
+        }
     };
 
     return (

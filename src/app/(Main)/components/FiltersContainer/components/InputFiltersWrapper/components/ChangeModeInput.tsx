@@ -3,8 +3,15 @@ import { ColorRadialInputSelect } from 'app/(Main)/components/FiltersContainer/c
 import React, { useEffect, useState } from 'react';
 import { SearchParamsHelper } from 'utils/searchParamsHelper';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { QueryModeType } from 'app/(Main)/components/LineChart/LineChart';
 
-export const ChangeModeInput = () => {
+interface ChangeModeInputProps {
+    setMode: (m: QueryModeType) => void;
+}
+
+export const ChangeModeInput: React.FC<ChangeModeInputProps> = ({
+    setMode,
+}) => {
     const pathname = usePathname();
     const router = useRouter();
     const query = useSearchParams();
@@ -25,6 +32,7 @@ export const ChangeModeInput = () => {
 
     const handleDeleteOne = (id: number) => {
         setSelectedMode(FilterData[0]);
+        setMode(FilterData[0].query as QueryModeType);
         searchHelper.getParams.delete('mode');
         router.replace(pathname + `?${searchHelper.getParams}`, {
             scroll: false,
@@ -33,6 +41,7 @@ export const ChangeModeInput = () => {
 
     const handleChangeMode = (v: typeof selectedMode) => {
         setSelectedMode(v);
+        setMode(FilterData[v.id].query as QueryModeType);
         searchHelper.set('mode', FilterData[v.id].query);
         router.replace(pathname + `?${searchHelper.getParams}`, {
             scroll: false,

@@ -1,25 +1,31 @@
-import React, { useEffect, useState } from 'react';
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 import { Button } from 'components/UI/Buttons/Button';
 import { useSocketStore } from 'store/useSocketStore';
 import AvatarSvg from '/public/svg/avatar.svg';
-import { IWorker, IWorkerDocs } from 'http/types';
+import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import { getWorkerDocs } from 'http/workerApi';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 
 import scss from 'app/(Main)/working-areas/session/[slug]/open/components/Security/Security.module.scss';
 import { Spinner } from 'components/Spinner';
-import { useRouter } from 'next/navigation';
+import Cookies from 'universal-cookie';
+import { useParams } from 'next/navigation';
+import { getParamsId } from 'app/(Main)/working-areas/helpers';
 
-interface SecurityErrorLogProps {
-    handleBackButton: () => void;
-}
+const cookie = new Cookies();
 
-export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = ({
-    handleBackButton,
-}) => {
-    const socketStore = useSocketStore((state) => state);
+interface SecurityErrorLogProps {}
+
+export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
+    const { slug } = useParams();
+
+    const socket = useRef<WebSocket>();
+
+    const [message, setMessage] = useState<SocketResponse>();
 
     const [worker, setWorker] = useState<IWorker | null>(null);
     const [loading, setLoading] = useState(false);
@@ -29,8 +35,19 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = ({
     } | null>(null);
 
     useEffect(() => {
-        const message = socketStore.message;
+        const access = cookie.get('access');
+        const areaId = getParamsId(slug);
+        socket.current = new WebSocket(
+            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}business/ws/session/${areaId}/?token=${access}`
+        );
 
+        socket.current.onmessage = (ev) => {
+            const event = JSON.parse(ev.data);
+            setMessage(event);
+        };
+    }, []);
+
+    useEffect(() => {
         if (message?.type === 'success') {
             return;
         }
@@ -46,7 +63,7 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = ({
                             setErrors((d) => ({
                                 errorsArray: [
                                     ...(d?.errorsArray ?? []),
-                                    doc.name,
+                                    doc.name + `до ${doc.activeTo}`,
                                 ],
                                 errorName: 'Документы просрочены',
                             }));
@@ -59,15 +76,10 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = ({
         };
 
         fetchWorkerDocs();
-    }, [socketStore.message]);
+    }, [message]);
 
     return (
         <div className={scss.errors_log}>
-            <div className={scss.back_button}>
-                <Button onClick={() => handleBackButton()} type="button">
-                    Назад
-                </Button>
-            </div>
             {worker && (
                 <>
                     <div className={scss.error_worker}>

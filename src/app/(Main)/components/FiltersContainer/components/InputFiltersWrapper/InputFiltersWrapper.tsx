@@ -6,15 +6,21 @@ import { ChangeModeInput } from 'app/(Main)/components/FiltersContainer/componen
 import { IOrganization } from 'store/types';
 
 import scss from 'app/(Main)/components/FiltersContainer/FilterContainer.module.scss';
+import {
+    QueryIntervalType,
+    QueryModeType,
+} from 'app/(Main)/components/LineChart/LineChart';
 
 interface InputFiltersWrapperProps {
     defaultOrg: IOrganization;
     contractors: IOrganization[];
+    handleChangeQuery: (m?: QueryModeType) => void;
 }
 
 export const InputFiltersWrapper: React.FC<InputFiltersWrapperProps> = ({
     defaultOrg,
     contractors,
+    handleChangeQuery,
 }) => {
     return (
         <div className={scss.filter_inputs}>
@@ -25,7 +31,7 @@ export const InputFiltersWrapper: React.FC<InputFiltersWrapperProps> = ({
                 />
             </div>
             <div className={scss.filter_wrapper}>
-                <ChangeModeInput />
+                <ChangeModeInput setMode={handleChangeQuery} />
             </div>
         </div>
     );

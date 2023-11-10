@@ -156,13 +156,7 @@
 }
 
 .utils_buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  row-gap: 10px;
-  @include phone {
-    width: 100%;
-  }
+
   & button {
     @include fullHd {
       width: 250px;

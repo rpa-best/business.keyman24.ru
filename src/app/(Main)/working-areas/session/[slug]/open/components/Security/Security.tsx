@@ -17,7 +17,7 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { sendSessionAction } from 'http/workingAreaApi';
 import { useSocketStore } from 'store/useSocketStore';
 import revalidate from 'utils/revalidate';
-import { SecurityErrorLog } from 'app/(Main)/working-areas/session/[slug]/open/components/Security/SecurityErrorLog';
+
 import { updateOrg } from 'http/organizationApi';
 
 import { BackButton } from 'components/UI/Buttons/BackButton';
@@ -41,7 +41,6 @@ export const Security: React.FC<SecurityProps> = ({
 
     const socketStore = useSocketStore((state) => state);
 
-    const [viewPage, setViewPage] = useState(false);
     const [sessionLogData, setSessionLogData] =
         useState<typeof sessionLog>(sessionLog);
 
@@ -166,66 +165,53 @@ export const Security: React.FC<SecurityProps> = ({
                     Назад
                 </BackButton>
             </div>
-            {!viewPage ? (
-                <div>
-                    <div className={scss.buttons_wrapper}>
+            <div>
+                <div className={scss.buttons_wrapper}>
+                    <Button onClick={() => onCloseSessionClick()} type="button">
+                        Завершить сессию
+                    </Button>
+                    <div className={scss.utils_buttons}>
                         <Button
-                            onClick={() => onCloseSessionClick()}
+                            onClick={() => handleUpdateClick()}
                             type="button"
                         >
-                            Завершить сессию
+                            Обновить данные
                         </Button>
-                        <div className={scss.utils_buttons}>
-                            <Button
-                                onClick={() => setViewPage(true)}
-                                type="button"
-                            >
-                                Лог ошибок
-                            </Button>
-                            <Button
-                                onClick={() => handleUpdateClick()}
-                                type="button"
-                            >
-                                Обновить данные
-                            </Button>
-                        </div>
                     </div>
-                    <div className={scss.working_view_wrapper}>
-                        {worker?.id ? (
-                            <div className={scss.worker_info_wrapper_custom}>
-                                <WorkerInfoCard
-                                    halfScreen
-                                    worker={worker as IWorker}
-                                    workerDocs={workerDocs as IWorkerDocs[]}
-                                />
-                            </div>
-                        ) : (
-                            <div className={scss.worker_empty_wrapper}>
-                                <h2 className={scss.spinner_header}>
-                                    Ожидание работника
-                                </h2>
-                                <div className={scss.spinner}>
-                                    <SpinnerFit />
-                                </div>
-                            </div>
-                        )}
-                        <div className={scss.working_view_table}>
-                            <Table
-                                handleRowClick={handleRowClick}
-                                tableData={sessionLogData}
-                                setTableData={setSessionLogData}
-                            >
-                                <Column header="Работник" field="workerName" />
-                                <Column header="Дата" field="date" />
-                                <Column header="Тип" field="modeName" />
-                            </Table>
-                        </div>
-                    </div>
-                    {loading && <Spinner />}
                 </div>
-            ) : (
-                <SecurityErrorLog handleBackButton={() => setViewPage(false)} />
-            )}
+                <div className={scss.working_view_wrapper}>
+                    {worker?.id ? (
+                        <div className={scss.worker_info_wrapper_custom}>
+                            <WorkerInfoCard
+                                halfScreen
+                                worker={worker as IWorker}
+                                workerDocs={workerDocs as IWorkerDocs[]}
+                            />
+                        </div>
+                    ) : (
+                        <div className={scss.worker_empty_wrapper}>
+                            <h2 className={scss.spinner_header}>
+                                Ожидание работника
+                            </h2>
+                            <div className={scss.spinner}>
+                                <SpinnerFit />
+                            </div>
+                        </div>
+                    )}
+                    <div className={scss.working_view_table}>
+                        <Table
+                            handleRowClick={handleRowClick}
+                            tableData={sessionLogData}
+                            setTableData={setSessionLogData}
+                        >
+                            <Column header="Работник" field="workerName" />
+                            <Column header="Дата" field="date" />
+                            <Column header="Тип" field="modeName" />
+                        </Table>
+                    </div>
+                </div>
+                {loading && <Spinner />}
+            </div>
         </>
     );
 };
