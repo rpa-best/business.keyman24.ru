@@ -23,6 +23,16 @@
     flex-direction: column;
     row-gap: 10px;
   }
+  & div {
+    &:first-child {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      @include phoneOrTablet {
+        margin-left: 15px;
+      }
+    }
+  }
 }
 
 .buttons_wrapper {
@@ -31,5 +41,12 @@
   @include phoneOrTablet {
     flex-direction: column;
     row-gap: 10px;
+  }
+  @include phone {
+    margin-left: 15px;
+  }
+  & button {
+    margin-top: auto;
+    height: max-content;
   }
 }

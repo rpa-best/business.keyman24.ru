@@ -27,6 +27,7 @@ import revalidate from 'utils/revalidate';
 import { DateHelper } from 'utils/dateHelper';
 
 import scss from './SessionWrapper.module.scss';
+import Link from 'next/link';
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -195,6 +196,11 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                                 ? 'Выйти из архива'
                                 : 'Посмотреть архив'}
                         </Button>
+                        <Link href={pathname + '/error-log'}>
+                            <Button onClick={() => {}} type="button">
+                                Лог ошибок
+                            </Button>
+                        </Link>
                     </div>
                     <div className={scss.buttons_wrapper}>
                         <Button
