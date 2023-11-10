@@ -21,17 +21,18 @@ ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 interface LineChartProps {
     chartData: LineChartData;
+    interval: QueryIntervalType;
+    mode: QueryModeType;
 }
 
-type QueryIntervalType = 'byHour' | 'byWeek' | 'byMonth' | 'byDay';
-type QueryModeType = 'uniqueCount' | 'exitCount' | 'entersCount';
+export type QueryIntervalType = 'byHour' | 'byWeek' | 'byMonth' | 'byDay';
+export type QueryModeType = 'uniqueCount' | 'exitCount' | 'entersCount';
 
-export const LineChart: React.FC<LineChartProps> = ({ chartData }) => {
-    const query = useSearchParams();
-
-    const interval = (query.get('interval') as QueryIntervalType) ?? 'byHour';
-    const mode = (query.get('mode') as QueryModeType) ?? 'uniqueCount';
-
+export const LineChart: React.FC<LineChartProps> = ({
+    chartData,
+    interval,
+    mode,
+}) => {
     const modeDesc =
         mode === 'uniqueCount'
             ? 'Уникальные посещения'

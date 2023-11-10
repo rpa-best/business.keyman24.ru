@@ -12,13 +12,16 @@ import {
 
 import scss from 'app/(Main)/MainPage.module.scss';
 import { formatDate } from 'utils/formatDate';
+import { QueryIntervalType } from 'app/(Main)/components/LineChart/LineChart';
+import { AxiosError } from 'axios';
+import { FiltersAndLineChart } from 'app/(Main)/components/FiltersAndLineChart';
 
 interface DashboardProps {
     searchParams: {
         org: string;
         date_lt: string;
         date_gt: string;
-        interval: string;
+        interval: QueryIntervalType;
     };
 }
 
@@ -45,8 +48,8 @@ export default async function DashboardMain({
 
     switch (intervalQuery) {
         case 'byHour': {
-            dateGtQuery = formatDate(new Date());
-            dateLtQuery = formatDate(new Date());
+            dateGtQuery = date_gt ?? formatDate(new Date(), 'gt');
+            dateLtQuery = date_lt ?? formatDate(new Date(), 'lg');
             break;
         }
         case 'byDay': {
@@ -58,28 +61,24 @@ export default async function DashboardMain({
             dateLtQuery = date_lt ?? formatDate(new Date());
             break;
         }
-        case 'byWeek': {
-            dateGtQuery =
-                date_gt ??
-                formatDate(
-                    new Date(new Date().setMonth(new Date().getMonth() - 2))
-                );
-            dateLtQuery = date_lt ?? formatDate(new Date());
-            break;
-        }
         case 'byMonth': {
             dateGtQuery =
                 date_gt ??
                 formatDate(
-                    new Date(new Date().setMonth(new Date().getMonth() - 6))
+                    new Date(new Date().setMonth(new Date().getMonth() - 1))
                 );
             dateLtQuery = date_lt ?? formatDate(new Date());
             break;
         }
 
         default: {
-            dateGtQuery = formatDate(new Date());
-            dateLtQuery = formatDate(new Date());
+            dateGtQuery =
+                date_gt ??
+                formatDate(
+                    new Date(new Date().setMonth(new Date().getMonth() - 1))
+                );
+            dateLtQuery = date_lt ?? formatDate(new Date());
+            break;
         }
     }
 
@@ -96,8 +95,11 @@ export default async function DashboardMain({
                 <div className={scss.short_info_wrapper}>
                     <MainCards statistics={mainCardsStatistics} />
                 </div>
-                <FiltersContainer contractors={allOrgs} org={orgs[0]} />
-                <LineChart chartData={lineChartData} />
+                <FiltersAndLineChart
+                    allOrgs={allOrgs}
+                    org={orgs[0]}
+                    lineChartData={lineChartData}
+                />
             </div>
         </div>
     );

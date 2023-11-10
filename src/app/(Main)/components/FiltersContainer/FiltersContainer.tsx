@@ -11,15 +11,23 @@ import { usePathname, useRouter } from 'next/navigation';
 import { DatePicker } from 'app/(Main)/components/FiltersContainer/components/DatePicker';
 
 import scss from './FilterContainer.module.scss';
+import {
+    QueryIntervalType,
+    QueryModeType,
+} from 'app/(Main)/components/LineChart/LineChart';
 
 interface FiltersContainerProps {
     org: IOrganization;
     contractors: IOrganization[];
+    interval: QueryIntervalType;
+    handleChangeQuery: (m?: QueryModeType, i?: QueryIntervalType) => void;
 }
 
 export const FiltersContainer: React.FC<FiltersContainerProps> = ({
     org,
     contractors,
+    interval,
+    handleChangeQuery,
 }) => {
     const pathname = usePathname();
     const router = useRouter();
@@ -51,11 +59,15 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
                         </div>
                     </div>
                     <InputFiltersWrapper
+                        handleChangeQuery={handleChangeQuery}
                         contractors={contractors}
                         defaultOrg={org}
                     />
                     <div className={scss.time_filters}>
-                        <SelectInterval />
+                        <SelectInterval
+                            interval={interval}
+                            handleChangeQuery={handleChangeQuery}
+                        />
                         <DatePicker />
                     </div>
                     <div

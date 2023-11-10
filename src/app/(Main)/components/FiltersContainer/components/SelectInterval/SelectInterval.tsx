@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { ButtonsData } from 'app/(Main)/components/FiltersContainer/components/SelectInterval/buttonsData';
 import { SearchParamsHelper } from 'utils/searchParamsHelper';
@@ -9,20 +9,32 @@ import { useResizeWidth } from 'hooks/useResizeWidth';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 
 import scss from './SelectInterval.module.scss';
+import {
+    QueryIntervalType,
+    QueryModeType,
+} from 'app/(Main)/components/LineChart/LineChart';
 
-export const SelectInterval = () => {
+interface SelectIntervalProps {
+    interval: QueryIntervalType;
+    handleChangeQuery: (m?: QueryModeType, i?: QueryIntervalType) => void;
+}
+
+export const SelectInterval: React.FC<SelectIntervalProps> = ({
+    interval,
+    handleChangeQuery,
+}) => {
     const query = useSearchParams();
     const pathname = usePathname();
     const router = useRouter();
     const queryHelper = new SearchParamsHelper(query.entries);
 
-    const currentQuery = query.get('interval') ?? 'byDay';
+    const mode = query.get('mode') ?? 'uniqueCount';
 
     const currentInputQuery = useMemo(() => {
         return ButtonsData.find((el) => {
-            return el.query === currentQuery;
+            return el.query === interval;
         });
-    }, [currentQuery]);
+    }, [interval]);
 
     const inputSelectData = useMemo(() => {
         return ButtonsData.map((el) => ({ name: el.text, id: el.id }));
@@ -30,6 +42,10 @@ export const SelectInterval = () => {
 
     const handleSelectIntervalChange = (id: number) => {
         const selectedInterval = ButtonsData.find((el) => el.id === id);
+        handleChangeQuery(
+            mode as QueryModeType,
+            selectedInterval?.query as QueryIntervalType
+        );
         queryHelper.set('interval', selectedInterval?.query as string);
         queryHelper.getParams.delete('date_gt');
         queryHelper.getParams.delete('date_lt');
@@ -48,7 +64,7 @@ export const SelectInterval = () => {
                             handleSelectIntervalChange(el.id);
                         }}
                         className={
-                            currentQuery === el.query
+                            interval === el.query
                                 ? scss.button_active
                                 : scss.button
                         }
