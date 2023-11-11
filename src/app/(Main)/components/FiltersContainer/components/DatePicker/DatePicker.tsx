@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+import { SearchParamsHelper } from 'utils/searchParamsHelper';
+
 import { SingleDayPicker } from 'app/(Main)/components/FiltersContainer/components/DatePicker/Variants/SingleDayPicker/SingleDayPicker';
 import { SelectRangePicker } from 'app/(Main)/components/FiltersContainer/components/DatePicker/Variants/SelectRangePicker/SelectRangePicker';
 import { SelectRangeMonthPicker } from 'app/(Main)/components/FiltersContainer/components/DatePicker/Variants/SelectRangeMonthPicker';
 
 import scss from 'app/(Main)/components/FiltersContainer/FilterContainer.module.scss';
-import { SearchParamsHelper } from 'utils/searchParamsHelper';
 
-export const DatePicker = () => {
+interface DatePickerProps {
+    currentInterval: string;
+}
+
+export const DatePicker: React.FC<DatePickerProps> = ({ currentInterval }) => {
     const query = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
     const queryHelper = new SearchParamsHelper(query.entries);
-
-    const currentInterval = query.get('interval') ?? 'byDay';
 
     useEffect(() => {
         queryHelper.set('interval', 'byHour');

@@ -14,7 +14,7 @@ import {
 interface InputFiltersWrapperProps {
     defaultOrg: IOrganization;
     contractors: IOrganization[];
-    handleChangeQuery: (m?: QueryModeType) => void;
+    handleChangeQuery: (m?: QueryModeType[]) => void;
 }
 
 export const InputFiltersWrapper: React.FC<InputFiltersWrapperProps> = ({

@@ -16,13 +16,14 @@ import { useSearchParams } from 'next/navigation';
 import { Line } from 'react-chartjs-2';
 
 import scss from './LineChart.module.scss';
+import { FilterData } from 'app/(Main)/components/FiltersContainer/components/InputFiltersWrapper/data';
 
 ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend);
 
 interface LineChartProps {
     chartData: LineChartData;
     interval: QueryIntervalType;
-    mode: QueryModeType;
+    mode: QueryModeType[];
 }
 
 export type QueryIntervalType = 'byHour' | 'byWeek' | 'byMonth' | 'byDay';
@@ -33,23 +34,24 @@ export const LineChart: React.FC<LineChartProps> = ({
     interval,
     mode,
 }) => {
-    const modeDesc =
-        mode === 'uniqueCount'
-            ? 'Уникальные посещения'
-            : mode === 'entersCount'
-            ? 'Входы'
-            : 'Выходы';
+    const modeDesc = FilterData.filter((el) =>
+        mode.some((m) => el.query === m)
+    );
 
     const labels = Object.keys(chartData[interval]);
 
+    const datasets: ChartData<'line'>['datasets'] = modeDesc.map((m) => {
+        return {
+            label: m.name,
+            data: Object.values(chartData[interval]).map(
+                (el) => el[m.query as QueryModeType]
+            ),
+        };
+    });
+
     const dataSet: ChartData<'line'> = {
         labels: labels,
-        datasets: [
-            {
-                label: modeDesc,
-                data: Object.values(chartData[interval]).map((el) => el[mode]),
-            },
-        ],
+        datasets,
     };
 
     return <Line className={scss.line_chart_wrapper} data={dataSet} />;

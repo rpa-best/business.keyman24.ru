@@ -23,6 +23,7 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
     const [selectedOrg, setSelectedOrg] = useState<IOrganization>({
         name: '',
     } as any);
+
     const orgListValues = useMemo(() => {
         return [...contractors];
     }, [contractors]);
@@ -52,7 +53,7 @@ export const ChangeOrgInput: React.FC<ChangeOrgInputProps> = ({
             scroll: false,
         });
 
-        setSelectedOrgs([...selectedOrgs, v]);
+        setSelectedOrgs(newOrgs);
         setSelectedOrg(v);
     };
 

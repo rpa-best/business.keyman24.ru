@@ -38,6 +38,12 @@ $accent-color-blue: #516FA5;
   }
 }
 
+@mixin thousendThreeWidth () {
+  @media (max-width: 1300px) {
+    @content
+  }
+}
+
 @mixin thousendTwoWidth() {
   @media (max-width: 1200px) {
     @content

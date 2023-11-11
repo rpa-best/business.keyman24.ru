@@ -138,6 +138,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                         onClick={() => {
                             setVisible(true);
                         }}
+                        type="button"
                         className={scss.change_img_wrapper}
                     >
                         <EditSvg />

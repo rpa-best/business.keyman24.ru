@@ -20,7 +20,7 @@ interface FiltersContainerProps {
     org: IOrganization;
     contractors: IOrganization[];
     interval: QueryIntervalType;
-    handleChangeQuery: (m?: QueryModeType, i?: QueryIntervalType) => void;
+    handleChangeQuery: (m?: QueryModeType[], i?: QueryIntervalType) => void;
 }
 
 export const FiltersContainer: React.FC<FiltersContainerProps> = ({
@@ -68,7 +68,7 @@ export const FiltersContainer: React.FC<FiltersContainerProps> = ({
                             interval={interval}
                             handleChangeQuery={handleChangeQuery}
                         />
-                        <DatePicker />
+                        <DatePicker currentInterval={interval} />
                     </div>
                     <div
                         tabIndex={0}
