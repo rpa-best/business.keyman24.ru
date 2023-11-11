@@ -45,6 +45,10 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
             const event = JSON.parse(ev.data);
             setMessage(event);
         };
+
+        return () => {
+            socket.current?.close();
+        };
     }, []);
 
     useEffect(() => {

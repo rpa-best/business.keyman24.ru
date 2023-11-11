@@ -3,15 +3,17 @@
 
 .input_select {
   @extend .input;
+  height: 40px;
   background-color: white;
   border-radius: 25px;
   letter-spacing: 1px;
-  height: 40px;
 }
 
 .input_select_many {
   @extend .input_select;
-  height: 80px;
+  @include thousendTwoWidth {
+    height: 80px;
+  }
 }
 
 .pseudo_inputs_container {
@@ -37,9 +39,7 @@
   border-radius: 25px;
   cursor: text;
   padding-right: 30px;
-  @include phone {
-    row-gap: 2px;
-  }
+  row-gap: 2px;
 }
 
 .input_arrow_svg_single {
@@ -88,13 +88,8 @@
   &:first-child {
     border-radius: 25px 0 0 25px;
   }
-
-  &:nth-child(2n) {
-    border-radius: 0 25px 25px 0
-  }
-
-  &:nth-child(3n) {
-    border-radius: 25px;
+  &:last-child {
+    border-radius: 0 25px 25px 0;
   }
 
   @include thousendWidth {
@@ -123,10 +118,5 @@
 
 .field_many {
   @extend .field_without_label;
-  height: 80px;
-}
-
-.input_select_many {
-  @extend .input_select;
   height: 80px;
 }

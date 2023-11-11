@@ -16,7 +16,7 @@ import {
 
 interface SelectIntervalProps {
     interval: QueryIntervalType;
-    handleChangeQuery: (m?: QueryModeType, i?: QueryIntervalType) => void;
+    handleChangeQuery: (m?: QueryModeType[], i?: QueryIntervalType) => void;
 }
 
 export const SelectInterval: React.FC<SelectIntervalProps> = ({
@@ -27,8 +27,6 @@ export const SelectInterval: React.FC<SelectIntervalProps> = ({
     const pathname = usePathname();
     const router = useRouter();
     const queryHelper = new SearchParamsHelper(query.entries);
-
-    const mode = query.get('mode') ?? 'uniqueCount';
 
     const currentInputQuery = useMemo(() => {
         return ButtonsData.find((el) => {
@@ -43,7 +41,7 @@ export const SelectInterval: React.FC<SelectIntervalProps> = ({
     const handleSelectIntervalChange = (id: number) => {
         const selectedInterval = ButtonsData.find((el) => el.id === id);
         handleChangeQuery(
-            mode as QueryModeType,
+            undefined,
             selectedInterval?.query as QueryIntervalType
         );
         queryHelper.set('interval', selectedInterval?.query as string);

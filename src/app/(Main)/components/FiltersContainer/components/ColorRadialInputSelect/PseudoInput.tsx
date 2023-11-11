@@ -18,19 +18,19 @@ export const PseudoInput: React.FC<PseudoInputProps> = ({
     handleDeleteOne,
     itemCount,
 }) => {
-    const { thousandTwoBreak } = useResizeWidth();
+    const { thousandThreeBreak } = useResizeWidth();
 
     const borderRadius = useMemo(() => {
         if (itemCount === 1) {
             return '25px';
         }
-        if (thousandTwoBreak) {
+        if (thousandThreeBreak) {
             return '25px';
         }
-        if (itemCount > 2 && thousandTwoBreak) {
+        if (itemCount > 2 && thousandThreeBreak) {
             return '25px';
         }
-    }, [itemCount, thousandTwoBreak]);
+    }, [itemCount, thousandThreeBreak]);
 
     return (
         <div

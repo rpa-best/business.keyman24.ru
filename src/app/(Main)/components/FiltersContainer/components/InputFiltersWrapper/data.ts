@@ -1,4 +1,4 @@
-interface FilterData {
+export interface FilterData {
     id: number;
     name: string;
     query: string;

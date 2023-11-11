@@ -28,14 +28,14 @@ export const FiltersAndLineChart: React.FC<FiltersAndLineChartProps> = ({
     const queryInterval = query.get('interval');
     const queryMode = query.get('mode');
 
-    const [mode, setMode] = useState<QueryModeType>(
-        (queryMode as QueryModeType) ?? 'uniqueCount'
+    const [mode, setMode] = useState<QueryModeType[]>(
+        (queryMode?.split(',') as QueryModeType[]) ?? ['uniqueCount']
     );
     const [interval, setInterval] = useState<QueryIntervalType>(
         (queryInterval as QueryIntervalType) ?? 'byDay'
     );
 
-    const handleChangeQuery = (m?: QueryModeType, i?: QueryIntervalType) => {
+    const handleChangeQuery = (m?: QueryModeType[], i?: QueryIntervalType) => {
         if (m) {
             setMode(m);
         }
@@ -46,7 +46,7 @@ export const FiltersAndLineChart: React.FC<FiltersAndLineChartProps> = ({
 
     useEffect(() => {
         if (!queryMode) {
-            setMode('uniqueCount');
+            setMode(['uniqueCount']);
         }
     }, [queryMode]);
 

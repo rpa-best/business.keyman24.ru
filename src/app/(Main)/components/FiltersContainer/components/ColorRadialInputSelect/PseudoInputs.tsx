@@ -12,13 +12,11 @@ import { useResizeWidth } from 'hooks/useResizeWidth';
 interface PseudoInputsProps {
     handleChangeType: () => void;
     selectedValues?: any[];
-    inputValue: string;
     bgColor: string;
     handleDeleteOne: (v: number) => void;
 }
 
 export const PseudoInputs: React.FC<PseudoInputsProps> = ({
-    inputValue,
     selectedValues,
     handleDeleteOne,
     bgColor,
@@ -43,14 +41,6 @@ export const PseudoInputs: React.FC<PseudoInputsProps> = ({
                 }}
                 className={scss.pseudo_inputs}
             >
-                {!selectedValues && inputValue && (
-                    <PseudoInput
-                        itemCount={itemCount}
-                        bgColor={bgColor}
-                        name={inputValue}
-                        handleDeleteOne={() => handleDeleteOne(0)}
-                    />
-                )}
                 {selectedValues?.map((el, index) => (
                     <PseudoInput
                         itemCount={itemCount}

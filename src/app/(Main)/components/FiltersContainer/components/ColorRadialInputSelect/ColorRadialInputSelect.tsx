@@ -140,7 +140,7 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
                     />
                 )}
             >
-                <div style={{ height: 'max-content' }}>
+                <div style={{ position: 'relative' }}>
                     <div
                         style={{
                             display: type === 'input' ? 'flex' : 'none',
@@ -171,7 +171,6 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
                         <PseudoInputs
                             handleChangeType={handleChangeType}
                             selectedValues={selectedValues}
-                            inputValue={inputValue}
                             bgColor={bgColor}
                             handleDeleteOne={handleDeleteOne}
                         />
