@@ -8,6 +8,9 @@
   @include thousendThreeWidth {
     height: max-content;
   }
+  @include phoneOrTablet {
+    background: transparent;
+  }
 }
 
 .filter {

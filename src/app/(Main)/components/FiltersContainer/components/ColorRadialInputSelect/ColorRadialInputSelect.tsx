@@ -36,19 +36,11 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
     const prevValue = useRef(value);
 
     useEffect(() => {
-        if (selectedValues?.length !== 1 && selectedValues) {
-            setModifiedListValues(
-                [...listValues].filter((v) => {
-                    return !selectedValues?.some((el) => el.id === v.id);
-                })
-            );
-        } else {
-            setModifiedListValues(
-                [...listValues].filter((v) => {
-                    return v.name !== value;
-                })
-            );
-        }
+        setModifiedListValues(
+            [...listValues].filter((v) => {
+                return !selectedValues?.some((el) => el.id === v.id);
+            })
+        );
     }, [listValues, selectedValues, value]);
 
     useEffect(() => {
@@ -61,7 +53,7 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
         setInputValue(e.target.value);
 
         // Фильтруем список на основе inputValue
-        const filteredList = listValues.filter(
+        const filteredList = modifiedListValues.filter(
             (item) =>
                 item.name.toLowerCase().includes(inputValue) &&
                 item.name.toLowerCase() !== prevValue.current.toLowerCase()

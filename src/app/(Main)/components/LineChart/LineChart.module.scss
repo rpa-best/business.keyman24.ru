@@ -1,5 +1,7 @@
 @import "scss/utils";
 
 .line_chart_wrapper {
-  max-height: 400px;
+  min-height: 100%;
+  max-width: 100%;
+  min-width: 100%;
 }
