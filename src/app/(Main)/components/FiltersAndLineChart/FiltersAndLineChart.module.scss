@@ -1,0 +1,62 @@
+@import "scss/utils";
+
+
+.line_chart_wrapper {
+  height: 450px;
+  width: 100%;
+  position: relative;
+  margin: 25px auto 0;
+  background: $dark-main;
+  z-index: 0;
+  border-radius: 25px;
+  padding: 25px;
+  @include fullHd {
+    height: 500px;
+    padding: 30px 30px 20px;
+  }
+  @include thousendTwoWidth {
+    height: max-content;
+    padding: 35px 15px 15px;
+  }
+  @include phoneOrTablet {
+    height: max-content;
+    border-radius: 0;
+    margin: 50px auto 0;
+  }
+  @include phoneOrTablet {
+    min-height: 230px;
+    padding: 0;
+  }
+}
+
+.line_chart_title {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  @include fullHd {
+    left: 40px;
+    top: 10px;
+  }
+  left: 20px;
+  top: 15px;
+  @include phoneOrTablet {
+    top: -35px;
+  }
+  & h2 {
+    @include MontserratSemiBold(32px);
+    color: white;
+    @include laptopWidth {
+      font-size: 24px;
+    }
+  }
+  & svg {
+    width: 32px;
+    height: 32px;
+    @include laptopWidth {
+      width: 26px;
+      height: 26px;
+    }
+    cursor: auto;
+  }
+}

@@ -10,7 +10,10 @@ import {
     QueryModeType,
 } from 'app/(Main)/components/LineChart/LineChart';
 import { LineChartData } from 'http/types';
+import StatisticsSvg from './svg/statistics.svg';
 import { useSearchParams } from 'next/navigation';
+
+import scss from './FiltersAndLineChart.module.scss';
 
 interface FiltersAndLineChartProps {
     allOrgs: IOrganization[];
@@ -64,11 +67,18 @@ export const FiltersAndLineChart: React.FC<FiltersAndLineChartProps> = ({
                 contractors={allOrgs}
                 org={org}
             />
-            <LineChart
-                mode={mode}
-                interval={interval}
-                chartData={lineChartData}
-            />
+            <div className={scss.line_chart_wrapper}>
+                <div className={scss.line_chart_title}>
+                    <StatisticsSvg className={scss.svg} />
+                    <h2>Статистика</h2>
+                </div>
+
+                <LineChart
+                    mode={mode}
+                    interval={interval}
+                    chartData={lineChartData}
+                />
+            </div>
         </>
     );
 };

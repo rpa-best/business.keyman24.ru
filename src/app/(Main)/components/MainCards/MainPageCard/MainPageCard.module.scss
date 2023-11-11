@@ -1,7 +1,7 @@
 @import "scss/utils";
 
 .card_layout {
-  height: 141px;
+  height: 120px;
   width: 100%;
   min-width: 150px;
   display: flex;
@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 48px;
+  padding: 20px 32px;
   background: $dark-main;
   border-radius: 25px;
   color: white;
@@ -47,9 +47,7 @@
       color: $accent-color-darker;
     }
   }
-  @include thousendTwoWidth {
-    padding: 20px 32px;
-  }
+
   @include thousendWidth {
     padding: 15px 24px;
   }
@@ -115,16 +113,16 @@
 }
 
 .card_ico {
-  max-height: 70px;
-  max-width: 70px;
-  min-height: 70px;
-  min-width: 70px;
+  max-height: 50px;
+  max-width: 50px;
+  min-height: 50px;
+  min-width: 50px;
   z-index: 200;
   @include thousendTwoWidth {
-    max-height: 50px;
-    max-width: 50%;
-    min-height: 50px;
-    min-width: 50px;
+    max-height: 35px;
+    max-width: 35px;
+    min-height: 35px;
+    min-width: 35px;
   }
   @include thousendWidth {
     max-height: 40px;
