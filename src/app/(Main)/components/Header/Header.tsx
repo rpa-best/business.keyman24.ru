@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = async ({ disabled, services }) => {
                         disabled={disabled}
                         organizations={organizations}
                     />
-                    <NotificationsContainer />
+                    <NotificationsContainer user={user as IUser} />
                     <HeaderDropdown
                         subs={services?.serviceRates}
                         userData={user as IUser}

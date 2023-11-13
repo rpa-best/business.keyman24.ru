@@ -234,6 +234,7 @@ interface WorkerWithoutUser extends Omit<IWorker, 'user'> {
 export interface SocketResponse {
     data: {
         device: number;
+        use_session: boolean;
         mode: boolean;
         user: IWorker | string;
         worker: IWorker;
