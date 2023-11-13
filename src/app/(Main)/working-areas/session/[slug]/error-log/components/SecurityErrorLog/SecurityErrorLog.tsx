@@ -15,6 +15,7 @@ import { Spinner } from 'components/Spinner';
 import Cookies from 'universal-cookie';
 import { useParams } from 'next/navigation';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
+import { AxiosError } from 'axios';
 
 const cookie = new Cookies();
 
@@ -29,25 +30,31 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
 
     const [worker, setWorker] = useState<IWorker | null>(null);
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<{
-        errorName: string;
-        errorsArray: string[];
-    } | null>(null);
+    const [errors, setErrors] = useState<
+        {
+            errorName: string;
+            errorValue: string;
+        }[]
+    >([]);
 
     useEffect(() => {
         const access = cookie.get('access');
         const areaId = getParamsId(slug);
         socket.current = new WebSocket(
-            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}business/ws/session/${areaId}/?token=${access}`
+            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}business/ws/working_area/${areaId}/?token=${access}`
         );
 
         socket.current.onmessage = (ev) => {
             const event = JSON.parse(ev.data);
+            setErrors([]);
+            setWorker(null);
             setMessage(event);
         };
 
         return () => {
-            socket.current?.close();
+            if (socket.current) {
+                socket.current?.close();
+            }
         };
     }, []);
 
@@ -55,24 +62,60 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
         if (message?.type === 'success') {
             return;
         }
-        setErrors(null);
-        setWorker(null);
         const fetchWorkerDocs = async () => {
             setLoading(true);
             setWorker(message?.data.worker as IWorker);
+            if (message?.data.error.slug !== 'end_doc_date_time_worker') {
+                setErrors((errors) => [
+                    ...errors,
+                    {
+                        errorValue: message?.data.error.name as string,
+                        errorName: 'Ошибка',
+                    },
+                ]);
+            }
+
+            if (message?.data?.inventory) {
+                message?.data?.inventory.map((el) => {
+                    setErrors((err) => [
+                        ...err,
+                        {
+                            // @ts-ignore
+                            errorValue: `${el.type.name} ${el.code_number}`,
+                            errorName: `Несданный ${el.type.name}`,
+                        },
+                    ]);
+                });
+            }
+
             await getWorkerDocs(message?.data?.worker?.id as number)
                 .then((d) => {
                     d.results.forEach((doc) => {
                         if (validateDate(doc.activeTo)) {
-                            setErrors((d) => ({
-                                errorsArray: [
-                                    ...(d?.errorsArray ?? []),
-                                    doc.name + `до ${doc.activeTo}`,
-                                ],
-                                errorName: 'Документы просрочены',
-                            }));
+                            setErrors((d) => [
+                                ...d,
+                                {
+                                    errorValue:
+                                        doc.name +
+                                        ` ${new Date(
+                                            doc.activeTo.split('-').join('.')
+                                        ).toLocaleDateString()}`,
+                                    errorName: 'Документы просрочены',
+                                },
+                            ]);
                         }
                     });
+                })
+                .catch((e) => {
+                    if (e instanceof AxiosError && e.response?.status === 404) {
+                        setWorker({
+                            // @ts-ignore
+                            org: {
+                                name: 'Не найдено',
+                            },
+                            name: 'Не найден',
+                        });
+                    }
                 })
                 .finally(() => {
                     setLoading(false);
@@ -134,13 +177,13 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
                                 <p>Наименование</p>
                             </div>
                             <div className={scss.log_table_body}>
-                                {errors?.errorsArray.map((el, index) => (
+                                {errors.map((el, index) => (
                                     <div
                                         className={scss.log_table_body_item}
                                         key={index}
                                     >
-                                        <p>{errors?.errorName}</p>
-                                        <p>{el}</p>
+                                        <p>{el.errorName}</p>
+                                        <p>{el.errorValue}</p>
                                     </div>
                                 ))}
                             </div>
