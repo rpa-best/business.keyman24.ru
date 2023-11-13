@@ -33,12 +33,14 @@ export const HeaderNavTablet: React.FC<HeaderNavTabletProps> = ({
                 style={{ pointerEvents: disabled ? 'none' : 'auto' }}
                 className={scss.header_nav_icons}
             >
-                <NotificationsContainer />
                 {tabletBreak && (
-                    <BurgerMenu
-                        disabled={disabled}
-                        organizations={organizations as IOrganization[]}
-                    />
+                    <>
+                        <NotificationsContainer user={user as IUser} />
+                        <BurgerMenu
+                            disabled={disabled}
+                            organizations={organizations as IOrganization[]}
+                        />
+                    </>
                 )}
             </div>
         </div>

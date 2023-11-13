@@ -93,6 +93,9 @@ export const Security: React.FC<SecurityProps> = ({
         if (message?.type === 'error') {
             return;
         }
+        if (!message?.data.use_session) {
+            return;
+        }
         if (message && workerDocs) {
             const body = {
                 session: currentSessionId,

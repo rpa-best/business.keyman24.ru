@@ -18,7 +18,6 @@ import { FilterData } from 'app/(Main)/components/FiltersContainer/components/In
 import { getGradient } from 'app/(Main)/components/LineChart/utils';
 
 import scss from './LineChart.module.scss';
-import ExitSvg from '/public/svg/x.svg';
 
 ChartJS.register(CategoryScale, LinearScale, Title, Tooltip, Legend);
 
@@ -135,10 +134,12 @@ export const LineChart: React.FC<LineChartProps> = ({
         });
     }, [chartData, interval, modeDesc]);
 
-    const dataSet: ChartData<'line'> = {
-        labels: labels,
-        datasets,
-    };
+    const dataSet: ChartData<'line'> = useMemo(() => {
+        return {
+            labels: labels,
+            datasets,
+        };
+    }, [datasets, labels]);
 
     return (
         <Line

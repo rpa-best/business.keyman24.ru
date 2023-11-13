@@ -95,7 +95,7 @@ export const Key: React.FC<KeyProps> = ({
                 </BackButton>
             </div>
             <div className={scss.key_layout}>
-                <div className={scss.button_wrapper}>
+                <div className={scss.buttons_wrapper}>
                     <Button onClick={() => onCloseSessionClick()} type="button">
                         Завершить сессию
                     </Button>
