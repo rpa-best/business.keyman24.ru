@@ -238,7 +238,11 @@ export interface SocketResponse {
         mode: boolean;
         user: IWorker | string;
         worker: IWorker;
-        error: any;
+        inventory?: IInventory[];
+        error: {
+            slug: string;
+            name: string;
+        };
     };
     type: 'success' | string;
 }
