@@ -23,8 +23,6 @@ import { updateOrg } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
-import { toast } from 'react-toastify';
-import { successToastConfig } from 'config/toastConfig';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -54,27 +52,19 @@ export const Security: React.FC<SecurityProps> = ({
     });
 
     useEffect(() => {
-        if (socketStore.socket) {
-            if (socketStore.socket.readyState !== 1) {
-                router.replace(
-                    `/working-areas/session/security-${currentAreaId}`
-                );
+        return () => {
+            if (socketStore.socket) {
+                socketStore.closeConnection();
             }
-        } else {
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!socketStore.socket) {
+            revalidate('/working-areas/session/security-' + currentAreaId);
             router.replace(`/working-areas/session/security-${currentAreaId}`);
         }
     }, [currentAreaId, socketStore.socket]);
-
-    useEffect(() => {
-        socketStore.onClose = () => {
-            revalidate(
-                '/working-areas/session/' +
-                    'security-' +
-                    getParamsId(params.slug)
-            );
-            router.replace(`/working-areas/session/security-${currentAreaId}`);
-        };
-    }, [currentAreaId, socketStore]);
 
     useEffect(() => {
         if (socketStore.message?.type === 'success') {

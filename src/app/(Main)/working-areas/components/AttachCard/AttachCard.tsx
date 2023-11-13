@@ -34,23 +34,25 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
         if (!session || !session.toString()) {
             return;
         }
-        if (getParamsType(params.slug) === 'security') {
-            sendActivateSession(areaId, session);
-        }
-    }, [areaId, params.slug, session]);
-
-    useEffect(() => {
-        if (!session || !session.toString()) {
-            return;
-        }
         const access = cookie.get('access');
-        if (visible && !isSuccess) {
-            socketStore.createConnection(session, access);
+        if (getParamsType(params.slug) === 'security') {
+            sendActivateSession(areaId, session).then(() => {
+                if (visible && !isSuccess) {
+                    socketStore.createConnection(session, access);
+                }
+                if (!visible && !isSuccess) {
+                    socketStore.closeConnection();
+                }
+            });
+        } else {
+            if (visible && !isSuccess) {
+                socketStore.createConnection(session, access);
+            }
+            if (!visible && !isSuccess) {
+                socketStore.closeConnection();
+            }
         }
-        if (!visible && !isSuccess) {
-            socketStore.closeConnection();
-        }
-    }, [visible, isSuccess, session]);
+    }, [areaId, params.slug, session, visible, isSuccess]);
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {

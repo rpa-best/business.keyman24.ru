@@ -50,6 +50,14 @@ export const Key: React.FC<KeyProps> = ({
     });
 
     useEffect(() => {
+        return () => {
+            if (socketStore.socket) {
+                socketStore.closeConnection();
+            }
+        };
+    }, []);
+
+    useEffect(() => {
         if (!socketStore.message) {
             if (type === 'keys') {
                 router.replace(`/working-areas/session/key-${currentAreaId}`);

@@ -17,7 +17,7 @@ interface NotificationsContainerProps {
 export const NotificationsContainer: React.FC<NotificationsContainerProps> = ({
     user,
 }) => {
-    const socket = useSocketConnect(`ws/notification/`);
+    useSocketConnect(`ws/notification/`);
 
     return (
         <div className={scss.notifications_wrapper}>

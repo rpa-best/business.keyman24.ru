@@ -17,19 +17,22 @@ export const useSocketConnect = (url: string) => {
     }, [message?.data.name]);
 
     useEffect(() => {
-        if (socket.current) {
-            return;
+        if (!socket.current?.readyState) {
+            const access = cookie.get('access');
+            socket.current = new WebSocket(
+                `${process.env.NEXT_PUBLIC_API_SOCKET_URL}${url}?token=${access}`
+            );
+
+            socket.current.onmessage = (ev) => {
+                const event = JSON.parse(ev.data);
+                setMessage(event);
+            };
         }
 
-        const access = cookie.get('access');
-        socket.current = new WebSocket(
-            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}${url}?token=${access}`
-        );
-
-        socket.current.onmessage = (ev) => {
-            const event = JSON.parse(ev.data);
-            const parsedEvent = JSON.parse(event);
-            setMessage(parsedEvent);
+        return () => {
+            if (socket.current) {
+                socket.current?.close();
+            }
         };
     }, [url]);
 };

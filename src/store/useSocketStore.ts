@@ -24,7 +24,7 @@ export const useSocketStore = create<T.ISocketStore>((set) => ({
         });
     },
 
-    onClose: ({ callback }) => {
+    onClose: (callback) => {
         set((state) => {
             if (state.socket) {
                 state.socket.onclose = callback;
