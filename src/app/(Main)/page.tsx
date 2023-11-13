@@ -15,6 +15,7 @@ import { formatDate } from 'utils/formatDate';
 import { QueryIntervalType } from 'app/(Main)/components/LineChart/LineChart';
 import { AxiosError } from 'axios';
 import { FiltersAndLineChart } from 'app/(Main)/components/FiltersAndLineChart';
+import { getMonth, setDate, setMonth } from 'date-fns';
 
 interface DashboardProps {
     searchParams: {
@@ -65,7 +66,7 @@ export default async function DashboardMain({
             dateGtQuery =
                 date_gt ??
                 formatDate(
-                    new Date(new Date().setMonth(new Date().getMonth() - 1))
+                    new Date(new Date().setMonth(new Date().getMonth() - 6))
                 );
             dateLtQuery = date_lt ?? formatDate(new Date());
             break;

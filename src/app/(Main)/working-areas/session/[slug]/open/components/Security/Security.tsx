@@ -152,7 +152,6 @@ export const Security: React.FC<SecurityProps> = ({
     const handleUpdateClick = async () => {
         setLoading(true);
         await updateOrg().finally(() => {
-            toast('Обновление началось', successToastConfig);
             setLoading(false);
         });
     };

@@ -10,9 +10,7 @@ export const WorkersButton = () => {
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const handleRefreshClick = async () => {
-        await updateOrg().finally(() => {
-            toast('Обновление началось', successToastConfig);
-        });
+        await updateOrg();
     };
 
     return (

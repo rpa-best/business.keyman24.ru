@@ -40,11 +40,11 @@ export const RangeDatePicker = ({
         const [start, end] = dates;
         if (selectMonth) {
             if (getMonth(end) === getMonth(Date.now())) {
-                setStartDate(setDate(start, 1));
+                setStartDate(start);
                 setEndDate(new Date());
                 return;
             }
-            setStartDate(setDate(start, 1));
+            setStartDate(start);
             setEndDate(end);
             return;
         }
@@ -94,12 +94,11 @@ export const RangeDatePicker = ({
 
     useEffect(() => {
         if (!startDate && !endDate) {
-            const difference = selectMonth ? 6 : showWeek ? 2 : 1;
             const newEnd = new Date();
 
             const newStart = selectMonth
                 ? setDate(setMonth(Date.now(), getMonth(Date.now()) - 6), 1)
-                : setMonth(Date.now(), getMonth(Date.now()) - difference);
+                : setMonth(Date.now(), getMonth(Date.now()) - 1);
 
             setStart(newStart);
             setStartDate(newStart);

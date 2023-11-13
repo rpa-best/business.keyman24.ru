@@ -1,10 +1,20 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Cookies from 'universal-cookie';
+import { toast } from 'react-toastify';
+import { successToastConfig } from 'config/toastConfig';
 
 const cookie = new Cookies();
 
 export const useSocketConnect = (url: string) => {
+    const [message, setMessage] = useState<{
+        type: string;
+        data: { slug: string; name: string };
+    }>();
     const socket = useRef<WebSocket>();
+
+    useEffect(() => {
+        toast(message?.data.name, successToastConfig);
+    }, [message?.data.name]);
 
     useEffect(() => {
         if (socket.current) {
@@ -18,8 +28,8 @@ export const useSocketConnect = (url: string) => {
 
         socket.current.onmessage = (ev) => {
             const event = JSON.parse(ev.data);
+            const parsedEvent = JSON.parse(event);
+            setMessage(parsedEvent);
         };
     }, [url]);
-
-    console.log(socket.current);
 };

@@ -24,6 +24,11 @@ export const DatePicker: React.FC<DatePickerProps> = ({ currentInterval }) => {
         router.prefetch(pathname + `?${queryHelper.getParams}`);
     }, [query]);
 
+    useEffect(() => {
+        queryHelper.set('interval', 'byMonth');
+        router.prefetch(pathname + `?${queryHelper.getParams}`);
+    }, [query]);
+
     return (
         <div className={scss.date_filter}>
             {currentInterval === 'byHour' && <SingleDayPicker />}
