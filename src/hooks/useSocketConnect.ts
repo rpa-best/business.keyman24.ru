@@ -35,7 +35,7 @@ export const useSocketConnect: SocketConnectFunc = ({
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [worker, setWorker] = useState<IWorker>();
 
-    const onSocketSuccess = async (data: SocketResponse) => {
+    const onSocketMessage = async (data: SocketResponse) => {
         if (!disableSuccessFunc) {
             if (data) {
                 setLoading(true);
@@ -59,16 +59,12 @@ export const useSocketConnect: SocketConnectFunc = ({
 
     useEffect(() => {
         const { message } = socketStore;
-        if (message?.type === 'error') {
-            toast(message?.data.error?.name, errorToastOptions);
-        }
-    }, [socketStore.message]);
-
-    useEffect(() => {
         if (socketStore.message?.type === 'success') {
             setErrors(false);
-            onSocketSuccess(socketStore.message);
+        } else {
+            toast(message?.data.error?.name, errorToastOptions);
         }
+        onSocketMessage(socketStore.message as SocketResponse);
     }, [areaId, sessionId, socketStore.message]);
 
     return {

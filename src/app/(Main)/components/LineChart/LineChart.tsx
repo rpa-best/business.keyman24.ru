@@ -96,7 +96,7 @@ export const LineChart: React.FC<LineChartProps> = ({
                   el.slice(2, 7).split('-').reverse().join('.')
               )
             : Object.keys(chartData[interval]).map((el) =>
-                  el.slice(5).replace('-', '.')
+                  el.slice(5).replace('-', '.').split('.').reverse().join('.')
               );
     }, [chartData, interval]);
 

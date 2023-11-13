@@ -85,7 +85,9 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                                 label={doc.name}
                                 placeholder="-"
                                 disabled
-                                value={doc?.activeTo}
+                                value={new Date(
+                                    doc.activeTo.split('-').join('.')
+                                ).toLocaleDateString()}
                                 name={doc?.name}
                                 onChange={() => {}}
                                 handleError={validateDate(doc.activeTo)}

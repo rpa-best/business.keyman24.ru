@@ -6,9 +6,9 @@
   flex-direction: column;
   border-radius: 40px;
   background-color: $dark-main;
-  padding: 22px 30px;
+  padding: 22px 30px 50px;
   @include laptopWidth {
-    padding: 20px 25px;
+    padding: 20px 25px 50px;
   }
   @include phoneOrTablet {
     border-radius: 0;
@@ -57,7 +57,7 @@
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  row-gap: 10px;
+  row-gap: 20px;
 }
 
 .worker_card_data_additional {
