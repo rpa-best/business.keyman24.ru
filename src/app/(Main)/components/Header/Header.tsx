@@ -16,6 +16,7 @@ import { HeaderNavTablet } from 'app/(Main)/components/Header/components/HeaderN
 import { cookies } from 'next/headers';
 
 import scss from './Header.module.scss';
+import { Tools } from 'app/(Main)/components/Header/components/Tools';
 
 interface HeaderProps {
     disabled: boolean;
@@ -47,18 +48,12 @@ export const Header: React.FC<HeaderProps> = async ({ disabled, services }) => {
                     <span className={scss.separator} />
                     <h2 className={scss.title_second}>Business</h2>
                 </Link>
-                <div className={scss.tools_wrapper}>
-                    <Organization
-                        size="pc"
-                        disabled={disabled}
-                        organizations={organizations}
-                    />
-                    <NotificationsContainer user={user as IUser} />
-                    <HeaderDropdown
-                        subs={services?.serviceRates}
-                        userData={user as IUser}
-                    />
-                </div>
+                <Tools
+                    subs={services?.serviceRates}
+                    disabled={disabled}
+                    organizations={organizations}
+                    user={user as IUser}
+                />
             </div>
             <HeaderNavTablet
                 subs={services?.serviceRates}

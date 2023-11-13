@@ -15,6 +15,7 @@ import { IServiceRate } from 'http/types';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './Dropdown.module.scss';
+import { useSocketConnect } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/hooks/useSocketConnect';
 
 interface HeaderDropdownProps {
     userData: IUser;

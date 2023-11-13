@@ -28,15 +28,11 @@ export interface IUserStore {
     setLogoutUser: LogoutUserType;
 }
 
-interface OnCloseProps {
-    callback: () => void;
-}
-
 export interface ISocketStore {
     socket: WebSocket | null;
     createConnection: (sessionId: number, access: string) => void;
     closeConnection: () => void;
-    onClose: (cb: OnCloseProps) => void;
+    onClose: (cb: () => void) => void;
     message: SocketResponse | null;
 }
 
