@@ -13,9 +13,14 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import scss from 'app/(Main)/workers/[id]/components/WorkerDocsTable/WorkerDocsTable.module.scss';
 
+export interface ModifiedWorkerDocs extends IWorkerDocs {
+    formattedActiveTo: string;
+    formattedActiveFrom: string;
+}
+
 interface WorkerTablesProps {
     cards: ICard[] | null;
-    docs: IWorkerDocs[] | null;
+    docs: ModifiedWorkerDocs[] | null;
     workerInventory: IModifiedInventory[] | null;
     time: IWorkerPlan | null;
 }

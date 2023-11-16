@@ -57,8 +57,8 @@ export const WorkerDocsTable: React.FC<WorkerDocsTableProps> = async ({
 
             return {
                 ...w,
-                activeTo: formattedActiveTo,
-                activeFrom: formattedActiveFrom,
+                formattedActiveTo,
+                formattedActiveFrom,
             };
         });
     }

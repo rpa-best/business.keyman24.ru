@@ -4,9 +4,10 @@ import { IWorkerDocs } from 'http/types';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
+import { ModifiedWorkerDocs } from 'app/(Main)/workers/[id]/components/WorkerTables/WorkerTables';
 
 interface TableDocsWrapperProps {
-    data: IWorkerDocs[] | null;
+    data: ModifiedWorkerDocs[] | null;
 }
 
 export const TableDocsWrapper: React.FC<TableDocsWrapperProps> = ({ data }) => {
@@ -28,8 +29,8 @@ export const TableDocsWrapper: React.FC<TableDocsWrapperProps> = ({ data }) => {
             setTableData={() => {}}
         >
             <Column header="Наименование" field="name" />
-            <Column header="Дата начала" field="activeFrom" />
-            <Column header="Дата окончания" field="activeTo" />
+            <Column header="Дата начала" field="formattedActiveFrom" />
+            <Column header="Дата окончания" field="formattedActiveTo" />
         </Table>
     );
 };
