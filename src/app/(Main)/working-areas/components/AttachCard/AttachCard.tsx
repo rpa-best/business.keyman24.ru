@@ -35,22 +35,12 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
             return;
         }
         const access = cookie.get('access');
-        if (getParamsType(params.slug) === 'security') {
-            sendActivateSession(areaId, session).then(() => {
-                if (visible && !isSuccess) {
-                    socketStore.createConnection(session, access);
-                }
-                if (!visible && !isSuccess) {
-                    socketStore.closeConnection();
-                }
-            });
-        } else {
-            if (visible && !isSuccess) {
-                socketStore.createConnection(session, access);
-            }
-            if (!visible && !isSuccess) {
-                socketStore.closeConnection();
-            }
+
+        if (visible && !isSuccess) {
+            socketStore.createConnection(session, access);
+        }
+        if (!visible && !isSuccess) {
+            socketStore.closeConnection();
         }
     }, [areaId, params.slug, session, visible, isSuccess]);
 
@@ -67,10 +57,26 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
                 user: data.data.user.user as string,
                 session,
             };
-            await sendCheck(areaId, session, body)
+            await sendActivateSession(areaId, session)
                 .then(() => {
-                    setVisible(false);
-                    router.push(`${pathname}/open/${session}`);
+                    sendCheck(areaId, session, body)
+                        .then(() => {
+                            setVisible(false);
+                            router.push(`${pathname}/open/${session}`);
+                        })
+                        .catch((e: unknown) => {
+                            if (e instanceof AxiosError) {
+                                if (
+                                    e.response?.data.user[0].slug ===
+                                    'not_perm_to_session'
+                                ) {
+                                    toast(
+                                        'Нет доступа к сессии',
+                                        errorToastOptions
+                                    );
+                                }
+                            }
+                        });
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
@@ -90,8 +96,12 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
         if (!socketStore.message) {
             return;
         }
+        if (socketStore.message.type === 'error') {
+            toast(socketStore.message.data.error.name, errorToastOptions);
+            return;
+        }
         onSocketSuccess(socketStore.message);
-    }, [socketStore.message, onSocketSuccess]);
+    }, [socketStore.message]);
 
     return (
         <div>

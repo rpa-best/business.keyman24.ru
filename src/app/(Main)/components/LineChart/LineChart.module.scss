@@ -5,3 +5,32 @@
   max-width: 100%;
   min-width: 100%;
 }
+
+.line_chart_wrapper_empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & p {
+    @include MontserratSemiBold(32px);
+    @include laptopWidth {
+      font-size: 28px;
+    }
+    @include phoneOrTablet {
+      font-size: 24px;
+    }
+    text-align: center;
+    color: white;
+  }
+  @include fullHd {
+    min-height: 450px;
+    max-height: 450px;
+  }
+  @include laptopWidth {
+    min-height: 400px;
+    max-height: 400px;
+  }
+  @include phoneOrTablet {
+    min-height: 300px;
+    max-height: 300px;
+  }
+}

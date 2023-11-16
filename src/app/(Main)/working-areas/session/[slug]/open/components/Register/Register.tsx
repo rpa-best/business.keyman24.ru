@@ -32,6 +32,7 @@ import { AxiosError } from 'axios';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import revalidate from 'utils/revalidate';
 import { errorToastOptions, successToastConfig } from 'config/toastConfig';
+import { BackButton } from 'components/UI/Buttons/BackButton';
 
 const cookie = new UniversalCookies();
 
@@ -40,6 +41,7 @@ export const Register: React.FC<RegisterProps> = ({
     currentSessionId,
     currentAreaId,
     sessionLog,
+    areaName,
 }) => {
     const router = useRouter();
     const path = usePathname();
@@ -123,8 +125,10 @@ export const Register: React.FC<RegisterProps> = ({
         };
 
         return () => {
-            socket?.current?.close();
-            sendActivateSession(currentAreaId, currentSessionId as number);
+            if (socket.current) {
+                socket?.current?.close();
+                socket.current;
+            }
         };
     }, [currentAreaId, currentSessionId, onSocketSuccess]);
 
@@ -173,14 +177,16 @@ export const Register: React.FC<RegisterProps> = ({
 
     return (
         <div>
-            <div className={scss.button_register_wrapper}>
-                <Button onClick={() => onCloseSessionClick()} type="button">
-                    Завершить сессию
-                </Button>
+            <div className={scss.page_title_with_table_back_button}>
+                <h1>{areaName}</h1>
+                <BackButton onClick={() => socket.current?.close()} skipWord>
+                    Назад
+                </BackButton>
             </div>
             <div className={scss.inputs_wrapper}>
                 <div>
                     <InputSelect
+                        type="new-password"
                         listValues={organizations}
                         placeholder="Выберите организацию"
                         onChange={handleSelectOrg}
@@ -191,6 +197,7 @@ export const Register: React.FC<RegisterProps> = ({
                 {selectedOrg && (
                     <div>
                         <InputSelect
+                            type="new-password"
                             listValues={workers}
                             placeholder="Выберите работника"
                             onChange={handleSelectWorker}

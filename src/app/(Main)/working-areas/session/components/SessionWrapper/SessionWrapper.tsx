@@ -22,6 +22,7 @@ import {
     closeSession,
     createSession,
     sendActivateSession,
+    sendCheck,
 } from 'http/workingAreaApi';
 import revalidate from 'utils/revalidate';
 import { DateHelper } from 'utils/dateHelper';
@@ -66,25 +67,13 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
         router.prefetch(`${pathname}/?archive=true`);
     }, [pathname]);
 
-    const handleRowClick = (id: number) => {
+    const handleRowClick = async (id: number) => {
         const session = sessions.find((s) => s.id === id);
         if (session?.status === 'Завершена') {
             router.push(`${pathname}/closed/${session.id}`);
         } else {
             if (!needAttach) {
-                setLoading(true);
-                sendActivateSession(areaId, currentSession as number)
-                    .then(() => {
-                        router.push(
-                            `${pathname}/open/${currentSession as number}`
-                        );
-                    })
-                    .catch(() => {
-                        toast('Ошибка', errorToastOptions);
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
+                router.push(`${pathname}/open/${currentSession as number}`);
                 return;
             }
             setVisible(true);
@@ -133,16 +122,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             revalidate(pathname);
 
             if (!needAttach) {
-                sendActivateSession(areaId, newSession.id)
-                    .then(() => {
-                        router.push(`${pathname}/open/${newSession.id}`);
-                    })
-                    .catch(() => {
-                        toast('Ошибка', errorToastOptions);
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
+                router.push(`${pathname}/open/${currentSession as number}`);
             }
         });
         setLoading(false);

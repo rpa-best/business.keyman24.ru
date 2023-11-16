@@ -45,7 +45,7 @@
   color: $gray;
   backdrop-filter: blur(20px);
   @include MontserratRegular(18px);
-  width: calc(25% - 10px);
+  width: calc(33% - 10px);
   cursor: pointer;
   transition: .2s all ease-in-out;
   &:hover {

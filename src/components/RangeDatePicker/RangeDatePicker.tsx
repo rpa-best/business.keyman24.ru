@@ -25,7 +25,6 @@ export const RangeDatePicker = ({
     start,
     setStart,
     setEnd,
-    showWeek,
     selectMonth = false,
 }: PickDateProps) => {
     const query = useSearchParams();
@@ -137,7 +136,6 @@ export const RangeDatePicker = ({
                 startDate={startDate}
                 endDate={endDate}
                 portalId="root"
-                showWeekNumbers={showWeek}
                 selectsRange
             />
         </div>

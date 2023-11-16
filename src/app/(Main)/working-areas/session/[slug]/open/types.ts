@@ -9,6 +9,7 @@ export interface RegisterProps {
     currentAreaId: number;
     currentSessionId: number;
     sessionLog: ModifiedRegisterLog[];
+    areaName: string;
 }
 
 export interface SecurityProps

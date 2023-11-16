@@ -27,7 +27,7 @@ interface LineChartProps {
     mode: QueryModeType[];
 }
 
-export type QueryIntervalType = 'byHour' | 'byWeek' | 'byMonth' | 'byDay';
+export type QueryIntervalType = 'byHour' | 'byMonth' | 'byDay';
 export type QueryModeType = 'uniqueCount' | 'exitCount' | 'entersCount';
 
 export const options: ChartOptions<'line'> = {
@@ -95,6 +95,8 @@ export const LineChart: React.FC<LineChartProps> = ({
             ? Object.keys(chartData[interval]).map((el) =>
                   el.slice(2, 7).split('-').reverse().join('.')
               )
+            : interval === 'byHour'
+            ? Object.keys(chartData[interval]).map((el) => el.slice(0, 5))
             : Object.keys(chartData[interval]).map((el) =>
                   el.slice(5).replace('-', '.').split('.').reverse().join('.')
               );
@@ -140,6 +142,16 @@ export const LineChart: React.FC<LineChartProps> = ({
             datasets,
         };
     }, [datasets, labels]);
+
+    if (dataSet.datasets[0].data.length === 0) {
+        return (
+            <div className={scss.line_chart_wrapper_empty}>
+                <p>
+                    По выбранной дате ничего нет, попробуйте выбрать другой день
+                </p>
+            </div>
+        );
+    }
 
     return (
         <Line
