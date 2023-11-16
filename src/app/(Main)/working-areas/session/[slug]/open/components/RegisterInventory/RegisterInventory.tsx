@@ -34,8 +34,11 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
             setLoading,
             currentAreaId,
             currentSessionId,
-            'register_inventory-' + getParamsId(params.slug),
-            router
+            'register_inventory-' + getParamsId(params.slug)
+        );
+        router.replace(
+            '/working-areas/session/register_inventory-' +
+                getParamsId(params.slug)
         );
     };
 

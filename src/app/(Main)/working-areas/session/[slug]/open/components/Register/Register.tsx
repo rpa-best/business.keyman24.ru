@@ -127,7 +127,6 @@ export const Register: React.FC<RegisterProps> = ({
         return () => {
             if (socket.current) {
                 socket?.current?.close();
-                socket.current;
             }
         };
     }, [currentAreaId, currentSessionId, onSocketSuccess]);
@@ -148,8 +147,10 @@ export const Register: React.FC<RegisterProps> = ({
             setLoading,
             currentAreaId,
             currentSessionId,
-            'register-' + getParamsId(params.slug),
-            router
+            'register-' + getParamsId(params.slug)
+        );
+        router.replace(
+            '/working-areas/session/register-' + getParamsId(params.slug)
         );
     };
 
@@ -183,10 +184,15 @@ export const Register: React.FC<RegisterProps> = ({
                     Назад
                 </BackButton>
             </div>
+            <div className={scss.button_wrapper}>
+                <Button onClick={() => onCloseSessionClick()} type="button">
+                    Завершить сессию
+                </Button>
+            </div>
             <div className={scss.inputs_wrapper}>
                 <div>
                     <InputSelect
-                        type="new-password"
+                        autoComplete="new-password"
                         listValues={organizations}
                         placeholder="Выберите организацию"
                         onChange={handleSelectOrg}
@@ -197,7 +203,7 @@ export const Register: React.FC<RegisterProps> = ({
                 {selectedOrg && (
                     <div>
                         <InputSelect
-                            type="new-password"
+                            autoComplete="new-password"
                             listValues={workers}
                             placeholder="Выберите работника"
                             onChange={handleSelectWorker}

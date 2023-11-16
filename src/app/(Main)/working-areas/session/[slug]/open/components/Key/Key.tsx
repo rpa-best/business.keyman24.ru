@@ -59,17 +59,21 @@ export const Key: React.FC<KeyProps> = ({
                 );
             }
         }
+        return () => {
+            if (socketStore.socket) {
+                socketStore.closeConnection();
+            }
+        };
     }, [socketStore.message, type]);
 
     const onCloseSessionClick = async () => {
-        socketStore.closeConnection();
         await closeSessionHandler(
             setLoading,
             currentAreaId,
             currentSessionId,
-            'key-' + getParamsId(params.slug),
-            router
+            'key-' + getParamsId(params.slug)
         );
+        socketStore.closeConnection();
     };
 
     const handleRowClick = (id: number) => {
@@ -87,12 +91,7 @@ export const Key: React.FC<KeyProps> = ({
         <>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton
-                    onClick={() => socketStore.closeConnection()}
-                    skipWord
-                >
-                    Назад
-                </BackButton>
+                <BackButton skipWord>Назад</BackButton>
             </div>
             <div className={scss.key_layout}>
                 <div className={scss.buttons_wrapper}>

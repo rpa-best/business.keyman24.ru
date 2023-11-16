@@ -39,6 +39,5 @@ export type CloseSessionType = (
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     areaId: number,
     sessionId: number,
-    pathSlug: string,
-    router: AppRouterInstance
+    pathSlug: string
 ) => Promise<void>;

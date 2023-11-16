@@ -23,6 +23,9 @@ import { updateOrg } from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { errorToastOptions } from 'config/toastConfig';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
@@ -34,9 +37,6 @@ export const Security: React.FC<SecurityProps> = ({
     const router = useRouter();
     const params = useParams();
 
-    const itsRegisterInventory =
-        getParamsType(params.slug) === 'register_inventory';
-
     const socketStore = useSocketStore((state) => state);
 
     const [sessionLogData, setSessionLogData] =
@@ -45,7 +45,7 @@ export const Security: React.FC<SecurityProps> = ({
     const [sended, setSended] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const { worker, workerDocs, errors } = useSocketConnect({
+    const { worker, workerDocs } = useSocketConnect({
         setLoading,
         sessionId: currentSessionId,
         areaId: currentAreaId,
@@ -53,9 +53,13 @@ export const Security: React.FC<SecurityProps> = ({
 
     useEffect(() => {
         if (!socketStore.socket) {
-            revalidate('/working-areas/session/security-' + currentAreaId);
             router.replace(`/working-areas/session/security-${currentAreaId}`);
         }
+        return () => {
+            if (socketStore.socket) {
+                socketStore.closeConnection();
+            }
+        };
     }, [currentAreaId, socketStore.socket]);
 
     useEffect(() => {
@@ -66,9 +70,6 @@ export const Security: React.FC<SecurityProps> = ({
 
     useEffect(() => {
         const { message } = socketStore;
-        if (errors) {
-            return;
-        }
         if (sended) {
             return;
         }
@@ -97,33 +98,31 @@ export const Security: React.FC<SecurityProps> = ({
                     revalidate(path);
                     setSended(true);
                 })
+                .catch((e) => {
+                    if (e instanceof AxiosError) {
+                        toast(
+                            e.response?.data.error.name ?? 'Ошибка',
+                            errorToastOptions
+                        );
+                    }
+                })
                 .finally(() => {
                     setLoading(false);
                 });
         }
-    }, [
-        socketStore.message,
-        errors,
-        workerDocs,
-        currentSessionId,
-        currentAreaId,
-    ]);
+    }, [socketStore.message, socketStore.message?.data.use_session]);
 
     const onCloseSessionClick = async () => {
-        socketStore.closeConnection();
         await closeSessionHandler(
             setLoading,
             currentAreaId,
             currentSessionId,
-            'security-' + getParamsId(params.slug),
-            router
+            'security-' + getParamsId(params.slug)
         );
+        socketStore.closeConnection();
     };
 
     const handleRowClick = (id: number) => {
-        if (itsRegisterInventory) {
-            return;
-        }
         const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
         window.open(
             `https://${window.location.host}/workers/${workerId}?which=docs`,
@@ -142,12 +141,7 @@ export const Security: React.FC<SecurityProps> = ({
         <>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton
-                    onClick={() => socketStore.closeConnection()}
-                    skipWord
-                >
-                    Назад
-                </BackButton>
+                <BackButton skipWord>Назад</BackButton>
             </div>
             <div>
                 <div className={scss.buttons_wrapper}>
