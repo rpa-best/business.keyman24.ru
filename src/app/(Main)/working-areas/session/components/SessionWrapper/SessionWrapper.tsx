@@ -122,7 +122,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             revalidate(pathname);
 
             if (!needAttach) {
-                router.push(`${pathname}/open/${currentSession as number}`);
+                router.push(`${pathname}/open/${newSession.id}`);
             }
         });
         setLoading(false);

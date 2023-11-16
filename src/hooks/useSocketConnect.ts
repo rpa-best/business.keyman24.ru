@@ -18,7 +18,6 @@ type UseSocketConnectProps = {
 type SocketConnectFunc = (props: UseSocketConnectProps) => {
     worker: IWorker;
     workerDocs: IWorkerDocs[];
-    errors: boolean;
 };
 
 export const useSocketConnect: SocketConnectFunc = ({
@@ -31,7 +30,6 @@ export const useSocketConnect: SocketConnectFunc = ({
 
     const path = usePathname();
 
-    const [errors, setErrors] = useState<boolean>(false);
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [worker, setWorker] = useState<IWorker>();
 
@@ -44,11 +42,6 @@ export const useSocketConnect: SocketConnectFunc = ({
                     .then((d) => {
                         revalidate(path);
                         setWorkerDocs(d.results);
-                        d.results.forEach((doc) => {
-                            if (validateDate(doc.activeTo)) {
-                                setErrors(true);
-                            }
-                        });
                     })
                     .finally(() => {
                         setLoading(false);
@@ -59,9 +52,7 @@ export const useSocketConnect: SocketConnectFunc = ({
 
     useEffect(() => {
         const { message } = socketStore;
-        if (socketStore.message?.type === 'success') {
-            setErrors(false);
-        } else {
+        if (message?.type === 'error') {
             toast(message?.data.error?.name, errorToastOptions);
         }
         onSocketMessage(socketStore.message as SocketResponse);
@@ -70,6 +61,5 @@ export const useSocketConnect: SocketConnectFunc = ({
     return {
         worker: worker as IWorker,
         workerDocs: workerDocs as IWorkerDocs[],
-        errors,
     };
 };

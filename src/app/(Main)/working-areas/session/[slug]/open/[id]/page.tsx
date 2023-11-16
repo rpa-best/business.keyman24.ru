@@ -5,7 +5,10 @@ import { Key } from 'app/(Main)/working-areas/session/[slug]/open/components/Key
 import { Register } from 'app/(Main)/working-areas/session/[slug]/open/components/Register';
 import { Security } from 'app/(Main)/working-areas/session/[slug]/open/components/Security';
 import { getSessionLog, getWorkingAreas } from 'http/workingAreaApi';
-import { getOrganizations } from 'http/organizationApi';
+import {
+    getOrganizationContractors,
+    getOrganizations,
+} from 'http/organizationApi';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
@@ -29,7 +32,7 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const organizations = await getOrganizations();
+    const organizations = await getOrganizationContractors(+orgId);
 
     const workingAreas = await getWorkingAreas(+orgId);
 
