@@ -5,7 +5,7 @@ import { SearchParamsHelper } from 'utils/searchParamsHelper';
 import { formatDate } from 'utils/formatDate';
 import { RangeDatePicker } from 'components/RangeDatePicker/RangeDatePicker';
 
-export const SelectRangePicker = ({ showWeek }: { showWeek?: boolean }) => {
+export const SelectRangePicker = () => {
     const pathname = usePathname();
     const router = useRouter();
     const query = useSearchParams();
@@ -44,7 +44,6 @@ export const SelectRangePicker = ({ showWeek }: { showWeek?: boolean }) => {
             setStart={(d) => {
                 handleChangeDate(d, 'date_gt');
             }}
-            showWeek={showWeek}
             setEnd={(d) => {
                 handleChangeDate(d, 'date_lt');
             }}

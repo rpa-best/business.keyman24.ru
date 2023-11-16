@@ -33,9 +33,6 @@ export const DatePicker: React.FC<DatePickerProps> = ({ currentInterval }) => {
         <div className={scss.date_filter}>
             {currentInterval === 'byHour' && <SingleDayPicker />}
             {currentInterval === 'byDay' && <SelectRangePicker />}
-            {currentInterval === 'byWeek' && (
-                <SelectRangePicker showWeek={true} />
-            )}
             {currentInterval === 'byMonth' && <SelectRangeMonthPicker />}
         </div>
     );

@@ -59,11 +59,10 @@ export const Row: React.FC<ColumnRowProps> = ({
     return textArr.map((el, index) => {
         const lastElem = textArr.length - 1 === index;
         return (
-            <>
+            <React.Fragment key={index}>
                 <div
                     style={lastElem ? { position: 'relative' } : undefined}
                     className={tableTdClassName}
-                    key={index}
                 >
                     <p
                         className={textClass}
@@ -98,7 +97,7 @@ export const Row: React.FC<ColumnRowProps> = ({
                         </div>
                     )}
                 </div>
-            </>
+            </React.Fragment>
         );
     });
 };

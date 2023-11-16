@@ -7,8 +7,9 @@
   margin-bottom: 30px;
   @include thousendWidth {
     flex-direction: column;
-      width: calc(100% - 40px);
-      margin: 0 auto 30px;
+    width: calc(100% - 40px);
+    margin: 0 auto 30px;
+    row-gap: 15px;
   }
 }
 

@@ -207,7 +207,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                                 type="button"
                                 onClick={() => handleGenerateClick()}
                             >
-                                Сгенерировать инвентарь
+                                Сгенерировать ключи
                             </Button>
                         </div>
                     </>

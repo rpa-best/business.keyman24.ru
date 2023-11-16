@@ -102,11 +102,8 @@ const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {
             });
             return (
                 <div className={scss.children_with_table}>
-                    <div className={scss.page_title_with_table_back_button}>
-                        <h1>{area?.name}</h1>
-                        <BackButton skipWord>Назад</BackButton>
-                    </div>
                     <Register
+                        areaName={area?.name as string}
                         sessionLog={registerLog}
                         currentSessionId={+params.id}
                         currentAreaId={areaId}

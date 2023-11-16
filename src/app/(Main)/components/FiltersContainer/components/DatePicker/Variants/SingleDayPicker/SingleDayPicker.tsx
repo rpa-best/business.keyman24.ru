@@ -68,6 +68,7 @@ export const SingleDayPicker = () => {
                     handleChangeDate(date as Date, 'date_gt');
                 }}
                 maxDate={new Date()}
+                portalId="root"
                 customInput={
                     <Input
                         className={scss.custom_input_single}
