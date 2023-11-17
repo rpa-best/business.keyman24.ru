@@ -112,6 +112,7 @@ export const LineChart: React.FC<LineChartProps> = ({
                 fill: {
                     value: -25,
                 },
+                spanGaps: true,
                 backgroundColor: (context) => {
                     const chart = context.chart;
                     const { ctx, chartArea } = chart;
