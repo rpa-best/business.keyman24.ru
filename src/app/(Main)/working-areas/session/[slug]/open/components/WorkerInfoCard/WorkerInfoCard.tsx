@@ -88,7 +88,7 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                                 placeholder="-"
                                 disabled
                                 value={new Date(
-                                    doc.activeTo.split('-').join('.')
+                                    doc.activeTo
                                 ).toLocaleDateString()}
                                 name={doc?.name}
                                 onChange={() => {}}
