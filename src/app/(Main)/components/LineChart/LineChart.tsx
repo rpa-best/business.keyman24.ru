@@ -106,9 +106,12 @@ export const LineChart: React.FC<LineChartProps> = ({
         return modeDesc.map((m, index) => {
             return {
                 label: m.name,
-                data: Object.values(chartData[interval]).map(
-                    (el) => el[m.query as QueryModeType]
-                ),
+                data: Object.values(chartData[interval]).map((el) => {
+                    if (!el[m.query as QueryModeType]) {
+                        return 0;
+                    }
+                    return el[m.query as QueryModeType];
+                }),
                 fill: {
                     value: -25,
                 },
