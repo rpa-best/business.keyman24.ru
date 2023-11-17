@@ -75,6 +75,8 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
             </div>
             <div className={scss.worker_card_data_additional}>
                 {workerDocs?.map((doc, index) => {
+                    console.log(doc.activeTo);
+                    console.log(doc.activeTo.split('-').join('.'));
                     return (
                         <div
                             key={index}
