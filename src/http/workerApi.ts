@@ -24,6 +24,14 @@ export const getWorkerPlan: T.GetWorkerPlan = async (orgId, workerId) => {
 
     return res.data;
 };
+export const getWorkersPlan: T.GetWorkersPlan = async () => {
+    const res: AxiosResponse<ReturnType<typeof getWorkersPlan>> =
+        await $clientAuth.get(`business/${orgId}/worker/plan/?format=xlsx`, {
+            responseType: 'blob',
+        });
+
+    return res.data;
+};
 export const getServerWorkers: T.GetServerWorkers = async (orgId) => {
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`

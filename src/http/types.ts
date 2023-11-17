@@ -809,6 +809,8 @@ export type GetWorkerPlan = (
     workerId: number
 ) => Promise<IWorkerPlan>;
 
+export type GetWorkersPlan = () => Promise<File>;
+
 export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
