@@ -26,12 +26,13 @@
 .inventory_content {
   display: flex;
   flex-direction: column;
+  row-gap: 15px;
   margin-top: 30px;
+  @include phone {
+    row-gap: 0;
+  }
 }
 
-.button_wrapper {
-  margin-top: 20px;
-}
 
 .input_select_wrapper {
   position: relative;

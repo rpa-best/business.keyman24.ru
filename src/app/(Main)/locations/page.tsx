@@ -3,10 +3,10 @@ import { cookies } from 'next/headers';
 
 import { Column } from 'components/Table/Column';
 import { getLocations } from 'http/locationsApi';
+import { getOrganizationContractors } from 'http/organizationApi';
 import { TableWrapper } from 'app/(Main)/locations/components/TableWrapper';
 
 import scss from 'app/(Main)/locations/locations.module.scss';
-import { getOrganizationContractors } from 'http/organizationApi';
 
 const LocationsPage = async () => {
     const cookieStore = cookies();

@@ -207,6 +207,7 @@ export interface ILocation {
     deleted: boolean;
     isActive: boolean;
     desc: string;
+    timezone: string;
     name: string;
 }
 
@@ -377,6 +378,7 @@ export interface CreateGroupPermBody {
 export interface CreateLocationBody {
     name: string;
     desc: string;
+    timezone: string;
 }
 
 export interface ILocationOrgResponse {
@@ -648,13 +650,13 @@ export type CreateLocation = (body: CreateLocationBody) => Promise<ILocation>;
 
 export type CreateLocationObject = (
     locId: number,
-    body: CreateLocationBody
+    body: { name: string; desc: string }
 ) => Promise<IObject>;
 
 export type EditLocationObject = (
     locId: number,
     objId: number,
-    body: CreateLocationBody
+    body: { name: string; desc: string }
 ) => Promise<void>;
 
 export type DeleteLocationObject = (
@@ -694,7 +696,7 @@ export type DeleteLocationKey = (
 export type EditLocation = (
     locId: number,
     body: CreateLocationBody
-) => Promise<void>;
+) => Promise<ILocation>;
 export type DeleteLocation = (locId: number) => Promise<void>;
 
 export type GetLocationObjects = (

@@ -8,9 +8,14 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async () => {
+export const getWorkers: T.GetWorkers = async (org) => {
+    const query = new URLSearchParams();
+    org ? query.set('org', org.toString()) : '';
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
-        `business/${orgId}/worker/`
+        `business/${orgId}/worker/`,
+        {
+            params: query,
+        }
     );
 
     return res.data;

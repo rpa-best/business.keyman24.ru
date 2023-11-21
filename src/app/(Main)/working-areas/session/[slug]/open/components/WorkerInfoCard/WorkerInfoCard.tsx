@@ -75,8 +75,6 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
             </div>
             <div className={scss.worker_card_data_additional}>
                 {workerDocs?.map((doc, index) => {
-                    console.log(doc.activeTo);
-                    console.log(doc.activeTo.split('-').join('.'));
                     return (
                         <div
                             key={index}
@@ -87,9 +85,10 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                                 label={doc.name}
                                 placeholder="-"
                                 disabled
-                                value={new Date(
-                                    doc.activeTo
-                                ).toLocaleDateString()}
+                                value={new Date(doc.activeTo)
+                                    .toLocaleDateString()
+                                    .split('/')
+                                    .join('.')}
                                 name={doc?.name}
                                 onChange={() => {}}
                                 handleError={validateDate(doc.activeTo)}
