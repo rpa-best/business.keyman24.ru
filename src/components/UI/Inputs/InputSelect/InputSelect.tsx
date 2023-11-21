@@ -85,9 +85,6 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
         }
     };
 
-    const offset: [number, number] =
-        label && needErrorLabel ? [0, -10] : [0, 0];
-
     const arrowClassname = clsx({
         [scss.input_arrow_svg]: true,
         [scss.input_arrow_svg_open]: visible,
@@ -127,7 +124,6 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
             visible={visible}
             placement="bottom"
             onClickOutside={onClickOutside}
-            offset={offset}
             render={(attrs) => (
                 <InputSelectList
                     {...attrs}

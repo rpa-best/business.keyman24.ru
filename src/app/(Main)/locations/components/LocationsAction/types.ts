@@ -16,4 +16,5 @@ export interface LocationActionProps {
 export interface LocationFormValues {
     location: string;
     desc: string;
+    timezone: { name: string; id: number };
 }

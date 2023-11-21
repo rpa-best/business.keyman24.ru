@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
@@ -13,9 +13,10 @@ import {
 import { LocationsActionValidate } from 'app/(Main)/locations/components/LocationsAction/LocationsAction.utils';
 import { createLocation, editLocation } from 'http/locationsApi';
 import { PickListsWrapper } from 'app/(Main)/locations/components/LocationsAction/components/PickListsWrapper';
-import { useNotificationStore } from 'store/notificationStore';
 import { useModalStore } from 'store/modalVisibleStore';
 import revalidate from 'utils/revalidate';
+import { ITimezones, Timezones } from 'app/(Main)/locations/timezones';
+import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { errorToastOptions } from 'config/toastConfig';
 
 import scss from './LocationsAction.module.scss';
@@ -37,6 +38,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         const body: CreateLocationBody = {
             desc: values.desc,
             name: values.location,
+            timezone: timezones[values.timezone.id].utc[0],
         };
 
         if (formType === 'create') {
@@ -54,16 +56,12 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                 });
         } else {
             editLocation(location?.id as number, body)
-                .then(() => {
+                .then((loc) => {
                     revalidate(path);
                     setTableData((d) =>
                         d.map((elem) => {
-                            if (elem.id === location.id) {
-                                return {
-                                    ...elem,
-                                    desc: values.desc,
-                                    name: values.location,
-                                };
+                            if (elem.id === loc.id) {
+                                return loc;
                             }
                             return elem;
                         })
@@ -79,6 +77,36 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         }
     };
 
+    const timezones = useMemo(() => {
+        return Timezones.filter((el) => el.ru_names.length !== 0).map(
+            (el, index) => ({
+                ...el,
+                name: `${el.text}, ${el.ru_names}`,
+                id: index,
+            })
+        );
+    }, []);
+
+    const locationTimezone = useMemo(() => {
+        const timezone = timezones.find((el) =>
+            el.utc.find((el) => {
+                if (location?.timezone) {
+                    return el === location?.timezone;
+                } else {
+                    return (
+                        el === Intl.DateTimeFormat().resolvedOptions().timeZone
+                    );
+                }
+            })
+        );
+        const index = timezones.indexOf(timezone as any);
+
+        return {
+            name: `${timezone?.text}, ${timezone?.ru_names}`,
+            id: index,
+        };
+    }, [location?.timezone, timezones]);
+
     const {
         values,
         touched,
@@ -86,11 +114,14 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         handleBlur,
         isValid,
         errors,
+        setFieldValue,
+        setFieldTouched,
         handleSubmit,
     } = useFormik<LocationFormValues>({
         initialValues: {
             location: location?.name ?? '',
             desc: location?.desc ?? '',
+            timezone: locationTimezone,
         },
         enableReinitialize: true,
         validate: LocationsActionValidate,
@@ -116,6 +147,22 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                     />
                 </div>
                 <div className={scss.input}>
+                    <InputSelect
+                        autoComplete="new-password"
+                        label="Часовой пояс"
+                        setFieldTouched={setFieldTouched}
+                        listValues={timezones}
+                        onChange={(tz) => {
+                            setFieldValue('timezone', tz);
+                        }}
+                        handleError={
+                            touched.timezone && (errors.timezone as string)
+                        }
+                        value={values.timezone.name}
+                        name="timezone"
+                    />
+                </div>
+                <div className={scss.input}>
                     <Input
                         label="Описание"
                         needErrorLabel={false}
@@ -127,6 +174,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                         onChange={handleChange}
                     />
                 </div>
+
                 <div className={scss.button_wrapper}>
                     <Button
                         onClick={() => {}}

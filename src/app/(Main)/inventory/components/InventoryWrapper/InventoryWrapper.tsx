@@ -150,7 +150,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 paginatorData={{ offset: 25, countItems: count }}
                 stopPropagation
             >
-                <Column sortable header="номер" field="number" />
                 <Column sortable header="Наименование" field="name" />
                 <Column sortable header="Штрихкод" field="codeNumber" />
                 <Column sortable header="Локация" field="location" />

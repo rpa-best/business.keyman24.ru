@@ -36,7 +36,9 @@ export const createLocation: T.CreateLocation = async (body) => {
 };
 
 export const editLocation: T.EditLocation = async (locId, body) => {
-    await $clientAuth.patch(`business/${orgId}/location/${locId}/`, body);
+    const res: AxiosResponse<ReturnType<typeof editLocation>> =
+        await $clientAuth.patch(`business/${orgId}/location/${locId}/`, body);
+    return res.data;
 };
 
 export const deleteLocation: T.DeleteLocation = async (locId) => {

@@ -16,6 +16,8 @@ import { QueryIntervalType } from 'app/(Main)/components/LineChart/LineChart';
 import { AxiosError } from 'axios';
 import { FiltersAndLineChart } from 'app/(Main)/components/FiltersAndLineChart';
 import { getMonth, setDate, setMonth } from 'date-fns';
+import { Suspense } from 'react';
+import { Spinner } from 'components/Spinner';
 
 interface DashboardProps {
     searchParams: {

@@ -3,7 +3,7 @@
 
 .edit_form_location {
   @extend .edit_form;
-  row-gap: 0;
+  row-gap: 20px;
   @include fullHd {
     max-height: 750px;
     width: 850px;
@@ -23,6 +23,7 @@
 
 .input {
   width: 100%;
+  position: relative;
 }
 
 .pick_list_wrapper {
@@ -39,7 +40,6 @@
   text-align: center;
   @include MontserratSemiBold(24px);
   color: white;
-  margin-bottom: 20px;
   @include phoneOrTablet {
     font-size: 20px;
     text-align: left;
@@ -49,9 +49,10 @@
 .button_wrapper {
   @include fullHd {
     width: 100%;
+      margin-bottom: 50px;
   }
   width: 100%;
-  margin: 10px auto;
+  margin: 20px auto;
   @include phoneOrTablet {
     width: 100%;
   }

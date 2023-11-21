@@ -97,9 +97,10 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
                                 {
                                     errorValue:
                                         doc.name +
-                                        ` ${new Date(
-                                            doc.activeTo.split('-').join('.')
-                                        ).toLocaleDateString()}`,
+                                        ` ${new Date(doc.activeTo)
+                                            .toLocaleDateString()
+                                            .split('/')
+                                            .join('.')}`,
                                     errorName: 'Документы просрочены',
                                 },
                             ]);
