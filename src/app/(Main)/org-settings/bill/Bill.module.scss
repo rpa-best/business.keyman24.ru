@@ -79,18 +79,33 @@
 }
 
 .card_item {
+  width: 240px;
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   column-gap: 10px;
   @include MontserratRegular(18px);
   color: white;
+  @include thousendWidth {
+    width: 220px;
+  }
+  @include phoneOrTablet {
+    width: 250px;
+  }
+  @include phone {
+    width: 220px;
+  }
   & svg {
-
     margin-bottom: 2px;
     &:hover {
       color: $accent-color;
     }
+  }
+  & div {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
   }
 }
 
