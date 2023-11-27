@@ -27,7 +27,7 @@ export const PseudoInput: React.FC<PseudoInputProps> = ({
         if (thousandThreeBreak) {
             return '25px';
         }
-        if (itemCount > 2 && thousandThreeBreak) {
+        if (itemCount > 2) {
             return '25px';
         }
     }, [itemCount, thousandThreeBreak]);

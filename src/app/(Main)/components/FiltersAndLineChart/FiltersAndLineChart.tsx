@@ -9,7 +9,7 @@ import {
     QueryIntervalType,
     QueryModeType,
 } from 'app/(Main)/components/LineChart/LineChart';
-import { LineChartData } from 'http/types';
+import { ILocation, LineChartData } from 'http/types';
 import StatisticsSvg from './svg/statistics.svg';
 import { useSearchParams } from 'next/navigation';
 
@@ -19,11 +19,13 @@ interface FiltersAndLineChartProps {
     allOrgs: IOrganization[];
     org: IOrganization;
     lineChartData: LineChartData;
+    locations: ILocation[];
 }
 
 export const FiltersAndLineChart: React.FC<FiltersAndLineChartProps> = ({
     lineChartData,
     allOrgs,
+    locations,
     org,
 }) => {
     const query = useSearchParams();
@@ -62,6 +64,7 @@ export const FiltersAndLineChart: React.FC<FiltersAndLineChartProps> = ({
     return (
         <>
             <FiltersContainer
+                locations={locations}
                 interval={interval}
                 handleChangeQuery={handleChangeQuery}
                 contractors={allOrgs}

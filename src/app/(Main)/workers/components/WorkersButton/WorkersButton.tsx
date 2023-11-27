@@ -2,39 +2,46 @@
 
 import { Button } from 'components/UI/Buttons/Button';
 import { useModalStore } from 'store/modalVisibleStore';
-import { updateOrg } from 'http/organizationApi';
+import {
+    getOrganizationContractorsOnClient,
+    updateOrg,
+} from 'http/organizationApi';
 import FileSaver from 'file-saver';
 import { getWorkersPlan } from 'http/workerApi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { SelectOrgAndIntervalTippy } from 'app/(Main)/workers/components/SelectOrgAndIntervalTippy';
+import { IOrganization } from 'store/types';
 import { Spinner } from 'components/Spinner';
 
+import scss from 'app/(Main)/workers/Worker.module.scss';
+
 export const WorkersButton = () => {
-    const [loading, setLoading] = useState(false);
+    const [orgs, setOrgs] = useState<IOrganization[]>([]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const handleRefreshClick = async () => {
         await updateOrg();
     };
-    const handleDownloadExcel = async () => {
-        setLoading(true);
-        await getWorkersPlan().then((d) => {
-            FileSaver.saveAs(d, 'Учтёт времени');
-            setLoading(false);
-        });
-    };
+
+    useEffect(() => {
+        const fetchOrgs = async () => {
+            return await getOrganizationContractorsOnClient();
+        };
+
+        fetchOrgs().then((d) => setOrgs(d));
+    }, []);
 
     return (
         <>
-            <Button onClick={() => setVisible(true)} type="button">
-                Загрузить работников
-            </Button>
             <Button onClick={() => handleRefreshClick()} type="button">
                 Обновить данные
             </Button>
-            <Button onClick={() => handleDownloadExcel()} type="button">
-                Учет времени
-            </Button>
-            {loading && <Spinner />}
+            <div className={scss.buttons}>
+                <Button onClick={() => setVisible(true)} type="button">
+                    Загрузить работников
+                </Button>
+                <SelectOrgAndIntervalTippy orgs={orgs} />
+            </div>
         </>
     );
 };

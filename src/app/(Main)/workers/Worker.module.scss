@@ -14,12 +14,12 @@
 }
 
 .button_wrapper {
-  min-width: 300px;
   display: flex;
-  flex-direction: column;
-  row-gap: 10px;
+  column-gap: 10px;
   @include thousendTwoWidth {
     font-size: 16px;
+    flex-direction: column;
+    row-gap: 10px;
   }
   @include phoneOrTablet {
     min-width: 0;
@@ -27,5 +27,15 @@
   }
   @include phone {
     font-size: 14px;
+  }
+
+  & > div {
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    @include phone {
+      white-space: initial;
+    }
   }
 }

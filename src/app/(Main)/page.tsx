@@ -15,13 +15,13 @@ import { formatDate } from 'utils/formatDate';
 import { QueryIntervalType } from 'app/(Main)/components/LineChart/LineChart';
 import { AxiosError } from 'axios';
 import { FiltersAndLineChart } from 'app/(Main)/components/FiltersAndLineChart';
-import { getMonth, setDate, setMonth } from 'date-fns';
-import { Suspense } from 'react';
-import { Spinner } from 'components/Spinner';
+
+import { getLocations } from 'http/locationsApi';
 
 interface DashboardProps {
     searchParams: {
-        org: string;
+        org?: string;
+        location?: string;
         date_lt: string;
         date_gt: string;
         interval: QueryIntervalType;
@@ -29,7 +29,7 @@ interface DashboardProps {
 }
 
 export default async function DashboardMain({
-    searchParams: { org, date_gt, date_lt, interval },
+    searchParams: { org, location, date_gt, date_lt, interval },
 }: DashboardProps) {
     const cookieStore = cookies();
 
@@ -41,9 +41,14 @@ export default async function DashboardMain({
 
     const allOrgs = await getOrganizationContractors(+orgId);
 
+    const allLocations = await getLocations(+orgId);
+
     const intervalQuery = interval ?? 'byDay';
 
-    const orgQuery = org ?? orgs[0].id;
+    const orgQuery = org && !location ? org ?? orgs[0].id : undefined;
+
+    const locQuery =
+        location && !org ? location ?? allLocations.results[0].id : undefined;
 
     let dateGtQuery;
 
@@ -87,6 +92,7 @@ export default async function DashboardMain({
 
     const lineChartData = await getLineChartData(+orgId, {
         orgs: orgQuery,
+        location: locQuery,
         date_gt: dateGtQuery,
         date_lt: dateLtQuery,
     });
@@ -99,6 +105,7 @@ export default async function DashboardMain({
                     <MainCards statistics={mainCardsStatistics} />
                 </div>
                 <FiltersAndLineChart
+                    locations={allLocations.results}
                     allOrgs={allOrgs}
                     org={orgs[0]}
                     lineChartData={lineChartData}
