@@ -16,8 +16,11 @@ export const SubConstructor = () => {
                 {fields.map((item, index) => (
                     <div key={index} className={scss.range_wrapper}>
                         <div className={scss.card_item}>
-                            {item.name} : {item.count}{' '}
-                            <PriceInfo price={item.cost} />
+                            {item.name} :
+                            <div>
+                                {item.count}
+                                <PriceInfo price={item.cost} />
+                            </div>
                         </div>
                     </div>
                 ))}

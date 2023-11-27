@@ -21,9 +21,11 @@ export const InputCheckbox = ({
     return (
         <div className={css.input_container}>
             <div className={css.input_wrapper}>
-                <label className={fontClass} htmlFor={name}>
-                    {label}
-                </label>
+                {label && (
+                    <label className={fontClass} htmlFor={name}>
+                        {label}
+                    </label>
+                )}
                 <label
                     htmlFor={name}
                     className={

@@ -1,0 +1,1 @@
+export { SelectOrgAndIntervalTippy } from './SelectOrgAndIntervalTippy';

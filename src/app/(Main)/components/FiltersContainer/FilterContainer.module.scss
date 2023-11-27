@@ -4,7 +4,7 @@
   background: linear-gradient(transparentize($dark-main, 0.9), transparentize($gray, 0.6));
   border-radius: 25px;
   z-index: 0;
-  height: 206px;
+  height: max-content;
   @include thousendThreeWidth {
     height: max-content;
   }
@@ -26,7 +26,7 @@
   }
   @include phoneOrTablet {
     border-radius: 0;
-    padding: 16px 20px;
+    padding: 35px 20px 16px;
   }
 }
 
@@ -45,7 +45,7 @@
   align-items: center;
   column-gap: 15px;
   color: white;
-
+  margin-bottom: 15px;
   @include phoneOrTablet {
     display: none;
   }
@@ -213,5 +213,17 @@
 
   & div[data-tippy-root] {
     width: 100%
+  }
+}
+
+.checkbox_wrapper {
+  position: absolute;
+  top: -30px;
+  display: flex;
+  column-gap: 10px;
+  cursor: pointer;
+  & p {
+    color: $gray-semi;
+    margin-top: 5px;
   }
 }

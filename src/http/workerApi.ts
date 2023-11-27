@@ -29,10 +29,20 @@ export const getWorkerPlan: T.GetWorkerPlan = async (orgId, workerId) => {
 
     return res.data;
 };
-export const getWorkersPlan: T.GetWorkersPlan = async () => {
+export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
+    const queryParams = new URLSearchParams();
+    if (query) {
+        for (const elem of Object.keys(query)) {
+            if (query[elem]) {
+                queryParams.set(elem, query[elem] as string);
+            }
+        }
+    }
+
     const res: AxiosResponse<ReturnType<typeof getWorkersPlan>> =
         await $clientAuth.get(`business/${orgId}/worker/plan/?format=xlsx`, {
             responseType: 'blob',
+            params: queryParams,
         });
 
     return res.data;

@@ -460,7 +460,8 @@ export interface LineChartData {
 export type GetMainCardsStatistics = (orgId: number) => Promise<MainCardsData>;
 
 interface QueryType {
-    orgs: string;
+    orgs?: string;
+    location?: string;
     date_lt: string;
     date_gt: string;
 }
@@ -811,7 +812,12 @@ export type GetWorkerPlan = (
     workerId: number
 ) => Promise<IWorkerPlan>;
 
-export type GetWorkersPlan = () => Promise<File>;
+export type GetWorkersPlan = (query?: {
+    date_from?: string;
+    date_end?: string;
+    org?: string;
+    [key: string]: string | undefined;
+}) => Promise<File>;
 
 export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
 

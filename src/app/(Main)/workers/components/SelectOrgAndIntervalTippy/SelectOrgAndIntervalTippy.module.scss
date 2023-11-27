@@ -1,0 +1,116 @@
+@import "scss/utils";
+@import "app/(Main)/inventory/components/SelectLocationTippy/SelectLocationInput.module.scss";
+@import "src/app/(Main)/components/FiltersContainer/components/SelectInterval/SelectInterval.module.scss";
+@import "components/RangeDatePicker/PickDate.module.scss";
+
+.tippy_content {
+  @extend .content_wrapper;
+  position: relative;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.tippy_actions {
+  display: flex;
+  column-gap: 20px;
+  @include phone {
+    flex-direction: column;
+
+  }
+}
+
+.input_select_wrapper {
+  width: 286px;
+  position: relative;
+  @include thousendWidth {
+    width: 220px;
+  }
+  @include phone {
+    width: 310px;
+  }
+}
+
+.clear_button {
+  &:after {
+    font-size: 32px!important;
+    right: 5px;
+    transition: .2s all ease-in-out;
+    @include phoneOrTablet {
+      font-size: 28px;
+      right: 0;
+    }
+  }
+  &:hover {
+    &:after {
+      color: $gray!important;
+    }
+  }
+}
+
+.interval_custom_input {
+  @extend .custom_input;
+  border-radius: 10px;
+  min-width: 286px;
+  @include phoneOrTablet {
+    max-width: 200px;
+    & button {
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    min-width: 200px;
+  }
+  @include phone {
+    max-width: 300px;
+    min-width: 300px;
+  }
+}
+
+.range_custom_wrapper{
+  @extend .date_picker_wrapper;
+  @include phone {
+    min-width: 0;
+  }
+}
+
+.interval_wrapper {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+}
+
+.close {
+  @extend .svg;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 9999;
+}
+
+.interval_button {
+  @extend .button;
+  width: 286px;
+  height: 43px;
+  border-radius: 10px;
+  @include phoneOrTablet {
+    width: 200px;
+  }
+  @include phone {
+    width: 300px;
+  }
+}
+
+.interval_button_active {
+  @extend .button_active;
+  width: 286px;
+  height: 43px;
+  border-radius: 10px;
+  @include phoneOrTablet {
+    width: 200px;
+  }
+  @include phone {
+    width: 300px;
+  }
+}

@@ -19,12 +19,19 @@ export const getMainCardsStatistics: T.GetMainCardsStatistics = async (
 
 export const getLineChartData: T.GetLineChartData = async (
     orgId,
-    { orgs, date_lt, date_gt }
+    { orgs, location, date_lt, date_gt }
 ) => {
     const query = new URLSearchParams();
-    query.set('org', orgs);
+    if (orgs) {
+        query.set('org', orgs);
+    }
+    if (location) {
+        query.set('location', location);
+    }
     query.set('date_lt', date_lt);
     query.set('date_gt', date_gt);
+
+    console.log(query);
 
     const res: AxiosResponse<ReturnType<typeof getLineChartData>> =
         await $serverAuth.get(`business/${orgId}/statistics/home/line-chart/`, {
