@@ -18,7 +18,7 @@ import { formatDate } from 'utils/formatDate';
 interface RangePickerProps {
     selectMonth?: boolean;
     setDates: React.Dispatch<
-        React.SetStateAction<{ from: string; to: string } | null>
+        React.SetStateAction<{ from?: string; to?: string } | null>
     >;
     refresh: boolean;
 }
@@ -58,9 +58,12 @@ export const RangePicker: React.FC<RangePickerProps> = ({
     }, [refresh]);
 
     useEffect(() => {
-        if (endDate && startDate) {
-            setDates({ to: formatDate(endDate), from: formatDate(startDate) });
+        if (startDate) {
+            setDates({ from: formatDate(startDate) });
+        } else if (endDate) {
+            setDates({ to: formatDate(endDate) });
         }
+
         if (!endDate && !startDate) {
             setDates(null);
         }

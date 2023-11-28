@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   @include phone {
     margin-bottom: 0;
   }
@@ -216,14 +216,7 @@
   }
 }
 
-.checkbox_wrapper {
+.toggle_wrapper {
   position: absolute;
   top: -30px;
-  display: flex;
-  column-gap: 10px;
-  cursor: pointer;
-  & p {
-    color: $gray-semi;
-    margin-top: 5px;
-  }
 }

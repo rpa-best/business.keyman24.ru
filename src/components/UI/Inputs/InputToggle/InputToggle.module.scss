@@ -1,0 +1,34 @@
+@import "scss/utils";
+
+.toggle_wrapper {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+  & label {
+    color: $gray-semi;
+    cursor: pointer;
+  }
+}
+
+.switch {
+  width: 50px;
+  height: 25px;
+  background-color: $gray-semi;
+  display: flex;
+  justify-content: flex-start;
+  border-radius: 40px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.switch[data-isOn="true"] {
+  justify-content: flex-end;
+}
+
+.handle {
+  width: 16.5px;
+  height: 16.5px;
+  background-color: white;
+  border-radius: 40px;
+}

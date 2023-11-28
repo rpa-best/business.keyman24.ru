@@ -1,19 +1,17 @@
 import { IOrganization } from 'store/types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, MotionValue } from 'framer-motion';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { SearchParamsHelper } from 'utils/searchParamsHelper';
 import { ILocation } from 'http/types';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { LocationsList } from 'app/(Main)/inventory/components/SelectLocationTippy/LocationsList/LocationsList';
 import { Button } from 'components/UI/Buttons/Button';
-
-import scss from './SelectOrgAndIntervalTippy.module.scss';
 import { Interval } from 'app/(Main)/workers/components/SelectOrgAndIntervalTippy/Interval';
 import ExitSvg from '/public/svg/x.svg';
 import { getWorkersPlan } from 'http/workerApi';
 import FileSaver from 'file-saver';
 import { Spinner } from 'components/Spinner';
+
+import scss from './SelectOrgAndIntervalTippy.module.scss';
 
 interface OrgAndIntervalTIppyProps {
     orgs: IOrganization[];
@@ -30,8 +28,8 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
 }) => {
     const [refresh, setRefresh] = useState(false);
     const [fromAndToDates, setFromAndToDates] = useState<{
-        from: string;
-        to: string;
+        from?: string;
+        to?: string;
     } | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -45,6 +43,8 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
     const [selectedOrgs, setSelectedOrgs] = useState<
         { id: number; name: string }[]
     >([]);
+
+    const disabled = fromAndToDates?.from && !fromAndToDates.to;
 
     useEffect(() => {
         const alreadyHas = new Set();
@@ -140,7 +140,11 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
                     <Interval refresh={refresh} setDates={setFromAndToDates} />
                 </div>
                 <div className={scss.button_wrapper}>
-                    <Button onClick={() => handleDownloadExcel()} type="button">
+                    <Button
+                        disabled={!!disabled}
+                        onClick={() => handleDownloadExcel()}
+                        type="button"
+                    >
                         Скачать
                     </Button>
                 </div>

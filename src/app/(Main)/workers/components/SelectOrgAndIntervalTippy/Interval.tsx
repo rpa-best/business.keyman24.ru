@@ -5,7 +5,7 @@ import scss from './SelectOrgAndIntervalTippy.module.scss';
 
 interface IntervalProps {
     setDates: React.Dispatch<
-        React.SetStateAction<{ from: string; to: string } | null>
+        React.SetStateAction<{ from?: string; to?: string } | null>
     >;
     refresh: boolean;
 }
