@@ -12,6 +12,7 @@ import { SearchParamsHelper } from 'utils/searchParamsHelper';
 import { ILocation } from 'http/types';
 
 import scss from 'app/(Main)/components/FiltersContainer/FilterContainer.module.scss';
+import { InputToggle } from 'components/UI/Inputs/InputToggle';
 
 interface InputFiltersWrapperProps {
     defaultOrg: IOrganization;
@@ -71,18 +72,12 @@ export const InputFiltersWrapper: React.FC<InputFiltersWrapperProps> = ({
     return (
         <div className={scss.filter_inputs}>
             <div className={scss.filter_wrapper}>
-                <div
-                    onClick={() => handleChangeInput(!checked)}
-                    className={scss.checkbox_wrapper}
-                >
-                    <InputCheckbox
-                        type="checkbox"
-                        name="change-selected"
-                        label=""
+                <div className={scss.toggle_wrapper}>
+                    <InputToggle
                         value={checked}
                         onChange={handleChangeInput}
+                        label="По локациям"
                     />
-                    <p>По локациям</p>
                 </div>
                 {checked ? (
                     <ChangeOrgInput

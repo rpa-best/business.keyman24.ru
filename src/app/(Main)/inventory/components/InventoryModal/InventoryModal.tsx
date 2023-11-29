@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useDropzone } from 'react-dropzone';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { InventoryModalProps } from 'app/(Main)/inventory/types';
 import { InventoryFormType } from 'app/(Main)/inventory/components/InventoryModal/types';
@@ -14,7 +14,6 @@ import {
     updateInventoryItem,
     uploadInventoryPhoto,
 } from 'http/inventoryApi';
-import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/components';
@@ -23,7 +22,6 @@ import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
 import scss from './InventoryModal.module.scss';
-import { AxiosError } from 'axios';
 
 export const InventoryModal: React.FC<InventoryModalProps> = ({
     type,

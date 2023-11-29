@@ -31,8 +31,6 @@ export const getLineChartData: T.GetLineChartData = async (
     query.set('date_lt', date_lt);
     query.set('date_gt', date_gt);
 
-    console.log(query);
-
     const res: AxiosResponse<ReturnType<typeof getLineChartData>> =
         await $serverAuth.get(`business/${orgId}/statistics/home/line-chart/`, {
             params: query,
