@@ -27,7 +27,7 @@ export const InputToggle: React.FC<InputToggleTypes> = ({
             <motion.div
                 style={{ backgroundColor: value ? '#31D79B' : '#C5C5C5' }}
                 className={scss.switch}
-                data-isOn={value}
+                data-ison={value}
             >
                 <motion.div
                     className={scss.handle}

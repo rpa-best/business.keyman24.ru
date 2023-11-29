@@ -8,6 +8,8 @@ import { IInventoryHistory, IResponse } from 'http/types';
 
 import scss from './HistoryComponent.module.scss';
 import { LocationButton } from 'app/(Main)/components/HistoryComponent/LocationButton';
+import { ImagesCarousel } from 'components/ImagesCarousel';
+import { ImageCarouselWrapper } from 'app/(Main)/inventory/[id]/components/ImageCarouselWrapper';
 
 interface KeyHistoryComponentProps {
     keyHistory: IResponse<IInventoryHistory>;
@@ -54,15 +56,19 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
     return (
         <>
             {type !== 'Keys' && (
-                <div
-                    className={scss.charts_button}
-                    style={{
-                        width: 'max-content',
-                        marginBottom: register ? '0' : '20px',
-                    }}
-                >
-                    <LocationButton />
-                </div>
+                <>
+                    <div
+                        className={scss.charts_button}
+                        style={{
+                            width: 'max-content',
+                        }}
+                    >
+                        <LocationButton />
+                    </div>
+                    <div className={scss.charts_images}>
+                        <ImageCarouselWrapper />
+                    </div>
+                </>
             )}
             {barData?.length !== 0 ? (
                 <>

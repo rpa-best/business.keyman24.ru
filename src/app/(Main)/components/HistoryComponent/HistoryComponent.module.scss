@@ -2,11 +2,19 @@
 
 .charts_button {
   margin-left: 30px;
+  margin-bottom: 20px;
+  @include phone {
+    margin: 0 auto 10px;
+  }
+}
+
+.charts_images {
+  margin-left: 30px;
   @include phoneOrTablet {
-    margin-bottom: 20px!important;
+    margin-bottom: 20px
   }
   @include phone {
-    margin: 0 auto;
+    margin-left: 10px;
   }
 }
 

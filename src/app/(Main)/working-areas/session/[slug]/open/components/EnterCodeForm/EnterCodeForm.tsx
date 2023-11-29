@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 
 import { useFormik } from 'formik';
@@ -18,6 +18,9 @@ import scss from './EnterCodeFOrm.module.scss';
 import { successToastConfig } from 'config/toastConfig';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
+import { IInventoryImage } from 'http/types';
+import { getInventoryImage } from 'http/inventoryApi';
+import { ImagesCarousel } from 'components/ImagesCarousel';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -30,8 +33,13 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     const path = usePathname();
     const params = useParams();
     const slug = getParamsType(params.slug);
+
+    const [loading, setLoading] = useState(false);
+    const [images, setImages] = useState<IInventoryImage[] | null>(null);
     const onSubmit = async (values: EnterCodeFormValues) => {
         let body = null;
+        setLoading(true);
+        setImages(null);
         if (worker?.id) {
             body = {
                 session: +sessionId,
@@ -51,6 +59,13 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     | ModifiedRegisterLog
                     | Omit<ModifiedRegisterLog, 'workerName'>;
                 let mode: string;
+                if (type !== 'keys') {
+                    getInventoryImage(d.inventory.id)
+                        .then((d) => {
+                            setImages(d.results);
+                        })
+                        .finally(() => setLoading(false));
+                }
                 if (slug === 'register_inventory') {
                     mode = d.mode ? 'Зарегестрировано' : 'Сдано';
                     newLog = {
@@ -115,7 +130,10 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             <h2 className={scss.form_title}>
                 Добавьте или отсканируйте штрихкод
             </h2>
-            <div className={scss.input_wrapper}>
+            <div
+                style={{ marginBottom: type !== 'keys' ? 0 : undefined }}
+                className={scss.input_wrapper}
+            >
                 <Input
                     autoFocus
                     clearable
@@ -136,6 +154,10 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     handleError={touched.code && errors.code}
                 />
             </div>
+            <div className={scss.images_wrapper}>
+                <ImagesCarousel images={images} loading={loading} />
+            </div>
+
             <div className={scss.button_wrapper}>
                 <Button
                     disabled={!worker && touched.code && !isValid}
