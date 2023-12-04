@@ -2,11 +2,11 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'react-toastify';
+import Link from 'next/link';
+import Cookies from 'universal-cookie';
 
 import { SessionWrapperProps } from 'app/(Main)/working-areas/types';
 import { ICreateSessionBody, IModifiedSession } from 'http/types';
-import { errorToastOptions } from 'config/toastConfig';
 
 import { useModalStore } from 'store/modalVisibleStore';
 import { useUserStore } from 'store/userStore';
@@ -18,17 +18,16 @@ import { AttachCard } from 'app/(Main)/working-areas/components/AttachCard';
 import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
 
-import {
-    closeSession,
-    createSession,
-    sendActivateSession,
-    sendCheck,
-} from 'http/workingAreaApi';
+import { checkAccess } from 'utils/checkAccess';
+import { closeSession, createSession } from 'http/workingAreaApi';
 import revalidate from 'utils/revalidate';
 import { DateHelper } from 'utils/dateHelper';
 
 import scss from './SessionWrapper.module.scss';
-import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { warningToastConfig } from 'config/toastConfig';
+
+const cookie = new Cookies();
 
 export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     sessions,
@@ -69,14 +68,22 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
     const handleRowClick = async (id: number) => {
         const session = sessions.find((s) => s.id === id);
-        if (session?.status === 'Завершена') {
-            router.push(`${pathname}/closed/${session.id}`);
-        } else {
-            if (!needAttach) {
-                router.push(`${pathname}/open/${currentSession as number}`);
-                return;
+        const orgId = cookie.get('orgId');
+        const accessed = await checkAccess(
+            `business/${orgId}/working_area/${areaId}/session/${session?.id}/element?limit=1&offset=0`
+        );
+        if (accessed) {
+            if (session?.status === 'Завершена') {
+                router.push(`${pathname}/closed/${session.id}`);
+            } else {
+                if (!needAttach) {
+                    router.push(`${pathname}/open/${currentSession as number}`);
+                    return;
+                }
+                setVisible(true);
             }
-            setVisible(true);
+        } else {
+            toast('Недостаточно прав', warningToastConfig);
         }
     };
 
@@ -97,35 +104,38 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
             user: user?.username as string,
         };
 
-        await createSession(areaId, body).then((d) => {
-            const startDate = new DateHelper(d.startDate);
-            const endDate = new DateHelper(d.endDate ?? '');
+        await createSession(areaId, body)
+            .then((d) => {
+                const startDate = new DateHelper(d.startDate);
+                const endDate = new DateHelper(d.endDate ?? '');
 
-            const newSession =
-                d.status === 1
-                    ? {
-                          ...d,
-                          status: 'В процессе',
-                          startDate: `${startDate.getDate} в ${startDate.getTime}`,
-                          endDate: '-',
-                      }
-                    : {
-                          ...d,
-                          status: 'Завершена',
-                          startDate: `${startDate.getDate} в ${startDate.getTime}`,
-                          endDate: `${endDate.getDate} в ${endDate.getTime}`,
-                      };
+                const newSession =
+                    d.status === 1
+                        ? {
+                              ...d,
+                              status: 'В процессе',
+                              startDate: `${startDate.getDate} в ${startDate.getTime}`,
+                              endDate: '-',
+                          }
+                        : {
+                              ...d,
+                              status: 'Завершена',
+                              startDate: `${startDate.getDate} в ${startDate.getTime}`,
+                              endDate: `${endDate.getDate} в ${endDate.getTime}`,
+                          };
 
-            setSessionsData((d) => [newSession, ...d]);
+                setSessionsData((d) => [newSession, ...d]);
 
-            router.prefetch(`${pathname}/open/${newSession.id}`);
-            revalidate(pathname);
+                router.prefetch(`${pathname}/open/${newSession.id}`);
+                revalidate(pathname);
 
-            if (!needAttach) {
-                router.push(`${pathname}/open/${newSession.id}`);
-            }
-        });
-        setLoading(false);
+                if (!needAttach) {
+                    router.push(`${pathname}/open/${newSession.id}`);
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const onCloseSessionClick = async () => {

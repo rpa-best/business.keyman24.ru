@@ -18,6 +18,8 @@ import {
 } from 'http/permissionsApi';
 import { getModeName } from 'utils/permTypeHelper';
 import { getListValues } from 'components/PickList/helpers/getListValues';
+import { useErrorBoundary } from 'react-error-boundary';
+import { AxiosError } from 'axios';
 
 export const WorkersPermissionsPickList: React.FC<
     WorkerPickListPermissionsWrapper
@@ -29,15 +31,39 @@ export const WorkersPermissionsPickList: React.FC<
 
     const [loading, setLoading] = useState(false);
 
+    const { showBoundary } = useErrorBoundary();
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
 
-            const allPermissions = await getClientAllPermissions();
+            const allPermissions = await getClientAllPermissions().catch(
+                (e) => {
+                    if (e instanceof AxiosError) {
+                        if (e.response?.status === 403) {
+                            showBoundary('Недостаточно прав');
+                        }
+                    }
+                }
+            );
 
             const workerPermission = await getWorkerPermissionsOnClient(
                 workerUsername
-            );
+            ).catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (e.response?.status === 403) {
+                        showBoundary('Недостаточно прав');
+                    }
+                }
+            });
+
+            if (!allPermissions) {
+                return;
+            }
+
+            if (!workerPermission) {
+                return;
+            }
 
             const source = getListValues(allPermissions, workerPermission);
 
@@ -53,7 +79,11 @@ export const WorkersPermissionsPickList: React.FC<
             return { source, target };
         };
         fetchData()
-            .then(({ source, target }) => {
+            .then((props) => {
+                if (!props) {
+                    return;
+                }
+                const { source, target } = props;
                 setSource(source);
                 setTarget(target);
             })

@@ -48,14 +48,15 @@ export const PermModalForm: React.FC<IFormProps> = ({
                         levelDesc: values.level?.name as string,
                     };
                     setTableData((data) => [...data, newPerm]);
+                    setVisible(false);
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         } else {
             await editGroupPerm(selectedPerm?.id as number, body)
                 .then(() => {
+                    setVisible(false);
                     revalidate(path);
                     setTableData((data) => {
                         return data.map((el) => {
@@ -73,7 +74,6 @@ export const PermModalForm: React.FC<IFormProps> = ({
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         }
     };

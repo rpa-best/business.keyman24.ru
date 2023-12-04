@@ -17,9 +17,11 @@ import { useModalStore } from 'store/modalVisibleStore';
 import revalidate from 'utils/revalidate';
 import { ITimezones, Timezones } from 'app/(Main)/locations/timezones';
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
-import { errorToastOptions } from 'config/toastConfig';
+import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
 
 import scss from './LocationsAction.module.scss';
+import { useDenied } from 'hooks/useDenied';
+import { AxiosError } from 'axios';
 
 export const LocationAction: React.FC<LocationActionProps> = ({
     location,
@@ -46,13 +48,18 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                 .then((d) => {
                     revalidate(path);
                     setTableData((rows) => [...rows, d]);
+                    setVisible(false);
                 })
-                .catch(() => {
-                    toast('Ошибка', errorToastOptions);
+                .catch((e) => {
+                    if (e instanceof AxiosError) {
+                        if (e.response?.status === 403) {
+                            toast('Недостаточно прав', warningToastConfig);
+                            return;
+                        }
+                    }
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         } else {
             editLocation(location?.id as number, body)
@@ -66,12 +73,17 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                             return elem;
                         })
                     );
+                    setVisible(false);
                 })
-                .catch(() => {
-                    toast('Ошибка', errorToastOptions);
+                .catch((e) => {
+                    if (e instanceof AxiosError) {
+                        if (e.response?.status === 403) {
+                            toast('Недостаточно прав', warningToastConfig);
+                            return;
+                        }
+                    }
                 })
                 .finally(() => {
-                    setVisible(false);
                     setLoading(false);
                 });
         }

@@ -66,7 +66,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     }, [priceByOne, totalPositions]);
 
     useEffect(() => {
-        if (totalPrice > 0) {
+        if (totalPrice > 0 && modalType === 'more') {
             if (toastId.current) {
                 toast.update(toastId.current, {
                     render: <ToastPrice price={totalPrice} />,
@@ -80,11 +80,11 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                     }
                 );
             }
-        } else {
+        } else if (totalPrice === 0 && modalType === 'more') {
             toast.dismiss();
             toastId.current = null;
         }
-    }, [totalPrice, toastId.current]);
+    }, [totalPrice, toastId.current, modalType]);
 
     useEffect(() => {
         if (!visible) {

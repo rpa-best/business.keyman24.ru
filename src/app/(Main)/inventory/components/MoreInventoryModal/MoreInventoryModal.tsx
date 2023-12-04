@@ -42,11 +42,11 @@ export const MoreInventoryModal: React.FC<MoreInventoryModalProps> = ({
         createInventoryKeys(body)
             .then(() => {
                 setData([]);
+                setVisible(false);
+                revalidate(path);
             })
             .finally(() => {
                 setLoading(false);
-                setVisible(false);
-                revalidate(path);
             });
     };
     return (

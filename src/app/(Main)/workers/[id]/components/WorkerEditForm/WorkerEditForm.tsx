@@ -62,20 +62,14 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 if (e instanceof AxiosError) {
                     if (e.response) {
                         if (
-                            e.response.data &&
-                            e.response.data.phone &&
-                            e.response.data.phone[0] &&
                             e.response.data.phone[0].phone.slug ===
-                                'user_already_has_with_this_phone'
+                            'user_already_has_with_this_phone'
                         ) {
-                            errors.phone = 'Этот телефон занят';
+                            errors.phone = e.response.data.phone[0].phone.name;
                         }
                         if (
-                            e.response.data &&
-                            e.response.data.password1 &&
-                            e.response.data.password1.flat(1) &&
                             e.response.data.password1.flat(1)[0] ===
-                                'Введённый пароль слишком широко распространён.'
+                            'Введённый пароль слишком широко распространён.'
                         ) {
                             errors.password = 'Пароль слишком простой';
                             errors.confirmPassword = 'Пароль слишком простой';

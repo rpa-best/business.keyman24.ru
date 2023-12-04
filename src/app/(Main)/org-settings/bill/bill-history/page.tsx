@@ -32,7 +32,7 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
             <Table tableData={cloneHistory} setTableData={[] as any}>
                 <Column sortable header="Дата" field="date" />
                 <Column sortable header="Тип операции" field="typeName" />
-                <Column sortable header="Количество" field="cost" />
+                <Column sortable header="Стоимость в рублях" field="cost" />
             </Table>
         </div>
     );

@@ -15,8 +15,13 @@ import { IOrganization } from 'store/types';
 import revalidate from 'utils/revalidate';
 import { toast } from 'react-toastify';
 import { usePriceBySlug } from 'hooks/usePrice';
-import { priceToastConfig } from 'config/toastConfig';
+import { priceToastConfig, warningToastConfig } from 'config/toastConfig';
 import { ToastPrice } from 'components/ToastPrice';
+import { checkAccess } from 'utils/checkAccess';
+import Cookies from 'universal-cookie';
+import { AxiosError } from 'axios';
+
+const cookie = new Cookies();
 
 interface TableWrapperProps {
     tableRows: ILocation[];
@@ -62,15 +67,30 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteLocation(id)
+        return deleteLocation(id)
             .then(() => revalidate(pathname))
             .finally(() => {
                 setLoading(false);
             });
     };
 
-    const handleRowClick = (id: number) => {
-        router.push(`${pathName}/${id}${path ? '/' + path : ''}`);
+    const handleRowClick = async (id: number) => {
+        setLoading(true);
+        const orgId = cookie.get('orgId');
+        checkAccess(`business/${orgId}/location/${id}/object?deleted=false`)
+            .then((d) => {
+                if (d) {
+                    router.prefetch(
+                        `${pathName}/${id}${path ? '/' + path : ''}`
+                    );
+                    router.push(`${pathName}/${id}${path ? '/' + path : ''}`);
+                } else {
+                    toast('Недостаточно прав', warningToastConfig);
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     return (

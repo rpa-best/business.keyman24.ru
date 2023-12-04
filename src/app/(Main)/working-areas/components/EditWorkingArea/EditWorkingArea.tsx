@@ -16,6 +16,7 @@ import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
 import scss from './EditWorkingArea.module.scss';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,
@@ -53,11 +54,11 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                         ...workingAreas,
                         newWorkingArea,
                     ]);
+                    setNoteVisible(false);
+                    setVisible(false);
                     revalidate(pathName);
                 })
                 .finally(() => {
-                    setNoteVisible(false);
-                    setVisible(false);
                     setLoading(false);
                 });
         } else {
@@ -81,10 +82,10 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                             return el;
                         })
                     );
+                    setVisible(false);
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         }
     };
@@ -178,7 +179,9 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                     </Button>
                 </div>
                 {formType === 'edit' && (
-                    <AreaPickList areaId={editableArea?.id as number} />
+                    <ErrorBoundary fallback={<></>}>
+                        <AreaPickList areaId={editableArea?.id as number} />
+                    </ErrorBoundary>
                 )}
             </form>
         </>

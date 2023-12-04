@@ -12,11 +12,11 @@ import 'scss/utils.scss';
 import 'scss/_reset.scss';
 import { getServices } from 'http/organizationApi';
 import { Notification } from 'app/(Main)/components/Notification';
-
-import scss from 'app/(Main)/MainPage.module.scss';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
 import { IService } from 'http/types';
+
+import scss from 'app/(Main)/MainPage.module.scss';
 
 export const metadata: Metadata = {
     title: 'Keyman24 - Business',
