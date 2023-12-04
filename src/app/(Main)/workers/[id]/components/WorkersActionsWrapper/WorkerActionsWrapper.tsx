@@ -8,6 +8,7 @@ import { IWorker, IWorkerUser } from 'http/types';
 import { WorkerEditForm } from 'app/(Main)/workers/[id]/components/WorkerEditForm';
 
 import scss from 'app/(Main)/workers/Worker.module.scss';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export interface WorkerActionsWrapperProps {
     workerUser: IWorkerUser | null;
@@ -51,12 +52,16 @@ export const WorkerActionsWrapper: React.FC<WorkerActionsWrapperProps> = ({
             {children}
             {workerUserData && (
                 <>
-                    <WorkersPermissionsPickList
-                        workerUsername={workerUserData.username}
-                    />
-                    <WorkerGroupPickList
-                        workerUsername={workerUserData.username}
-                    />
+                    <ErrorBoundary fallback={<></>}>
+                        <WorkersPermissionsPickList
+                            workerUsername={workerUserData.username}
+                        />
+                    </ErrorBoundary>
+                    <ErrorBoundary fallback={<></>}>
+                        <WorkerGroupPickList
+                            workerUsername={workerUserData.username}
+                        />
+                    </ErrorBoundary>
                 </>
             )}
         </>

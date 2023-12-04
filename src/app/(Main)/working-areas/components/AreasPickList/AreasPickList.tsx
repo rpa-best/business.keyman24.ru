@@ -14,6 +14,8 @@ import {
 } from 'http/deviceApi';
 
 import scss from 'app/(Main)/permission-group/components/PermissionPickList/PermissionPickList.module.scss';
+import { useErrorBoundary } from 'react-error-boundary';
+import { AxiosError } from 'axios';
 
 export const AreaPickList: React.FC<WorkingAreaDevicePickList> = ({
     areaId,
@@ -24,10 +26,22 @@ export const AreaPickList: React.FC<WorkingAreaDevicePickList> = ({
 
     const [loading, setLoading] = useState(false);
 
+    const { showBoundary } = useErrorBoundary();
+
     useEffect(() => {
         setLoading(true);
         fetchAreasData(areaId as number)
+            .catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (e.response?.status === 403) {
+                        showBoundary('Недостаточно прав');
+                    }
+                }
+            })
             .then((d) => {
+                if (!d) {
+                    return;
+                }
                 setSource(d.trg as []);
                 setTarget(d.src as []);
             })

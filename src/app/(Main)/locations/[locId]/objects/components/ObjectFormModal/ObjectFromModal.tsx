@@ -18,6 +18,9 @@ import { Spinner } from 'components/Spinner';
 import revalidate from 'utils/revalidate';
 
 import scss from './ObjectFormModal.module.scss';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { warningToastConfig } from 'config/toastConfig';
 
 export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
     locId,
@@ -44,10 +47,10 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
                 .then((d) => {
                     revalidate(pathname);
                     setObjects((obj) => [...obj, d]);
+                    setVisible(false);
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         } else {
             editLocationObject(locId, object?.id as number, body)
@@ -65,10 +68,10 @@ export const ObjectFormModal: React.FC<ObjectFormModalProps> = ({
                             return objects;
                         })
                     );
+                    setVisible(false);
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         }
     };

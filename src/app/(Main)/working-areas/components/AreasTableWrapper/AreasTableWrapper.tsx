@@ -48,7 +48,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteWorkingArea(id)
+        return deleteWorkingArea(id)
             .then(() => revalidate(pathName))
             .finally(() => setLoading(false));
     };

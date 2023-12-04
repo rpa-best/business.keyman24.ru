@@ -14,6 +14,8 @@ import { getWorkers } from 'http/workerApi';
 import { v4 } from 'uuid';
 import { IWorker } from 'http/types';
 import { ModifiedWorker } from 'app/(Main)/locations/components/LocationsAction/components/types';
+import { AxiosError } from 'axios';
+import { useErrorBoundary } from 'react-error-boundary';
 
 export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
     listsRefresh,
@@ -25,12 +27,36 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
     const [source, setSource] = useState<IWorker[]>([]);
     const [target, setTarget] = useState<ModifiedWorker[]>([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const locationWorkers = await getLocationWorkersOnClient(locId);
+    const { showBoundary } = useErrorBoundary();
 
-            const workers = await getWorkers();
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            const locationWorkers = await getLocationWorkersOnClient(
+                locId
+            ).catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (e.response?.status === 403) {
+                        showBoundary('Недостаточно прав');
+                    }
+                }
+            });
+
+            if (!locationWorkers) {
+                return;
+            }
+
+            const workers = await getWorkers().catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (e.response?.status === 403) {
+                        showBoundary('Недостаточно прав');
+                    }
+                }
+            });
+
+            if (!workers) {
+                return;
+            }
 
             const filteredWorkers = workers.results.filter((w) => {
                 return !locationWorkers.results.find(
@@ -53,7 +79,11 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
             return { source, target };
         };
         fetchData()
-            .then(({ source, target }) => {
+            .then((props) => {
+                if (!props) {
+                    return;
+                }
+                const { source, target } = props;
                 setSource(source as []);
                 setTarget(target);
             })

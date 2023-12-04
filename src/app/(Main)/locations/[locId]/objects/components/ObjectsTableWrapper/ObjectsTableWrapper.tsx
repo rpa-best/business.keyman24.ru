@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { checkAccess } from 'utils/checkAccess';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
 
 import { Column } from 'components/Table/Column';
 import { Table } from 'components/Table';
@@ -13,9 +17,10 @@ import { deleteLocationObject } from 'http/locationsApi';
 import { Spinner } from 'components/Spinner';
 import revalidate from 'utils/revalidate';
 import { usePriceBySlug } from 'hooks/usePrice';
-import { toast } from 'react-toastify';
 import { ToastPrice } from 'components/ToastPrice';
-import { priceToastConfig } from 'config/toastConfig';
+import { priceToastConfig, warningToastConfig } from 'config/toastConfig';
+
+const cookie = new Cookies();
 
 interface ObjectsTableWrapper {
     modifiedObjects: IObject[];
@@ -40,7 +45,17 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     const price = usePriceBySlug('ObjectInLocation');
 
     const handleRowClick = (id: number) => {
-        router.push(`${pathname}/${id}`);
+        const orgId = cookie.get('orgId');
+        checkAccess(
+            `business/${orgId}/inventory/?type=inventory&ordering=id`
+        ).then((d) => {
+            if (d) {
+                router.prefetch(`${pathname}/${id}`);
+                router.push(`${pathname}/${id}`);
+            } else {
+                toast('Недостаточно прав', warningToastConfig);
+            }
+        });
     };
 
     const handleAddClick = () => {
@@ -60,7 +75,7 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        deleteLocationObject(locId, id)
+        return deleteLocationObject(locId, id)
             .then(() => revalidate(pathname))
             .finally(() => {
                 setLoading(false);
@@ -75,7 +90,7 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
                     onClick: () => handleAddClick(),
                     text: 'Добавить',
                 }}
-                prefetch={(id) => router.prefetch(`${pathname}/${id}`)}
+                /*prefetch={(id) => router.prefetch(`${pathname}/${id}`)}*/
                 handleDeleteClick={handleDeleteClick}
                 handleRowClick={handleRowClick}
                 tableData={tableRows}

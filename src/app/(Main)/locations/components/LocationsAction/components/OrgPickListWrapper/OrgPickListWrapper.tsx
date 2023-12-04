@@ -14,8 +14,9 @@ import {
     IModifiedOrganization,
     OrgPickListProps,
 } from 'app/(Main)/locations/components/LocationsAction/components/types';
-import { IOrganization } from 'store/types';
 import { ILocationOrgResponse } from 'http/types';
+import { AxiosError } from 'axios';
+import { useErrorBoundary } from 'react-error-boundary';
 
 export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
     organizations,
@@ -28,11 +29,23 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
     const [source, setSource] = useState<IModifiedOrganization[]>([]);
     const [target, setTarget] = useState<ILocationOrgResponse[]>([]);
 
+    const { showBoundary } = useErrorBoundary();
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             const locationOrganizations =
-                await getLocationOrganizationsOnClient(locId);
+                await getLocationOrganizationsOnClient(locId).catch((e) => {
+                    if (e instanceof AxiosError) {
+                        if (e.response?.status === 403) {
+                            showBoundary('Недостаточно прав');
+                        }
+                    }
+                });
+
+            if (!locationOrganizations) {
+                return;
+            }
 
             const source = organizations.map((org) => {
                 const orgInLocation = locationOrganizations.results.find(
@@ -64,7 +77,11 @@ export const OrgPickListWrapper: React.FC<OrgPickListProps> = ({
             return { source, target };
         };
         fetchData()
-            .then(({ source, target }) => {
+            .then((props) => {
+                if (!props) {
+                    return;
+                }
+                const { source, target } = props;
                 setSource(source as []);
                 setTarget(target);
             })

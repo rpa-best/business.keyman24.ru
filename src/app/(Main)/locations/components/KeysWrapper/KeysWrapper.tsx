@@ -68,7 +68,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
     }, [priceByOne, totalPositions]);
 
     useEffect(() => {
-        if (totalPrice > 0) {
+        if (totalPrice > 0 && visible) {
             if (toastId.current) {
                 toast.update(toastId.current, {
                     render: <ToastPrice price={totalPrice} />,
@@ -86,7 +86,7 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
             toast.dismiss();
             toastId.current = null;
         }
-    }, [totalPrice, toastId.current]);
+    }, [totalPrice, visible]);
 
     useEffect(() => {
         if (!visible) {
@@ -102,13 +102,13 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         setVisible(true);
     };
 
-    const handleDeleteOneData = (id: string) => {
+    const handleDeleteOneData = async (id: string) => {
         setPreviewKeys((d) => d.filter((dat) => dat.id !== id));
     };
 
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
-        await deleteLocationKey(+params.locId, +params.objId, +id)
+        return await deleteLocationKey(+params.locId, +params.objId, +id)
             .then(() => revalidate(pathname))
             .finally(() => {
                 setLoading(false);
@@ -123,11 +123,11 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
         createLocationKeys(+params.locId, +params.objId, body)
             .then(() => {
                 setPreviewKeys([]);
+                setVisible(false);
             })
             .finally(() => {
                 revalidate(pathname);
                 setLoading(false);
-                setVisible(false);
             });
     };
 

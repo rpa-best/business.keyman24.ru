@@ -9,7 +9,7 @@ import { Spinner } from 'components/Spinner';
 import { toast } from 'react-toastify';
 import { sortArr, sortByCustomDesc } from 'utils/sortPickListArrays';
 import { AxiosError } from 'axios';
-import { errorToastOptions } from 'config/toastConfig';
+import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
 
 import scss from './PickList.module.scss';
 
@@ -85,10 +85,12 @@ export const PickList = ({
             })
             .catch((e) => {
                 if (e instanceof AxiosError) {
-                    toast(
-                        'Ошибка, попробуйте обновить страницу',
-                        errorToastOptions
-                    );
+                    if (e.response?.status !== 403) {
+                        toast(
+                            'Ошибка, попробуйте обновить страницу',
+                            errorToastOptions
+                        );
+                    }
                 }
             })
             .finally(() => {
@@ -115,10 +117,12 @@ export const PickList = ({
             })
             .catch((e) => {
                 if (e instanceof AxiosError) {
-                    toast(
-                        'Ошибка, попробуйте обновить страницу',
-                        errorToastOptions
-                    );
+                    if (e.response?.status != 403) {
+                        toast(
+                            'Ошибка, попробуйте обновить страницу',
+                            errorToastOptions
+                        );
+                    }
                 }
             })
             .finally(() => {

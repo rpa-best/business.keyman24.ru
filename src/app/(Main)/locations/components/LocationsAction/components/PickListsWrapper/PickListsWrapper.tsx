@@ -3,6 +3,7 @@
 import { OrgPickListWrapper } from 'app/(Main)/locations/components/LocationsAction/components/OrgPickListWrapper';
 import { WorkersPickListWrapper } from 'app/(Main)/locations/components/LocationsAction/components/WorkersPickListWrapper';
 import React, { useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { IOrganization } from 'store/types';
 
 import scss from 'app/(Main)/locations/components/LocationsAction/LocationsAction.module.scss';
@@ -21,25 +22,30 @@ export const PickListsWrapper: React.FC<PickListsWrapperProps> = ({
     loading,
 }) => {
     const [listsRefresh, setListsRefresh] = useState(false);
+
     return (
         <>
-            <div className={scss.pick_list_wrapper}>
-                <OrgPickListWrapper
-                    loading={loading}
-                    setLoading={setLoading}
-                    locId={locId}
-                    setListsRefresh={setListsRefresh}
-                    organizations={organizations}
-                />
-            </div>
-            <div className={scss.pick_list_wrapper}>
-                <WorkersPickListWrapper
-                    loading={loading}
-                    setLoading={setLoading}
-                    locId={locId}
-                    listsRefresh={listsRefresh}
-                />
-            </div>
+            <ErrorBoundary fallback={<></>}>
+                <div className={scss.pick_list_wrapper}>
+                    <OrgPickListWrapper
+                        loading={loading}
+                        setLoading={setLoading}
+                        locId={locId}
+                        setListsRefresh={setListsRefresh}
+                        organizations={organizations}
+                    />
+                </div>
+            </ErrorBoundary>
+            <ErrorBoundary fallback={<></>}>
+                <div className={scss.pick_list_wrapper}>
+                    <WorkersPickListWrapper
+                        loading={loading}
+                        setLoading={setLoading}
+                        locId={locId}
+                        listsRefresh={listsRefresh}
+                    />
+                </div>
+            </ErrorBoundary>
         </>
     );
 };

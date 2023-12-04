@@ -15,6 +15,8 @@ import { WorkerPresetPermValues } from 'app/(Main)/workers/[id]/components/Worke
 import { DefaultElem } from 'components/PickList/types';
 import { getGroupListValues } from 'components/PickList/helpers/getListValues';
 import { IAdminGroupPermission, IGroupPermission } from 'http/types';
+import { useErrorBoundary } from 'react-error-boundary';
+import { AxiosError } from 'axios';
 
 export const WorkerGroupPickList: React.FC<WorkerPresetPermValues> = ({
     workerUsername,
@@ -24,15 +26,39 @@ export const WorkerGroupPickList: React.FC<WorkerPresetPermValues> = ({
     const [source, setSource] = useState<IGroupPermission[]>();
     const [target, setTarget] = useState<IAdminGroupPermission[]>();
 
+    const { showBoundary } = useErrorBoundary();
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
 
-            const allGroupPerm = await getGroupPermissionsOnClient();
+            const allGroupPerm = await getGroupPermissionsOnClient().catch(
+                (e) => {
+                    if (e instanceof AxiosError) {
+                        if (e.response?.status === 403) {
+                            showBoundary('Недостаточно прав');
+                        }
+                    }
+                }
+            );
 
             const workerGroupPerm = await getWorkerGroupPermissionsOnClient(
                 workerUsername
-            );
+            ).catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (e.response?.status === 403) {
+                        showBoundary('Недостаточно прав');
+                    }
+                }
+            });
+
+            if (!allGroupPerm) {
+                return;
+            }
+
+            if (!workerGroupPerm) {
+                return;
+            }
 
             const groupPermsWithId = allGroupPerm.results.map((el) => {
                 return { ...el, uuid: v4() };
@@ -53,7 +79,11 @@ export const WorkerGroupPickList: React.FC<WorkerPresetPermValues> = ({
             return { source, target };
         };
         fetchData()
-            .then(({ source, target }) => {
+            .then((props) => {
+                if (!props) {
+                    return;
+                }
+                const { source, target } = props;
                 setSource(source);
                 setTarget(target);
             })

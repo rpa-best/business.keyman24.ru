@@ -28,9 +28,9 @@ export const Row: React.FC<ColumnRowProps> = ({
     const onDeleteClick = (e: MouseEvent) => {
         e.stopPropagation();
         if (handleDeleteClick) {
-            handleDeleteClick(item.id).then((r) =>
-                setTableData((d) => d.filter((el) => el.id !== item.id))
-            );
+            handleDeleteClick(item.id).then((r) => {
+                setTableData((d) => d.filter((el) => el.id !== item.id));
+            });
         }
     };
 

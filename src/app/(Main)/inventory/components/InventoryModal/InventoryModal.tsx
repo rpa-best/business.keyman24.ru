@@ -80,21 +80,21 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     } finally {
                         setSelectedImage(undefined);
                     }
-
+                    setVisible(false);
                     revalidate(path);
                 })
                 .finally(() => {
                     setLoading(false);
-                    setVisible(false);
                 });
         } else {
-            await updateInventoryItem(selectedItem?.id as number, body).finally(
-                () => {
+            await updateInventoryItem(selectedItem?.id as number, body)
+                .then(() => {
                     revalidate(path);
-                    setLoading(false);
                     setVisible(false);
-                }
-            );
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     };
 

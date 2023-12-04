@@ -11,7 +11,7 @@ const orgId = cookie.get('orgId') as string;
 export const getWorkingAreas: T.GetWorkingAreas = async (orgId) => {
     const res: AxiosResponse<T.IResponse<T.IWorkingArea>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/?offset=0&ordering=id&deleted=false&limit=10`
+            `business/${orgId}/working_area/?offset=0&ordering=id&deleted=false`
         );
 
     return res.data;

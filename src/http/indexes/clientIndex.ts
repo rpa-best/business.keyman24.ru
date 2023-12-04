@@ -1,6 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import CookiesUniversal from 'universal-cookie';
 import { snakeToCamelCaseDeep } from 'utils/snakeTOCamelCaseDeep';
+import { toast } from 'react-toastify';
+import { warningToastConfig } from 'config/toastConfig';
 
 const cookiesUni = new CookiesUniversal();
 
@@ -20,8 +22,30 @@ $clientAuth.interceptors.request.use(async (req) => {
 });
 
 [$clientAuth, $host].forEach((item) => {
-    item.interceptors.response.use((res) => {
-        if (res.data) snakeToCamelCaseDeep(res.data);
-        return res;
-    });
+    item.interceptors.response.use(
+        (res) => {
+            if (res.data) snakeToCamelCaseDeep(res.data);
+            return res;
+        },
+        (error: AxiosError) => {
+            const method = error.response?.config.method;
+            if (
+                method !== 'get' &&
+                method !== 'head' &&
+                error.response?.status === 403
+            ) {
+                toast('Недостаточно прав', warningToastConfig);
+            } else if (
+                method !== 'get' &&
+                method !== 'head' &&
+                (error.response?.status as any) >= 400 &&
+                (error.response?.status as any) <= 400
+            ) {
+                toast('Ошибка', warningToastConfig);
+            } else if ((error.response?.status as any) >= 500) {
+                toast('Ошибка сервера', warningToastConfig);
+            }
+            throw error;
+        }
+    );
 });
