@@ -5,6 +5,9 @@ import { getInventoryImage } from 'http/inventoryApi';
 import { useParams } from 'next/navigation';
 import { IInventoryImage } from 'http/types';
 import { ImagesCarousel } from 'components/ImagesCarousel';
+import Cookies from 'universal-cookie';
+
+const cookie = new Cookies();
 
 export const ImageCarouselWrapper = () => {
     const [loading, setLoading] = useState(false);
@@ -25,5 +28,23 @@ export const ImageCarouselWrapper = () => {
             });
     }, [inventoryId]);
 
-    return <ImagesCarousel loading={loading} images={images} />;
+    return (
+        <ImagesCarousel
+            deleteSettings={{
+                url: (imageId) => {
+                    const orgId = cookie.get('orgId');
+                    return `business/${orgId}/inventory/${inventoryId}/image/${imageId}`;
+                },
+            }}
+            uploadSettings={{
+                url: () => {
+                    const orgId = cookie.get('orgId');
+                    return `business/${orgId}/inventory/${inventoryId}/image/`;
+                },
+            }}
+            setLoading={setLoading}
+            loading={loading}
+            images={images}
+        />
+    );
 };

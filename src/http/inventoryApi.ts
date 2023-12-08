@@ -179,3 +179,23 @@ export const createInventoryKeys: T.CreateInventoryCode = async (body) => {
         body
     );
 };
+
+export const uploadPhoto = async (url: string, photo: File) => {
+    const formData = new FormData();
+    formData.append('image', photo);
+    try {
+        const res = await $clientAuth.post(url, formData);
+
+        return res.data;
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 400) {
+                toast('Неверный формат изображения', errorToastOptions);
+            }
+        }
+    }
+};
+
+export const deletePhoto = async (url: string) => {
+    await $clientAuth.delete(url);
+};

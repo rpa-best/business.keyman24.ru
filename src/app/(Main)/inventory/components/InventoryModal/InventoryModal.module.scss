@@ -190,6 +190,9 @@
   height: calc(100% - 3px);
   background: #2E3E38;
   margin: auto;
+  & input {
+    visibility: hidden;
+  }
 }
 
 .dropdown_content {

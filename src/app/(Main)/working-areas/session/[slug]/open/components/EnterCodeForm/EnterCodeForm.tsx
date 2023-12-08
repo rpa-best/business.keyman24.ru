@@ -155,7 +155,11 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                 />
             </div>
             <div className={scss.images_wrapper}>
-                <ImagesCarousel images={images} loading={loading} />
+                <ImagesCarousel
+                    setLoading={setLoading}
+                    images={images}
+                    loading={loading}
+                />
             </div>
 
             <div className={scss.button_wrapper}>

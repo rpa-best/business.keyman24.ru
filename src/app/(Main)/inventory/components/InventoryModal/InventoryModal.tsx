@@ -34,21 +34,11 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     const path = usePathname();
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
-    const [setNoteVisible] = useNotificationStore((state) => [
-        state.setVisible,
-    ]);
-
-    useEffect(() => {
-        if (type === 'edit') {
-            setNoteVisible(false);
-        }
-    }, [setNoteVisible, type]);
 
     const onSubmit = async (values: InventoryFormType) => {
         setLoading(true);
         const body: ReqInventoryBody = {
             name: values.name,
-            number: values.number,
             desc: values.description,
             type: 'inventory',
         };
@@ -67,6 +57,8 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                         ...inventory,
                         newInventory,
                     ]);
+                    setVisible(false);
+                    revalidate(path);
                     try {
                         selectedImage.forEach(async (i) => {
                             await uploadInventoryPhoto(
@@ -80,8 +72,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                     } finally {
                         setSelectedImage(undefined);
                     }
-                    setVisible(false);
-                    revalidate(path);
                 })
                 .finally(() => {
                     setLoading(false);
@@ -109,7 +99,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
     } = useFormik<InventoryFormType>({
         initialValues: {
             name: selectedItem?.name ?? '',
-            number: selectedItem?.number ?? '',
             description: selectedItem?.desc ?? '',
         },
         enableReinitialize: true,
@@ -210,16 +199,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             name="description"
                             onChange={handleChange}
                             onBlur={handleBlur}
-                        />
-                        <Input
-                            type="number"
-                            label={'Номер'}
-                            onBlur={handleBlur}
-                            handleError={touched.number && errors.number}
-                            placeholder={'Укажите номер'}
-                            value={values.number}
-                            name="number"
-                            onChange={handleChange}
                         />
                         {type === 'edit' ? (
                             <ImageContainer

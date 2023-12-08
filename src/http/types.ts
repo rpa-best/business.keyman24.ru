@@ -354,7 +354,6 @@ export interface KeyBody {
 }
 
 export interface ReqInventoryBody extends Omit<IType, 'slug' | 'id'> {
-    number: string;
     type: string;
 }
 

@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { ILocation } from 'http/types';
 
 export interface TableRows extends Record<string, any> {
     id: number;

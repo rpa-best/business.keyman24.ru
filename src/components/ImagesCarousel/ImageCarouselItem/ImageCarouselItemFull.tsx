@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 
 import scss from 'components/ImagesCarousel/ImageCarousel.module.scss';
+import { ImageCarouselItemFullProps } from 'components/ImagesCarousel/types';
 
 export const ImageCarouselItemFull: React.FC<ImageCarouselItemFullProps> = ({
     item,
