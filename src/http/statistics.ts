@@ -22,12 +22,13 @@ export const getLineChartData: T.GetLineChartData = async (
     { orgs, location, date_lt, date_gt }
 ) => {
     const query = new URLSearchParams();
-    if (orgs) {
+    if (orgs && !location) {
         query.set('org', orgs);
     }
-    if (location) {
+    if (location && !orgs) {
         query.set('location', location);
     }
+
     query.set('date_lt', date_lt);
     query.set('date_gt', date_gt);
 

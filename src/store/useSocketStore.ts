@@ -6,7 +6,7 @@ export const useSocketStore = create<T.ISocketStore>((set) => ({
     message: null,
     createConnection: (sessionId, access) => {
         set((state) => {
-            if (state.socket) {
+            if (state.socket?.readyState === 1) {
                 return state;
             }
             const socket = new WebSocket(
@@ -37,7 +37,7 @@ export const useSocketStore = create<T.ISocketStore>((set) => ({
     closeConnection: () => {
         set(({ socket }) => {
             socket?.close();
-            return { ...socket, socket: null, message: null };
+            return { ...socket, message: null };
         });
     },
 }));

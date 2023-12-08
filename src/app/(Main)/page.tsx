@@ -3,8 +3,6 @@ import { cookies } from 'next/headers';
 import { getLineChartData, getMainCardsStatistics } from 'http/statistics';
 import { MainCards } from 'app/(Main)/components/MainCards';
 
-import { LineChart } from 'app/(Main)/components/LineChart';
-import { FiltersContainer } from 'app/(Main)/components/FiltersContainer';
 import {
     getOrganizationContractors,
     getOrganizations,
@@ -13,7 +11,6 @@ import {
 import scss from 'app/(Main)/MainPage.module.scss';
 import { formatDate } from 'utils/formatDate';
 import { QueryIntervalType } from 'app/(Main)/components/LineChart/LineChart';
-import { AxiosError } from 'axios';
 import { FiltersAndLineChart } from 'app/(Main)/components/FiltersAndLineChart';
 
 import { getLocations } from 'http/locationsApi';
@@ -45,7 +42,7 @@ export default async function DashboardMain({
 
     const intervalQuery = interval ?? 'byDay';
 
-    const orgQuery = org && !location ? org ?? orgs[0].id : undefined;
+    const orgQuery = org && !location ? org : orgs[0].id.toString();
 
     const locQuery =
         location && !org ? location ?? allLocations.results[0].id : undefined;

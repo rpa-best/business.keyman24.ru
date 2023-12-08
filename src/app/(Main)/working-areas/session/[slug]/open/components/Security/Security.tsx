@@ -63,6 +63,12 @@ export const Security: React.FC<SecurityProps> = ({
     }, [currentAreaId, socketStore.socket]);
 
     useEffect(() => {
+        socketStore.onClose(() => {
+            router.replace(`/working-areas/session/security-${currentAreaId}`);
+        });
+    }, [currentAreaId, router, socketStore]);
+
+    useEffect(() => {
         if (socketStore.message?.type === 'success') {
             setSended(false);
         }
