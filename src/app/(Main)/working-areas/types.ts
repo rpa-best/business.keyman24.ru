@@ -21,6 +21,7 @@ export interface EditWorkingAreaProps {
     setWorkingAreasData: React.Dispatch<
         React.SetStateAction<IModfiedWorkingArea[]>
     >;
+    showDevices: boolean;
     types: IType[];
 }
 

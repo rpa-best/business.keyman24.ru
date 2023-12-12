@@ -2,26 +2,31 @@
 
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import Cookies from 'universal-cookie';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
-import {
-    AreasTableWrapperProps,
-    IModfiedWorkingArea,
-} from 'app/(Main)/working-areas/types';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
 import { EditWorkingArea } from 'app/(Main)/working-areas/components/EditWorkingArea';
-import { deleteWorkingArea } from 'http/workingAreaApi';
 import { Spinner } from 'components/Spinner';
+import { deleteWorkingArea } from 'http/workingAreaApi';
+
+import {
+    AreasTableWrapperProps,
+    IModfiedWorkingArea,
+} from 'app/(Main)/working-areas/types';
 import revalidate from 'utils/revalidate';
 import { usePriceBySlug } from 'hooks/usePrice';
-import { toast } from 'react-toastify';
 import { ToastPrice } from 'components/ToastPrice';
 import { priceToastConfig, warningToastConfig } from 'config/toastConfig';
 import { fetchLocationsAndTypes } from 'app/(Main)/working-areas/helpers/fetchLocationsAndTypes';
 import { ILocation, IType } from 'http/types';
-import { AxiosError } from 'axios';
+import { checkAccess } from 'utils/checkAccess';
+
+const cookies = new Cookies();
 
 export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     workingAreas,
@@ -41,6 +46,8 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
 
     const [formType, setFormType] = useState<'edit' | 'create'>('create');
     const [loading, setLoading] = useState(false);
+
+    const [showDevices, setShowDevises] = useState(false);
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
@@ -86,6 +93,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     }, [workingAreas]);
 
     useEffect(() => {
+        const orgId = cookies.get('orgId');
         fetchLocationsAndTypes()
             .then((d) => {
                 setWorkingAreaTypes(d.workingAreaTypes.results);
@@ -98,6 +106,11 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                     }
                 }
             });
+        checkAccess(`business/${orgId}/device/?place=working_area`).then(
+            (d) => {
+                setShowDevises(d as boolean);
+            }
+        );
     }, []);
 
     return (
@@ -141,6 +154,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
             </Table>
             <Modal>
                 <EditWorkingArea
+                    showDevices={showDevices}
                     setLoading={setLoading}
                     setWorkingAreasData={setWorkingAreasData}
                     editableArea={editableArea}

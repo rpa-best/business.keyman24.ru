@@ -25,6 +25,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     editableArea,
     setWorkingAreasData,
     setLoading,
+    showDevices,
 }) => {
     const pathName = usePathname();
 
@@ -178,10 +179,8 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                         {formType === 'create' ? 'Добавить' : 'Сохранить'}
                     </Button>
                 </div>
-                {formType === 'edit' && (
-                    <ErrorBoundary fallback={<></>}>
-                        <AreaPickList areaId={editableArea?.id as number} />
-                    </ErrorBoundary>
+                {formType === 'edit' && showDevices && (
+                    <AreaPickList areaId={editableArea?.id as number} />
                 )}
             </form>
         </>
