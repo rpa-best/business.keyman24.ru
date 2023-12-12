@@ -58,7 +58,6 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
             `business/${orgId}/inventory/?type=inventory&ordering=id`
         ).then((d) => {
             if (d) {
-                revalidate(`${pathname}/${id}`);
                 router.push(`${pathname}/${id}`);
             } else {
                 toast('Недостаточно прав', warningToastConfig);
