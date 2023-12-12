@@ -5,12 +5,18 @@ import { PermGroupTableWrapper } from 'app/(Main)/permission-group/components/Pe
 
 import scss from './PermGroup.module.scss';
 
-const PermissionGroupPage = async () => {
+const PermissionGroupPage = async ({
+    searchParams,
+}: {
+    searchParams: { offset: string };
+}) => {
     const cookieStore = cookies();
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const permissions = await getGroupPermissions(+orgId);
+    const offset = searchParams.offset ?? '0';
+
+    const permissions = await getGroupPermissions(+orgId, offset);
 
     const levels = await getPermLevels(+orgId);
 
@@ -24,7 +30,9 @@ const PermissionGroupPage = async () => {
                 Права доступа / список
             </h1>
             <PermGroupTableWrapper
+                allowedPermissions={permissions.permissions}
                 levels={levels?.results}
+                count={permissions.count}
                 permissions={modifiedPermissions}
             />
         </div>

@@ -10,16 +10,20 @@ import scss from 'app/(Main)/locations/locations.module.scss';
 
 interface LocationObjectsPageProps {
     params: { locId: string };
+    searchParams: { offset: string };
 }
 
 const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
     params: { locId },
+    searchParams,
 }) => {
     const cookieStore = cookies();
 
+    const offset = searchParams.offset ?? '0';
+
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const objects = await getLocationObjects(+orgId, +locId);
+    const objects = await getLocationObjects(+orgId, +locId, offset);
 
     const modifiedObjects = objects.results.map((l) => {
         return { ...l, desc: l.desc ?? '-' };
@@ -40,6 +44,8 @@ const LocationObjectsPage: React.FC<LocationObjectsPageProps> = async ({
                 Объекты на локации: {locationName}
             </h2>
             <ObjectsTableWrapper
+                count={objects.count}
+                permissions={objects.permissions}
                 locId={+locId}
                 modifiedObjects={modifiedObjects}
             />

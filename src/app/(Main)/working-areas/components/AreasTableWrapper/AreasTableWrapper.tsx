@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
@@ -18,12 +18,15 @@ import revalidate from 'utils/revalidate';
 import { usePriceBySlug } from 'hooks/usePrice';
 import { toast } from 'react-toastify';
 import { ToastPrice } from 'components/ToastPrice';
-import { priceToastConfig } from 'config/toastConfig';
+import { priceToastConfig, warningToastConfig } from 'config/toastConfig';
+import { fetchLocationsAndTypes } from 'app/(Main)/working-areas/helpers/fetchLocationsAndTypes';
+import { ILocation, IType } from 'http/types';
+import { AxiosError } from 'axios';
 
 export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     workingAreas,
-    workingTypes,
-    locations,
+    permissions,
+    count,
 }) => {
     const pathName = usePathname();
     const router = useRouter();
@@ -31,6 +34,10 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const [workingAreasData, setWorkingAreasData] =
         useState<IModfiedWorkingArea[]>(workingAreas);
     const [editableArea, setEditableArea] = useState<IModfiedWorkingArea>();
+
+    const [locationOrTypeDenied, setLocationOrTypeDenied] = useState(false);
+    const [locations, setLocations] = useState<ILocation[]>([]);
+    const [workingAreaTypes, setWorkingAreaTypes] = useState<IType[]>([]);
 
     const [formType, setFormType] = useState<'edit' | 'create'>('create');
     const [loading, setLoading] = useState(false);
@@ -54,28 +61,69 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     };
 
     const handleEditClick = async (id: number) => {
+        if (locationOrTypeDenied) {
+            toast('Недостаточно прав', warningToastConfig);
+            return;
+        }
         setEditableArea(workingAreasData.find((area) => area.id === id));
         setFormType('edit');
         setVisible(true);
     };
 
     const handleAddClick = () => {
+        if (locationOrTypeDenied) {
+            toast('Недостаточно прав', warningToastConfig);
+            return;
+        }
         setFormType('create');
         setVisible(true);
         setEditableArea(undefined);
         toast(<ToastPrice price={price} />, priceToastConfig);
     };
 
+    useEffect(() => {
+        setWorkingAreasData(workingAreas);
+    }, [workingAreas]);
+
+    useEffect(() => {
+        fetchLocationsAndTypes()
+            .then((d) => {
+                setWorkingAreaTypes(d.workingAreaTypes.results);
+                setLocations(d.locations.results);
+            })
+            .catch((e) => {
+                if (e instanceof AxiosError) {
+                    if (e.response?.status === 403) {
+                        setLocationOrTypeDenied(true);
+                    }
+                }
+            });
+    }, []);
+
     return (
         <>
             <Table
-                buttonData={{
-                    onClick: () => handleAddClick(),
-                    text: 'Добавить',
-                }}
+                buttonData={
+                    permissions.includes('POST')
+                        ? {
+                              onClick: () => handleAddClick(),
+                              text: 'Добавить',
+                          }
+                        : undefined
+                }
                 handleRowClick={handleRowClick}
-                handleEditClick={handleEditClick}
-                handleDeleteClick={handleDeleteClick}
+                handleEditClick={
+                    permissions.includes('PATCH') ? handleEditClick : undefined
+                }
+                handleDeleteClick={
+                    permissions.includes('DELETE')
+                        ? handleDeleteClick
+                        : undefined
+                }
+                paginatorData={{
+                    countItems: count,
+                    offset: 15,
+                }}
                 tableData={workingAreasData}
                 setTableData={setWorkingAreasData}
                 prefetch={(id: number) => {
@@ -98,7 +146,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                     editableArea={editableArea}
                     formType={formType}
                     locations={locations}
-                    types={workingTypes}
+                    types={workingAreaTypes}
                 />
             </Modal>
             {loading && <Spinner />}

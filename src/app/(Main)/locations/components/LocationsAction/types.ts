@@ -2,6 +2,11 @@ import { ILocation } from 'http/types';
 import React from 'react';
 import { IOrganization } from 'store/types';
 
+export type PermissionLocationType = {
+    orgs?: boolean;
+    workers?: boolean;
+} | null;
+
 export interface LocationActionProps {
     formType: 'create' | 'edit';
     location: LocationActionProps['formType'] extends 'create'
@@ -11,6 +16,7 @@ export interface LocationActionProps {
     setTableData: React.Dispatch<React.SetStateAction<ILocation[]>>;
     loading: boolean;
     organizations: IOrganization[];
+    permissions: PermissionLocationType;
 }
 
 export interface LocationFormValues {

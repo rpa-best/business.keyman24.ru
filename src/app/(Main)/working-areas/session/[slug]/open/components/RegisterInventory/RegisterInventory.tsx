@@ -20,6 +20,7 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
     currentAreaId,
     sessionLog,
     areaName,
+    permissions,
 }) => {
     const router = useRouter();
     const params = useParams();
@@ -49,11 +50,16 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
                 <BackButton skipWord>Назад</BackButton>
             </div>
             <div className={scss.key_layout}>
-                <div className={scss.button_wrapper}>
-                    <Button onClick={() => onCloseSessionClick()} type="button">
-                        Завершить сессию
-                    </Button>
-                </div>
+                {permissions.includes('DELETE') && (
+                    <div className={scss.button_wrapper}>
+                        <Button
+                            onClick={() => onCloseSessionClick()}
+                            type="button"
+                        >
+                            Завершить сессию
+                        </Button>
+                    </div>
+                )}
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm

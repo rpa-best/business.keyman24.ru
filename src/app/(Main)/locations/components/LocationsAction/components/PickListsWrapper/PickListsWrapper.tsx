@@ -7,12 +7,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { IOrganization } from 'store/types';
 
 import scss from 'app/(Main)/locations/components/LocationsAction/LocationsAction.module.scss';
+import { PermissionLocationType } from 'app/(Main)/locations/components/LocationsAction/types';
 
 interface PickListsWrapperProps {
     organizations: IOrganization[];
     locId: number;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     loading: boolean;
+    permissions: PermissionLocationType;
 }
 
 export const PickListsWrapper: React.FC<PickListsWrapperProps> = ({
@@ -20,12 +22,13 @@ export const PickListsWrapper: React.FC<PickListsWrapperProps> = ({
     locId,
     setLoading,
     loading,
+    permissions,
 }) => {
     const [listsRefresh, setListsRefresh] = useState(false);
 
     return (
         <>
-            <ErrorBoundary fallback={<></>}>
+            {permissions?.orgs && (
                 <div className={scss.pick_list_wrapper}>
                     <OrgPickListWrapper
                         loading={loading}
@@ -35,8 +38,9 @@ export const PickListsWrapper: React.FC<PickListsWrapperProps> = ({
                         organizations={organizations}
                     />
                 </div>
-            </ErrorBoundary>
-            <ErrorBoundary fallback={<></>}>
+            )}
+
+            {permissions?.workers && (
                 <div className={scss.pick_list_wrapper}>
                     <WorkersPickListWrapper
                         loading={loading}
@@ -45,7 +49,7 @@ export const PickListsWrapper: React.FC<PickListsWrapperProps> = ({
                         listsRefresh={listsRefresh}
                     />
                 </div>
-            </ErrorBoundary>
+            )}
         </>
     );
 };

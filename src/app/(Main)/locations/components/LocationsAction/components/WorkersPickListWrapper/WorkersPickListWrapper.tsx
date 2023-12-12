@@ -27,36 +27,12 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
     const [source, setSource] = useState<IWorker[]>([]);
     const [target, setTarget] = useState<ModifiedWorker[]>([]);
 
-    const { showBoundary } = useErrorBoundary();
-
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
-            const locationWorkers = await getLocationWorkersOnClient(
-                locId
-            ).catch((e) => {
-                if (e instanceof AxiosError) {
-                    if (e.response?.status === 403) {
-                        showBoundary('Недостаточно прав');
-                    }
-                }
-            });
+            const locationWorkers = await getLocationWorkersOnClient(locId);
 
-            if (!locationWorkers) {
-                return;
-            }
-
-            const workers = await getWorkers().catch((e) => {
-                if (e instanceof AxiosError) {
-                    if (e.response?.status === 403) {
-                        showBoundary('Недостаточно прав');
-                    }
-                }
-            });
-
-            if (!workers) {
-                return;
-            }
+            const workers = await getWorkers();
 
             const filteredWorkers = workers.results.filter((w) => {
                 return !locationWorkers.results.find(
@@ -80,9 +56,6 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
         };
         fetchData()
             .then((props) => {
-                if (!props) {
-                    return;
-                }
                 const { source, target } = props;
                 setSource(source as []);
                 setTarget(target);

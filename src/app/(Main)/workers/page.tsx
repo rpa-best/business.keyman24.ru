@@ -9,12 +9,18 @@ import { WorkersModal } from 'app/(Main)/workers/components/WorkersModal';
 
 import scss from './Worker.module.scss';
 
-const WorkersPage = async () => {
+const WorkersPage = async ({
+    searchParams,
+}: {
+    searchParams: { offset: string };
+}) => {
     const cookieStore = cookies();
+
+    const offset = searchParams.offset ?? '0';
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const serverWorkers = await getServerWorkers(+orgId);
+    const serverWorkers = await getServerWorkers(+orgId, offset);
 
     const modifiedWorkers: ModifiedWorkers = {
         ...serverWorkers,
@@ -31,7 +37,10 @@ const WorkersPage = async () => {
                     <WorkersButton />
                 </div>
             </div>
-            <WorkersTableWrapper workers={modifiedWorkers} />
+            <WorkersTableWrapper
+                permissions={serverWorkers.permissions}
+                workers={modifiedWorkers}
+            />
             <Modal>
                 <WorkersModal />
             </Modal>

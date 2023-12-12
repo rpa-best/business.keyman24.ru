@@ -3,8 +3,15 @@
 import React from 'react';
 import { Table } from 'components/Table';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
+import Cookies from 'universal-cookie';
+import { checkAccess } from 'utils/checkAccess';
+import { toast } from 'react-toastify';
+import { warningToastConfig } from 'config/toastConfig';
+import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
+
+const cookie = new Cookies();
 
 interface TableRowsType
     extends Omit<ModifiedRegisterLog, 'modeName' | 'inventoryName' | 'mode'> {
@@ -14,30 +21,33 @@ interface TableRowsType
 interface TableWrapperProps {
     children: React.ReactNode;
     tableRows: TableRowsType[];
+    count: number;
 }
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
     children,
     tableRows,
+    count,
 }) => {
     const params = useParams();
 
     const itsRegisterInventory =
         getParamsType(params.slug) === 'register_inventory';
 
-    const handleRowClick = (id: number) => {
+    const handleRowClick = async (id: number) => {
         if (itsRegisterInventory) {
             return;
         }
         const workerId = tableRows.find((el) => el.id === id)?.worker.id;
-        window.open(
-            `https://${window.location.host}/workers/${workerId}?which=docs`,
-            '_blank'
-        );
+        await onWorkerClick(workerId as number);
     };
 
     return (
         <Table
+            paginatorData={{
+                offset: 25,
+                countItems: count,
+            }}
             handleRowClick={handleRowClick}
             tableData={tableRows}
             setTableData={() => {}}

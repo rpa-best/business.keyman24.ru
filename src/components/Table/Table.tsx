@@ -19,6 +19,7 @@ import { setSortedData } from 'components/Table/utils/setSortedData';
 import { Spinner } from 'components/Spinner';
 
 import scss from './Table.module.scss';
+import { useSearchParams } from 'next/navigation';
 
 export const TableContext = createContext<ITableContext | null>(null);
 
@@ -36,7 +37,7 @@ export const Table = memo(function MemoTable({
     errorRowIds = [],
     prefetch,
 }: TableProps) {
-    const [loading, setLoading] = useState(false);
+    const searchParams = useSearchParams();
 
     const [headers, setHeaders] = useState<IHeader[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -57,6 +58,16 @@ export const Table = memo(function MemoTable({
     const handlePaginatorClick = (page: number) => {
         setCurrentPage(page);
     };
+
+    useEffect(() => {
+        const offset = searchParams.get('offset');
+        if (offset && paginatorData?.offset) {
+            if (+offset === 0) {
+                return;
+            }
+            setCurrentPage(+offset / paginatorData?.offset + 1);
+        }
+    }, []);
 
     useEffect(() => {
         if (prefetch && tableData) {
@@ -180,7 +191,6 @@ export const Table = memo(function MemoTable({
                     handlePaginatorClick={handlePaginatorClick}
                 />
             )}
-            {loading && <Spinner />}
         </div>
     );
 });

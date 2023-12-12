@@ -2,7 +2,7 @@ import React from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 
 import { IOrganization } from 'store/types';
-import { SessionLogResponse } from 'http/types';
+import { PermissionsResponseType, SessionLogResponse } from 'http/types';
 
 export interface RegisterProps {
     organizations: IOrganization[];
@@ -10,6 +10,7 @@ export interface RegisterProps {
     currentSessionId: number;
     sessionLog: ModifiedRegisterLog[];
     areaName: string;
+    permissions: PermissionsResponseType[];
 }
 
 export interface SecurityProps
@@ -24,13 +25,13 @@ export interface ModifiedRegisterLog extends SessionLogResponse {
     inventoryName: string;
 }
 
-export interface KeyProps extends RegisterProps {
+export interface KeyProps extends Omit<RegisterProps, 'organizations'> {
     areaName: string;
     type: 'inventory' | 'keys';
 }
 
 export interface RegisterInventoryProps
-    extends Omit<RegisterProps, 'sessionLog'> {
+    extends Omit<RegisterProps, 'sessionLog' | 'organizations'> {
     sessionLog: Omit<ModifiedRegisterLog, 'workerName'>[];
     areaName: string;
 }

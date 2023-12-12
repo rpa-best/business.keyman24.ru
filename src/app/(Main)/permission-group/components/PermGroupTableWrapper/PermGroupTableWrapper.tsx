@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { warningToastConfig } from 'config/toastConfig';
@@ -21,6 +21,8 @@ import revalidate from 'utils/revalidate';
 export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     permissions,
     levels,
+    allowedPermissions,
+    count,
 }) => {
     const path = usePathname();
 
@@ -31,6 +33,10 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setTableData(permissions);
+    }, [permissions]);
 
     const handleRowClick = (id: number) => {
         const selectedPerm = tableData.find((p) => p.id === id);
@@ -62,9 +68,33 @@ export const PermGroupTableWrapper: React.FC<PermGroupTableWrapperProps> = ({
     return (
         <>
             <Table
-                handleRowClick={handleRowClick}
-                handleDeleteClick={handleDeleteButtonClick}
-                buttonData={{ onClick: handleButtonClick, text: 'Добавить' }}
+                handleRowClick={
+                    allowedPermissions.includes('PATCH')
+                        ? handleRowClick
+                        : undefined
+                }
+                handleEditClick={
+                    allowedPermissions.includes('PATCH')
+                        ? handleRowClick
+                        : undefined
+                }
+                handleDeleteClick={
+                    allowedPermissions.includes('DELETE')
+                        ? handleDeleteButtonClick
+                        : undefined
+                }
+                buttonData={
+                    allowedPermissions.includes('POST')
+                        ? {
+                              onClick: handleButtonClick,
+                              text: 'Добавить',
+                          }
+                        : undefined
+                }
+                paginatorData={{
+                    offset: 15,
+                    countItems: count,
+                }}
                 tableData={tableData}
                 setTableData={setTableData}
             >

@@ -58,6 +58,9 @@ export const PickList = ({
         set: (arr: DefaultElem[]) => void,
         event: React.MouseEvent<HTMLLIElement, MouseEvent>
     ) {
+        if (loading) {
+            return;
+        }
         const data = addSelected(arr, elem);
         set(data);
     }

@@ -12,11 +12,13 @@ import { checkAccess } from 'utils/checkAccess';
 import { toast } from 'react-toastify';
 import { warningToastConfig } from 'config/toastConfig';
 import Cookies from 'universal-cookie';
+import revalidate from 'utils/revalidate';
 
 const cookie = new Cookies();
 
 export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
     workers,
+    permissions,
 }) => {
     const router = useRouter();
 
@@ -46,7 +48,7 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
                 `business/${orgId}/worker/${workerWithUser?.id}/user`
             ).then((d) => {
                 if (d) {
-                    router.prefetch(`/workers/${id}?which=docs`);
+                    revalidate(`/workers/${id}?which=docs`);
                     router.push(`/workers/${id}?which=docs`);
                 } else {
                     toast('Недостаточно прав', warningToastConfig);
@@ -55,7 +57,7 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
         } else {
             checkAccess(`business/${orgId}/worker/${id}/user`).then((d) => {
                 if (d) {
-                    router.prefetch(`/workers/${id}?which=docs`);
+                    revalidate(`/workers/${id}?which=docs`);
                     router.push(`/workers/${id}?which=docs`);
                 } else {
                     toast('Недостаточно прав', warningToastConfig);
@@ -68,7 +70,15 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
         <>
             <Table
                 handleRowClick={handleRowClick}
-                handleDeleteClick={handleDeleteClick}
+                handleDeleteClick={
+                    permissions.includes('DELETE')
+                        ? handleDeleteClick
+                        : undefined
+                }
+                paginatorData={{
+                    offset: 25,
+                    countItems: workers.count,
+                }}
                 tableData={tableData}
                 setTableData={setTableData}
             >

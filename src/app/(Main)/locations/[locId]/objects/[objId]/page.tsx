@@ -15,7 +15,7 @@ interface KeyPageProps {
 const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
     const cookieStore = cookies();
 
-    const offset = searchParams.offset ?? 0;
+    const offset = searchParams.offset ?? '0';
     const name = searchParams.name ?? encodeURI('Все');
 
     const orgId = cookieStore.get('orgId')?.value as string;
@@ -33,7 +33,11 @@ const KeyPage: React.FC<KeyPageProps> = async ({ params, searchParams }) => {
                     <BackButton>Назад</BackButton>
                 </div>
             </div>
-            <KeysWrapper keys={keys.results} count={keys.count} />
+            <KeysWrapper
+                permissions={keys.permissions}
+                keys={keys.results}
+                count={keys.count}
+            />
         </div>
     );
 };

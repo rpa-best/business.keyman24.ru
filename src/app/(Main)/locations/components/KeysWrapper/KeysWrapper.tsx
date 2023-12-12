@@ -19,7 +19,11 @@ import {
     deleteLocationKey,
     getLocationClientKeys,
 } from 'http/locationsApi';
-import { LocKeyBody, LocKeysResponse } from 'http/types';
+import {
+    LocKeyBody,
+    LocKeysResponse,
+    PermissionsResponseType,
+} from 'http/types';
 import { Spinner } from 'components/Spinner';
 import { useModalStore } from 'store/modalVisibleStore';
 import { Modal } from 'components/Modal';
@@ -36,9 +40,14 @@ import FileSaver from 'file-saver';
 interface KeysWrapperProps {
     count: number;
     keys: LocKeysResponse[];
+    permissions: PermissionsResponseType[];
 }
 
-export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
+export const KeysWrapper: React.FC<KeysWrapperProps> = ({
+    keys,
+    count,
+    permissions,
+}) => {
     const pathname = usePathname();
     const router = useRouter();
     const params = useParams();
@@ -169,16 +178,25 @@ export const KeysWrapper: React.FC<KeysWrapperProps> = ({ keys, count }) => {
                     </div>
                     <div className={scss.keys_table_layout}>
                         <Table
-                            buttonData={{
-                                text: 'Генерация ключей',
-                                onClick: () => handleTableButtonClick(),
-                            }}
+                            buttonData={
+                                permissions.includes('POST')
+                                    ? {
+                                          text: 'Генерация ключей',
+                                          onClick: () =>
+                                              handleTableButtonClick(),
+                                      }
+                                    : undefined
+                            }
                             paginatorData={{
                                 offset: 25,
                                 countItems: count,
                             }}
                             handleRowClick={handleRowClick}
-                            handleDeleteClick={handleDeleteClick}
+                            handleDeleteClick={
+                                permissions.includes('DELETE')
+                                    ? handleDeleteClick
+                                    : undefined
+                            }
                             tableData={generatedKeys}
                             setTableData={setGeneratedKeys}
                             stopPropagation

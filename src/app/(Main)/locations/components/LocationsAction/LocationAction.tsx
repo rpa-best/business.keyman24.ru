@@ -30,6 +30,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
     organizations,
     loading,
     setTableData,
+    permissions,
 }) => {
     const path = usePathname();
 
@@ -198,6 +199,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                 </div>
                 {formType === 'edit' && (
                     <PickListsWrapper
+                        permissions={permissions}
                         loading={loading}
                         setLoading={setLoading}
                         locId={location.id}

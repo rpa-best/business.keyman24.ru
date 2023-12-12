@@ -1,7 +1,14 @@
-import { ICard, IWorker, IWorkerDocs, IWorkerUser } from 'http/types';
+import {
+    ICard,
+    IWorker,
+    IWorkerDocs,
+    IWorkerUser,
+    PermissionsResponseType,
+} from 'http/types';
 
 export interface WorkerTableWrapperProps {
     workers: ModifiedWorkers;
+    permissions: PermissionsResponseType[];
 }
 
 export interface NewWorkers extends Omit<IWorker, 'user' | 'org'> {

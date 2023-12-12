@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { getSessions, getWorkingAreas } from 'http/workingAreaApi';
+import {
+    getSessions,
+    getWorkingArea,
+    getWorkingAreas,
+} from 'http/workingAreaApi';
 import { cookies } from 'next/headers';
 import { SessionWrapper } from 'app/(Main)/working-areas/session/components/SessionWrapper';
 import { DateHelper } from 'utils/dateHelper';
@@ -11,7 +15,7 @@ import scss from './SessionPage.module.scss';
 
 interface SessionPageProps {
     params: { slug: string };
-    searchParams?: { archive: string };
+    searchParams?: { offset: string; archive: string };
 }
 
 const SessionPage: React.FC<SessionPageProps> = async ({
@@ -20,41 +24,45 @@ const SessionPage: React.FC<SessionPageProps> = async ({
 }) => {
     const cookieStore = cookies();
 
-    const orgId = cookieStore.get('orgId')?.value as string;
+    const offset = searchParams?.offset ?? '0';
 
-    const workingAreas = await getWorkingAreas(+orgId);
+    const orgId = cookieStore.get('orgId')?.value as string;
 
     const id = getParamsId(params.slug);
 
-    const type = getParamsType(params.slug);
+    const area = await getWorkingArea(+orgId, +id);
 
-    const area = workingAreas.results.find((area) => area.id === +id);
+    const type = getParamsType(params.slug);
 
     const sessions = await getSessions(
         +orgId,
         area?.id as number,
-        searchParams?.archive
+        searchParams?.archive,
+        offset
     );
 
-    const modifiedSessions = sessions.results.map((s) => {
-        const startDate = new DateHelper(s.startDate);
-        const endDate = new DateHelper(s.endDate ?? '');
-        if (s.status === 1) {
-            return {
-                ...s,
-                status: 'В процессе',
-                startDate: `${startDate.getDate} в ${startDate.getTime}`,
-                endDate: '-',
-            };
-        } else {
-            return {
-                ...s,
-                status: 'Завершена',
-                startDate: `${startDate.getDate} в ${startDate.getTime}`,
-                endDate: `${endDate.getDate} в ${endDate.getTime}`,
-            };
-        }
-    });
+    const modifiedSessions = {
+        ...sessions,
+        results: sessions.results.map((s) => {
+            const startDate = new DateHelper(s.startDate);
+            const endDate = new DateHelper(s.endDate ?? '');
+            if (s.status === 1) {
+                return {
+                    ...s,
+                    status: 'В процессе',
+                    startDate: `${startDate.getDate} в ${startDate.getTime}`,
+                    endDate: '-',
+                };
+            } else {
+                return {
+                    ...s,
+                    status: 'Завершена',
+                    startDate: `${startDate.getDate} в ${startDate.getTime}`,
+                    endDate: `${endDate.getDate} в ${endDate.getTime}`,
+                };
+            }
+        }),
+    };
 
     return (
         <div className={scss.children_with_table}>

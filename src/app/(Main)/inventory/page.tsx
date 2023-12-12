@@ -14,14 +14,14 @@ interface InventoryPageProps {
 const InventoryPage: React.FC<InventoryPageProps> = async ({
     searchParams,
 }) => {
-    const offset = searchParams.offset ?? 0;
+    const offset = searchParams.offset ?? '0';
     const name = searchParams.name ?? 'Все';
     const location = searchParams.location ?? 'Все';
 
     const cookieStore = cookies();
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const inventories = await getInventories(+orgId, +offset, name, location);
+    const inventories = await getInventories(+orgId, offset, name, location);
 
     const modifiedInventory: IModifiedInventory[] = inventories.results.map(
         (i) => {
@@ -36,6 +36,7 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
                 <h2 className={scss.title_text_wrapper}>Инвентарь</h2>
             </div>
             <InventoryWrapper
+                permissions={inventories.permissions}
                 count={inventories.count}
                 inventory={modifiedInventory}
             />
