@@ -51,6 +51,8 @@ export const Table = memo(function MemoTable({
     const headerClickCount = useRef<number>(1);
     const headerRef = useRef<HTMLDivElement>(null);
 
+    const [prefetchedRows, setPrefetchedRows] = useState<number[]>();
+
     const memoizedHeaders = useMemo(() => headers, [headers]);
 
     const { tabletBreak } = useResizeWidth();
@@ -73,6 +75,19 @@ export const Table = memo(function MemoTable({
         if (prefetch && tableData) {
             for (const elem of tableData) {
                 prefetch(elem.id);
+            }
+            setPrefetchedRows(tableData.map((el) => el.id));
+        }
+    }, []);
+
+    useEffect(() => {
+        const newTableRow = tableData.find(
+            (el) => !prefetchedRows?.includes(el.id)
+        );
+
+        if (newTableRow) {
+            if (prefetch) {
+                prefetch(newTableRow.id);
             }
         }
     }, [prefetch, tableData]);

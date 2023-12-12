@@ -54,10 +54,19 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
     const price = usePriceBySlug('WorkingArea');
 
     const handleRowClick = (id: number) => {
-        const slug = workingAreasData.find((area) => area.id === id);
-        router.push(
-            'working-areas/session/' + `${slug?.type.slug}-${slug?.id}`
-        );
+        const orgId = cookies.get('orgId');
+        checkAccess(
+            `business/${orgId}/working_area/${id}/session/?ordering=-end_date`
+        ).then((d) => {
+            if (d) {
+                const slug = workingAreasData.find((area) => area.id === id);
+                router.push(
+                    'working-areas/session/' + `${slug?.type.slug}-${slug?.id}`
+                );
+            } else {
+                toast('Недостаточно прав');
+            }
+        });
     };
 
     const handleDeleteClick = async (id: number) => {

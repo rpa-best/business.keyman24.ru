@@ -102,7 +102,6 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         checkAccess(`business/${orgId}/location/${id}/object?deleted=false`)
             .then((d) => {
                 if (d) {
-                    revalidate(`${pathName}/${id}${path ? '/' + path : ''}`);
                     router.push(`${pathName}/${id}${path ? '/' + path : ''}`);
                 } else {
                     toast('Недостаточно прав', warningToastConfig);
