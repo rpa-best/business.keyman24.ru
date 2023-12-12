@@ -4,6 +4,7 @@ import {
     ISession,
     IType,
     IWorkingArea,
+    PermissionsResponseType,
 } from 'http/types';
 import React from 'react';
 
@@ -20,17 +21,22 @@ export interface EditWorkingAreaProps {
     setWorkingAreasData: React.Dispatch<
         React.SetStateAction<IModfiedWorkingArea[]>
     >;
+    showDevices: boolean;
     types: IType[];
 }
 
 export interface AreasTableWrapperProps {
     workingAreas: IModfiedWorkingArea[];
-    locations: ILocation[];
-    workingTypes: IType[];
+    permissions: PermissionsResponseType[];
+    count: number;
 }
 
 export interface SessionWrapperProps {
-    sessions: IModifiedSession[];
+    sessions: {
+        count: number;
+        permissions: PermissionsResponseType[];
+        results: IModifiedSession[];
+    };
     areaId: number;
     type: 'register' | 'security' | 'inventory' | 'key' | 'register_inventory';
 }

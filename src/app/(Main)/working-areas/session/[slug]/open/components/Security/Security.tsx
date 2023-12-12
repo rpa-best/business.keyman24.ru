@@ -13,25 +13,27 @@ import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { useSocketConnect } from 'hooks/useSocketConnect';
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
-import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
+import { getParamsId } from 'app/(Main)/working-areas/helpers';
 import { sendSessionAction } from 'http/workingAreaApi';
 import { useSocketStore } from 'store/useSocketStore';
 import revalidate from 'utils/revalidate';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { errorToastOptions } from 'config/toastConfig';
+import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
 
 import { updateOrg } from 'http/organizationApi';
 
 import { BackButton } from 'components/UI/Buttons/BackButton';
 
 import scss from './Security.module.scss';
-import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
-import { errorToastOptions } from 'config/toastConfig';
 
 export const Security: React.FC<SecurityProps> = ({
     currentSessionId,
     currentAreaId,
     sessionLog,
     areaName,
+    permissions,
 }) => {
     const path = usePathname();
     const router = useRouter();
@@ -128,12 +130,9 @@ export const Security: React.FC<SecurityProps> = ({
         socketStore.closeConnection();
     };
 
-    const handleRowClick = (id: number) => {
+    const handleRowClick = async (id: number) => {
         const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
-        window.open(
-            `https://${window.location.host}/workers/${workerId}?which=docs`,
-            '_blank'
-        );
+        await onWorkerClick(workerId as number);
     };
 
     const handleUpdateClick = async () => {
@@ -151,9 +150,14 @@ export const Security: React.FC<SecurityProps> = ({
             </div>
             <div>
                 <div className={scss.buttons_wrapper}>
-                    <Button onClick={() => onCloseSessionClick()} type="button">
-                        Завершить сессию
-                    </Button>
+                    {permissions.includes('DELETE') && (
+                        <Button
+                            onClick={() => onCloseSessionClick()}
+                            type="button"
+                        >
+                            Завершить сессию
+                        </Button>
+                    )}
                     <div className={scss.utils_buttons}>
                         <Button
                             onClick={() => handleUpdateClick()}

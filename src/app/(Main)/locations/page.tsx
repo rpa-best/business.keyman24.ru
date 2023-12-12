@@ -8,12 +8,18 @@ import { TableWrapper } from 'app/(Main)/locations/components/TableWrapper';
 
 import scss from 'app/(Main)/locations/locations.module.scss';
 
-const LocationsPage = async () => {
+interface LocationPageProps {
+    searchParams: { offset: string };
+}
+
+const LocationsPage = async ({ searchParams }: LocationPageProps) => {
     const cookieStore = cookies();
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const locations = await getLocations(+orgId);
+    const offset = searchParams.offset ?? '0';
+
+    const locations = await getLocations(+orgId, offset);
 
     const organizations = await getOrganizationContractors(+orgId);
 
@@ -25,6 +31,8 @@ const LocationsPage = async () => {
         <div className={scss.children_with_table}>
             <h2 className={scss.page_title_with_table}>Локации</h2>
             <TableWrapper
+                count={locations.count}
+                allowedPermissions={locations.permissions}
                 organizations={organizations}
                 path="objects"
                 tableRows={modifiedLocations}

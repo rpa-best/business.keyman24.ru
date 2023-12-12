@@ -8,11 +8,23 @@ const cookie = new UniversalCookies();
 
 const orgId = cookie.get('orgId') as string;
 
-export const getWorkingAreas: T.GetWorkingAreas = async (orgId) => {
+export const getWorkingAreas: T.GetWorkingAreas = async (orgId, offset) => {
+    const query = new URLSearchParams();
+    if (offset) {
+        query.set('limit', '15');
+        query.set('offset', offset);
+    }
     const res: AxiosResponse<T.IResponse<T.IWorkingArea>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/?offset=0&ordering=id&deleted=false`
+            `business/${orgId}/working_area/?offset=0&ordering=id&deleted=false`,
+            { params: query }
         );
+
+    return res.data;
+};
+export const getWorkingArea: T.GetWorkingArea = async (orgId, areaId) => {
+    const res: AxiosResponse<ReturnType<typeof getWorkingArea>> =
+        await $serverAuth.get(`business/${orgId}/working_area/${areaId}`);
 
     return res.data;
 };
@@ -23,6 +35,14 @@ export const getWorkingAreaTypes: T.GetWorkingAreaTypes = async (orgId) => {
 
     return res.data;
 };
+
+export const getWorkingAreaTypesOnClient: T.GetWorkingAreaTypesOnClient =
+    async () => {
+        const res: AxiosResponse<ReturnType<T.GetWorkingAreaTypes>> =
+            await $clientAuth.get(`business/${orgId}/working_area/type/`);
+
+        return res.data;
+    };
 
 export const createWorkingArea: T.CreateWorkingArea = async (body) => {
     try {
@@ -64,10 +84,17 @@ export const deleteWorkingArea: T.DeleteWorkingArea = async (id) => {
 export const getSessions: T.GetAreaSessions = async (
     orgId,
     areaId,
-    archive
+    archive,
+    offset
 ) => {
     const query = new URLSearchParams();
     archive ? query.set('is_archive', archive) : '';
+
+    if (offset) {
+        query.set('limit', '25');
+        query.set('offset', offset);
+    }
+
     const res: AxiosResponse<ReturnType<T.GetAreaSessions>> =
         await $serverAuth.get(
             `business/${orgId}/working_area/${areaId}/session/?ordering=-end_date`,
@@ -81,11 +108,19 @@ export const getSessions: T.GetAreaSessions = async (
 export const getSessionLog: T.GetSessionLog = async (
     orgId,
     areaId,
-    sessionId
+    sessionId,
+    offset
 ) => {
+    const query = new URLSearchParams();
+    if (offset) {
+        query.set('limit', '25');
+        query.set('offset', offset);
+    }
+
     const res: AxiosResponse<ReturnType<T.GetSessionLog>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/${areaId}/session/${sessionId}/element?ordering=-date&limit=50`
+            `business/${orgId}/working_area/${areaId}/session/${sessionId}/element?ordering=-date&limit=50`,
+            { params: query }
         );
 
     return res.data;

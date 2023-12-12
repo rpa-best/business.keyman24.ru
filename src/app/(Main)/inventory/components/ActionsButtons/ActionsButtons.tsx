@@ -18,11 +18,13 @@ const cookie = new Cookies();
 interface ActionsButtonsProps {
     setVisible: (v: boolean) => void;
     setModalType: (v: 'one' | 'more') => void;
+    hasCreate: boolean;
 }
 
 export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
     setModalType,
     setVisible,
+    hasCreate,
 }) => {
     const searchParams = useSearchParams();
     const name = searchParams.get('name') ?? 'Все';
@@ -70,16 +72,18 @@ export const ActionsButtons: React.FC<ActionsButtonsProps> = ({
                     >
                         Скачать наклейки ШК
                     </Button>
-                    <Button
-                        nowrap
-                        onClick={() => {
-                            setVisible(true);
-                            setModalType('more');
-                        }}
-                        type="button"
-                    >
-                        Сгенерировать инвентарь
-                    </Button>
+                    {hasCreate && (
+                        <Button
+                            nowrap
+                            onClick={() => {
+                                setVisible(true);
+                                setModalType('more');
+                            }}
+                            type="button"
+                        >
+                            Сгенерировать инвентарь
+                        </Button>
+                    )}
                 </div>
             </div>
         </>

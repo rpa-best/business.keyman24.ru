@@ -47,9 +47,15 @@ export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
 
     return res.data;
 };
-export const getServerWorkers: T.GetServerWorkers = async (orgId) => {
+export const getServerWorkers: T.GetServerWorkers = async (orgId, offset) => {
+    const query = new URLSearchParams();
+    if (offset) {
+        query.set('limit', '25');
+        query.set('offset', offset);
+    }
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
-        `business/${orgId}/worker/`
+        `business/${orgId}/worker/`,
+        { params: query }
     );
 
     return res.data;

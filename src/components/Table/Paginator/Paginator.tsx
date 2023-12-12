@@ -16,6 +16,10 @@ export const Paginator: React.FC<PaginatorProps> = ({
         (_, index) => index + 1
     );
 
+    if (countPages === 1) {
+        return null;
+    }
+
     return (
         <div className={scss.paginator_container}>
             {artificialPagesArr.map((pageNumber, index) => {

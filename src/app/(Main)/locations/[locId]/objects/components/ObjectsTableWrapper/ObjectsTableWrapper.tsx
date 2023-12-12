@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { checkAccess } from 'utils/checkAccess';
 import { AxiosError } from 'axios';
@@ -12,7 +12,7 @@ import { Table } from 'components/Table';
 import { Modal } from 'components/Modal';
 import { ObjectFormModal } from 'app/(Main)/locations/[locId]/objects/components/ObjectFormModal/ObjectFromModal';
 import { useModalStore } from 'store/modalVisibleStore';
-import { IObject } from 'http/types';
+import { IObject, PermissionsResponseType } from 'http/types';
 import { deleteLocationObject } from 'http/locationsApi';
 import { Spinner } from 'components/Spinner';
 import revalidate from 'utils/revalidate';
@@ -25,11 +25,15 @@ const cookie = new Cookies();
 interface ObjectsTableWrapper {
     modifiedObjects: IObject[];
     locId: number;
+    permissions: PermissionsResponseType[];
+    count: number;
 }
 
 export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     modifiedObjects,
     locId,
+    permissions,
+    count,
 }) => {
     const router = useRouter();
     const pathname = usePathname();
@@ -44,13 +48,17 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
 
     const price = usePriceBySlug('ObjectInLocation');
 
+    useEffect(() => {
+        setTableRows(modifiedObjects);
+    }, [modifiedObjects]);
+
     const handleRowClick = (id: number) => {
         const orgId = cookie.get('orgId');
         checkAccess(
             `business/${orgId}/inventory/?type=inventory&ordering=id`
         ).then((d) => {
             if (d) {
-                router.prefetch(`${pathname}/${id}`);
+                revalidate(`${pathname}/${id}`);
                 router.push(`${pathname}/${id}`);
             } else {
                 toast('Недостаточно прав', warningToastConfig);
@@ -85,16 +93,29 @@ export const ObjectsTableWrapper: React.FC<ObjectsTableWrapper> = ({
     return (
         <>
             <Table
-                handleEditClick={handleEditClick}
-                buttonData={{
-                    onClick: () => handleAddClick(),
-                    text: 'Добавить',
-                }}
-                /*prefetch={(id) => router.prefetch(`${pathname}/${id}`)}*/
-                handleDeleteClick={handleDeleteClick}
+                buttonData={
+                    permissions.includes('POST')
+                        ? {
+                              onClick: () => handleAddClick(),
+                              text: 'Добавить',
+                          }
+                        : undefined
+                }
+                handleEditClick={
+                    permissions.includes('PATCH') ? handleEditClick : undefined
+                }
+                handleDeleteClick={
+                    permissions.includes('DELETE')
+                        ? handleDeleteClick
+                        : undefined
+                }
                 handleRowClick={handleRowClick}
                 tableData={tableRows}
                 setTableData={setTableRows}
+                paginatorData={{
+                    offset: 25,
+                    countItems: count,
+                }}
             >
                 <Column header="Наименование" field="name" />
                 <Column header="Описание" field="desc" />

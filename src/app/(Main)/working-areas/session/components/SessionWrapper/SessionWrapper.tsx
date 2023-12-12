@@ -38,8 +38,9 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const [sessionsData, setSessionsData] =
-        useState<IModifiedSession[]>(sessions);
+    const [sessionsData, setSessionsData] = useState<IModifiedSession[]>(
+        sessions.results
+    );
 
     const [user] = useUserStore((state) => [state.user]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
@@ -55,7 +56,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const needAttach = type !== 'register' && type !== 'register_inventory';
 
     useEffect(() => {
-        setSessionsData(sessions);
+        setSessionsData(sessions.results);
     }, [sessions]);
 
     useEffect(() => {
@@ -67,7 +68,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     }, [pathname]);
 
     const handleRowClick = async (id: number) => {
-        const session = sessions.find((s) => s.id === id);
+        const session = sessions.results.find((s) => s.id === id);
         const orgId = cookie.get('orgId');
         const accessed = await checkAccess(
             `business/${orgId}/working_area/${areaId}/session/${session?.id}/element?limit=1&offset=0`
@@ -97,7 +98,7 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
         const body: ICreateSessionBody = {
             status: 1,
-            number: sessions.length + 1,
+            number: sessions.results.length + 1,
             start_date: currentDate,
             end_date: null,
             is_active: false,
@@ -193,34 +194,39 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                         </Link>
                     </div>
                     <div className={scss.buttons_wrapper}>
-                        <Button
-                            disabled={
-                                !!searchParams.get('archive') ||
-                                !!startSessionDisabled
-                            }
-                            nowrap
-                            onClick={onStartSessionClick}
-                            type="button"
-                        >
-                            Начать сессию
-                        </Button>
-                        <Button
-                            disabled={
-                                !!searchParams.get('archive') ||
-                                !startSessionDisabled
-                            }
-                            nowrap
-                            onClick={onCloseSessionClick}
-                            type="button"
-                        >
-                            Завершить сессию
-                        </Button>
+                        {sessions.permissions.includes('POST') && (
+                            <Button
+                                disabled={
+                                    !!searchParams.get('archive') ||
+                                    !!startSessionDisabled
+                                }
+                                nowrap
+                                onClick={onStartSessionClick}
+                                type="button"
+                            >
+                                Начать сессию
+                            </Button>
+                        )}
+                        {sessions.permissions.includes('DELETE') && (
+                            <Button
+                                disabled={
+                                    !!searchParams.get('archive') ||
+                                    !startSessionDisabled
+                                }
+                                nowrap
+                                onClick={onCloseSessionClick}
+                                type="button"
+                            >
+                                Завершить сессию
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>
             <Table
                 tableData={sessionsData}
                 setTableData={() => {}}
+                paginatorData={{ offset: 25, countItems: sessions.count }}
                 handleRowClick={handleRowClick}
             >
                 <Column header="Дата начала" field="startDate" />

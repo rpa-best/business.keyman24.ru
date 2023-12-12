@@ -17,8 +17,10 @@ export const getInventories: T.GetInventories = async (
     location
 ) => {
     const query = new URLSearchParams();
-    query.set('limit', '25');
-    query.set('offset', offset.toString());
+    if (offset) {
+        query.set('limit', '25');
+        query.set('offset', offset);
+    }
 
     if (location) {
         if (location === 'Все') {

@@ -183,9 +183,12 @@ export interface IAdminGroupPermission {
     org: number;
 }
 
+export type PermissionsResponseType = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+
 export interface IResponse<T> {
     results: T[];
     count: number;
+    permissions: PermissionsResponseType[];
 }
 
 export interface IType {
@@ -530,7 +533,8 @@ export type DeleteWorkerPermission = (
 export type DeleteOrgPermission = (obj: { id: number }) => void;
 
 export type GetGroupOrgPermissions = (
-    orgId: number
+    orgId: number,
+    offset?: string
 ) => Promise<IResponse<IGroupPermission>>;
 
 export type GetGroupOrgPermissionsOnClient = () => Promise<
@@ -554,7 +558,7 @@ export type DeletePermGroupPermissions = (
 
 export type GetInventories = (
     orgId: number,
-    offset: number,
+    offset: string,
     name: string,
     location: string
 ) => Promise<IResponse<IInventory>>;
@@ -637,10 +641,19 @@ export type CreateGroupOrgPermission = (obj: {
 export type DeleteGroupOrgPermission = (obj: { id: number }) => void;
 
 export type GetWorkingAreas = (
-    orgId: number
+    orgId: number,
+    offset?: string
 ) => Promise<IResponse<IWorkingArea>>;
 
-export type GetLocations = (orgId: number) => Promise<IResponse<ILocation>>;
+export type GetWorkingArea = (
+    orgId: number,
+    areaId: number
+) => Promise<IWorkingArea>;
+
+export type GetLocations = (
+    orgId: number,
+    offset?: string
+) => Promise<IResponse<ILocation>>;
 
 export type GetLocationsOnClient = () => Promise<IResponse<ILocation>>;
 
@@ -701,7 +714,8 @@ export type DeleteLocation = (locId: number) => Promise<void>;
 
 export type GetLocationObjects = (
     orgId: number,
-    locationId: number
+    locationId: number,
+    offset?: string
 ) => Promise<IResponse<IObject>>;
 
 export type GetLocationWorkers = (
@@ -750,16 +764,20 @@ export type GenerateKeys = (
 
 export type GetWorkingAreaTypes = (orgId: number) => Promise<IResponse<IType>>;
 
+export type GetWorkingAreaTypesOnClient = () => Promise<IResponse<IType>>;
+
 export type GetAreaSessions = (
     orgId: number,
     areaId: number,
-    archive?: string
+    archive?: string,
+    offset?: string
 ) => Promise<IResponse<ISession>>;
 
 export type GetSessionLog = (
     orgId: number,
     areaId: number,
-    sessionId: number
+    sessionId: number,
+    offset?: string
 ) => Promise<IResponse<SessionLogResponse>>;
 
 export type CreateWorkingArea = (
@@ -818,7 +836,10 @@ export type GetWorkersPlan = (query?: {
     [key: string]: string | undefined;
 }) => Promise<File>;
 
-export type GetServerWorkers = (orgId: number) => Promise<IResponse<IWorker>>;
+export type GetServerWorkers = (
+    orgId: number,
+    offset?: string
+) => Promise<IResponse<IWorker>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
 

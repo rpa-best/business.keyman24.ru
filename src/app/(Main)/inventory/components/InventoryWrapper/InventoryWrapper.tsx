@@ -30,6 +30,7 @@ import { priceToastConfig } from 'config/toastConfig';
 export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
     inventory,
     count,
+    permissions,
 }) => {
     const router = useRouter();
     const pathname = usePathname();
@@ -133,18 +134,29 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         <>
             <div className={scss.keys}>
                 <ActionsButtons
+                    hasCreate={permissions.includes('POST')}
                     setVisible={setVisible}
                     setModalType={setModalType}
                 />
             </div>
             <Table
-                buttonData={{
-                    onClick: handleTableButtonClick,
-                    text: 'Добавить',
-                }}
-                handleEditClick={handleEditClick}
+                buttonData={
+                    permissions.includes('POST')
+                        ? {
+                              onClick: handleTableButtonClick,
+                              text: 'Добавить',
+                          }
+                        : undefined
+                }
+                handleEditClick={
+                    permissions.includes('PATCH') ? handleEditClick : undefined
+                }
+                handleDeleteClick={
+                    permissions.includes('DELETE')
+                        ? handleDeleteClick
+                        : undefined
+                }
                 handleRowClick={handleRowClick}
-                handleDeleteClick={handleDeleteClick}
                 tableData={generatedData}
                 setTableData={setGeneratedData}
                 paginatorData={{ offset: 25, countItems: count }}

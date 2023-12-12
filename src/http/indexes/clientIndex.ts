@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import CookiesUniversal from 'universal-cookie';
 import { snakeToCamelCaseDeep } from 'utils/snakeTOCamelCaseDeep';
 import { toast } from 'react-toastify';
-import { warningToastConfig } from 'config/toastConfig';
+import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
 
 const cookiesUni = new CookiesUniversal();
 
@@ -41,9 +41,9 @@ $clientAuth.interceptors.request.use(async (req) => {
                 (error.response?.status as any) >= 400 &&
                 (error.response?.status as any) <= 400
             ) {
-                toast('Ошибка', warningToastConfig);
+                toast('Ошибка', errorToastOptions);
             } else if ((error.response?.status as any) >= 500) {
-                toast('Ошибка сервера', warningToastConfig);
+                toast('Ошибка сервера', errorToastOptions);
             }
             throw error;
         }

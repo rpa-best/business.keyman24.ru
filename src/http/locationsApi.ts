@@ -8,9 +8,18 @@ const cookie = new UniversalCookies();
 
 const orgId = cookie.get('orgId') as string;
 
-export const getLocations: T.GetLocations = async (orgId) => {
+export const getLocations: T.GetLocations = async (orgId, offset) => {
+    const query = new URLSearchParams();
+
+    if (offset) {
+        query.set('limit', '15');
+        query.set('offset', offset.toString());
+    }
+
     const res: AxiosResponse<ReturnType<T.GetLocations>> =
-        await $serverAuth.get(`business/${orgId}/location/?deleted=false`);
+        await $serverAuth.get(`business/${orgId}/location/?deleted=false`, {
+            params: query,
+        });
 
     return res.data;
 };
@@ -47,11 +56,19 @@ export const deleteLocation: T.DeleteLocation = async (locId) => {
 
 export const getLocationObjects: T.GetLocationObjects = async (
     orgId,
-    locationId
+    locationId,
+    offset
 ) => {
+    const query = new URLSearchParams();
+    if (offset) {
+        query.set('limit', '25');
+        query.set('offset', offset);
+    }
+
     const res: AxiosResponse<ReturnType<typeof getLocationObjects>> =
         await $serverAuth.get(
-            `business/${orgId}/location/${locationId}/object?deleted=false`
+            `business/${orgId}/location/${locationId}/object?deleted=false`,
+            { params: query }
         );
 
     return res.data;
@@ -95,8 +112,10 @@ export const getLocationKeys: T.GetLocationKeys = async (
     { offset, name }
 ) => {
     const query = new URLSearchParams();
-    query.set('limit', '25');
-    offset && query.set('offset', offset);
+    if (offset) {
+        query.set('limit', '25');
+        query.set('offset', offset);
+    }
 
     if (name) {
         if (decodeURI(name) === 'Все') {

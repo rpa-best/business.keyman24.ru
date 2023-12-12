@@ -226,9 +226,20 @@ export const deleteAdminPermission: T.DeleteOrgPermission = async ({ id }) => {
     }
 };
 
-export const getGroupPermissions: T.GetGroupOrgPermissions = async (orgId) => {
+export const getGroupPermissions: T.GetGroupOrgPermissions = async (
+    orgId,
+    offset
+) => {
+    const query = new URLSearchParams();
+    if (offset) {
+        query.set('offset', offset.toString());
+        query.set('limit', '15');
+    }
+
     const response: AxiosResponse<T.IResponse<IGroupPermission>> =
-        await $serverAuth.get(`business/${orgId}/permission/group/`);
+        await $serverAuth.get(`business/${orgId}/permission/group/`, {
+            params: query,
+        });
 
     if (response.status !== 200) {
         throw new Error('Ошибка в получении групповых разрешений');

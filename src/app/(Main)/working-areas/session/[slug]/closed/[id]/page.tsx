@@ -1,8 +1,11 @@
 import React from 'react';
 import { cookies } from 'next/headers';
 
-import { getSessionLog, getWorkingAreas } from 'http/workingAreaApi';
-import { Table } from 'components/Table';
+import {
+    getSessionLog,
+    getWorkingArea,
+    getWorkingAreas,
+} from 'http/workingAreaApi';
 import { Column } from 'components/Table/Column';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
@@ -12,16 +15,21 @@ import { TableWrapper } from 'app/(Main)/working-areas/session/[slug]/closed/[id
 
 interface ClosedSessionProps {
     params: { id: string; slug: string };
+    searchParams: { offset: string };
 }
 
-const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
+const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({
+    params,
+    searchParams,
+}) => {
     const cookieStore = cookies();
     const orgId = cookieStore.get('orgId')?.value as string;
-    const workingAreas = await getWorkingAreas(+orgId);
 
-    const area = workingAreas.results.find(
-        (area) => area.id === +getParamsId(params.slug)
-    );
+    const areaId = +getParamsId(params.slug);
+
+    const area = await getWorkingArea(+orgId, areaId);
+
+    const offset = searchParams.offset ?? '0';
 
     const inventoryOrKeys =
         getParamsType(params.slug) === 'inventory' ||
@@ -37,7 +45,8 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
     const sessionLog = await getSessionLog(
         +orgId,
         area?.id as number,
-        +params.id
+        +params.id,
+        offset
     );
 
     const modifiedLog = sessionLog.results.map((s) => {
@@ -75,7 +84,7 @@ const ClosedSessionPage: React.FC<ClosedSessionProps> = async ({ params }) => {
                 <BackButton skipWord>Назад</BackButton>
             </div>
             {modifiedLog.length !== 0 ? (
-                <TableWrapper tableRows={modifiedLog}>
+                <TableWrapper count={sessionLog.count} tableRows={modifiedLog}>
                     {!itsRegisterInventory && (
                         <Column header="Работник" field="workerName" />
                     )}

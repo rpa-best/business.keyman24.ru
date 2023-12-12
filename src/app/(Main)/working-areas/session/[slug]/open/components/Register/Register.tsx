@@ -33,6 +33,7 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import revalidate from 'utils/revalidate';
 import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 import { BackButton } from 'components/UI/Buttons/BackButton';
+import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
 
 const cookie = new UniversalCookies();
 
@@ -42,6 +43,7 @@ export const Register: React.FC<RegisterProps> = ({
     currentAreaId,
     sessionLog,
     areaName,
+    permissions,
 }) => {
     const router = useRouter();
     const path = usePathname();
@@ -165,15 +167,12 @@ export const Register: React.FC<RegisterProps> = ({
             .finally(() => setLoading(false));
     };
 
-    const handleRowClick = (id: number) => {
+    const handleRowClick = async (id: number) => {
         if (itsRegisterInventory) {
             return;
         }
         const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
-        window.open(
-            `https://${window.location.host}/workers/${workerId}?which=docs`,
-            '_blank'
-        );
+        await onWorkerClick(workerId as number);
     };
 
     return (
@@ -184,11 +183,13 @@ export const Register: React.FC<RegisterProps> = ({
                     Назад
                 </BackButton>
             </div>
-            <div className={scss.button_wrapper}>
-                <Button onClick={() => onCloseSessionClick()} type="button">
-                    Завершить сессию
-                </Button>
-            </div>
+            {permissions.includes('DELETE') && (
+                <div className={scss.button_wrapper}>
+                    <Button onClick={() => onCloseSessionClick()} type="button">
+                        Завершить сессию
+                    </Button>
+                </div>
+            )}
             <div className={scss.inputs_wrapper}>
                 <div>
                     <InputSelect

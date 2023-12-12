@@ -1,5 +1,10 @@
 import React from 'react';
-import { IInventory, IInventoryImage, IType } from 'http/types';
+import {
+    IInventory,
+    IInventoryImage,
+    IType,
+    PermissionsResponseType,
+} from 'http/types';
 
 export interface IModifiedInventory
     extends Omit<IInventory, 'type' | 'location'> {
@@ -43,4 +48,5 @@ export interface ImageContainerCreateProps {
 export interface InventoryWrapperProps {
     inventory: IModifiedInventory[];
     count: number;
+    permissions: PermissionsResponseType[];
 }

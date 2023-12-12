@@ -22,6 +22,7 @@ import { BackButton } from 'components/UI/Buttons/BackButton';
 import { useSocketStore } from 'store/useSocketStore';
 
 import scss from './Key.module.scss';
+import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
 
 export const Key: React.FC<KeyProps> = ({
     type,
@@ -29,6 +30,7 @@ export const Key: React.FC<KeyProps> = ({
     currentAreaId,
     sessionLog,
     areaName,
+    permissions,
 }) => {
     const router = useRouter();
     const params = useParams();
@@ -76,15 +78,12 @@ export const Key: React.FC<KeyProps> = ({
         socketStore.closeConnection();
     };
 
-    const handleRowClick = (id: number) => {
+    const handleRowClick = async (id: number) => {
         if (itsRegisterInventory) {
             return;
         }
         const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
-        window.open(
-            `https://${window.location.host}/workers/${workerId}?which=docs`,
-            '_blank'
-        );
+        await onWorkerClick(workerId as number);
     };
 
     return (
@@ -94,11 +93,16 @@ export const Key: React.FC<KeyProps> = ({
                 <BackButton skipWord>Назад</BackButton>
             </div>
             <div className={scss.key_layout}>
-                <div className={scss.buttons_wrapper}>
-                    <Button onClick={() => onCloseSessionClick()} type="button">
-                        Завершить сессию
-                    </Button>
-                </div>
+                {permissions.includes('DELETE') && (
+                    <div className={scss.buttons_wrapper}>
+                        <Button
+                            onClick={() => onCloseSessionClick()}
+                            type="button"
+                        >
+                            Завершить сессию
+                        </Button>
+                    </div>
+                )}
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm
