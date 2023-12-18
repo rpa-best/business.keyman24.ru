@@ -35,13 +35,6 @@ $clientAuth.interceptors.request.use(async (req) => {
                 error.response?.status === 403
             ) {
                 toast('Недостаточно прав', warningToastConfig);
-            } else if (
-                method !== 'get' &&
-                method !== 'head' &&
-                (error.response?.status as any) >= 400 &&
-                (error.response?.status as any) <= 400
-            ) {
-                toast('Ошибка', errorToastOptions);
             } else if ((error.response?.status as any) >= 500) {
                 toast('Ошибка сервера', errorToastOptions);
             }

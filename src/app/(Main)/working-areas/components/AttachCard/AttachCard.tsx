@@ -17,6 +17,7 @@ import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 
 import scss from './AttachCard.module.scss';
 import { errorToastOptions } from 'config/toastConfig';
+import { useUserStore } from 'store/userStore';
 
 const cookie = new Cookies();
 
@@ -25,6 +26,7 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     const pathname = usePathname();
     const params = useParams();
 
+    const [user] = useUserStore((state) => [state.user]);
     const socketStore = useSocketStore((state) => state);
     const [isSuccess, setIsSuccess] = useState(false);
     const [visible] = useModalStore((state) => [state.visible]);
@@ -33,11 +35,6 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     useEffect(() => {
         if (!session || !session.toString()) {
             return;
-        }
-        const access = cookie.get('access');
-
-        if (visible && !isSuccess) {
-            socketStore.createConnection(session, access);
         }
         if (!visible && !isSuccess) {
             socketStore.closeConnection();
@@ -51,41 +48,19 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
                 toast('Нет доступа к сессии', errorToastOptions);
                 return;
             }
-            setIsSuccess(true);
             const body = {
-                // @ts-ignore
-                user: data.data.user.user as string,
+                user: user?.username as string,
                 session,
             };
-            await sendActivateSession(areaId, session)
+            sendCheck(areaId, session, body)
                 .then(() => {
-                    sendCheck(areaId, session, body)
-                        .then(() => {
-                            setVisible(false);
-                            router.push(`${pathname}/open/${session}`);
-                        })
-                        .catch((e: unknown) => {
-                            if (e instanceof AxiosError) {
-                                if (
-                                    e.response?.data.user[0].slug ===
-                                    'not_perm_to_session'
-                                ) {
-                                    toast(
-                                        'Нет доступа к сессии',
-                                        errorToastOptions
-                                    );
-                                }
-                            }
-                        });
+                    setVisible(false);
+                    setIsSuccess(true);
+                    router.push(`${pathname}/open/${session}`);
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
-                        if (
-                            e.response?.data.user[0].slug ===
-                            'not_perm_to_session'
-                        ) {
-                            toast('Нет доступа к сессии', errorToastOptions);
-                        }
+                        toast(e.response?.data.user[0].name, errorToastOptions);
                     }
                 });
         },
