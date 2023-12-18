@@ -19,13 +19,21 @@ import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
 
 import { checkAccess } from 'utils/checkAccess';
-import { closeSession, createSession } from 'http/workingAreaApi';
+import {
+    closeSession,
+    createSession,
+    sendActivateSession,
+    sendCheck,
+} from 'http/workingAreaApi';
 import revalidate from 'utils/revalidate';
 import { DateHelper } from 'utils/dateHelper';
+import { toast } from 'react-toastify';
+import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
+import { useSocketStore } from 'store/useSocketStore';
 
 import scss from './SessionWrapper.module.scss';
-import { toast } from 'react-toastify';
-import { warningToastConfig } from 'config/toastConfig';
+import { AxiosError } from 'axios';
+import { sendActivateAndCheck } from 'app/(Main)/working-areas/session/[slug]/open/utils';
 
 const cookie = new Cookies();
 
@@ -37,6 +45,8 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
+
+    const socketStore = useSocketStore((state) => state);
 
     const [sessionsData, setSessionsData] = useState<IModifiedSession[]>(
         sessions.results
@@ -68,8 +78,10 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
     }, [pathname]);
 
     const handleRowClick = async (id: number) => {
+        const sessionId = id;
         const session = sessions.results.find((s) => s.id === id);
         const orgId = cookie.get('orgId');
+
         const accessed = await checkAccess(
             `business/${orgId}/working_area/${areaId}/session/${session?.id}/element?limit=1&offset=0`
         );
@@ -78,9 +90,30 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                 router.push(`${pathname}/closed/${session.id}`);
             } else {
                 if (!needAttach) {
-                    router.push(`${pathname}/open/${currentSession as number}`);
+                    const access = cookie.get('access');
+                    sendActivateAndCheck(
+                        sessionId,
+                        areaId,
+                        user?.username
+                    ).then(() => {
+                        socketStore.createConnection(sessionId, access);
+                        router.push(`${pathname}/open/${sessionId}`);
+                    });
                     return;
                 }
+                sendActivateSession(areaId, sessionId)
+                    .then(() => {
+                        const access = cookie.get('access');
+                        socketStore.createConnection(sessionId, access);
+                    })
+                    .catch((e: unknown) => {
+                        if (e instanceof AxiosError) {
+                            toast(
+                                e.response?.data.user[0].name,
+                                errorToastOptions
+                            );
+                        }
+                    });
                 setVisible(true);
             }
         } else {
@@ -130,9 +163,32 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                 router.prefetch(`${pathname}/open/${newSession.id}`);
                 revalidate(pathname);
 
+                const access = cookie.get('access');
+
+                const session = d.id;
+
                 if (!needAttach) {
-                    router.push(`${pathname}/open/${newSession.id}`);
+                    sendActivateAndCheck(session, areaId, user?.username).then(
+                        () => {
+                            socketStore.createConnection(session, access);
+                            router.push(`${pathname}/open/${newSession.id}`);
+                        }
+                    );
+                    return;
                 }
+
+                sendActivateSession(areaId, session)
+                    .then(() => {
+                        socketStore.createConnection(session, access);
+                    })
+                    .catch((e: unknown) => {
+                        if (e instanceof AxiosError) {
+                            toast(
+                                e.response?.data.user[0].name,
+                                errorToastOptions
+                            );
+                        }
+                    });
             })
             .finally(() => {
                 setLoading(false);

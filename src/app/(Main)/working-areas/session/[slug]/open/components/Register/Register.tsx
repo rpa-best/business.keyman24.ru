@@ -5,7 +5,11 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
-import { sendActivateSession, sendSessionAction } from 'http/workingAreaApi';
+import {
+    sendActivateSession,
+    sendCheck,
+    sendSessionAction,
+} from 'http/workingAreaApi';
 import {
     ModifiedRegisterLog,
     RegisterProps,
@@ -34,6 +38,8 @@ import revalidate from 'utils/revalidate';
 import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
+import { useUserStore } from 'store/userStore';
+import { useSocketStore } from 'store/useSocketStore';
 
 const cookie = new UniversalCookies();
 
@@ -62,7 +68,8 @@ export const Register: React.FC<RegisterProps> = ({
     const [workers, setWorkers] = useState<IWorker[]>([]);
 
     const [loading, setLoading] = useState(false);
-    const socket = useRef<WebSocket>();
+
+    const socketStore = useSocketStore((state) => state);
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
@@ -102,15 +109,8 @@ export const Register: React.FC<RegisterProps> = ({
         [currentAreaId, currentSessionId, router, selectedWorker?.id]
     );
 
-    useEffect(() => {
-        const access = cookie.get('access');
-        socket.current = new WebSocket(
-            `${process.env.NEXT_PUBLIC_API_SOCKET_URL}business/ws/session/${currentSessionId}/?token=${access}`
-        );
-
-        socket.current.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-
+    const onMessage = useCallback(
+        (message: SocketResponse) => {
             if (message.type === 'success') {
                 if (selectedOrg && selectedWorker) {
                     onSocketSuccess(message);
@@ -124,14 +124,36 @@ export const Register: React.FC<RegisterProps> = ({
                     });
                 }
             }
-        };
+        },
+        [onSocketSuccess, selectedOrg, selectedWorker]
+    );
 
+    useEffect(() => {
+        if (!socketStore.socket) {
+            router.replace(`/working-areas/session/register-${currentAreaId}`);
+        }
         return () => {
-            if (socket.current) {
-                socket?.current?.close();
+            if (socketStore.socket) {
+                socketStore.closeConnection();
             }
         };
-    }, [currentAreaId, currentSessionId, onSocketSuccess]);
+    }, [currentAreaId, socketStore.socket]);
+
+    useEffect(() => {
+        socketStore.onClose(() => {
+            router.replace(
+                '/working-areas/session/register-' + getParamsId(params.slug)
+            );
+        });
+    }, [currentAreaId, router, socketStore]);
+
+    useEffect(() => {
+        const message = socketStore.message;
+
+        if (message) {
+            onMessage(message);
+        }
+    }, [socketStore.message]);
 
     const handleSelectOrg = (org: IOrganization) => {
         setLoading(true);
@@ -179,9 +201,7 @@ export const Register: React.FC<RegisterProps> = ({
         <div>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton onClick={() => socket.current?.close()} skipWord>
-                    Назад
-                </BackButton>
+                <BackButton skipWord>Назад</BackButton>
             </div>
             {permissions.includes('DELETE') && (
                 <div className={scss.button_wrapper}>

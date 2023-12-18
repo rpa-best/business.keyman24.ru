@@ -27,9 +27,9 @@ export function LoginFormValidate(values: T.ILoginFormTypes) {
 
     if (!values.username) {
         errors.username = 'Укажите почту';
-    } else if (!values.username.match(emailCheck)?.length) {
+    } /*else if (!values.username.match(emailCheck)?.length) {
         errors.username = 'некорректный email';
-    }
+    }*/
 
     if (!values.password) {
         errors.password = 'Укажите пароль';
