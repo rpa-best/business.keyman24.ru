@@ -8,6 +8,7 @@ import { validateDate } from 'app/(Main)/working-areas/session/[slug]/open/OpenS
 import clsx from 'clsx';
 
 import scss from './WorkerInfoCard.module.scss';
+import { formatWorkerInfoData } from 'app/(Main)/working-areas/session/[slug]/helpers/formatWorkerInfoData';
 
 interface IWorkerInfoCardProps {
     worker: IWorker;
@@ -85,10 +86,9 @@ export const WorkerInfoCard: React.FC<IWorkerInfoCardProps> = ({
                                 label={doc.name}
                                 placeholder="-"
                                 disabled
-                                value={new Date(doc.activeTo)
-                                    .toLocaleDateString()
-                                    .split('/')
-                                    .join('.')}
+                                value={formatWorkerInfoData(
+                                    new Date(doc.activeTo)
+                                )}
                                 name={doc?.name}
                                 onChange={() => {}}
                                 handleError={validateDate(doc.activeTo)}

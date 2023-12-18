@@ -4,6 +4,8 @@ import {
     IPinCodeFormTypes,
 } from 'app/(Authorization)/login/components/Form/Form.types';
 
+const emailCheck = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/gi;
+
 function checkStringForDigitsAndLetters(str: string) {
     const digitRegex = /[0-9]/;
     const letterRegex = /[a-zA-Z]/;
@@ -25,6 +27,8 @@ export function LoginFormValidate(values: T.ILoginFormTypes) {
 
     if (!values.username) {
         errors.username = 'Укажите почту';
+    } else if (!values.username.match(emailCheck)?.length) {
+        errors.username = 'некорректный email';
     }
 
     if (!values.password) {

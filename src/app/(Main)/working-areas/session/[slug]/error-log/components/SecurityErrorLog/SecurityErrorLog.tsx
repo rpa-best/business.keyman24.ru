@@ -16,6 +16,7 @@ import Cookies from 'universal-cookie';
 import { useParams } from 'next/navigation';
 import { getParamsId } from 'app/(Main)/working-areas/helpers';
 import { AxiosError } from 'axios';
+import { formatWorkerInfoData } from 'app/(Main)/working-areas/session/[slug]/helpers/formatWorkerInfoData';
 
 const cookie = new Cookies();
 
@@ -97,10 +98,9 @@ export const SecurityErrorLog: React.FC<SecurityErrorLogProps> = () => {
                                 {
                                     errorValue:
                                         doc.name +
-                                        ` ${new Date(doc.activeTo)
-                                            .toLocaleDateString()
-                                            .split('/')
-                                            .join('.')}`,
+                                        ` ${formatWorkerInfoData(
+                                            new Date(doc.activeTo)
+                                        )}`,
                                     errorName: 'Документы просрочены',
                                 },
                             ]);
