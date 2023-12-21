@@ -26,7 +26,12 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
     const modifiedInventory: IModifiedInventory[] = inventories.results.map(
         (i) => {
             const location = i.location === null ? '-' : `${i.location.name}`;
-            return { ...i, type: i.type.name, location: location };
+            return {
+                ...i,
+                type: i.type.name,
+                location: location,
+                statusName: i.status ? 'На руках' : 'На складе',
+            };
         }
     );
 

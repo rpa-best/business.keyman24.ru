@@ -8,6 +8,7 @@ import {
 
 export interface IModifiedInventory
     extends Omit<IInventory, 'type' | 'location'> {
+    statusName?: 'На руках' | 'На складе';
     type: string;
     location: string;
 }

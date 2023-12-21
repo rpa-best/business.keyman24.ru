@@ -15,12 +15,14 @@ interface KeyHistoryComponentProps {
     keyHistory: IResponse<IInventoryHistory>;
     type: 'Inventory' | 'Keys';
     register?: boolean;
+    status?: 'На руках' | 'На складе';
 }
 
 export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
     keyHistory,
     type,
     register,
+    status,
 }) => {
     const emptyText = type === 'Inventory' ? 'инвентарь' : 'ключ';
 
@@ -68,6 +70,15 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
                     <div className={scss.charts_images}>
                         <ImageCarouselWrapper />
                     </div>
+                    {status && (
+                        <div className={scss.history_status}>
+                            <h3>
+                                Статус{' '}
+                                {type === 'Inventory' ? 'инвентаря' : 'ключа'}:{' '}
+                                {status}
+                            </h3>
+                        </div>
+                    )}
                 </>
             )}
             {barData?.length !== 0 ? (

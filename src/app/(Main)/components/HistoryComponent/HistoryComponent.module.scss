@@ -8,6 +8,19 @@
   }
 }
 
+.history_status {
+  @include MontserratSemiBold(20px);
+  color: white;
+  margin-left: 30px;
+  @include phoneOrTablet {
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  @include phone {
+    margin-left: 10px;
+  }
+}
+
 .charts_images {
   margin-left: 30px;
   @include phoneOrTablet {

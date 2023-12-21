@@ -124,6 +124,16 @@ export const getInventoryImage: T.GetInventoryImage = async (invId) => {
     return res.data;
 };
 
+export const getInventoryById: T.GetInventoryById = async (
+    orgId,
+    inventoryId
+) => {
+    const res: AxiosResponse<ReturnType<T.GetInventoryById>> =
+        await $serverAuth.get(`business/${orgId}/inventory/${inventoryId}`);
+
+    return res.data;
+};
+
 export const createInventoryItem: T.CreateInventoryItem = async (body) => {
     const res = await $clientAuth.post(`business/${orgId}/inventory/`, body);
 
