@@ -139,6 +139,7 @@ export interface IInventory {
     notZone: boolean;
     codeNumber: string;
     number: string;
+    status: boolean;
     name: string;
     desc: string;
     codeImage: string;
@@ -585,6 +586,11 @@ export type GetKeyHistory = (
 ) => Promise<IResponse<IInventoryHistory>>;
 
 export type GetInventoryTypes = (orgId: number) => Promise<IResponse<IType>>;
+
+export type GetInventoryById = (
+    orgId: number,
+    inventoryId: number
+) => Promise<IInventory>;
 
 export type GetInventoryImage = (
     inventoryId: number

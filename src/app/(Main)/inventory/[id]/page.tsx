@@ -2,7 +2,7 @@ import React from 'react';
 import { cookies } from 'next/headers';
 
 import { BackButton } from 'components/UI/Buttons/BackButton';
-import { getInventoryHistory } from 'http/inventoryApi';
+import { getInventoryById, getInventoryHistory } from 'http/inventoryApi';
 import { HistoryComponent } from 'app/(Main)/components/HistoryComponent';
 
 import scss from './KeyHistoryPage.module.scss';
@@ -31,6 +31,10 @@ const InventoryPage: React.FC<KeyPageProps> = async ({
         searchParams.register
     );
 
+    const inventory = await getInventoryById(+orgId, +params.id);
+
+    const inventoryStatus = inventory.status ? 'На руках' : 'На складе';
+
     return (
         <div className={scss.custom_children}>
             <div className={scss.custom_title_wrapper}>
@@ -38,6 +42,7 @@ const InventoryPage: React.FC<KeyPageProps> = async ({
                 <BackButton>Назад</BackButton>
             </div>
             <HistoryComponent
+                status={inventoryStatus}
                 register={searchParams.register}
                 type="Inventory"
                 keyHistory={inventoryHistory}

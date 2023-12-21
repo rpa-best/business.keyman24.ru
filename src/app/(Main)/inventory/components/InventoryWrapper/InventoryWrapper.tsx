@@ -167,6 +167,7 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
                 <Column sortable header="Наименование" field="name" />
                 <Column sortable header="Штрихкод" field="codeNumber" />
                 <Column sortable header="Локация" field="location" />
+                <Column sortable header="Статус инвентаря" field="statusName" />
             </Table>
             {modalType === 'more' && (
                 <Modal>
