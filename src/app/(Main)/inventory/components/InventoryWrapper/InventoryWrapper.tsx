@@ -66,8 +66,6 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
         return totalPositions * priceByOne;
     }, [priceByOne, totalPositions]);
 
-    console.log(inventory);
-
     useEffect(() => {
         if (totalPrice > 0 && modalType === 'more') {
             if (toastId.current) {

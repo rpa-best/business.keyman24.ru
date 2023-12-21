@@ -36,7 +36,6 @@ export const useSocketStore = create<T.ISocketStore>((set) => ({
 
     closeConnection: () => {
         set(({ socket }) => {
-            console.log('test');
             socket?.close();
             return { ...socket, message: null };
         });
