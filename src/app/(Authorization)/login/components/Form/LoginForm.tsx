@@ -79,7 +79,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         handleBlur,
         errors,
         handleSubmit,
-        setFieldTouched,
         setErrors,
         touched,
     } = useFormik<ILoginFormTypes>({

@@ -20,15 +20,12 @@ const LoginPage: FC = async () => {
             <div className={scss.preview_wrapper}>
                 <h1 className={scss.logo}>KeyMan24</h1>
                 <div className={scss.preview_content}>
-                    <h1 className={scss.preview_content_header}>
-                        Lorem ipsum{' '}
-                    </h1>
+                    <h1 className={scss.preview_content_header}>KeyMan</h1>
                     <p className={scss.preview_content_text}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Tempora blanditiis eveniet quis eaque quisquam
-                        repudiandae. Inventore enim, odio unde velit dicta
-                        deserunt! Provident ullam reprehenderit recusandae a,
-                        vel quia aperiam.
+                        Автоматизированная система для контроля доступа
+                        иностранным работникам на объекты по документам. С
+                        быстрым и прозрачным учетом выдачи ключей, инструментов
+                        и прочих ТМЦ.
                     </p>
                 </div>
             </div>
