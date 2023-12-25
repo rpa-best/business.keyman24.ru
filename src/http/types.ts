@@ -156,6 +156,7 @@ export interface IInventoryHistory {
     card: string;
     comment: string;
     image: string;
+    now: string;
     inventory: IInventory;
 }
 

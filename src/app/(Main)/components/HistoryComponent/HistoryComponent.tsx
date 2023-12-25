@@ -1,15 +1,15 @@
+import React from 'react';
+
 import { BarChart } from 'components/Charts/BarChart';
 import { PieChart } from 'components/Charts/PieChart/PieChart';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-import React from 'react';
 import { formatDateHistory, getBarGroupData } from 'utils/historyHelper';
 import { IInventoryHistory, IResponse } from 'http/types';
+import { LocationButton } from 'app/(Main)/components/HistoryComponent/LocationButton';
+import { ImageCarouselWrapper } from 'app/(Main)/inventory/[id]/components/ImageCarouselWrapper';
 
 import scss from './HistoryComponent.module.scss';
-import { LocationButton } from 'app/(Main)/components/HistoryComponent/LocationButton';
-import { ImagesCarousel } from 'components/ImagesCarousel';
-import { ImageCarouselWrapper } from 'app/(Main)/inventory/[id]/components/ImageCarouselWrapper';
 
 interface KeyHistoryComponentProps {
     keyHistory: IResponse<IInventoryHistory>;
