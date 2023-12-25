@@ -43,47 +43,15 @@ export const getBarGroupData = (
             if (passed) {
                 pasDate = passed.date.getTime();
             } else {
-                const timestamp = Date.now();
-                const dateFormatter = new Intl.DateTimeFormat('ru', {
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                });
-
-                const formattedDateStr = dateFormatter.format(
-                    new Date(timestamp)
-                );
-
-                const date = formattedDateStr.slice(0, 10).split('.');
-                const time = formattedDateStr.slice(12).split(':');
-
-                const year = +date[2];
-                const month = +date[1] - 1;
-                const day = +date[0];
-                const hours = +time[0];
-                const minutes = +time[1];
-                const seconds = +time[2];
-
-                pasDate = new Date(
-                    year,
-                    month,
-                    day,
-                    hours,
-                    minutes,
-                    seconds
-                ).getTime();
+                pasDate = new Date(item.now).getTime();
             }
-
             const date = item.date.getTime();
+
             const passedDate = pasDate;
             const difference = passedDate - date;
             const secondsDifference = difference / 1000;
             const minutesDifference = secondsDifference / 60;
             const hoursDifference = minutesDifference / 60;
-
             units.push({
                 unit: getObjValue(item, unitPath),
                 hours: +hoursDifference.toFixed(1),
