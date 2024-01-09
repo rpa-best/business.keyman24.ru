@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RangePicker } from 'app/(Main)/workers/components/SelectOrgAndIntervalTippy/RangePicker';
 
 import scss from './SelectOrgAndIntervalTippy.module.scss';
+import {
+    CalendarContext,
+    CalendarType,
+} from 'app/(Main)/workers/components/WorkersButton/WorkersButton';
+import { TableContext } from 'components/Table/Table';
 
 interface IntervalProps {
     setDates: React.Dispatch<
@@ -11,9 +16,19 @@ interface IntervalProps {
 }
 
 export const Interval: React.FC<IntervalProps> = ({ setDates, refresh }) => {
+    const { setCalendarOpen } = useContext<CalendarType | null>(
+        CalendarContext
+    ) as CalendarType;
     const [currentInterval, setCurrentInterval] = useState<'month' | 'day'>(
         'day'
     );
+
+    const onCalendarOpen = () => {
+        setCalendarOpen(true);
+    };
+    const onCalendarClose = () => {
+        setCalendarOpen(false);
+    };
 
     useEffect(() => {
         setCurrentInterval('day');
@@ -46,10 +61,19 @@ export const Interval: React.FC<IntervalProps> = ({ setDates, refresh }) => {
                 По месяцам
             </button>
             {currentInterval === 'day' && (
-                <RangePicker refresh={refresh} setDates={setDates} />
+                <RangePicker
+                    onCalendarOpen={onCalendarOpen}
+                    onCalendarClose={onCalendarClose}
+                    refresh={refresh}
+                    maxDate={new Date()}
+                    setDates={setDates}
+                />
             )}
             {currentInterval === 'month' && (
                 <RangePicker
+                    maxDate={new Date()}
+                    onCalendarClose={onCalendarClose}
+                    onCalendarOpen={onCalendarOpen}
                     refresh={refresh}
                     setDates={setDates}
                     selectMonth={true}

@@ -9,41 +9,33 @@ import { toast } from 'react-toastify';
 import revalidate from 'utils/revalidate';
 import { errorToastOptions } from 'config/toastConfig';
 
-interface ChangeImgModalProps {
-    workerId: number;
-    setWorkerImg: (st: string) => void;
+interface TemporaryWorkerChangeImgProps {
+    setWorkerImg: (st: File) => void;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const ChangeImgModal: React.FC<ChangeImgModalProps> = ({
-    workerId,
-    setWorkerImg,
-    setLoading,
-}) => {
-    const path = usePathname();
-
+export const TemporaryWorkerChangeImg: React.FC<
+    TemporaryWorkerChangeImgProps
+> = ({ setWorkerImg, setLoading }) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const [setVisible] = useModalStore((state) => [state.setVisible]);
     const handleChangeFile: ChangeEventHandler<HTMLInputElement> = (e) => {
         try {
-            // @ts-ignore
+            if (!e.target.files) {
+                return;
+            }
             if (e.target.files[0].size >= 1048576) {
                 toast('Размер файла превышает 1мб', errorToastOptions);
                 return;
             }
             setLoading(true);
-            updateUserImg(e.target.files as FileList, workerId)
-                .then((r) => {
-                    setWorkerImg(r.image);
-                })
-                .finally(() => {
-                    setVisible(false);
-                    setLoading(false);
-                    revalidate(path);
-                });
+            setWorkerImg(e.target.files[0]);
+            setVisible(false);
         } catch (e: any) {
             toast('Непредвиденная ошибка', errorToastOptions);
+        } finally {
+            setLoading(false);
         }
     };
 

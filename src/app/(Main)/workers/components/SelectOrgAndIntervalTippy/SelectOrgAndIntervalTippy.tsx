@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSpring } from 'framer-motion';
 import Tippy from '@tippyjs/react/headless';
 
@@ -9,6 +9,10 @@ import { OrgAndIntervalTIppy } from 'app/(Main)/workers/components/SelectOrgAndI
 import scss from './SelectOrgAndIntervalTippy.module.scss';
 import { Button } from 'components/UI/Buttons/Button';
 import { useResizeWidth } from 'hooks/useResizeWidth';
+import {
+    CalendarContext,
+    CalendarType,
+} from 'app/(Main)/workers/components/WorkersButton/WorkersButton';
 
 interface SelectOrgAndIntervalTippyProps {
     orgs: IOrganization[];
@@ -17,11 +21,28 @@ interface SelectOrgAndIntervalTippyProps {
 export const SelectOrgAndIntervalTippy: React.FC<
     SelectOrgAndIntervalTippyProps
 > = ({ orgs }) => {
-    const { tabletBreak } = useResizeWidth();
+    const { tabletBreak, phoneBreak, pcBreak } = useResizeWidth();
     const [visible, setVisible] = useState(false);
     const opacity = useSpring(0);
 
-    const xOffset = tabletBreak ? 0 : 90;
+    const { visibleButtons } = useContext<CalendarType | null>(
+        CalendarContext
+    ) as CalendarType;
+
+    const xOffset =
+        pcBreak && !tabletBreak
+            ? -20
+            : tabletBreak && !phoneBreak
+            ? -120
+            : phoneBreak
+            ? -150
+            : 40;
+
+    useEffect(() => {
+        if (!visibleButtons) {
+            setVisible(false);
+        }
+    }, [visibleButtons]);
 
     return (
         <div style={{ zIndex: 300 }} className={scss.tippy_wrapper}>
@@ -32,7 +53,7 @@ export const SelectOrgAndIntervalTippy: React.FC<
                 visible={visible}
                 interactive={true}
                 placement="left-start"
-                offset={[40, xOffset]}
+                offset={[50, xOffset]}
                 render={() => (
                     <OrgAndIntervalTIppy
                         visible={visible}
