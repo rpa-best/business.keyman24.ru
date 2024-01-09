@@ -829,7 +829,10 @@ export type SendSessionAction = (
     }
 ) => Promise<SessionLogResponse>;
 
-export type GetWorkers = (orgId?: number) => Promise<IResponse<IWorker>>;
+export type GetWorkers = (
+    orgId?: number,
+    guest?: boolean
+) => Promise<IResponse<IWorker>>;
 
 export type GetWorkerPlan = (
     orgId: number,
@@ -845,8 +848,21 @@ export type GetWorkersPlan = (query?: {
 
 export type GetServerWorkers = (
     orgId: number,
-    offset?: string
+    offset?: string,
+    guest?: boolean
 ) => Promise<IResponse<IWorker>>;
+
+interface IQrcode {
+    id: string;
+    createDate: string;
+    startDate: string;
+    endDate: string;
+}
+
+export type GetServerQrcodes = (
+    orgId: number,
+    workerId: number
+) => Promise<IResponse<IQrcode>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
 
@@ -863,6 +879,31 @@ export type CreateWorkerUser = (
     workerId: number,
     body: CreateWorkerUserBody
 ) => Promise<errorsResponse | void>;
+
+export interface CreateTempWorkerBody {
+    image: File | null;
+    name: string;
+}
+
+interface CreateTempWorkerResponse {
+    name: string;
+    image: string;
+    id: number;
+}
+
+export type CreateTemporaryWorker = (
+    body: CreateTempWorkerBody
+) => Promise<CreateTempWorkerResponse>;
+
+interface CreateTempWorkerQrcodeBody {
+    start_date: Date;
+    end_date: Date;
+}
+
+export type CreateTemporaryWorkerQrcode = (
+    workerId: number,
+    body: CreateTempWorkerQrcodeBody
+) => Promise<IQrcode>;
 
 export type EditWorkerUser = (
     workerId: number,

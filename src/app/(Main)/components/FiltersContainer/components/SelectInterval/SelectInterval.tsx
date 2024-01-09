@@ -5,14 +5,13 @@ import React, { useEffect, useMemo } from 'react';
 
 import { ButtonsData } from 'app/(Main)/components/FiltersContainer/components/SelectInterval/buttonsData';
 import { SearchParamsHelper } from 'utils/searchParamsHelper';
-import { useResizeWidth } from 'hooks/useResizeWidth';
-import { InputSelect } from 'components/UI/Inputs/InputSelect';
-
-import scss from './SelectInterval.module.scss';
 import {
     QueryIntervalType,
     QueryModeType,
 } from 'app/(Main)/components/LineChart/LineChart';
+import { InputSelect } from 'components/UI/Inputs/InputSelect';
+
+import scss from './SelectInterval.module.scss';
 
 interface SelectIntervalProps {
     interval: QueryIntervalType;

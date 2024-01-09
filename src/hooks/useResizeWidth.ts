@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const tabletBreakpoint = 769;
-const pcBreakpoint = 1024;
+const pcBreakpoint = 1000;
 const thousandPcBreakPoint = 1200;
 const thousandThreePoint = 1300;
 const laptopBreakpoint = 1440;

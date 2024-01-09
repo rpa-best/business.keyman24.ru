@@ -20,13 +20,21 @@ interface RangePickerProps {
     setDates: React.Dispatch<
         React.SetStateAction<{ from?: string; to?: string } | null>
     >;
-    refresh: boolean;
+    refresh?: boolean;
+    onCalendarOpen?: () => void;
+    maxDate?: Date;
+    minDate?: Date;
+    onCalendarClose?: () => void;
 }
 
 export const RangePicker: React.FC<RangePickerProps> = ({
     selectMonth = false,
     setDates,
     refresh,
+    onCalendarOpen,
+    onCalendarClose,
+    maxDate,
+    minDate,
 }) => {
     const [startDate, setStartDate] = useState<Date>();
     const [endDate, setEndDate] = useState<Date>();
@@ -44,26 +52,22 @@ export const RangePicker: React.FC<RangePickerProps> = ({
             return;
         }
 
-        if (+start > Date.now()) {
-            toast('Дата не может быть больше сегодняшней', warningToastConfig);
-            return;
-        }
         setStartDate(start);
         setEndDate(end);
+        if (start && end) {
+            setDates({ to: formatDate(end), from: formatDate(start) });
+        }
     };
 
     useEffect(() => {
+        if (refresh === undefined) {
+            return;
+        }
         setStartDate(undefined);
         setEndDate(undefined);
     }, [refresh]);
 
     useEffect(() => {
-        if (startDate) {
-            setDates({ from: formatDate(startDate) });
-        } else if (endDate) {
-            setDates({ to: formatDate(endDate) });
-        }
-
         if (!endDate && !startDate) {
             setDates(null);
         }
@@ -115,13 +119,22 @@ export const RangePicker: React.FC<RangePickerProps> = ({
                 /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
                 // @ts-ignore
                 customInput={<CustomInput />}
+                onCalendarOpen={() => {
+                    if (onCalendarOpen) {
+                        onCalendarOpen();
+                    }
+                }}
                 onCalendarClose={() => {
                     if (startDate && !endDate) {
                         toast('Конечная дата не выбрана', warningToastConfig);
                         return;
                     }
+                    if (onCalendarClose) {
+                        onCalendarClose();
+                    }
                 }}
-                maxDate={new Date()}
+                maxDate={maxDate}
+                minDate={minDate}
                 placeholderText="Укажите интервал"
                 disabledKeyboardNavigation
                 clearButtonClassName={scss.clear_button}

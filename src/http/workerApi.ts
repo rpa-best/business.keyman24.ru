@@ -3,14 +3,16 @@ import { $clientAuth } from 'http/indexes/clientIndex';
 import { AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/indexes/serverIndex';
 import Cookies from 'universal-cookie';
+import FormData from 'form-data';
 
 const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async (org) => {
+export const getWorkers: T.GetWorkers = async (org, guest) => {
     const query = new URLSearchParams();
     org ? query.set('org', org.toString()) : '';
+    guest ? query.set('guest', 'true') : '';
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
         `business/${orgId}/worker/`,
         {
@@ -47,16 +49,28 @@ export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
 
     return res.data;
 };
-export const getServerWorkers: T.GetServerWorkers = async (orgId, offset) => {
+export const getServerWorkers: T.GetServerWorkers = async (
+    orgId,
+    offset,
+    guest
+) => {
     const query = new URLSearchParams();
     if (offset) {
         query.set('limit', '25');
         query.set('offset', offset);
     }
+    guest ? query.set('guest', 'true') : '';
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`,
         { params: query }
     );
+
+    return res.data;
+};
+
+export const getServerQrcodes: T.GetServerQrcodes = async (orgId, workerId) => {
+    const res: AxiosResponse<ReturnType<typeof getServerQrcodes>> =
+        await $serverAuth.get(`business/${orgId}/worker/${workerId}/qrcode`);
 
     return res.data;
 };
@@ -80,9 +94,24 @@ export const createWorkerUser: T.CreateWorkerUser = async (workerId, body) => {
     await $clientAuth.post(`business/${orgId}/worker/${workerId}/user/`, body);
 };
 
-export const editWorkerUser: T.EditWorkerUser = async (workerId, body) => {
-    await $clientAuth.patch(`business/${orgId}/worker/${workerId}/user/`, body);
+export const createTemporaryWorker: T.CreateTemporaryWorker = async (body) => {
+    const formData = new FormData();
+    formData.append('name', body.name);
+    body.image && formData.append('image', body.image);
+
+    const res = await $clientAuth.post(`business/${orgId}/worker/`, formData);
+    return res.data;
 };
+
+export const createTemporaryWorkerQrCode: T.CreateTemporaryWorkerQrcode =
+    async (workerId, body) => {
+        const res = await $clientAuth.post(
+            `business/${orgId}/worker/${workerId}/qrcode/`,
+            body
+        );
+
+        return res.data;
+    };
 
 export const getWorkerCard: T.GetWorkerCard = async (orgId, workerId) => {
     const res: AxiosResponse<ReturnType<T.GetWorkerCard>> =

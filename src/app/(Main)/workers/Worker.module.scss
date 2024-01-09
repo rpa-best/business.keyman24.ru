@@ -39,3 +39,25 @@
     }
   }
 }
+
+.buttons_tippy_wrapper {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  background-color: $additional-dark;
+  border-radius: 12px;
+  padding: 5px;
+  box-shadow: 1px 0 5px white;
+  @include thousendWidth {
+    margin-left: -60px;
+  }
+  @include phoneOrTablet {
+    margin-left: -40px;
+  }
+  @include phone {
+    width: 250px;
+    margin-top: -8px;
+    margin-left: -15px;
+  }
+}
