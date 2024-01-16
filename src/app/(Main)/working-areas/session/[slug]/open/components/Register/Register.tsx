@@ -82,23 +82,8 @@ export const Register: React.FC<RegisterProps> = ({
                 worker: selectedWorker?.id,
                 device: data.data.device,
             } as any;
-            if (selectedWorker?.guest && data.data.mode) {
-                if (!interval) {
-                    toast(
-                        'Пожалуйста, укажите интервал, чтобы выдать/забрать карту',
-                        warningToastConfig
-                    );
-                    setLoading(false);
-                    return;
-                } else if (!interval.from || !interval.to) {
-                    toast(
-                        'Пожалуйста, укажите интервал, чтобы выдать/забрать карту',
-                        warningToastConfig
-                    );
-
-                    setLoading(false);
-                    return;
-                } else {
+            if (selectedWorker?.guest) {
+                if (interval?.from && interval?.to) {
                     body = {
                         ...body,
                         start_date: new Date(interval.from),
@@ -207,9 +192,6 @@ export const Register: React.FC<RegisterProps> = ({
     const handleSelectWorker = (worker: IWorker) => {
         setLoading(true);
         setSelectedWorker(worker);
-        if (worker.guest) {
-            toast('Пожалуйста, выберите интервал', warningToastConfig);
-        }
 
         const fetchData = async () => {
             return await getWorkerDocs(worker.id);

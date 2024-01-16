@@ -21,7 +21,7 @@ export default async function TemporaryPasses({
 
     return (
         <section className={scss.children_with_table}>
-            <h2 className={scss.page_title_with_table}>Временные пропуска</h2>
+            <h2 className={scss.page_title_with_table}>Временные гости</h2>
             <TemporaryWorkerForm tempWorkers={tempWorkers.results as any} />
             <Table
                 paginatorData={{ offset: 15, countItems: tempWorkers.count }}

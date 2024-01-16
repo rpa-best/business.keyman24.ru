@@ -98,7 +98,7 @@ export const TemporaryWorkerForm: React.FC<{
             onSubmit={handleSubmit}
             className={scss.worker_card_layout}
         >
-            <h2 className={scss.worker_card_title}>Информация о работнике</h2>
+            <h2 className={scss.worker_card_title}>Информация о госте</h2>
             <div className={scss.worker_content}>
                 <div className={scss.worker_card_image_wrapper}>
                     {workerImg ? (
@@ -160,7 +160,7 @@ export const TemporaryWorkerForm: React.FC<{
                             onClick={() => {}}
                             type="submit"
                         >
-                            Создать пропуск
+                            Создать гостя
                         </Button>
                     </div>
                 </div>
