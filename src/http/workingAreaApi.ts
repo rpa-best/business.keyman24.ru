@@ -1,4 +1,4 @@
-import * as T from './types';
+import * as T from 'http/types';
 import { AxiosError, AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/indexes/serverIndex';
 import { $clientAuth } from 'http/indexes/clientIndex';

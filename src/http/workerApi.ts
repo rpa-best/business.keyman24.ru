@@ -1,4 +1,4 @@
-import * as T from './types';
+import * as T from 'http/types';
 import { $clientAuth } from 'http/indexes/clientIndex';
 import { AxiosResponse } from 'axios';
 import { $serverAuth } from 'http/indexes/serverIndex';
@@ -12,7 +12,9 @@ const orgId = cookie.get('orgId');
 export const getWorkers: T.GetWorkers = async (org, guest) => {
     const query = new URLSearchParams();
     org ? query.set('org', org.toString()) : '';
-    guest ? query.set('guest', 'true') : '';
+    if (guest !== undefined) {
+        guest ? query.set('guest', 'true') : query.set('guest', 'false');
+    }
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
         `business/${orgId}/worker/`,
         {
@@ -42,10 +44,13 @@ export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
     }
 
     const res: AxiosResponse<ReturnType<typeof getWorkersPlan>> =
-        await $clientAuth.get(`business/${orgId}/worker/plan/?format=xlsx`, {
-            responseType: 'blob',
-            params: queryParams,
-        });
+        await $clientAuth.get(
+            `business/${orgId}/worker/plan/?format=${query?.format}`,
+            {
+                responseType: 'blob',
+                params: queryParams,
+            }
+        );
 
     return res.data;
 };
@@ -59,7 +64,9 @@ export const getServerWorkers: T.GetServerWorkers = async (
         query.set('limit', '25');
         query.set('offset', offset);
     }
-    guest ? query.set('guest', 'true') : '';
+    if (guest !== undefined) {
+        guest ? query.set('guest', 'true') : query.set('guest', 'false');
+    }
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`,
         { params: query }
@@ -97,6 +104,7 @@ export const createWorkerUser: T.CreateWorkerUser = async (workerId, body) => {
 export const createTemporaryWorker: T.CreateTemporaryWorker = async (body) => {
     const formData = new FormData();
     formData.append('name', body.name);
+    formData.append('desc', body.desc);
     body.image && formData.append('image', body.image);
 
     const res = await $clientAuth.post(`business/${orgId}/worker/`, formData);

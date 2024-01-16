@@ -281,6 +281,8 @@ export interface IWorker {
         dateJoined: string;
         isOfficial: string;
     };
+    guest: boolean;
+    desc: string | null;
     org: IOrganization;
     inventories: IInventory[];
     lc_id: number;
@@ -826,6 +828,8 @@ export type SendSessionAction = (
         user?: string;
         mode?: boolean;
         device?: number;
+        start_date?: string;
+        end_date?: string;
     }
 ) => Promise<SessionLogResponse>;
 
@@ -843,6 +847,7 @@ export type GetWorkersPlan = (query?: {
     date_from?: string;
     date_end?: string;
     org?: string;
+    format?: 'xlsx' | 'xml';
     [key: string]: string | undefined;
 }) => Promise<File>;
 
@@ -883,12 +888,14 @@ export type CreateWorkerUser = (
 export interface CreateTempWorkerBody {
     image: File | null;
     name: string;
+    desc?: string;
 }
 
 interface CreateTempWorkerResponse {
     name: string;
     image: string;
     id: number;
+    desc: string;
 }
 
 export type CreateTemporaryWorker = (

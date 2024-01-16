@@ -32,7 +32,7 @@ export const WorkersPickListWrapper: React.FC<WorkersPickListWrapperProps> = ({
         const fetchData = async () => {
             const locationWorkers = await getLocationWorkersOnClient(locId);
 
-            const workers = await getWorkers();
+            const workers = await getWorkers(undefined, undefined);
 
             const filteredWorkers = workers.results.filter((w) => {
                 return !locationWorkers.results.find(

@@ -152,7 +152,7 @@ export const ColorRadialInputSelect: React.FC<ColorRadialInputSelectProps> = ({
                                     setInputValue('');
                                 }}
                                 ref={inputRef}
-                                autoComplete="new-password"
+                                autoComplete="off"
                                 className={inputClass}
                                 onChange={handleInputChange}
                                 value={inputValue}

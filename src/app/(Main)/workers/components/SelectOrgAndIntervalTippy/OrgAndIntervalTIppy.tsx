@@ -92,13 +92,14 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
         });
     };
 
-    const handleDownloadExcel = async () => {
+    const handleDownloadExcel = async (format: 'xlsx' | 'xml') => {
         setLoading(true);
         const ids = selectedOrgs.map((el) => el.id).join(',');
         await getWorkersPlan({
             org: ids,
             date_end: fromAndToDates?.to,
             date_from: fromAndToDates?.from,
+            format,
         })
             .then((d) => {
                 FileSaver.saveAs(d, 'Учтёт времени');
@@ -139,13 +140,20 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
                     </div>
                     <Interval refresh={refresh} setDates={setFromAndToDates} />
                 </div>
-                <div className={scss.button_wrapper}>
+                <div className={scss.download_buttons_wrapper}>
                     <Button
                         disabled={!!disabled}
-                        onClick={() => handleDownloadExcel()}
+                        onClick={() => handleDownloadExcel('xlsx')}
                         type="button"
                     >
-                        Скачать
+                        Скачать Excel
+                    </Button>
+                    <Button
+                        disabled={!!disabled}
+                        onClick={() => handleDownloadExcel('xml')}
+                        type="button"
+                    >
+                        Скачать 1C
                     </Button>
                 </div>
             </motion.div>

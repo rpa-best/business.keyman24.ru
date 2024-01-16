@@ -25,6 +25,7 @@ interface RangePickerProps {
     maxDate?: Date;
     minDate?: Date;
     onCalendarClose?: () => void;
+    getRawDate?: boolean;
 }
 
 export const RangePicker: React.FC<RangePickerProps> = ({
@@ -35,6 +36,7 @@ export const RangePicker: React.FC<RangePickerProps> = ({
     onCalendarClose,
     maxDate,
     minDate,
+    getRawDate = false,
 }) => {
     const [startDate, setStartDate] = useState<Date>();
     const [endDate, setEndDate] = useState<Date>();
@@ -55,6 +57,13 @@ export const RangePicker: React.FC<RangePickerProps> = ({
         setStartDate(start);
         setEndDate(end);
         if (start && end) {
+            if (getRawDate) {
+                setDates({
+                    to: end.toString(),
+                    from: start.toString(),
+                });
+                return;
+            }
             setDates({ to: formatDate(end), from: formatDate(start) });
         }
     };

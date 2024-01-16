@@ -111,6 +111,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                                 errorToastOptions
                             );
                         }
+                    })
+                    .finally(() => {
+                        setLoading(false);
                     });
             }
         });
@@ -132,7 +135,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     autoFocus={true}
                     placeholder="Введите почту"
                     value={values.username}
-                    autoComplete="new-password"
                     onChange={handleChange}
                     handleError={touched.username && errors.username}
                 />
@@ -143,7 +145,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     placeholder="Введите пароль"
                     value={values.password}
                     type="password"
-                    autoComplete="new-password"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     handleError={touched.password && errors.password}

@@ -108,10 +108,18 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                     })
                     .catch((e: unknown) => {
                         if (e instanceof AxiosError) {
-                            toast(
-                                e.response?.data.user[0].name,
-                                errorToastOptions
-                            );
+                            if (e.response?.data.error[0].name) {
+                                toast(
+                                    e.response?.data.error[0].name,
+                                    errorToastOptions
+                                );
+                            }
+                            if (e.response?.data.user[0].name) {
+                                toast(
+                                    e.response?.data.user[0].name,
+                                    errorToastOptions
+                                );
+                            }
                         }
                     });
                 setVisible(true);

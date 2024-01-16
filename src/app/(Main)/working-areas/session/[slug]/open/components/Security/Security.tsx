@@ -87,6 +87,7 @@ export const Security: React.FC<SecurityProps> = ({
         if (!message?.data.use_session) {
             return;
         }
+        console.log('test');
         if (message && message.data.use_session) {
             const body = {
                 session: currentSessionId,
@@ -118,7 +119,7 @@ export const Security: React.FC<SecurityProps> = ({
                     setLoading(false);
                 });
         }
-    }, [socketStore.message, socketStore.message?.data.use_session]);
+    }, [socketStore.message, sended, socketStore.message?.data.use_session]);
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(

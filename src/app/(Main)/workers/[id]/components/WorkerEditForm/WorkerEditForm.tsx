@@ -154,7 +154,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                     </div>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
-                            autoComplete="new-password"
+                            autoComplete="off"
                             onBlur={handleBlur}
                             placeholder="-"
                             label={`Почта${required}`}
@@ -187,7 +187,7 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 <div className={scss.worker_card_data_additional}>
                     <div className={scss.worker_card_input_wrapper}>
                         <Input
-                            autoComplete="new-password"
+                            autoComplete="off"
                             onBlur={handleBlur}
                             type="password"
                             label={`Пароль${required}`}
