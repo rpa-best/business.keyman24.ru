@@ -14,9 +14,5 @@ export const TemporaryWorkerFormValidate = (
         errors.fullName = 'Обязательное поле';
     }
 
-    if (!values.rangeDate?.from || !values.rangeDate.to) {
-        errors.rangeDate = 'Обязательное поле';
-    }
-
     return errors;
 };

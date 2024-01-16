@@ -115,3 +115,10 @@
     width: 300px;
   }
 }
+
+.download_buttons_wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  column-gap: 20px;
+}

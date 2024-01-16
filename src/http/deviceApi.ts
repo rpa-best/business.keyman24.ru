@@ -1,4 +1,4 @@
-import * as T from './types';
+import * as T from 'http/types';
 import UniversalCookies from 'universal-cookie';
 import { $clientAuth } from 'http/indexes/clientIndex';
 import { AxiosResponse } from 'axios';

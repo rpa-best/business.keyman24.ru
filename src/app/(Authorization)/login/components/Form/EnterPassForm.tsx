@@ -79,7 +79,7 @@ export const EnterPassForm: React.FC<EnterPassForm> = ({
                     autoFocus={true}
                     placeholder="Введите новый пароль"
                     value={values.password}
-                    autoComplete="new-password"
+                    autoComplete="off"
                     onChange={handleChange}
                     handleError={touched.password && errors.password}
                 />
@@ -90,7 +90,7 @@ export const EnterPassForm: React.FC<EnterPassForm> = ({
                     placeholder="Подтвердите новый пароль"
                     value={values.confirmPassword}
                     type="password"
-                    autoComplete="new-password"
+                    autoComplete="off"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     handleError={

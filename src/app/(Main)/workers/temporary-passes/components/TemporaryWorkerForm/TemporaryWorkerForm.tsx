@@ -15,22 +15,18 @@ import { Spinner } from 'components/Spinner';
 import { Modal } from 'components/Modal';
 import { TemporaryWorkerFormValidate } from 'app/(Main)/workers/temporary-passes/components/TemporaryWorkerForm/TemporaryWorkerForm.utils';
 import { TemporaryWorkerChangeImg } from 'app/(Main)/workers/temporary-passes/components/TemporaryWorkerChangeImg';
-import { RangePicker } from 'app/(Main)/workers/components/SelectOrgAndIntervalTippy/RangePicker';
 
 import { useModalStore } from 'store/modalVisibleStore';
 
 import { TemporaryWorkerFormValuesType } from 'app/(Main)/workers/temporary-passes/components/TemporaryWorkerForm/types';
-import {
-    createTemporaryWorker,
-    createTemporaryWorkerQrCode,
-} from 'http/workerApi';
+import { createTemporaryWorker } from 'http/workerApi';
 import revalidate from 'utils/revalidate';
 import { IWorker } from 'http/types';
 
 import scss from './TemporaryWorkerForm.module.scss';
 
 interface TemporaryWorkerWithEnd extends IWorker {
-    endDate: string;
+    desc: string;
 }
 
 export const TemporaryWorkerForm: React.FC<{
@@ -44,25 +40,20 @@ export const TemporaryWorkerForm: React.FC<{
     const [loading, setLoading] = useState(false);
 
     const onSubmit = async (values: TemporaryWorkerFormValuesType) => {
-        console.log(values.photo);
         setLoading(true);
         createTemporaryWorker({
             name: values.fullName,
+            desc: values.description,
             image: values.photo,
         })
             .then((w) => {
-                createTemporaryWorkerQrCode(w.id, {
-                    end_date: new Date(values.rangeDate?.to as string),
-                    start_date: new Date(values.rangeDate?.from as string),
-                }).then((qr) => {
-                    tempWorkers.push({
-                        ...w,
-                        endDate: qr.endDate,
-                    } as TemporaryWorkerWithEnd);
-                    revalidate(pathname);
-                    resetForm();
-                    setWorkerImg(null);
-                });
+                tempWorkers.push({
+                    ...w,
+                    desc: w.desc,
+                } as TemporaryWorkerWithEnd);
+                revalidate(pathname);
+                resetForm();
+                setWorkerImg(null);
             })
             .finally(() => {
                 setLoading(false);
@@ -83,10 +74,7 @@ export const TemporaryWorkerForm: React.FC<{
     } = useFormik<TemporaryWorkerFormValuesType>({
         initialValues: {
             fullName: '',
-            rangeDate: {
-                from: '',
-                to: '',
-            },
+            description: '',
             photo: null,
         },
         enableReinitialize: true,
@@ -152,21 +140,19 @@ export const TemporaryWorkerForm: React.FC<{
                             onChange={handleChange}
                         />
                     </div>
-                    <div className={scss.range_picker_wrapper}>
-                        <p className={scss.range_picker_title}>
-                            Укажите интервал
-                        </p>
-                        <RangePicker
-                            minDate={new Date()}
-                            setDates={(v) => {
-                                setFieldTouched('rangeDate');
-                                setFieldValue('rangeDate', v);
-                            }}
+                    <div className={scss.worker_card_input_wrapper}>
+                        <Input
+                            autoComplete="off"
+                            onBlur={handleBlur}
+                            label="Описание"
+                            placeholder="Введите описание"
+                            value={values.description}
+                            handleError={
+                                touched.description && errors.description
+                            }
+                            name="description"
+                            onChange={handleChange}
                         />
-
-                        <label className={scss.range_picker_error}>
-                            {touched.rangeDate && errors.rangeDate}
-                        </label>
                     </div>
                     <div className={scss.worker_card_button_wrapper}>
                         <Button

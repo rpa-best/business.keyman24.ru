@@ -1,15 +1,11 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
-import {
-    sendActivateSession,
-    sendCheck,
-    sendSessionAction,
-} from 'http/workingAreaApi';
+import { sendSessionAction } from 'http/workingAreaApi';
 import {
     ModifiedRegisterLog,
     RegisterProps,
@@ -17,29 +13,27 @@ import {
 import { InputSelect } from 'components/UI/Inputs/InputSelect';
 import { IOrganization } from 'store/types';
 import { getWorkerDocs, getWorkers } from 'http/workerApi';
-import {
-    IWorker,
-    IWorkerDocs,
-    SessionLogResponse,
-    SocketResponse,
-} from 'http/types';
+import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import { WorkerInfoCard } from 'app/(Main)/working-areas/session/[slug]/open/components/WorkerInfoCard/WorkerInfoCard';
 import { Spinner } from 'components/Spinner';
 import { Button } from 'components/UI/Buttons/Button';
 import { closeSessionHandler } from 'app/(Main)/working-areas/session/[slug]/open/OpenSession.utils';
 import { Table } from 'components/Table';
-import { useModalStore } from 'store/modalVisibleStore';
 import { Column } from 'components/Table/Column';
-
-import scss from './Register.module.scss';
 import { AxiosError } from 'axios';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import revalidate from 'utils/revalidate';
-import { errorToastOptions, successToastConfig } from 'config/toastConfig';
+import {
+    errorToastOptions,
+    successToastConfig,
+    warningToastConfig,
+} from 'config/toastConfig';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
-import { useUserStore } from 'store/userStore';
 import { useSocketStore } from 'store/useSocketStore';
+import { RangePicker } from 'app/(Main)/workers/components/SelectOrgAndIntervalTippy/RangePicker';
+
+import scss from './Register.module.scss';
 
 const cookie = new UniversalCookies();
 
@@ -65,6 +59,14 @@ export const Register: React.FC<RegisterProps> = ({
     const [selectedWorker, setSelectedWorker] = useState<IWorker>();
     const [selectedWorkerDocs, setSelectedWorkerDocs] =
         useState<IWorkerDocs[]>();
+    const [interval, setInterval] = useState<{
+        from?: '';
+        to?: '';
+    }>({
+        from: '',
+        to: '',
+    });
+
     const [workers, setWorkers] = useState<IWorker[]>([]);
 
     const [loading, setLoading] = useState(false);
@@ -74,12 +76,36 @@ export const Register: React.FC<RegisterProps> = ({
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
             setLoading(true);
-            const body = {
-                user: data.data.user,
+            let body = {
+                user: data.data.user as string,
                 mode: data.data.mode,
                 worker: selectedWorker?.id,
                 device: data.data.device,
-            };
+            } as any;
+            if (selectedWorker?.guest && data.data.mode) {
+                if (!interval) {
+                    toast(
+                        'Пожалуйста, укажите интервал, чтобы выдать/забрать карту',
+                        warningToastConfig
+                    );
+                    setLoading(false);
+                    return;
+                } else if (!interval.from || !interval.to) {
+                    toast(
+                        'Пожалуйста, укажите интервал, чтобы выдать/забрать карту',
+                        warningToastConfig
+                    );
+
+                    setLoading(false);
+                    return;
+                } else {
+                    body = {
+                        ...body,
+                        start_date: new Date(interval.from),
+                        end_date: new Date(interval.to),
+                    };
+                }
+            }
             sendSessionAction(currentAreaId, currentSessionId, body as any)
                 .then((d) => {
                     const mode = d.mode ? 'Выдан' : 'Сдан';
@@ -106,7 +132,7 @@ export const Register: React.FC<RegisterProps> = ({
                     setLoading(false);
                 });
         },
-        [currentAreaId, currentSessionId, router, selectedWorker?.id]
+        [interval, currentAreaId, currentSessionId, router, selectedWorker?.id]
     );
 
     const onMessage = useCallback(
@@ -181,6 +207,10 @@ export const Register: React.FC<RegisterProps> = ({
     const handleSelectWorker = (worker: IWorker) => {
         setLoading(true);
         setSelectedWorker(worker);
+        if (worker.guest) {
+            toast('Пожалуйста, выберите интервал', warningToastConfig);
+        }
+
         const fetchData = async () => {
             return await getWorkerDocs(worker.id);
         };
@@ -213,7 +243,7 @@ export const Register: React.FC<RegisterProps> = ({
             <div className={scss.inputs_wrapper}>
                 <div>
                     <InputSelect
-                        autoComplete="new-password"
+                        autoComplete="off"
                         listValues={organizations}
                         placeholder="Выберите организацию"
                         onChange={handleSelectOrg}
@@ -224,12 +254,23 @@ export const Register: React.FC<RegisterProps> = ({
                 {selectedOrg && (
                     <div>
                         <InputSelect
-                            autoComplete="new-password"
+                            autoComplete="off"
                             listValues={workers}
                             placeholder="Выберите работника"
                             onChange={handleSelectWorker}
                             value={selectedWorker?.name ?? ''}
                             name="workers"
+                        />
+                    </div>
+                )}
+                {selectedWorker?.guest && (
+                    <div>
+                        <RangePicker
+                            minDate={new Date()}
+                            getRawDate
+                            setDates={(v) => {
+                                setInterval(v as any);
+                            }}
                         />
                     </div>
                 )}

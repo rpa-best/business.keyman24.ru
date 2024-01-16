@@ -161,7 +161,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                 </div>
                 <div className={scss.input}>
                     <InputSelect
-                        autoComplete="new-password"
+                        autoComplete="off"
                         label="Часовой пояс"
                         setFieldTouched={setFieldTouched}
                         listValues={timezones}

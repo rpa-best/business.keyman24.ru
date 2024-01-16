@@ -20,7 +20,7 @@ const WorkersPage = async ({
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const serverWorkers = await getServerWorkers(+orgId, offset);
+    const serverWorkers = await getServerWorkers(+orgId, offset, false);
 
     const modifiedWorkers: ModifiedWorkers = {
         ...serverWorkers,

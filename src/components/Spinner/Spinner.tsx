@@ -1,9 +1,9 @@
 'use client';
+import { createPortal } from 'react-dom';
 
 import SpinnerSvg from '/public/svg/spinner.svg';
 
 import scss from './Spinner.module.scss';
-import { createPortal } from 'react-dom';
 
 export function Spinner() {
     return createPortal(
