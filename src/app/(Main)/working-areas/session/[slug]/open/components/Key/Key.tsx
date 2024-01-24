@@ -20,9 +20,10 @@ import { useSocketConnect } from 'hooks/useSocketConnect';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { useSocketStore } from 'store/useSocketStore';
+import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
+import { CurrentSessionLogType } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/types';
 
 import scss from './Key.module.scss';
-import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
 
 export const Key: React.FC<KeyProps> = ({
     type,
@@ -40,16 +41,24 @@ export const Key: React.FC<KeyProps> = ({
 
     const socketStore = useSocketStore((state) => state);
 
+    const [temporaryData, setTemporaryData] = useState<CurrentSessionLogType[]>(
+        []
+    );
     const [sessionLogData, setSessionLogData] =
         useState<ModifiedRegisterLog[]>(sessionLog);
 
     const [loading, setLoading] = useState(false);
 
-    const { worker, workerDocs } = useSocketConnect({
-        sessionId: currentSessionId,
-        areaId: currentAreaId,
-        setLoading,
-    });
+    const { worker, workerDocs, confirmed, setConfirmed, newWorker } =
+        useSocketConnect({
+            sessionId: currentSessionId,
+            areaId: currentAreaId,
+            setLoading,
+        });
+
+    useEffect(() => {
+        setTemporaryData([]);
+    }, [newWorker]);
 
     useEffect(() => {
         if (!socketStore.socket) {
@@ -86,6 +95,10 @@ export const Key: React.FC<KeyProps> = ({
         await onWorkerClick(workerId as number);
     };
 
+    const handleRowDelete = async (id: number) => {
+        setTemporaryData((d) => d.filter((el) => el.id !== id));
+    };
+
     return (
         <>
             <div className={scss.page_title_with_table_back_button}>
@@ -106,6 +119,10 @@ export const Key: React.FC<KeyProps> = ({
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm
+                            temporaryLog={temporaryData}
+                            confirmed={confirmed}
+                            setConfirmed={setConfirmed}
+                            setTemporaryLog={setTemporaryData}
                             setSessionLog={setSessionLogData as any}
                             type={type}
                             worker={worker as IWorker}
@@ -132,6 +149,24 @@ export const Key: React.FC<KeyProps> = ({
                         </div>
                     </div>
                 </div>
+                {temporaryData.length !== 0 && (
+                    <div style={{ marginBottom: '20px' }}>
+                        <Table
+                            handleDeleteClick={handleRowDelete as any}
+                            height="max-content"
+                            tableData={temporaryData}
+                            setTableData={setTemporaryData}
+                            rowClickable={false}
+                        >
+                            <Column header="Работник" field="workerName" />
+                            <Column header="Событие" field="modeName" />
+                            <Column
+                                header="Наименование"
+                                field="inventoryName"
+                            />
+                        </Table>
+                    </div>
+                )}
                 {sessionLog.length !== 0 && (
                     <Table
                         handleRowClick={handleRowClick}

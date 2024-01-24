@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { IWorker, IWorkerDocs, SocketResponse } from 'http/types';
 import { getWorkerDocs } from 'http/workerApi';
 import { usePathname } from 'next/navigation';
@@ -18,6 +18,9 @@ type UseSocketConnectProps = {
 type SocketConnectFunc = (props: UseSocketConnectProps) => {
     worker: IWorker;
     workerDocs: IWorkerDocs[];
+    confirmed: boolean;
+    setConfirmed: Dispatch<SetStateAction<boolean>>;
+    newWorker: boolean;
 };
 
 export const useSocketConnect: SocketConnectFunc = ({
@@ -33,19 +36,30 @@ export const useSocketConnect: SocketConnectFunc = ({
     const [workerDocs, setWorkerDocs] = useState<IWorkerDocs[]>();
     const [worker, setWorker] = useState<IWorker>();
 
+    const prevWorker = useRef<string | null>(null);
+
+    const [newWorker, setNewWorker] = useState(false);
+
+    const [confirmed, setConfirmed] = useState(false);
+
     const onSocketMessage = async (data: SocketResponse) => {
         if (!disableSuccessFunc) {
             if (data) {
                 setLoading(true);
                 setWorker(data.data.worker as IWorker);
-                await getWorkerDocs(data.data.worker?.id)
-                    .then((d) => {
-                        revalidate(path);
-                        setWorkerDocs(d.results);
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
+                const workerDocs = await getWorkerDocs(
+                    data.data.worker?.id
+                ).finally(() => {
+                    setLoading(false);
+                });
+                setWorkerDocs(workerDocs.results);
+                if (prevWorker.current === data.data.user) {
+                    setConfirmed(true);
+                } else {
+                    setNewWorker(!newWorker);
+                }
+                revalidate(path);
+                prevWorker.current = data.data.user as string;
             }
         }
     };
@@ -61,5 +75,8 @@ export const useSocketConnect: SocketConnectFunc = ({
     return {
         worker: worker as IWorker,
         workerDocs: workerDocs as IWorkerDocs[],
+        confirmed,
+        setConfirmed,
+        newWorker,
     };
 };

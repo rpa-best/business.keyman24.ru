@@ -1,0 +1,15 @@
+@import "scss/utils";
+
+.add_document_form {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  & h3 {
+    @include MontserratMediumBold(20px);
+    color: white;
+  }
+  & button {
+    margin-top: 30px;
+  }
+}

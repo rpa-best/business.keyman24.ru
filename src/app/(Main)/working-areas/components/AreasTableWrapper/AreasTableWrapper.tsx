@@ -158,7 +158,7 @@ export const AreasTableWrapper: React.FC<AreasTableWrapperProps> = ({
                 }}
             >
                 <Column header="Наименование" field="name" />
-                <Column header="Локация" field="locationName" />
+                <Column sortable header="Локация" field="locationName" />
                 <Column header="Тип" field="typeName" />
             </Table>
             <Modal>

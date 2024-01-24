@@ -8,17 +8,31 @@ export const sendActivateAndCheck = async (
     areaId: number,
     username?: string
 ) => {
-    await sendActivateSession(areaId, sessionId).then((d) => {
-        const body = {
-            user: username as string,
-            session: sessionId,
-        };
-        sendCheck(areaId, sessionId, body)
-            .then(() => {})
-            .catch((e: unknown) => {
-                if (e instanceof AxiosError) {
-                    toast(e.response?.data.user[0].name, errorToastOptions);
+    await sendActivateSession(areaId, sessionId)
+        .catch((e) => {
+            if (e instanceof AxiosError) {
+                if (e.response?.data.error) {
+                    toast(e.response?.data.error[0].name);
                 }
-            });
-    });
+            }
+        })
+        .then((d) => {
+            const body = {
+                user: username as string,
+                session: sessionId,
+            };
+            sendCheck(areaId, sessionId, body)
+                .then(() => {})
+                .catch((e: unknown) => {
+                    if (e instanceof AxiosError) {
+                        if (e.response?.data.error) {
+                            toast(
+                                e.response?.data.error[0].name,
+                                errorToastOptions
+                            );
+                        }
+                        toast(e.response?.data.user[0].name, errorToastOptions);
+                    }
+                });
+        });
 };

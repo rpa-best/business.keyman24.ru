@@ -2,13 +2,14 @@ import { IInputProps } from '../types';
 
 export interface InputDateProps
     extends Pick<IInputProps, 'name' | 'autoFocus' | 'type'> {
-    value: Date;
+    value: Date | null;
     onBlur?: <T>(e: T) => void;
     onChange: (value: Date) => void;
     alwaysShowMask?: boolean;
     mask: string;
-    placeholder: string;
+    placeholder?: string;
     label?: string;
     disabled?: boolean;
-    handleError?: string | undefined;
+    minDate?: Date;
+    handleError?: string;
 }

@@ -154,9 +154,22 @@ export const updateUserImg: (
 ) => Promise<{ image: string }> = async (image, workerId) => {
     const formData = new FormData();
     formData.append('image', image.item(0) as Blob);
-    const res = await $clientAuth.patch(
+    const res = await $clientAuth.put(
         `business/${orgId}/worker/${workerId}/`,
         formData
     );
+    return res.data;
+};
+
+export const createWorkerDocument: T.CreateWorkerDocument = async (
+    workerId,
+    body
+) => {
+    const res: AxiosResponse<ReturnType<typeof createWorkerDocument>> =
+        await $clientAuth.post(
+            `business/${orgId}/worker/${workerId}/docs/`,
+            body
+        );
+
     return res.data;
 };

@@ -4,11 +4,7 @@ import { cookies } from 'next/headers';
 import { Key } from 'app/(Main)/working-areas/session/[slug]/open/components/Key';
 import { Register } from 'app/(Main)/working-areas/session/[slug]/open/components/Register';
 import { Security } from 'app/(Main)/working-areas/session/[slug]/open/components/Security';
-import {
-    getSessionLog,
-    getWorkingArea,
-    getWorkingAreas,
-} from 'http/workingAreaApi';
+import { getSessionLog, getWorkingArea } from 'http/workingAreaApi';
 import { getOrganizationContractors } from 'http/organizationApi';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';

@@ -11,31 +11,49 @@ import { useNotificationStore } from 'store/notificationStore';
 import { toast } from 'react-toastify';
 
 interface ModalProps {
+    customVisible?: boolean;
+    customSetVisible?: (b: boolean) => void;
     children: React.ReactElement;
 }
 
-export const Modal: React.FC<ModalProps> = ({ children }) => {
+export const Modal: React.FC<ModalProps> = ({
+    customVisible,
+    customSetVisible,
+    children,
+}) => {
     const [visible] = useModalStore((state) => [state.visible]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
+    const currentVisible = customVisible ?? visible;
+
     useEffect(() => {
-        if (visible) {
+        if (visible || customVisible) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
         }
-    }, [visible]);
+    }, [customVisible, visible]);
+
+    const handleHide = () => {
+        if (customVisible) {
+            if (customSetVisible) {
+                customSetVisible(false);
+            }
+        } else {
+            setVisible(false);
+        }
+        toast.dismiss();
+    };
 
     return (
         <AnimatePresence>
-            {visible && (
+            {currentVisible && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={() => {
-                        setVisible(false);
-                        toast.dismiss();
+                        handleHide();
                     }}
                     className={scss.modal_background}
                 >
@@ -48,8 +66,7 @@ export const Modal: React.FC<ModalProps> = ({ children }) => {
                     >
                         <ExitSvg
                             onClick={() => {
-                                setVisible(false);
-                                toast.dismiss();
+                                handleHide();
                             }}
                             className={scss.exit_svg}
                         />

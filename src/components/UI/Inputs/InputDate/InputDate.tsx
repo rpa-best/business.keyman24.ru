@@ -21,6 +21,7 @@ export const InputDate = ({
     onBlur,
     label,
     disabled,
+    minDate,
 }: InputDateProps) => {
     const fieldClass = clsx({
         [scss.field]: !label,
@@ -30,7 +31,7 @@ export const InputDate = ({
     return (
         <div className={fieldClass}>
             <label className={scss.input_label}>{label}</label>
-            <div onClick={onBlur} className={scss.input_wrapper}>
+            <div onBlur={onBlur} className={scss.input_wrapper}>
                 <DatePicker
                     disabled={disabled}
                     locale={ru}
@@ -39,6 +40,7 @@ export const InputDate = ({
                     onChange={(date) => {
                         onChange(date as Date);
                     }}
+                    minDate={minDate}
                     calendarClassName={scss.calendar}
                     customInput={
                         <Input
