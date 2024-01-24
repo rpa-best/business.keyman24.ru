@@ -151,6 +151,9 @@ export const Key: React.FC<KeyProps> = ({
                 </div>
                 {temporaryData.length !== 0 && (
                     <div style={{ marginBottom: '20px' }}>
+                        <h2 className={scss.temporary_table_title}>
+                            Добавьте или отсканируйте штрихкод
+                        </h2>
                         <Table
                             handleDeleteClick={handleRowDelete as any}
                             height="max-content"

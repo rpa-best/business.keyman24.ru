@@ -112,13 +112,19 @@
 }
 
 
-.temporary_table {
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
 
-  & div {
-    display: flex;
-    justify-content: space-between;
+.temporary_table_title {
+  @include MontserratSemiBold(22px);
+  color: white;
+  margin-bottom: 10px;
+  text-align: left;
+  @include laptopWidth {
+    font-size: 20px;
+  }
+  @include thousendTwoWidth {
+    font-size: 24px;
+  }
+  @include phoneOrTablet {
+    font-size: 20px;
   }
 }
