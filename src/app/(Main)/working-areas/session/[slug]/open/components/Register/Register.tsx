@@ -91,6 +91,7 @@ export const Register: React.FC<RegisterProps> = ({
                     };
                 }
             }
+            toast.dismiss();
             sendSessionAction(currentAreaId, currentSessionId, body as any)
                 .then((d) => {
                     const mode = d.mode ? 'Выдан' : 'Сдан';
@@ -192,12 +193,20 @@ export const Register: React.FC<RegisterProps> = ({
     const handleSelectWorker = (worker: IWorker) => {
         setLoading(true);
         setSelectedWorker(worker);
-
         const fetchData = async () => {
             return await getWorkerDocs(worker.id);
         };
+        toast('Приложите карточку', {
+            position: 'bottom-right',
+            hideProgressBar: true,
+            autoClose: false,
+            type: 'warning',
+            theme: 'colored',
+        });
         fetchData()
-            .then((d) => setSelectedWorkerDocs(d.results))
+            .then((d) => {
+                setSelectedWorkerDocs(d.results);
+            })
             .finally(() => setLoading(false));
     };
 
@@ -213,7 +222,16 @@ export const Register: React.FC<RegisterProps> = ({
         <div>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton skipWord>Назад</BackButton>
+                <BackButton
+                    onClick={() => {
+                        if (socketStore.socket) {
+                            socketStore.closeConnection();
+                        }
+                    }}
+                    skipWord
+                >
+                    Назад
+                </BackButton>
             </div>
             {permissions.includes('DELETE') && (
                 <div className={scss.button_wrapper}>

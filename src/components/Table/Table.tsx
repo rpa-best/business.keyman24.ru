@@ -36,6 +36,7 @@ export const Table = memo(function MemoTable({
     stopPropagation,
     errorRowIds = [],
     prefetch,
+    height,
 }: TableProps) {
     const searchParams = useSearchParams();
 
@@ -156,6 +157,7 @@ export const Table = memo(function MemoTable({
                     >
                         <div
                             onScroll={handleBodyScroll}
+                            style={{ height }}
                             className={scss.table_body}
                         >
                             {tableData.map((item, index) => {

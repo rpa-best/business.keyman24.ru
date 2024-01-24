@@ -33,6 +33,7 @@ export interface TableProps {
     tableData: TableRows[];
     setTableData: React.Dispatch<React.SetStateAction<any[]>>;
     children: ReactElement<ColumnProps> | Array<ReactElement<ColumnProps>>;
+    height?: 'max-content';
     buttonData?: { onClick: () => void; text: string };
     handleRowClick?: (id: number) => void;
     handleEditClick?: (id: number) => void;

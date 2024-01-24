@@ -339,6 +339,7 @@ export interface SessionLogResponse {
     date: string;
     card: string;
     comment: string;
+    now: string;
     image: string;
     inventory: IInventory;
 }
@@ -818,19 +819,22 @@ export type SendActivateSession = (
     sessionId: number
 ) => Promise<void>;
 
+export interface SessionActionBody {
+    session: number;
+    worker?: number;
+    barcode?: string;
+    user?: string;
+    mode?: boolean;
+    device?: number;
+    start_date?: string;
+    end_date?: string;
+}
+
 export type SendSessionAction = (
     areaId: number,
     sessionId: number,
-    body: {
-        session: number;
-        worker?: number;
-        barcode?: string;
-        user?: string;
-        mode?: boolean;
-        device?: number;
-        start_date?: string;
-        end_date?: string;
-    }
+    body: SessionActionBody,
+    validate?: boolean
 ) => Promise<SessionLogResponse>;
 
 export type GetWorkers = (
@@ -953,6 +957,17 @@ export type GetClientWorkerDocs = (
 ) => Promise<IResponse<IWorkerDocs>>;
 
 export type DeleteWorker = (workerId: number) => Promise<void>;
+
+export interface CreateWorkerDocumentBody {
+    name: string;
+    active_to: string;
+    active_from: string;
+}
+
+export type CreateWorkerDocument = (
+    workerId: number,
+    body: CreateWorkerDocumentBody
+) => Promise<IWorkerDocs>;
 
 export type GetWorkingAreaDevices = (
     areaId: number

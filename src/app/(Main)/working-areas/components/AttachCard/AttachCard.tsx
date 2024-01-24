@@ -60,7 +60,18 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
-                        toast(e.response?.data.user[0].name, errorToastOptions);
+                        if (e.response?.data.error) {
+                            toast(
+                                e.response?.data.error[0].name,
+                                errorToastOptions
+                            );
+                        }
+                        if (e.response?.data.user) {
+                            toast(
+                                e.response?.data.user[0].name,
+                                errorToastOptions
+                            );
+                        }
                     }
                 });
         },

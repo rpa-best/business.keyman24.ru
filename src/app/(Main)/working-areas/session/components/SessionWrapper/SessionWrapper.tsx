@@ -108,13 +108,13 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
                     })
                     .catch((e: unknown) => {
                         if (e instanceof AxiosError) {
-                            if (e.response?.data.error[0].name) {
+                            if (e.response?.data.error) {
                                 toast(
                                     e.response?.data.error[0].name,
                                     errorToastOptions
                                 );
                             }
-                            if (e.response?.data.user[0].name) {
+                            if (e.response?.data.user) {
                                 toast(
                                     e.response?.data.user[0].name,
                                     errorToastOptions

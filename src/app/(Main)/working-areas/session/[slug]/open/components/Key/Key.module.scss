@@ -1,6 +1,10 @@
 @import "scss/utils";
 @import "src/app/(Main)/working-areas/components/AttachCard/AttachCard.module.scss";
 
+.temporary_table {
+  display: flex;
+}
+
 .spinner {
   display: flex;
   align-items: center;
@@ -11,12 +15,15 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+
   & button {
     width: max-content;
+
     &:first-child {
       margin-top: auto;
     }
   }
+
   @include phoneOrTablet {
     margin: 0 20px 20px;
   }
@@ -96,10 +103,22 @@
   border-radius: 40px;
   @include thousendTwoWidth {
     height: 400px;
-    width: 100% ;
+    width: 100%;
   }
   @include phoneOrTablet {
     height: 300px;
     border-radius: 0;
+  }
+}
+
+
+.temporary_table {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+  & div {
+    display: flex;
+    justify-content: space-between;
   }
 }

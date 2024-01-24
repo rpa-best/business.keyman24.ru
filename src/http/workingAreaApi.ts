@@ -16,7 +16,7 @@ export const getWorkingAreas: T.GetWorkingAreas = async (orgId, offset) => {
     }
     const res: AxiosResponse<T.IResponse<T.IWorkingArea>> =
         await $serverAuth.get(
-            `business/${orgId}/working_area/?offset=0&ordering=id&deleted=false`,
+            `business/${orgId}/working_area/?offset=0&ordering=type&deleted=false`,
             { params: query }
         );
 
@@ -174,11 +174,17 @@ export const sendActivateSession: T.SendActivateSession = async (
 export const sendSessionAction: T.SendSessionAction = async (
     areaId,
     sessionId,
-    body
+    body,
+    validate = false
 ) => {
+    const query = new URLSearchParams();
+    if (validate) {
+        query.set('validate', 'true');
+    }
     const res = await $clientAuth.post(
         `business/${orgId}/working_area/${areaId}/session/${sessionId}/use/`,
-        body
+        body,
+        { params: query }
     );
     return res.data;
 };

@@ -87,7 +87,6 @@ export const Security: React.FC<SecurityProps> = ({
         if (!message?.data.use_session) {
             return;
         }
-        console.log('test');
         if (message && message.data.use_session) {
             const body = {
                 session: currentSessionId,

@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, usePathname } from 'next/navigation';
 
 import { useFormik } from 'formik';
+import { getParamsType } from 'app/(Main)/working-areas/helpers';
+import { IInventoryImage } from 'http/types';
+import { ImagesCarousel } from 'components/ImagesCarousel';
+import { sendAction } from 'app/(Main)/working-areas/session/[slug]/open/components/Key/keys.utils';
 import {
     EnterCodeFormProps,
     EnterCodeFormValues,
@@ -9,34 +13,47 @@ import {
 import { CodeFormValidate } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/EnterCodeForm.utils';
 import { Button } from 'components/UI/Buttons/Button';
 import { Input } from 'components/UI/Inputs/Input';
-import { sendSessionAction } from 'http/workingAreaApi';
-import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
-import revalidate from 'utils/revalidate';
 
 import scss from './EnterCodeFOrm.module.scss';
-import { successToastConfig } from 'config/toastConfig';
-import { getParamsType } from 'app/(Main)/working-areas/helpers';
-import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
-import { IInventoryImage } from 'http/types';
-import { getInventoryImage } from 'http/inventoryApi';
-import { ImagesCarousel } from 'components/ImagesCarousel';
+import { toast } from 'react-toastify';
+import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
     areaId,
     type,
+    temporaryLog,
     setSessionLog,
+    setTemporaryLog,
     sessionId,
     needWorker = true,
+    setConfirmed,
+    confirmed,
 }) => {
     const path = usePathname();
-    const params = useParams();
-    const slug = getParamsType(params.slug);
 
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState<IInventoryImage[] | null>(null);
-    const onSubmit = async (values: EnterCodeFormValues) => {
+
+    useEffect(() => {
+        if (confirmed) {
+            temporaryLog?.forEach((el) => {
+                onSubmit({ code: el.inventory.codeNumber }, false);
+            });
+            if (setTemporaryLog) {
+                setTemporaryLog([]);
+            }
+            toast('Успешно', successToastConfig);
+            if (setConfirmed) {
+                setConfirmed(false);
+            }
+        }
+    }, [confirmed]);
+
+    const onSubmit = async (
+        values: EnterCodeFormValues,
+        needValidate: boolean
+    ) => {
         let body = null;
         setLoading(true);
         setImages(null);
@@ -52,56 +69,57 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                 barcode: values.code,
             };
         }
+        const alreadyHas = temporaryLog?.find(
+            (el) => el.inventory.codeNumber === values.code
+        );
 
-        await sendSessionAction(areaId, sessionId, body)
-            .then((d) => {
-                let newLog:
-                    | ModifiedRegisterLog
-                    | Omit<ModifiedRegisterLog, 'workerName'>;
-                let mode: string;
-                if (type !== 'keys') {
-                    getInventoryImage(d.inventory.id)
-                        .then((d) => {
-                            setImages(d.results);
-                        })
-                        .finally(() => setLoading(false));
-                }
-                if (slug === 'register_inventory') {
-                    mode = d.mode ? 'Зарегестрировано' : 'Сдано';
-                    newLog = {
-                        ...d,
-                        modeName: mode,
-                        inventoryName: `${d?.inventory?.id} ${d?.inventory?.name}`,
-                    };
-                } else {
-                    const inventoryName =
-                        type === 'keys'
-                            ? ` ${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.objectArea.name}`
-                            : `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.location.name}`;
-                    mode = d.mode ? 'Выдан' : 'Сдан';
-                    newLog = {
-                        ...d,
-                        workerName: d.worker.name,
-                        modeName: mode,
-                        inventoryName,
-                    };
-                }
-                if (slug === 'register_inventory') {
-                    revalidate('/inventory');
-                }
-                revalidate(path);
-                setSessionLog((log) => [newLog, ...log]);
-                toast('Успешно', successToastConfig);
-            })
-            .catch((e: AxiosError) => {
-                // @ts-ignore
-                errors.code = e.response.data.error[0].name;
+        if (alreadyHas && needValidate) {
+            toast(
+                `Такой ${
+                    type === 'inventory' ? 'инвентарь' : 'ключ'
+                } уже добавлен`,
+                errorToastOptions
+            );
+            setLoading(false);
+            return;
+        }
+
+        if (type === 'inventory' || type === 'keys') {
+            await sendAction({
+                setTemporaryLog,
+                body,
+                areaId,
+                type,
+                setSessionLog,
+                sessionId,
+                validate: !confirmed,
+                setImages,
+                path,
+                setLoading,
             });
+            resetForm();
+        } else {
+            await sendAction({
+                setTemporaryLog,
+                body,
+                areaId,
+                type,
+                setSessionLog,
+                sessionId,
+                validate: false,
+                setImages,
+                path,
+                setLoading,
+            });
+            toast('Успешно', successToastConfig);
+            resetForm();
+        }
     };
 
     const {
         values,
         handleSubmit,
+        resetForm,
         setFieldValue,
         errors,
         touched,
@@ -109,7 +127,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         handleBlur,
     } = useFormik<EnterCodeFormValues>({
         initialValues: { code: '' },
-        onSubmit,
+        onSubmit: (values) => onSubmit(values, true),
         validate: CodeFormValidate,
     });
 
