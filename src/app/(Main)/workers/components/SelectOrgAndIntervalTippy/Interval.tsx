@@ -12,16 +12,20 @@ interface IntervalProps {
     setDates: React.Dispatch<
         React.SetStateAction<{ from?: string; to?: string } | null>
     >;
+    currentInterval: 'day' | 'month';
+    setCurrentInterval: React.Dispatch<React.SetStateAction<'day' | 'month'>>;
     refresh: boolean;
 }
 
-export const Interval: React.FC<IntervalProps> = ({ setDates, refresh }) => {
+export const Interval: React.FC<IntervalProps> = ({
+    setDates,
+    refresh,
+    setCurrentInterval,
+    currentInterval,
+}) => {
     const { setCalendarOpen } = useContext<CalendarType | null>(
         CalendarContext
     ) as CalendarType;
-    const [currentInterval, setCurrentInterval] = useState<'month' | 'day'>(
-        'day'
-    );
 
     const onCalendarOpen = () => {
         setCalendarOpen(true);

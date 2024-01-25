@@ -31,6 +31,10 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
         from?: string;
         to?: string;
     } | null>(null);
+    const [currentInterval, setCurrentInterval] = useState<'month' | 'day'>(
+        'day'
+    );
+
     const [loading, setLoading] = useState(false);
 
     const [listValues, setListValues] = useState<
@@ -92,12 +96,16 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
         });
     };
 
+    console.log(fromAndToDates);
+
     const handleDownloadExcel = async (format: 'xlsx' | 'xml') => {
         setLoading(true);
         const ids = selectedOrgs.map((el) => el.id).join(',');
         await getWorkersPlan({
             org: ids,
             date_end: fromAndToDates?.to,
+            calc_type:
+                currentInterval === 'month' ? currentInterval : undefined,
             date_from: fromAndToDates?.from,
             format,
         })
@@ -138,7 +146,12 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
                             locations={selectedOrgs}
                         />
                     </div>
-                    <Interval refresh={refresh} setDates={setFromAndToDates} />
+                    <Interval
+                        currentInterval={currentInterval}
+                        setCurrentInterval={setCurrentInterval}
+                        refresh={refresh}
+                        setDates={setFromAndToDates}
+                    />
                 </div>
                 <div className={scss.download_buttons_wrapper}>
                     <Button

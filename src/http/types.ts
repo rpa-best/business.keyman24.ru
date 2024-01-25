@@ -851,6 +851,7 @@ export type GetWorkersPlan = (query?: {
     date_from?: string;
     date_end?: string;
     org?: string;
+    calc_type?: 'month';
     format?: 'xlsx' | 'xml';
     [key: string]: string | undefined;
 }) => Promise<File>;

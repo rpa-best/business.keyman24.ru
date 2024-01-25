@@ -44,13 +44,10 @@ export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
     }
 
     const res: AxiosResponse<ReturnType<typeof getWorkersPlan>> =
-        await $clientAuth.get(
-            `business/${orgId}/worker/plan/?format=${query?.format}`,
-            {
-                responseType: 'blob',
-                params: queryParams,
-            }
-        );
+        await $clientAuth.get(`business/${orgId}/worker/plan/`, {
+            responseType: 'blob',
+            params: queryParams,
+        });
 
     return res.data;
 };
