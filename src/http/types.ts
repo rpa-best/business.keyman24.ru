@@ -245,12 +245,13 @@ export interface SocketResponse {
         user: IWorker | string;
         worker: IWorker;
         inventory?: IInventory[];
+        worker_guest_not_card: string;
         error: {
             slug: string;
             name: string;
         };
     };
-    type: 'success' | string;
+    type: 'success' | 'info' | string;
 }
 
 export interface CreateWorkingAreaProp {
@@ -790,6 +791,32 @@ export type GetSessionLog = (
     offset?: string
 ) => Promise<IResponse<SessionLogResponse>>;
 
+export interface SessionInfo {
+    id: number;
+    user: IUser;
+    info: {
+        workerCount: number;
+        workerGuest: number;
+        workerGuestNotCard: number;
+        inventoryCount: number;
+        inventoryCountNotGiven: number;
+        keyCount: number;
+        keyCountNotGiven: number;
+    };
+    number: number;
+    startDate: string;
+    endDate: string;
+    status: number;
+    isActive: boolean;
+    isArchive: boolean;
+    isWantActivate: boolean;
+}
+
+export type GetSessionInfo = (
+    areaId: number,
+    sessionId: number
+) => Promise<SessionInfo>;
+
 export type CreateWorkingArea = (
     data: CreateWorkingAreaProp
 ) => Promise<IWorkingArea>;
@@ -851,6 +878,7 @@ export type GetWorkersPlan = (query?: {
     date_from?: string;
     date_end?: string;
     org?: string;
+    calc_type?: 'month';
     format?: 'xlsx' | 'xml';
     [key: string]: string | undefined;
 }) => Promise<File>;

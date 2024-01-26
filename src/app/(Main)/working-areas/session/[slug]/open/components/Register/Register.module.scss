@@ -13,6 +13,15 @@
   }
 }
 
+.guest_description {
+  @include MontserratRegular(12px);
+  color: $white-semi;
+  & span {
+    font-size: 16px;
+    color: $accent-color;
+  }
+}
+
 .inputs_wrapper > div {
   position: relative;
   width: 49%;

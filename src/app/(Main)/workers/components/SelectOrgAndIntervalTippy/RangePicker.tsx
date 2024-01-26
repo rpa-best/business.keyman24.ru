@@ -47,15 +47,15 @@ export const RangePicker: React.FC<RangePickerProps> = ({
             if (getMonth(end) === getMonth(Date.now())) {
                 setStartDate(start);
                 setEndDate(new Date());
-                return;
+            } else {
+                setStartDate(start);
+                setEndDate(end);
             }
+        } else {
             setStartDate(start);
             setEndDate(end);
-            return;
         }
 
-        setStartDate(start);
-        setEndDate(end);
         if (start && end) {
             if (getRawDate) {
                 setDates({
