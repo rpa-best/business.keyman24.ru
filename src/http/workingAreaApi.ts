@@ -126,6 +126,15 @@ export const getSessionLog: T.GetSessionLog = async (
     return res.data;
 };
 
+export const getSessionInfo: T.GetSessionInfo = async (areaId, sessionId) => {
+    const res: AxiosResponse<ReturnType<typeof getSessionInfo>> =
+        await $clientAuth.get(
+            `business/${orgId}/working_area/${areaId}/session/${sessionId}`
+        );
+
+    return res.data;
+};
+
 export const closeSession: T.CloseSession = async (areaId, sessionId) => {
     try {
         await $clientAuth.delete(

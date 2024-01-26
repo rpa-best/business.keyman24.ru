@@ -5,7 +5,7 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import UniversalCookies from 'universal-cookie';
 import { toast } from 'react-toastify';
-import { sendSessionAction } from 'http/workingAreaApi';
+import { getSessionInfo, sendSessionAction } from 'http/workingAreaApi';
 import {
     ModifiedRegisterLog,
     RegisterProps,
@@ -23,19 +23,13 @@ import { Column } from 'components/Table/Column';
 import { AxiosError } from 'axios';
 import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import revalidate from 'utils/revalidate';
-import {
-    errorToastOptions,
-    successToastConfig,
-    warningToastConfig,
-} from 'config/toastConfig';
+import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 import { BackButton } from 'components/UI/Buttons/BackButton';
 import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
 import { useSocketStore } from 'store/useSocketStore';
 import { RangePicker } from 'app/(Main)/workers/components/SelectOrgAndIntervalTippy/RangePicker';
 
 import scss from './Register.module.scss';
-
-const cookie = new UniversalCookies();
 
 export const Register: React.FC<RegisterProps> = ({
     organizations,
@@ -66,12 +60,23 @@ export const Register: React.FC<RegisterProps> = ({
         from: '',
         to: '',
     });
+    const [refreshInterval, setRefreshInterval] = useState(false);
 
     const [workers, setWorkers] = useState<IWorker[]>([]);
 
     const [loading, setLoading] = useState(false);
 
+    const [guestCount, setGuestCount] = useState(0);
+
     const socketStore = useSocketStore((state) => state);
+
+    useEffect(() => {
+        const fetchInfo = async () => {
+            const info = await getSessionInfo(currentAreaId, currentSessionId);
+            setGuestCount(info.info.workerGuestNotCard);
+        };
+        fetchInfo();
+    }, [currentAreaId, currentSessionId]);
 
     const onSocketSuccess = useCallback(
         async (data: SocketResponse) => {
@@ -105,6 +110,11 @@ export const Register: React.FC<RegisterProps> = ({
                     revalidate(path);
                     revalidate(`/workers/${selectedWorker?.id}?which=card`);
                     toast('Успешно', successToastConfig);
+                    setInterval({
+                        from: '',
+                        to: '',
+                    });
+                    setRefreshInterval(!refreshInterval);
                 })
                 .catch((e: unknown) => {
                     if (e instanceof AxiosError) {
@@ -161,6 +171,11 @@ export const Register: React.FC<RegisterProps> = ({
 
     useEffect(() => {
         const message = socketStore.message;
+
+        if (message?.type === 'info') {
+            setGuestCount(+message.data.worker_guest_not_card);
+            return;
+        }
 
         if (message) {
             onMessage(message);
@@ -222,16 +237,10 @@ export const Register: React.FC<RegisterProps> = ({
         <div>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton
-                    onClick={() => {
-                        if (socketStore.socket) {
-                            socketStore.closeConnection();
-                        }
-                    }}
-                    skipWord
-                >
-                    Назад
-                </BackButton>
+                <p className={scss.guest_description}>
+                    Гостей без карт: <span>{guestCount}</span>
+                </p>
+                <BackButton skipWord>Назад</BackButton>
             </div>
             {permissions.includes('DELETE') && (
                 <div className={scss.button_wrapper}>
@@ -266,6 +275,7 @@ export const Register: React.FC<RegisterProps> = ({
                 {selectedWorker?.guest && (
                     <div>
                         <RangePicker
+                            refresh={refreshInterval}
                             minDate={new Date()}
                             getRawDate
                             setDates={(v) => {
