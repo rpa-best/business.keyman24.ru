@@ -70,12 +70,15 @@ export const Key: React.FC<KeyProps> = ({
                 );
             }
         }
+    }, [socketStore.message, type]);
+
+    useEffect(() => {
         return () => {
             if (socketStore.socket) {
                 socketStore.closeConnection();
             }
         };
-    }, [socketStore.message, type]);
+    }, [socketStore.socket]);
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(
@@ -151,9 +154,7 @@ export const Key: React.FC<KeyProps> = ({
                 </div>
                 {temporaryData.length !== 0 && (
                     <div style={{ marginBottom: '20px' }}>
-                        <h2 className={scss.temporary_table_title}>
-                            Добавьте или отсканируйте штрихкод
-                        </h2>
+                        <h2 className={scss.temporary_table_title}>К выдаче</h2>
                         <Table
                             handleDeleteClick={handleRowDelete as any}
                             height="max-content"

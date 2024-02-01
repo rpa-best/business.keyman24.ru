@@ -54,8 +54,8 @@ export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
             };
             sendCheck(areaId, session, body)
                 .then(() => {
-                    setVisible(false);
                     setIsSuccess(true);
+                    setVisible(false);
                     router.push(`${pathname}/open/${session}`);
                 })
                 .catch((e: unknown) => {

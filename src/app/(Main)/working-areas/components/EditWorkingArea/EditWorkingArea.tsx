@@ -16,7 +16,6 @@ import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
 import scss from './EditWorkingArea.module.scss';
-import { ErrorBoundary } from 'react-error-boundary';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,
@@ -122,7 +121,10 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     return (
         <>
             <form onSubmit={handleSubmit} className={scss.edit_form}>
-                <h2 className={scss.form_title}>Рабочее место / Добавление</h2>
+                <h2 className={scss.form_title}>
+                    Рабочее место / `$
+                    {formType === 'edit' ? 'Редактирование' : 'Добавление'}
+                </h2>
                 <Input
                     onBlur={handleBlur}
                     handleError={touched.name && errors.name}

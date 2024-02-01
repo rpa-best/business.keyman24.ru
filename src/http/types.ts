@@ -212,6 +212,7 @@ export interface ILocation {
     deleted: boolean;
     isActive: boolean;
     desc: string;
+    canOutWithInventory: boolean;
     timezone: string;
     name: string;
 }
@@ -387,6 +388,7 @@ export interface CreateLocationBody {
     name: string;
     desc: string;
     timezone: string;
+    can_out_with_inventory: boolean;
 }
 
 export interface ILocationOrgResponse {
@@ -880,7 +882,8 @@ export type GetWorkersPlan = (query?: {
     org?: string;
     calc_type?: 'month';
     format?: 'xlsx' | 'xml';
-    [key: string]: string | undefined;
+    guest?: boolean;
+    [key: string]: string | undefined | boolean;
 }) => Promise<File>;
 
 export type GetServerWorkers = (

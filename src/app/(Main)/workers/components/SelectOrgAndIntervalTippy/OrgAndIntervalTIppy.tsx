@@ -12,6 +12,7 @@ import FileSaver from 'file-saver';
 import { Spinner } from 'components/Spinner';
 
 import scss from './SelectOrgAndIntervalTippy.module.scss';
+import { InputCheckbox } from 'components/UI/Inputs/InputCheckbox';
 
 interface OrgAndIntervalTIppyProps {
     orgs: IOrganization[];
@@ -40,6 +41,7 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
     const [listValues, setListValues] = useState<
         { id: number; name: string }[]
     >([]);
+    const [guest, setGuest] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState<{
         id: number;
         name: string;
@@ -95,9 +97,6 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
             return [...l, v];
         });
     };
-
-    console.log(fromAndToDates);
-
     const handleDownloadExcel = async (format: 'xlsx' | 'xml') => {
         setLoading(true);
         const ids = selectedOrgs.map((el) => el.id).join(',');
@@ -107,6 +106,7 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
             calc_type:
                 currentInterval === 'month' ? currentInterval : undefined,
             date_from: fromAndToDates?.from,
+            guest: guest ? undefined : false,
             format,
         })
             .then((d) => {
@@ -145,6 +145,15 @@ export const OrgAndIntervalTIppy: React.FC<OrgAndIntervalTIppyProps> = ({
                             deleteOne={handleDeleteOne}
                             locations={selectedOrgs}
                         />
+                        <div className={scss.tippy_subtitle}>
+                            <InputCheckbox
+                                name="guest"
+                                label="С гостями"
+                                value={guest}
+                                type="checkbox"
+                                onChange={() => setGuest(!guest)}
+                            />
+                        </div>
                     </div>
                     <Interval
                         currentInterval={currentInterval}

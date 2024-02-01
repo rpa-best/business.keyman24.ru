@@ -37,7 +37,7 @@ export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
     const queryParams = new URLSearchParams();
     if (query) {
         for (const elem of Object.keys(query)) {
-            if (query[elem]) {
+            if (query[elem] !== undefined) {
                 queryParams.set(elem, query[elem] as string);
             }
         }
