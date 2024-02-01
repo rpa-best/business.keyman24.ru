@@ -135,6 +135,7 @@ export interface IAdminPermission {
 export interface IInventory {
     id: number;
     type: IType;
+    cost: number;
     comments: string;
     notZone: boolean;
     codeNumber: string;
@@ -365,6 +366,7 @@ export interface KeyBody {
 
 export interface ReqInventoryBody extends Omit<IType, 'slug' | 'id'> {
     type: string;
+    cost?: number;
 }
 
 export interface IInventoryImage {

@@ -99,8 +99,9 @@ export const InventoryWrapper: React.FC<InventoryWrapperProps> = ({
 
     const handleEditClick = async (id: number) => {
         setLoading(true);
-        setVisible(true);
         setType('edit');
+        setModalType('one');
+        setVisible(true);
         const selectedInventory = generatedData.find((i) => i.id === id);
         setSelectedItem(selectedInventory);
         await getInventoryImage(id).then((d) => {

@@ -59,6 +59,7 @@ export interface IOrganization {
     id: number;
     region: IRegion;
     name: string;
+    prime: boolean;
     createAt: string;
     lcId: number | null;
     inn: string | null;

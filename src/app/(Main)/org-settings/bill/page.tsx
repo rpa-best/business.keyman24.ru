@@ -37,7 +37,7 @@ const BillPage = async () => {
 
     const today = new Date();
 
-    const days = +(org.balance / price.cost).toFixed(0);
+    const days = +(org.balance / (price.cost / 30)).toFixed(0);
 
     const enoughUntil = addDays(today, days);
 
@@ -53,7 +53,7 @@ const BillPage = async () => {
             <p className={scss.bill_balance}>
                 Текущая цена:{' '}
                 <span className={scss.balance_count}>{price.cost} ₽ </span> /
-                день | хватит до{' '}
+                месяц | хватит до{' ~'}
                 <span className={scss.balance_count}>{enoughUntil}</span>
             </p>
             <SubConstructor />

@@ -13,6 +13,21 @@
   }
 }
 
+.status_bar {
+  position: relative;
+  display: flex;
+  margin-top: 5px;
+  & span {
+    text-transform: uppercase;
+    @include MontserratRegular(12px);
+  }
+  & svg {
+    position: absolute;
+    right: -15px;
+    top: -5px;
+  }
+}
+
 .settings_wrapper {
   width: 100%;
   display: flex;
