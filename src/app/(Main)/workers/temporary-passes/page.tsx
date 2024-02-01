@@ -6,6 +6,7 @@ import { getServerWorkers } from 'http/workerApi';
 import { cookies } from 'next/headers';
 
 import scss from './temporary-passess.module.scss';
+import { BackButton } from 'components/UI/Buttons/BackButton';
 
 export default async function TemporaryPasses({
     searchParams,
@@ -21,7 +22,11 @@ export default async function TemporaryPasses({
 
     return (
         <section className={scss.children_with_table}>
-            <h2 className={scss.page_title_with_table}>Временные гости</h2>
+            <div className={scss.page_title_with_table_back_button}>
+                <h1>Временные гости</h1>
+                <BackButton>Назад</BackButton>
+            </div>
+
             <TemporaryWorkerForm tempWorkers={tempWorkers.results as any} />
             <Table
                 paginatorData={{ offset: 15, countItems: tempWorkers.count }}

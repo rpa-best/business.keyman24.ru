@@ -22,6 +22,7 @@ import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
 import scss from './LocationsAction.module.scss';
 import { useDenied } from 'hooks/useDenied';
 import { AxiosError } from 'axios';
+import { InputCheckbox } from 'components/UI/Inputs/InputCheckbox';
 
 export const LocationAction: React.FC<LocationActionProps> = ({
     location,
@@ -41,6 +42,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         const body: CreateLocationBody = {
             desc: values.desc,
             name: values.location,
+            can_out_with_inventory: values.canOutWithInventory,
             timezone: timezones[values.timezone.id].utc[0],
         };
 
@@ -135,6 +137,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
             location: location?.name ?? '',
             desc: location?.desc ?? '',
             timezone: locationTimezone,
+            canOutWithInventory: location.canOutWithInventory,
         },
         enableReinitialize: true,
         validate: LocationsActionValidate,
@@ -187,7 +190,20 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                         onChange={handleChange}
                     />
                 </div>
-
+                <div className={scss.checkbox_wrapper}>
+                    <InputCheckbox
+                        name="canOutWithInventory"
+                        label="Можно выходить с инвентарём"
+                        value={values.canOutWithInventory}
+                        type="checkbox"
+                        onChange={(v: boolean) =>
+                            setFieldValue(
+                                'canOutWithInventory',
+                                !values.canOutWithInventory
+                            )
+                        }
+                    />
+                </div>
                 <div className={scss.button_wrapper}>
                     <Button
                         onClick={() => {}}

@@ -17,18 +17,19 @@
   column-gap: 20px;
   @include phone {
     flex-direction: column;
-
   }
 }
 
 .input_select_wrapper {
   width: 286px;
   position: relative;
+  display: flex;
+  flex-direction: column;
   @include thousendWidth {
-    width: 220px;
+    width: 240px;
   }
   @include phone {
-    width: 310px;
+    width: 320px;
   }
 }
 
@@ -121,4 +122,7 @@
   justify-content: space-between;
   margin-top: 15px;
   column-gap: 20px;
+  @include phone {
+    column-gap: 5px;
+  }
 }

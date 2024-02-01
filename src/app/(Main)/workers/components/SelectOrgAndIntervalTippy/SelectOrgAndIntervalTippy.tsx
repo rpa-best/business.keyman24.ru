@@ -33,9 +33,9 @@ export const SelectOrgAndIntervalTippy: React.FC<
         pcBreak && !tabletBreak
             ? -20
             : tabletBreak && !phoneBreak
-            ? -120
+            ? -100
             : phoneBreak
-            ? -150
+            ? -130
             : 40;
 
     useEffect(() => {

@@ -13,12 +13,17 @@
     width: 575px;
   }
   @include phoneOrTablet {
+    row-gap: 10px;
     width: 410px;
   }
   @include phone {
     width: 100%;
   }
   max-height: 550px;
+}
+
+.checkbox_wrapper {
+  width: max-content;
 }
 
 .input {
