@@ -27,7 +27,9 @@ const BillPage = async () => {
         };
     });
 
-    const price = await getServerPrice(rateBody);
+    const price = await getServerPrice(rateBody, { prime: org.prime });
+
+    console.log(price);
 
     function addDays(date: Date, days: number) {
         const result = new Date(date);
@@ -50,12 +52,33 @@ const BillPage = async () => {
                 </p>
                 <PaymentButton />
             </div>
-            <p className={scss.bill_balance}>
-                Текущая цена:{' '}
-                <span className={scss.balance_count}>{price.cost} ₽ </span> /
-                месяц | хватит до{' ~'}
-                <span className={scss.balance_count}>{enoughUntil}</span>
-            </p>
+            <div className={scss.bill_balance}>
+                <div className={scss.bill_advantages}>
+                    <p>Текущая цена: </p>
+                    <div>
+                        <span
+                            data-hasprime={org.prime}
+                            className={scss.balance_count}
+                        >
+                            {price.cost} ₽{' '}
+                        </span>
+                        {org.prime && (
+                            <p className={scss.prime_cost}>
+                                Ваша цена:{' '}
+                                <span className={scss.prime_cost}>
+                                    {' '}
+                                    {price.costPrime} ₽
+                                </span>
+                            </p>
+                        )}
+                    </div>
+                    / месяц;
+                </div>
+                <div>
+                    <p className={scss.enough_until}>хватит до</p>
+                    <span className={scss.balance_count}> ~{enoughUntil}</span>
+                </div>
+            </div>
             <SubConstructor />
             <Modal>
                 <ModalPayment />

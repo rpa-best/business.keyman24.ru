@@ -19,12 +19,15 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const history = await getServerHistory(+orgId);
+    const history = await getServerHistory(+orgId, day ? undefined : 'month');
 
     const cloneHistory = history.results.map((el) => {
         const typeName = el.type === 'service' ? 'Списание' : 'Пополнение';
         return { ...el, typeName };
     });
+
+    console.log(day);
+    console.log(cloneHistory);
 
     return (
         <div>
