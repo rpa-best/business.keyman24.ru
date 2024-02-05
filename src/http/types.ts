@@ -86,8 +86,11 @@ export type GetOrgById = (id?: number) => Promise<IOrganization>;
 export type GetServices = (org: number) => Promise<IService>;
 
 export type GetPrice = (
-    body: IRate[]
-) => Promise<{ body: string[]; cost: number }>;
+    body: IRate[],
+    query: {
+        prime: boolean;
+    }
+) => Promise<{ body: string[]; cost: number; costPrime: number }>;
 
 export type GetPriceBySlug = (
     slug: string
@@ -98,7 +101,10 @@ export type GetServerPriceBySlug = (
     slug: string
 ) => Promise<{ costNotLimited: number; cost: number }>;
 
-export type GetHistory = (orgId: number) => Promise<IResponse<IBalanceHistory>>;
+export type GetHistory = (
+    orgId: number,
+    type?: 'month'
+) => Promise<IResponse<IBalanceHistory>>;
 
 export type UpdatePrice = (body: IRate[]) => Promise<void>;
 
@@ -135,6 +141,7 @@ export interface IAdminPermission {
 export interface IInventory {
     id: number;
     type: IType;
+    cost: number;
     comments: string;
     notZone: boolean;
     codeNumber: string;
@@ -365,6 +372,7 @@ export interface KeyBody {
 
 export interface ReqInventoryBody extends Omit<IType, 'slug' | 'id'> {
     type: string;
+    cost?: number;
 }
 
 export interface IInventoryImage {

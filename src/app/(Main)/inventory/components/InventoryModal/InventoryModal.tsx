@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { useDropzone } from 'react-dropzone';
 import { usePathname } from 'next/navigation';
@@ -18,7 +18,6 @@ import { useModalStore } from 'store/modalVisibleStore';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/components';
 import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
-import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
 import scss from './InventoryModal.module.scss';
@@ -41,6 +40,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             name: values.name,
             desc: values.description,
             type: 'inventory',
+            cost: values.cost ?? 0,
         };
         if (type === 'create') {
             await createInventoryItem(body)
@@ -78,7 +78,8 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                 });
         } else {
             await updateInventoryItem(selectedItem?.id as number, body)
-                .then(() => {
+                .then((d) => {
+                    console.log(d);
                     revalidate(path);
                     setVisible(false);
                 })
@@ -100,6 +101,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         initialValues: {
             name: selectedItem?.name ?? '',
             description: selectedItem?.desc ?? '',
+            cost: selectedItem?.cost ?? 0,
         },
         enableReinitialize: true,
         onSubmit,
@@ -200,6 +202,15 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
+                        {type === 'edit' && (
+                            <Input
+                                label="Цена"
+                                name="cost"
+                                value={values.cost.toString()}
+                                type="number"
+                                onChange={handleChange}
+                            />
+                        )}
                         {type === 'edit' ? (
                             <ImageContainer
                                 setSelectedImage={setSelectedImage as any}

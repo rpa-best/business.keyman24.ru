@@ -101,9 +101,17 @@ export const getServerPriceBySlug: T.GetServerPriceBySlug = async (
     return res.data;
 };
 
-export const getServerPrice: T.GetPrice = async (body) => {
+export const getServerPrice: T.GetPrice = async (body, query) => {
+    const searchParams = new URLSearchParams();
+
+    if (query.prime) {
+        searchParams.set('prime', 'true');
+    }
+
     const res: AxiosResponse<ReturnType<typeof getPrice>> =
-        await $serverAuth.post('account/service-rate-calc/', body);
+        await $serverAuth.post(`account/service-rate-calc/`, body, {
+            params: searchParams,
+        });
 
     return res.data;
 };
@@ -112,10 +120,18 @@ export const updateSub: T.UpdatePrice = async (body) => {
     await $clientAuth.patch(`business/${orgId}/service/subscription/`, body);
 };
 
-export const getServerHistory: T.GetHistory = async (orgId) => {
+export const getServerHistory: T.GetHistory = async (orgId, type) => {
+    console.log(type);
+    const searchParams = new URLSearchParams();
+
+    if (type) {
+        searchParams.set('type', 'month');
+    }
+
     const res: AxiosResponse<ReturnType<typeof getServerHistory>> =
         await $serverAuth.get(
-            `business/${orgId}/balance-history/?ordering=-date`
+            `business/${orgId}/balance-history/?ordering=-date`,
+            { params: searchParams }
         );
 
     return res.data;
