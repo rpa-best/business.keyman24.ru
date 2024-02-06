@@ -14,15 +14,14 @@ import { LocationsActionValidate } from 'app/(Main)/locations/components/Locatio
 import { createLocation, editLocation } from 'http/locationsApi';
 import { PickListsWrapper } from 'app/(Main)/locations/components/LocationsAction/components/PickListsWrapper';
 import { useModalStore } from 'store/modalVisibleStore';
-import revalidate from 'utils/revalidate';
-import { ITimezones, Timezones } from 'app/(Main)/locations/timezones';
-import { InputSelect } from 'components/UI/Inputs/InputSelect';
-import { errorToastOptions, warningToastConfig } from 'config/toastConfig';
-
-import scss from './LocationsAction.module.scss';
-import { useDenied } from 'hooks/useDenied';
 import { AxiosError } from 'axios';
 import { InputCheckbox } from 'components/UI/Inputs/InputCheckbox';
+import revalidate from 'utils/revalidate';
+import { Timezones } from 'app/(Main)/locations/timezones';
+import { InputSelect } from 'components/UI/Inputs/InputSelect';
+import { warningToastConfig } from 'config/toastConfig';
+
+import scss from './LocationsAction.module.scss';
 
 export const LocationAction: React.FC<LocationActionProps> = ({
     location,
@@ -42,7 +41,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
         const body: CreateLocationBody = {
             desc: values.desc,
             name: values.location,
-            can_out_with_inventory: values.canOutWithInventory,
+            can_out_with_inventory: values?.canOutWithInventory,
             timezone: timezones[values.timezone.id].utc[0],
         };
 
@@ -137,7 +136,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
             location: location?.name ?? '',
             desc: location?.desc ?? '',
             timezone: locationTimezone,
-            canOutWithInventory: location.canOutWithInventory,
+            canOutWithInventory: location?.canOutWithInventory ?? false,
         },
         enableReinitialize: true,
         validate: LocationsActionValidate,
@@ -194,7 +193,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                     <InputCheckbox
                         name="canOutWithInventory"
                         label="Можно выходить с инвентарём"
-                        value={values.canOutWithInventory}
+                        value={values?.canOutWithInventory}
                         type="checkbox"
                         onChange={(v: boolean) =>
                             setFieldValue(
