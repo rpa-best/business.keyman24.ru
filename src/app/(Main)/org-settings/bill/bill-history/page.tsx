@@ -26,9 +26,6 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
         return { ...el, typeName };
     });
 
-    console.log(day);
-    console.log(cloneHistory);
-
     return (
         <div>
             <HistoryButtonsWrapper />

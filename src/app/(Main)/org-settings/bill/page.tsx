@@ -29,8 +29,6 @@ const BillPage = async () => {
 
     const price = await getServerPrice(rateBody, { prime: org.prime });
 
-    console.log(price);
-
     function addDays(date: Date, days: number) {
         const result = new Date(date);
         result.setDate(date.getDate() + days);

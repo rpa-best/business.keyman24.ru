@@ -65,9 +65,12 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         const locationId = tableRows[0].id;
         checkAccess(`business/${orgId}/location/${locationId}/org`).then(
             (d) => {
-                setPermissions({
-                    orgs: d,
-                });
+                if (d) {
+                    setPermissions((permissions) => ({
+                        ...permissions,
+                        orgs: d,
+                    }));
+                }
             }
         );
         checkAccess(`business/${orgId}/worker/`).then((d) => {
@@ -75,11 +78,18 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
                 checkAccess(
                     `business/${orgId}/location/${locationId}/worker`
                 ).then((d) => {
-                    setPermissions({ ...permissions, workers: d });
+                    if (d) {
+                        setPermissions((permissions) => ({
+                            ...permissions,
+                            workers: d,
+                        }));
+                    }
                 });
             }
         });
     }, []);
+
+    console.log(permissions);
 
     const handleEditClick = (id: number) => {
         setFormType('edit');

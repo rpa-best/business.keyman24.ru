@@ -79,7 +79,6 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         } else {
             await updateInventoryItem(selectedItem?.id as number, body)
                 .then((d) => {
-                    console.log(d);
                     revalidate(path);
                     setVisible(false);
                 })
