@@ -121,7 +121,6 @@ export const updateSub: T.UpdatePrice = async (body) => {
 };
 
 export const getServerHistory: T.GetHistory = async (orgId, type) => {
-    console.log(type);
     const searchParams = new URLSearchParams();
 
     if (type) {
