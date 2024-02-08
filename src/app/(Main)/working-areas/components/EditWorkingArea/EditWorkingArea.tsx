@@ -122,7 +122,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         <>
             <form onSubmit={handleSubmit} className={scss.edit_form}>
                 <h2 className={scss.form_title}>
-                    Рабочее место / `$
+                    Рабочее место /
                     {formType === 'edit' ? 'Редактирование' : 'Добавление'}
                 </h2>
                 <Input

@@ -16,12 +16,14 @@ interface KeyHistoryComponentProps {
     type: 'Inventory' | 'Keys';
     register?: boolean;
     status?: 'На руках' | 'На складе';
+    cost: number;
 }
 
 export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
     keyHistory,
     type,
     register,
+    cost,
     status,
 }) => {
     const emptyText = type === 'Inventory' ? 'инвентарь' : 'ключ';
@@ -72,6 +74,9 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
                     </div>
                     {status && (
                         <div className={scss.history_status}>
+                            <h3>
+                                Стоимость: <span>{cost} ₽</span>
+                            </h3>
                             <h3>
                                 Статус{' '}
                                 {type === 'Inventory' ? 'инвентаря' : 'ключа'}:{' '}

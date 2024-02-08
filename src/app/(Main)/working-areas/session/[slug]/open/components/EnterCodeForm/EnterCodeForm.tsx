@@ -57,16 +57,20 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         let body = null;
         setLoading(true);
         setImages(null);
+        const barcode = values.code.toString().split('');
+        while (barcode.length !== 12) {
+            barcode.unshift('0');
+        }
         if (worker?.id) {
             body = {
                 session: +sessionId,
                 worker: +worker.id,
-                barcode: values.code,
+                barcode: barcode.join(''),
             };
         } else {
             body = {
                 session: +sessionId,
-                barcode: values.code,
+                barcode: barcode.join(''),
             };
         }
         const alreadyHas = temporaryLog?.find(
@@ -96,8 +100,9 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                 setImages,
                 path,
                 setLoading,
+                errors,
+                resetForm,
             });
-            resetForm();
         } else {
             await sendAction({
                 setTemporaryLog,
@@ -110,9 +115,9 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                 setImages,
                 path,
                 setLoading,
+                errors,
+                resetForm,
             });
-            toast('Успешно', successToastConfig);
-            resetForm();
         }
     };
 
