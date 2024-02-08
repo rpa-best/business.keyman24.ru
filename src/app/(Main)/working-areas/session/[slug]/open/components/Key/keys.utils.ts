@@ -6,7 +6,11 @@ import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 import { AxiosError } from 'axios';
 import { IInventoryImage, SessionActionBody } from 'http/types';
 import React from 'react';
-import { CurrentSessionLogType } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/types';
+import {
+    CurrentSessionLogType,
+    EnterCodeFormValues,
+} from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/types';
+import { FormikErrors } from 'formik';
 
 interface SendActionProps {
     areaId: number;
@@ -23,6 +27,8 @@ interface SendActionProps {
     setTemporaryLog?: React.Dispatch<
         React.SetStateAction<CurrentSessionLogType[]>
     >;
+    errors: FormikErrors<EnterCodeFormValues>;
+    resetForm: () => void;
 }
 
 export const sendAction = async ({
@@ -36,6 +42,8 @@ export const sendAction = async ({
     path,
     setSessionLog,
     setTemporaryLog,
+    errors,
+    resetForm,
 }: SendActionProps) => {
     if (validate) {
         try {
@@ -64,6 +72,8 @@ export const sendAction = async ({
             if (setTemporaryLog) {
                 setTemporaryLog((log) => [newLog, ...log]);
             }
+            toast('Успешно', successToastConfig);
+            resetForm();
         } catch (e) {
             if (e instanceof AxiosError) {
                 toast(e.response?.data.error[0].name, errorToastOptions);
@@ -108,6 +118,8 @@ export const sendAction = async ({
                 }
                 revalidate(path);
                 setSessionLog((log) => [newLog, ...log]);
+                toast('Успешно', successToastConfig);
+                resetForm();
             })
             .finally(() => {
                 setLoading(false);

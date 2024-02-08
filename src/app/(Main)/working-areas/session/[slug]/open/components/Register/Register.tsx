@@ -170,6 +170,12 @@ export const Register: React.FC<RegisterProps> = ({
     }, [currentAreaId, router, socketStore]);
 
     useEffect(() => {
+        return () => {
+            toast.dismiss();
+        };
+    }, []);
+
+    useEffect(() => {
         const message = socketStore.message;
 
         if (message?.type === 'info') {

@@ -89,8 +89,6 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         });
     }, []);
 
-    console.log(permissions);
-
     const handleEditClick = (id: number) => {
         setFormType('edit');
         setEditableLocation(tableData.find((el) => el.id === id) ?? null);

@@ -12,6 +12,9 @@
   @include MontserratSemiBold(20px);
   color: white;
   margin-left: 30px;
+  & span {
+    color: $accent-color;
+  }
   @include phoneOrTablet {
     margin-bottom: 20px;
     font-size: 16px;

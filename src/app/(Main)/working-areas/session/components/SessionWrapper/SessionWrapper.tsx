@@ -63,7 +63,10 @@ export const SessionWrapper: React.FC<SessionWrapperProps> = ({
 
     const startSessionDisabled = currentSession;
 
-    const needAttach = type !== 'register' && type !== 'register_inventory';
+    const needAttach =
+        type !== 'register' &&
+        type !== 'register_inventory' &&
+        type !== 'security';
 
     useEffect(() => {
         setSessionsData(sessions.results);

@@ -52,6 +52,7 @@ export const getBarGroupData = (
             const secondsDifference = difference / 1000;
             const minutesDifference = secondsDifference / 60;
             const hoursDifference = minutesDifference / 60;
+
             units.push({
                 unit: getObjValue(item, unitPath),
                 hours: +hoursDifference.toFixed(1),

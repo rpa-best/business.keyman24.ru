@@ -42,6 +42,7 @@ const InventoryPage: React.FC<KeyPageProps> = async ({
                 <BackButton>Назад</BackButton>
             </div>
             <HistoryComponent
+                cost={inventory.cost}
                 status={inventoryStatus}
                 register={searchParams.register}
                 type="Inventory"
