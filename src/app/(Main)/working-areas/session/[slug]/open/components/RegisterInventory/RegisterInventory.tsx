@@ -53,8 +53,10 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
     };
 
     const handleRowClick = (id: number) => {
+        const selectedItemId = sessionLogData.find((el) => el.id === id)
+            ?.inventory.id;
         window.open(
-            `https://${window.location.host}/inventory/${id}`,
+            `https://${window.location.host}/inventory/${selectedItemId}`,
             '_blank'
         );
     };

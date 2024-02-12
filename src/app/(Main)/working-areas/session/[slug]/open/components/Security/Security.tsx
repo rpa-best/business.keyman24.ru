@@ -57,12 +57,15 @@ export const Security: React.FC<SecurityProps> = ({
         if (!socketStore.socket) {
             router.replace(`/working-areas/session/security-${currentAreaId}`);
         }
+    }, [currentAreaId, socketStore.socket]);
+
+    useEffect(() => {
         return () => {
             if (socketStore.socket) {
                 socketStore.closeConnection();
             }
         };
-    }, [currentAreaId, socketStore.socket]);
+    }, []);
 
     useEffect(() => {
         socketStore.onClose(() => {
