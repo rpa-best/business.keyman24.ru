@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
-
+import { usePathname } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 import { useFormik } from 'formik';
-import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { IInventoryImage } from 'http/types';
 import { ImagesCarousel } from 'components/ImagesCarousel';
 import { sendAction } from 'app/(Main)/working-areas/session/[slug]/open/components/Key/keys.utils';
@@ -15,8 +15,6 @@ import { Button } from 'components/UI/Buttons/Button';
 import { Input } from 'components/UI/Inputs/Input';
 
 import scss from './EnterCodeFOrm.module.scss';
-import { toast } from 'react-toastify';
-import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -38,21 +36,29 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     useEffect(() => {
         if (confirmed) {
             temporaryLog?.forEach((el) => {
-                onSubmit({ code: el.inventory.codeNumber }, false);
+                if ('responsible' in el) {
+                    onSubmit(
+                        { code: el.inventory.codeNumber },
+                        false,
+                        el.responsible
+                    );
+                } else {
+                    onSubmit({ code: el.inventory.codeNumber }, false);
+                }
             });
-            if (setTemporaryLog) {
-                setTemporaryLog([]);
-            }
+
+            setTemporaryLog([]);
+
             toast('Успешно', successToastConfig);
-            if (setConfirmed) {
-                setConfirmed(false);
-            }
+
+            setConfirmed(false);
         }
     }, [confirmed]);
 
     const onSubmit = async (
         values: EnterCodeFormValues,
-        needValidate: boolean
+        needValidate: boolean,
+        responsible?: string
     ) => {
         let body = null;
         setLoading(true);
@@ -67,20 +73,31 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                 worker: +worker.id,
                 barcode: barcode.join(''),
             };
+        } else if (responsible) {
+            body = {
+                session: +sessionId,
+                responsible,
+                barcode: barcode.join(''),
+            };
+
+            setConfirmed(true);
         } else {
             body = {
                 session: +sessionId,
                 barcode: barcode.join(''),
             };
         }
+
         const alreadyHas = temporaryLog?.find(
-            (el) => el.inventory.codeNumber === values.code
+            (el) => el.inventory.codeNumber === barcode.join('')
         );
 
         if (alreadyHas && needValidate) {
             toast(
                 `Такой ${
-                    type === 'inventory' ? 'инвентарь' : 'ключ'
+                    type === 'inventory' || type === 'registerInventory'
+                        ? 'инвентарь'
+                        : 'ключ'
                 } уже добавлен`,
                 errorToastOptions
             );
@@ -88,37 +105,20 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             return;
         }
 
-        if (type === 'inventory' || type === 'keys') {
-            await sendAction({
-                setTemporaryLog,
-                body,
-                areaId,
-                type,
-                setSessionLog,
-                sessionId,
-                validate: !confirmed,
-                setImages,
-                path,
-                setLoading,
-                errors,
-                resetForm,
-            });
-        } else {
-            await sendAction({
-                setTemporaryLog,
-                body,
-                areaId,
-                type,
-                setSessionLog,
-                sessionId,
-                validate: false,
-                setImages,
-                path,
-                setLoading,
-                errors,
-                resetForm,
-            });
-        }
+        await sendAction({
+            setTemporaryLog,
+            body,
+            areaId,
+            type,
+            setSessionLog,
+            sessionId,
+            validate: needValidate,
+            setImages,
+            path,
+            setLoading,
+            errors,
+            resetForm,
+        });
     };
 
     const {
@@ -132,7 +132,20 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         handleBlur,
     } = useFormik<EnterCodeFormValues>({
         initialValues: { code: '' },
-        onSubmit: (values) => onSubmit(values, true),
+        onSubmit: (values) => {
+            const responsible = values.code.startsWith('9');
+            if (responsible) {
+                setTemporaryLog((log) =>
+                    log.map((logItem) => ({
+                        ...logItem,
+                        responsible: values.code,
+                    }))
+                );
+                setConfirmed(true);
+                return;
+            }
+            onSubmit(values, true);
+        },
         validate: CodeFormValidate,
     });
 

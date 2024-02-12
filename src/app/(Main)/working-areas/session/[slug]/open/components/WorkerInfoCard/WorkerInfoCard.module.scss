@@ -127,15 +127,12 @@
 }
 
 .worker_card_button_wrapper {
-  width: 25%;
+  display: flex;
   margin-left: auto;
   margin-top: 15px;
-  @include thousendTwoWidth {
-    width: 35%;
-  }
-  @include phoneOrTablet {
-    width: 250px;
-    margin: 0 auto;
+  column-gap: 20px;
+  & button {
+    width: max-content;
   }
   @include phone {
     margin-top: 10px;

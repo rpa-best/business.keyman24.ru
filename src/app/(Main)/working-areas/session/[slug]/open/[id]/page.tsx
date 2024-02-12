@@ -1,6 +1,8 @@
 import React from 'react';
 import { cookies } from 'next/headers';
+import { Metadata } from 'next';
 
+import { RegisterInventory } from 'app/(Main)/working-areas/session/[slug]/open/components/RegisterInventory';
 import { Key } from 'app/(Main)/working-areas/session/[slug]/open/components/Key';
 import { Register } from 'app/(Main)/working-areas/session/[slug]/open/components/Register';
 import { Security } from 'app/(Main)/working-areas/session/[slug]/open/components/Security';
@@ -10,13 +12,40 @@ import { getParamsId, getParamsType } from 'app/(Main)/working-areas/helpers';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
 
 import scss from './OpenSession.module.scss';
-import { RegisterInventory } from 'app/(Main)/working-areas/session/[slug]/open/components/RegisterInventory';
 
 interface OpenSessionPage {
     params: {
         slug: string;
         id: string;
     };
+}
+
+export async function generateMetadata({
+    params,
+}: OpenSessionPage): Promise<Metadata | undefined> {
+    const cookieStore = cookies();
+    // read route params
+    const id = +getParamsId(params.slug);
+    const orgId = cookieStore.get('orgId')?.value as string;
+    const access = cookieStore.get('access')?.value as string;
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}business/${orgId}/working_area/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${access}`,
+                },
+            }
+        );
+
+        const area = await response.json();
+
+        return {
+            title: area.name,
+        };
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 const OpenSessionPage: React.FC<OpenSessionPage> = async ({ params }) => {

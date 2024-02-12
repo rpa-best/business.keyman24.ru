@@ -16,6 +16,8 @@ import { IOrganization } from 'store/types';
 
 import scss from 'app/(Main)/workers/Worker.module.scss';
 import Link from 'next/link';
+import { getWorkers } from 'http/workerApi';
+import FileSaver from 'file-saver';
 
 export const CalendarContext = createContext<CalendarType | null>(null);
 
@@ -34,6 +36,12 @@ export const WorkersButton = () => {
 
     const handleRefreshClick = async () => {
         await updateOrg();
+    };
+
+    const handleDownloadBarcodes = async () => {
+        const barcodes = await getWorkers(undefined, undefined, 'pdf');
+
+        FileSaver.saveAs(barcodes as unknown as Blob, 'Штрихкоды сотрудников');
     };
 
     useEffect(() => {
@@ -90,6 +98,9 @@ export const WorkersButton = () => {
                         >
                             <SelectOrgAndIntervalTippy orgs={orgs} />
                         </CalendarContext.Provider>
+                        <Button onClick={handleDownloadBarcodes} type="button">
+                            Скачать ШК работников
+                        </Button>
                     </motion.div>
                 )}
             >

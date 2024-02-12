@@ -373,6 +373,7 @@ export interface KeyBody {
 export interface ReqInventoryBody extends Omit<IType, 'slug' | 'id'> {
     type: string;
     cost?: number;
+    location: number;
 }
 
 export interface IInventoryImage {
@@ -607,6 +608,10 @@ export type GetInventoryById = (
     inventoryId: number
 ) => Promise<IInventory>;
 
+export type GetInventoryByIdOnClient = (
+    inventoryId: number
+) => Promise<IInventory>;
+
 export type GetInventoryImage = (
     inventoryId: number
 ) => Promise<IResponse<IInventoryImage>>;
@@ -617,10 +622,14 @@ export type CreateInventoryItem = (
     body: ReqInventoryBody
 ) => Promise<IInventory>;
 
+interface PatchInventory extends Omit<IInventory, 'location'> {
+    location: string;
+}
+
 export type UpdateInventoryItem = (
     inventoryId: number,
     body: ReqInventoryBody
-) => Promise<void>;
+) => Promise<PatchInventory>;
 
 export type DeleteInventoryPhoto = (
     itemId: number,
@@ -865,6 +874,7 @@ export interface SessionActionBody {
     device?: number;
     start_date?: string;
     end_date?: string;
+    responsible?: string;
 }
 
 export type SendSessionAction = (
@@ -876,7 +886,8 @@ export type SendSessionAction = (
 
 export type GetWorkers = (
     orgId?: number,
-    guest?: boolean
+    guest?: boolean,
+    format?: 'pdf'
 ) => Promise<IResponse<IWorker>>;
 
 export type GetWorkerPlan = (
@@ -913,6 +924,11 @@ export type GetServerQrcodes = (
 ) => Promise<IResponse<IQrcode>>;
 
 export type GetWorker = (orgId: number, workerId: number) => Promise<IWorker>;
+
+export type GetWorkerOnClient = (
+    workerId: number,
+    format?: 'pdf'
+) => Promise<IWorker | Blob>;
 
 export type GetWorkerUser = (
     orgId: number,

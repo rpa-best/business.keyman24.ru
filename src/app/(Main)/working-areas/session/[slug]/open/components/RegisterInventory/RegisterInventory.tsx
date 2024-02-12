@@ -25,8 +25,13 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
     const router = useRouter();
     const params = useParams();
 
+    const [temporaryLogData, setTemporaryLogData] = useState<typeof sessionLog>(
+        []
+    );
     const [sessionLogData, setSessionLogData] =
         useState<typeof sessionLog>(sessionLog);
+
+    const [confirmed, setConfirmed] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -40,6 +45,17 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
         router.replace(
             '/working-areas/session/register_inventory-' +
                 getParamsId(params.slug)
+        );
+    };
+
+    const handleRowDelete = async (id: number) => {
+        setTemporaryLogData((d) => d.filter((el) => el.id !== id));
+    };
+
+    const handleRowClick = (id: number) => {
+        window.open(
+            `https://${window.location.host}/inventory/${id}`,
+            '_blank'
         );
     };
 
@@ -63,6 +79,10 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm
+                            confirmed={confirmed}
+                            setConfirmed={setConfirmed}
+                            temporaryLog={temporaryLogData}
+                            setTemporaryLog={setTemporaryLogData as any}
                             needWorker={false}
                             setSessionLog={setSessionLogData}
                             type="registerInventory"
@@ -72,6 +92,7 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
                     </div>
                     <div className={scss.content_table_wrapper}>
                         <Table
+                            handleRowClick={handleRowClick}
                             tableData={sessionLogData}
                             setTableData={setSessionLogData}
                         >
@@ -84,7 +105,25 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
                         </Table>
                     </div>
                 </div>
-
+                {temporaryLogData.length !== 0 && (
+                    <div style={{ marginBottom: '20px' }}>
+                        <h2 className={scss.temporary_table_title}>К выдаче</h2>
+                        <Table
+                            handleDeleteClick={handleRowDelete as any}
+                            height="max-content"
+                            tableData={temporaryLogData}
+                            setTableData={setTemporaryLogData}
+                            rowClickable={false}
+                        >
+                            <Column header="Дата" field="date" />
+                            <Column header="Событие" field="modeName" />
+                            <Column
+                                header="Наименование"
+                                field="inventoryName"
+                            />
+                        </Table>
+                    </div>
+                )}
                 {loading && <Spinner />}
             </div>
         </>

@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { useDropzone } from 'react-dropzone';
 import { usePathname } from 'next/navigation';
 
 import { InventoryModalProps } from 'app/(Main)/inventory/types';
 import { InventoryFormType } from 'app/(Main)/inventory/components/InventoryModal/types';
-import { InventoryFormValidate } from 'app/(Main)/inventory/components/InventoryModal/InventoryModal.utils';
+import {
+    InventoryFormSubmit,
+    InventoryFormValidate,
+} from 'app/(Main)/inventory/components/InventoryModal/InventoryModal.utils';
 import { Input } from 'components/UI/Inputs/Input';
 import { Button } from 'components/UI/Buttons/Button';
-import { IInventoryImage, ReqInventoryBody } from 'http/types';
+import { InputSelect } from 'components/UI/Inputs/InputSelect';
+import { getLocationsOnClient } from 'http/locationsApi';
+import { IInventoryImage, ILocation, ReqInventoryBody } from 'http/types';
 import {
-    createInventoryItem,
-    updateInventoryItem,
+    getInventoryByIdOnClient,
     uploadInventoryPhoto,
 } from 'http/inventoryApi';
 import { useModalStore } from 'store/modalVisibleStore';
 import DropzoneContentSvg from 'app/(Main)/inventory/svg/dropzoneContent.svg';
 import { ImageContainer } from 'app/(Main)/inventory/components/InventoryModal/components';
 import { ImageCreateContainer } from 'app/(Main)/inventory/components/InventoryModal/components/ImageCreateContainer';
-import revalidate from 'utils/revalidate';
 
 import scss from './InventoryModal.module.scss';
 
@@ -32,6 +35,8 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
 }) => {
     const path = usePathname();
 
+    const [locations, setLocations] = useState<ILocation[]>([]);
+
     const [setVisible] = useModalStore((state) => [state.setVisible]);
 
     const onSubmit = async (values: InventoryFormType) => {
@@ -41,51 +46,20 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
             desc: values.description,
             type: 'inventory',
             cost: values.cost ?? 0,
+            location: values.location?.id as number,
         };
-        if (type === 'create') {
-            await createInventoryItem(body)
-                .then((d) => {
-                    const location =
-                        d.location === null ? '-' : `${d.location.name}`;
-                    const newInventory = {
-                        ...d,
-                        type: d.type.name,
-                        location: location,
-                    };
-
-                    setInventoryData((inventory) => [
-                        ...inventory,
-                        newInventory,
-                    ]);
-                    setVisible(false);
-                    revalidate(path);
-                    try {
-                        selectedImage.forEach(async (i) => {
-                            await uploadInventoryPhoto(
-                                d.id,
-                                // @ts-ignore
-                                i.img
-                            );
-                        });
-                    } catch (e) {
-                        return e;
-                    } finally {
-                        setSelectedImage(undefined);
-                    }
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        } else {
-            await updateInventoryItem(selectedItem?.id as number, body)
-                .then((d) => {
-                    revalidate(path);
-                    setVisible(false);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        }
+        await InventoryFormSubmit({
+            setInventoryData,
+            body,
+            type,
+            selectedImage,
+            setSelectedImage,
+            selectedItem,
+            path,
+            setVisible,
+            locations,
+        });
+        setLoading(false);
     };
 
     const {
@@ -95,17 +69,43 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
         handleBlur,
         handleSubmit,
         handleChange,
+        setFieldValue,
         touched,
     } = useFormik<InventoryFormType>({
         initialValues: {
             name: selectedItem?.name ?? '',
             description: selectedItem?.desc ?? '',
             cost: selectedItem?.cost ?? 0,
+            location: null,
         },
         enableReinitialize: true,
         onSubmit,
         validate: InventoryFormValidate,
     });
+
+    useEffect(() => {
+        if (selectedItem?.id) {
+            // eslint-disable-next-line no-inner-declarations
+            async function fetchInventoryLocation() {
+                return await getInventoryByIdOnClient(
+                    selectedItem?.id as number
+                );
+            }
+
+            // eslint-disable-next-line no-inner-declarations
+            async function fetchLocations() {
+                return await getLocationsOnClient();
+            }
+
+            fetchInventoryLocation().then((inventory) => {
+                setFieldValue('location', inventory.location);
+            });
+
+            fetchLocations().then((locations) => {
+                setLocations(locations.results);
+            });
+        }
+    }, [selectedItem?.id]);
 
     const onDrop = async (acceptedFiles: any) => {
         if (type === 'edit') {
@@ -201,23 +201,35 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {type === 'edit' && (
-                            <Input
-                                label="Цена"
-                                name="cost"
-                                value={values.cost.toString()}
-                                type="number"
-                                onChange={handleChange}
-                            />
-                        )}
                         {type === 'edit' ? (
-                            <ImageContainer
-                                setSelectedImage={setSelectedImage as any}
-                                setLoading={setLoading}
-                                rootProps={getRootProps}
-                                selectedItemId={selectedItem?.id as number}
-                                selectedImage={selectedImage as any}
-                            />
+                            <>
+                                <Input
+                                    label="Цена"
+                                    name="cost"
+                                    value={values.cost.toString()}
+                                    type="number"
+                                    onChange={handleChange}
+                                />
+                                <div style={{ position: 'relative' }}>
+                                    <InputSelect
+                                        label="Локация"
+                                        listValues={locations}
+                                        onChange={(location) => {
+                                            setFieldValue('location', location);
+                                        }}
+                                        placeholder="Выберите локацию"
+                                        value={values.location?.name ?? ''}
+                                        name="location"
+                                    />
+                                </div>
+                                <ImageContainer
+                                    setSelectedImage={setSelectedImage as any}
+                                    setLoading={setLoading}
+                                    rootProps={getRootProps}
+                                    selectedItemId={selectedItem?.id as number}
+                                    selectedImage={selectedImage as any}
+                                />
+                            </>
                         ) : (
                             <ImageCreateContainer
                                 selectedImage={selectedImage as []}
@@ -225,6 +237,7 @@ export const InventoryModal: React.FC<InventoryModalProps> = ({
                                 setSelectedImage={setSelectedImage as any}
                             />
                         )}
+
                         <div className={scss.button_wrapper}>
                             <Button
                                 disabled={!isValid}

@@ -8,6 +8,7 @@ import { IInventoryImage, SessionActionBody } from 'http/types';
 import React from 'react';
 import {
     CurrentSessionLogType,
+    CurrentSessionRegisterLogType,
     EnterCodeFormValues,
 } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/types';
 import { FormikErrors } from 'formik';
@@ -25,7 +26,9 @@ interface SendActionProps {
         React.SetStateAction<CurrentSessionLogType[]>
     >;
     setTemporaryLog?: React.Dispatch<
-        React.SetStateAction<CurrentSessionLogType[]>
+        React.SetStateAction<
+            (CurrentSessionLogType | CurrentSessionRegisterLogType)[]
+        >
     >;
     errors: FormikErrors<EnterCodeFormValues>;
     resetForm: () => void;
@@ -50,17 +53,12 @@ export const sendAction = async ({
             const d = await sendSessionAction(areaId, sessionId, body, true);
 
             const mode = d.mode ? 'Выдан' : 'Сдан';
+
             const inventoryName =
                 type === 'keys'
                     ? ` ${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.objectArea.name}`
-                    : `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.location.name}`;
+                    : `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory?.location?.name}`;
 
-            const newLog: CurrentSessionLogType = {
-                ...d,
-                workerName: d.worker.name,
-                modeName: mode,
-                inventoryName,
-            };
             if (type !== 'keys') {
                 getInventoryImage(d.inventory.id)
                     .then((d) => {
@@ -69,10 +67,16 @@ export const sendAction = async ({
                     .finally(() => setLoading(false));
             }
 
+            const newLog: CurrentSessionLogType = {
+                ...d,
+                workerName: d?.worker?.name,
+                modeName: mode,
+                inventoryName,
+            };
+
             if (setTemporaryLog) {
                 setTemporaryLog((log) => [newLog, ...log]);
             }
-            toast('Успешно', successToastConfig);
             resetForm();
         } catch (e) {
             if (e instanceof AxiosError) {
@@ -118,7 +122,6 @@ export const sendAction = async ({
                 }
                 revalidate(path);
                 setSessionLog((log) => [newLog, ...log]);
-                toast('Успешно', successToastConfig);
                 resetForm();
             })
             .finally(() => {

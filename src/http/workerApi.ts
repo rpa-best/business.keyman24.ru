@@ -9,15 +9,19 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async (org, guest) => {
+export const getWorkers: T.GetWorkers = async (org, guest, format) => {
     const query = new URLSearchParams();
     org ? query.set('org', org.toString()) : '';
     if (guest !== undefined) {
         guest ? query.set('guest', 'true') : query.set('guest', 'false');
     }
+
+    format && query.set('format', format);
+
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $clientAuth.get(
         `business/${orgId}/worker/`,
         {
+            responseType: format ? 'blob' : 'json',
             params: query,
         }
     );
@@ -82,6 +86,25 @@ export const getServerQrcodes: T.GetServerQrcodes = async (orgId, workerId) => {
 export const getWorker: T.GetWorker = async (orgId, workerId) => {
     const res: AxiosResponse<ReturnType<T.GetWorker>> = await $serverAuth.get(
         `business/${orgId}/worker/${workerId}`
+    );
+
+    return res.data;
+};
+
+export const getWorkerOnClient: T.GetWorkerOnClient = async (
+    workerId,
+    format
+) => {
+    const params = new URLSearchParams();
+
+    format && params.append('format', format);
+
+    const res: AxiosResponse<ReturnType<T.GetWorker>> = await $clientAuth.get(
+        `business/${orgId}/worker/${workerId}`,
+        {
+            responseType: format ? 'blob' : 'json',
+            params,
+        }
     );
 
     return res.data;
