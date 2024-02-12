@@ -76,3 +76,19 @@
     border-radius: 0;
   }
 }
+
+.temporary_table_title {
+  @include MontserratSemiBold(22px);
+  color: white;
+  margin-bottom: 10px;
+  text-align: left;
+  @include laptopWidth {
+    font-size: 20px;
+  }
+  @include thousendTwoWidth {
+    font-size: 24px;
+  }
+  @include phoneOrTablet {
+    font-size: 20px;
+  }
+}

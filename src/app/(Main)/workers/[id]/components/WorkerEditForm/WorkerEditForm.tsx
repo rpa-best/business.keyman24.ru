@@ -18,7 +18,7 @@ import {
 import { Button } from 'components/UI/Buttons/Button';
 import { usePathname } from 'next/navigation';
 import { CreateWorkerUserBody } from 'http/types';
-import { createWorkerUser } from 'http/workerApi';
+import { createWorkerUser, getWorkerOnClient } from 'http/workerApi';
 import { Spinner } from 'components/Spinner';
 import { InputMask } from 'components/UI/Inputs/InputMask';
 import { Modal } from 'components/Modal';
@@ -28,6 +28,7 @@ import { useModalStore } from 'store/modalVisibleStore';
 import { successToastConfig } from 'config/toastConfig';
 
 import scss from './WorkerEditForm.module.scss';
+import FileSaver from 'file-saver';
 
 export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
     worker,
@@ -80,6 +81,12 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
             .finally(() => {
                 setLoading(false);
             });
+    };
+
+    const handleDownloadBarcode = async () => {
+        const blob = await getWorkerOnClient(worker.id, 'pdf');
+
+        FileSaver.saveAs(blob as Blob, `ШК ${worker.name}`);
     };
 
     const {
@@ -222,9 +229,18 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
                 </div>
             )}
             <div className={scss.worker_card_button_wrapper}>
-                <Button disabled={!isValid} onClick={() => {}} type="submit">
-                    Сохранить
+                <Button onClick={handleDownloadBarcode} type="button">
+                    Скачать ШК
                 </Button>
+                {!worker.user && (
+                    <Button
+                        disabled={!isValid}
+                        onClick={() => {}}
+                        type="submit"
+                    >
+                        Сохранить
+                    </Button>
+                )}
             </div>
             <Modal>
                 <ChangeImgModal

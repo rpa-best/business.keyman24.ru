@@ -6,6 +6,7 @@ import { getInventoryById, getInventoryHistory } from 'http/inventoryApi';
 import { HistoryComponent } from 'app/(Main)/components/HistoryComponent';
 
 import scss from './KeyHistoryPage.module.scss';
+import { getLocations } from 'http/locationsApi';
 
 interface KeyPageProps {
     searchParams: { offset: string; register: boolean };
@@ -33,6 +34,8 @@ const InventoryPage: React.FC<KeyPageProps> = async ({
 
     const inventory = await getInventoryById(+orgId, +params.id);
 
+    const availableLocations = await getLocations(+orgId);
+
     const inventoryStatus = inventory.status ? 'На руках' : 'На складе';
 
     return (
@@ -42,10 +45,11 @@ const InventoryPage: React.FC<KeyPageProps> = async ({
                 <BackButton>Назад</BackButton>
             </div>
             <HistoryComponent
-                cost={inventory.cost}
+                inventory={inventory}
                 status={inventoryStatus}
                 register={searchParams.register}
                 type="Inventory"
+                locations={availableLocations.results}
                 keyHistory={inventoryHistory}
             />
         </div>

@@ -134,6 +134,15 @@ export const getInventoryById: T.GetInventoryById = async (
     return res.data;
 };
 
+export const getInventoryByIdOnClient: T.GetInventoryByIdOnClient = async (
+    inventoryId
+) => {
+    const res: AxiosResponse<ReturnType<T.GetInventoryById>> =
+        await $clientAuth.get(`business/${orgId}/inventory/${inventoryId}`);
+
+    return res.data;
+};
+
 export const createInventoryItem: T.CreateInventoryItem = async (body) => {
     const res = await $clientAuth.post(`business/${orgId}/inventory/`, body);
 
@@ -144,10 +153,12 @@ export const updateInventoryItem: T.UpdateInventoryItem = async (
     inventoryId,
     body
 ) => {
-    await $clientAuth.patch(
+    const res = await $clientAuth.patch(
         `business/${orgId}/inventory/${inventoryId}/`,
         body
     );
+
+    return res.data;
 };
 
 export const deleteInventoryItem = async (itemId: number) => {

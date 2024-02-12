@@ -1,31 +1,50 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 
 import { BarChart } from 'components/Charts/BarChart';
 import { PieChart } from 'components/Charts/PieChart/PieChart';
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
 import { formatDateHistory, getBarGroupData } from 'utils/historyHelper';
-import { IInventoryHistory, IResponse } from 'http/types';
+import {
+    IInventory,
+    IInventoryHistory,
+    ILocation,
+    IResponse,
+    ReqInventoryBody,
+} from 'http/types';
 import { LocationButton } from 'app/(Main)/components/HistoryComponent/LocationButton';
 import { ImageCarouselWrapper } from 'app/(Main)/inventory/[id]/components/ImageCarouselWrapper';
 
 import scss from './HistoryComponent.module.scss';
+import { InputSelect } from 'components/UI/Inputs/InputSelect';
+import { updateInventoryItem } from 'http/inventoryApi';
+import { useParams, usePathname } from 'next/navigation';
+import revalidate from 'utils/revalidate';
 
 interface KeyHistoryComponentProps {
     keyHistory: IResponse<IInventoryHistory>;
     type: 'Inventory' | 'Keys';
     register?: boolean;
     status?: 'На руках' | 'На складе';
-    cost?: number;
+    locations?: ILocation[];
+    inventory?: IInventory;
 }
 
 export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
     keyHistory,
     type,
     register,
-    cost,
     status,
+    locations,
+    inventory,
 }) => {
+    const params = useParams();
+    const path = usePathname();
+    const [selectedLocation, setSelectedLocation] = useState(
+        inventory?.location
+    );
+
     const emptyText = type === 'Inventory' ? 'инвентарь' : 'ключ';
 
     const cloneHistory = formatDateHistory(keyHistory.results);
@@ -57,6 +76,17 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
         };
     });
 
+    const handleLocationChange = async (location: ILocation) => {
+        setSelectedLocation(location);
+        const body: Partial<ReqInventoryBody> = {
+            ...inventory,
+            type: 'inventory',
+            location: location.id,
+        };
+        await updateInventoryItem(+params.id, body as ReqInventoryBody);
+        revalidate(path);
+    };
+
     return (
         <>
             {type !== 'Keys' && (
@@ -72,11 +102,24 @@ export const HistoryComponent: React.FC<KeyHistoryComponentProps> = ({
                     <div className={scss.charts_images}>
                         <ImageCarouselWrapper />
                     </div>
+                    {type === 'Inventory' && (
+                        <div className={scss.select_location}>
+                            <InputSelect
+                                needErrorLabel={false}
+                                label="Выберите локацию"
+                                placeholder="Выберите локацию"
+                                listValues={locations!}
+                                onChange={handleLocationChange}
+                                value={selectedLocation?.name as string}
+                                name="select-location"
+                            />
+                        </div>
+                    )}
                     {status && (
                         <div className={scss.history_status}>
-                            {cost && (
+                            {type === 'Inventory' && (
                                 <h3>
-                                    Стоимость: <span>{cost} ₽</span>
+                                    Стоимость: <span>{inventory?.cost} ₽</span>
                                 </h3>
                             )}
                             <h3>

@@ -145,3 +145,13 @@
   font-size: 24px;
   @extend .page_title
 }
+
+.select_location {
+  position: relative;
+  width: 350px;
+  margin: 0 30px 20px;
+  @include phone {
+    width: 300px;
+    margin-left: 10px;
+  }
+}
