@@ -73,11 +73,11 @@ export const Key: React.FC<KeyProps> = ({
     }, [socketStore.message, type]);
 
     useEffect(() => {
-        return () => {
+        /*return () => {
             if (socketStore.socket) {
                 socketStore.closeConnection();
             }
-        };
+        };*/
     }, [socketStore.socket]);
 
     const onCloseSessionClick = async () => {
@@ -106,7 +106,12 @@ export const Key: React.FC<KeyProps> = ({
         <>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton skipWord>Назад</BackButton>
+                <BackButton
+                    onClick={() => socketStore.closeConnection()}
+                    skipWord
+                >
+                    Назад
+                </BackButton>
             </div>
             <div className={scss.key_layout}>
                 {permissions.includes('DELETE') && (

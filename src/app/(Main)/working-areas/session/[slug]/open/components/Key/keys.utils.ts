@@ -57,7 +57,9 @@ export const sendAction = async ({
             const inventoryName =
                 type === 'keys'
                     ? ` ${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory.objectArea.name}`
-                    : `${d?.inventory?.id} ${d?.inventory?.name} ${d.inventory?.location?.name}`;
+                    : `${d?.inventory?.id} ${d?.inventory?.name} ${
+                          d.inventory?.location?.name ?? ''
+                      }`;
 
             if (type !== 'keys') {
                 getInventoryImage(d.inventory.id)
@@ -90,13 +92,6 @@ export const sendAction = async ({
             .then((d) => {
                 let newLog: CurrentSessionLogType;
                 let mode: string;
-                if (type !== 'keys') {
-                    getInventoryImage(d.inventory.id)
-                        .then((d) => {
-                            setImages(d.results);
-                        })
-                        .finally(() => setLoading(false));
-                }
                 if (type === 'registerInventory') {
                     mode = d.mode ? 'Зарегестрировано' : 'Сдано';
                     newLog = {

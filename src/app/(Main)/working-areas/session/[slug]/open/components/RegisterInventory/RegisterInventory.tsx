@@ -117,7 +117,6 @@ export const RegisterInventory: React.FC<RegisterInventoryProps> = ({
                             setTableData={setTemporaryLogData}
                             rowClickable={false}
                         >
-                            <Column header="Дата" field="date" />
                             <Column header="Событие" field="modeName" />
                             <Column
                                 header="Наименование"
