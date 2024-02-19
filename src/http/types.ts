@@ -16,6 +16,9 @@ export interface IService {
     status: 'active' | 'notActive';
     user: string;
     org: number;
+    defaultCost: number;
+    primeCost: number;
+    cost: number;
     serviceRates: IServiceRate[];
 }
 

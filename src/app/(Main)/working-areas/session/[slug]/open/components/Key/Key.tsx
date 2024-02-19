@@ -78,7 +78,7 @@ export const Key: React.FC<KeyProps> = ({
                 socketStore.closeConnection();
             }
         };
-    }, [socketStore.socket]);
+    }, []);
 
     const onCloseSessionClick = async () => {
         await closeSessionHandler(

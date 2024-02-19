@@ -24,7 +24,7 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
     const cloneHistory = history.results
         .map((el) => {
             const typeName = el.type === 'service' ? 'Списание' : 'Пополнение';
-            return { ...el, typeName };
+            return { ...el, typeName, date: el.date.slice(0, 10) };
         })
         .reverse();
 
