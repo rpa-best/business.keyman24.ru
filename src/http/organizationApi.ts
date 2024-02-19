@@ -129,7 +129,7 @@ export const getServerHistory: T.GetHistory = async (orgId, type) => {
 
     const res: AxiosResponse<ReturnType<typeof getServerHistory>> =
         await $serverAuth.get(
-            `business/${orgId}/balance-history/?ordering=-date`,
+            `business/${orgId}/balance-history/?ordering=_date`,
             { params: searchParams }
         );
 

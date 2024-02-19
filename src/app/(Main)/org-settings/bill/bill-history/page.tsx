@@ -21,10 +21,12 @@ const BillHistoryPage: React.FC<BillHistoryPageProps> = async ({
 
     const history = await getServerHistory(+orgId, day ? undefined : 'month');
 
-    const cloneHistory = history.results.map((el) => {
-        const typeName = el.type === 'service' ? 'Списание' : 'Пополнение';
-        return { ...el, typeName };
-    });
+    const cloneHistory = history.results
+        .map((el) => {
+            const typeName = el.type === 'service' ? 'Списание' : 'Пополнение';
+            return { ...el, typeName };
+        })
+        .reverse();
 
     return (
         <div>
