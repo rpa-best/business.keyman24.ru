@@ -18,17 +18,6 @@ const BillPage = async () => {
 
     const subs = await getServices(+id);
 
-    const rateBody: IRate[] = subs.serviceRates.map((item) => {
-        return {
-            id: item.id,
-            value: +item.value,
-            key: item.key.modelName,
-            not_limited: item.notLimited,
-        };
-    });
-
-    const price = await getServerPrice(rateBody, { prime: org.prime });
-
     function addDays(date: Date, days: number) {
         const result = new Date(date);
         result.setDate(date.getDate() + days);
@@ -37,7 +26,9 @@ const BillPage = async () => {
 
     const today = new Date();
 
-    const days = +(org.balance / (price.cost / 30)).toFixed(0);
+    const cost = org.prime ? subs.defaultCost : subs.cost;
+
+    const days = +(org.balance / (cost / 30)).toFixed(0);
 
     const enoughUntil = addDays(today, days);
 
@@ -58,14 +49,14 @@ const BillPage = async () => {
                             data-hasprime={org.prime}
                             className={scss.balance_count}
                         >
-                            {price.cost} ₽{' '}
+                            {subs.cost} ₽{' '}
                         </span>
                         {org.prime && (
                             <p className={scss.prime_cost}>
                                 Ваша цена:{' '}
                                 <span className={scss.prime_cost}>
                                     {' '}
-                                    {price.costPrime} ₽
+                                    {subs.primeCost} ₽
                                 </span>
                             </p>
                         )}

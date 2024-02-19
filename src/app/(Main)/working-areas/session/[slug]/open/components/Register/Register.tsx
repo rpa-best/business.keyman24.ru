@@ -154,12 +154,16 @@ export const Register: React.FC<RegisterProps> = ({
         if (!socketStore.socket) {
             router.replace(`/working-areas/session/register-${currentAreaId}`);
         }
+
+    }, [currentAreaId, socketStore.socket]);
+
+    useEffect(() => {
         return () => {
             if (socketStore.socket) {
                 socketStore.closeConnection();
             }
         };
-    }, [currentAreaId, socketStore.socket]);
+    }, []);
 
     useEffect(() => {
         socketStore.onClose(() => {
