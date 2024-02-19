@@ -35,23 +35,28 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
 
     useEffect(() => {
         if (confirmed) {
-            temporaryLog?.forEach((el) => {
-                if ('responsible' in el) {
-                    onSubmit(
-                        { code: el.inventory.codeNumber },
-                        false,
-                        el.responsible
-                    );
-                } else {
-                    onSubmit({ code: el.inventory.codeNumber }, false);
-                }
+            const inventories = Promise.all(
+                temporaryLog?.map((el) => {
+                    if ('responsible' in el) {
+                        return onSubmit(
+                            { code: el.inventory.codeNumber },
+                            false,
+                            el.responsible
+                        );
+                    } else {
+                        return onSubmit(
+                            { code: el.inventory.codeNumber },
+                            false
+                        );
+                    }
+                })
+            );
+            inventories.then(() => {
+                toast('Успешно', successToastConfig);
+                setTemporaryLog([]);
+                setConfirmed(false);
+                setImages([]);
             });
-
-            setTemporaryLog([]);
-
-            toast('Успешно', successToastConfig);
-
-            setConfirmed(false);
         }
     }, [confirmed]);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 import { InputToggleTypes } from 'components/UI/Inputs/InputToggle/InputToggle.types';
