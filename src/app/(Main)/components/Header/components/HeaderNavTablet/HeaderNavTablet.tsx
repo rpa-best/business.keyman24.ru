@@ -4,9 +4,10 @@ import React from 'react';
 
 import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown';
 import { IOrganization, IUser } from 'store/types';
-import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
+
 import { BurgerMenu } from 'app/(Main)/components/Header/components/BurgerMenu';
 import { IServiceRate } from 'http/types';
+import { useSocketNotificationConnect } from 'hooks/useSocketNotificationConnect';
 import { useResizeWidth } from 'hooks/useResizeWidth';
 
 import scss from 'app/(Main)/components/Header/Header.module.scss';
@@ -26,6 +27,8 @@ export const HeaderNavTablet: React.FC<HeaderNavTabletProps> = ({
 }) => {
     const { tabletBreak } = useResizeWidth();
 
+    useSocketNotificationConnect(`ws/notification/`);
+
     return (
         <div className={scss.header_nav_tablet}>
             <HeaderDropdown subs={subs} userData={user} />
@@ -35,7 +38,6 @@ export const HeaderNavTablet: React.FC<HeaderNavTabletProps> = ({
             >
                 {tabletBreak && (
                     <>
-                        <NotificationsContainer user={user as IUser} />
                         <BurgerMenu
                             disabled={disabled}
                             organizations={organizations as IOrganization[]}

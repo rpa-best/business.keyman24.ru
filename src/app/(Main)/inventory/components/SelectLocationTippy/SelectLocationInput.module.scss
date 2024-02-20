@@ -1,18 +1,30 @@
 @import "scss/utils";
 
+.tippy_filters_wrapper {
+  width: 200px;
+  @include smallTablet {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 68px;
+  }
+}
+
 .tippy_button {
-  max-height: 100%;
-  height: 45px;
-  width: max-content;
+  max-height: 40px;
+  height: 40px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 11px 40px;
+  padding: 11px 15px;
   margin-top: 5px;
   color: $dark-main;
   border-radius: 12px;
   background-color: white;
   cursor: pointer;
   transition: .2s all ease-in-out;
+  font-size: 14px;
   &:hover {
     background-color: transparentize(white, 0.1);
   }
@@ -24,26 +36,25 @@
     pointer-events: none;
   }
   @include thousendWidth {
-    padding: 10px 25px ;
-    width: 250px;
-  }
-  @include phoneOrTablet {
-    height: 45px;
-    padding: 12px 30px ;
+    padding: 10px 15px ;
   }
   @include smallTablet {
-    height: 45px;
-    width: 200px;
-    padding: 12px 20px;
+    width: calc(100% - 15px);
+    max-height: initial;
+    padding: 12px 15px;
     white-space: nowrap;
   }
   @include phone {
+    width: 222px;
     height: 40px;
   }
 }
 
 .tippy_wrapper {
   position: relative;
+  @include laptopWidth {
+    width: 100%;
+  }
   @include thousendWidth {
     width: 100%;
   }
@@ -57,6 +68,15 @@
 .tippy_desc {
   @include MontserratRegular(16px);
   color: $gray;
+  @include thousendWidth {
+    font-size: 15px;
+  }
+  @include phoneOrTablet {
+    font-size: 14px;
+  }
+  @include phone {
+    font-size: 13px;
+  }
 }
 
 .tippy_title {

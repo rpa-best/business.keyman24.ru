@@ -5,18 +5,16 @@ import Link from 'next/link';
 
 import { IUser } from 'store/types';
 import { getOrganizations } from 'http/organizationApi';
-import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
-import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown';
+
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
 import { getUser } from 'http/userApi';
 import { IService } from 'http/types';
-import { Organization } from 'app/(Main)/components/Header/components/Organization';
 import { HeaderNavTablet } from 'app/(Main)/components/Header/components/HeaderNavTablet/HeaderNavTablet';
+import { Tools } from 'app/(Main)/components/Header/components/Tools';
 import { cookies } from 'next/headers';
 
 import scss from './Header.module.scss';
-import { Tools } from 'app/(Main)/components/Header/components/Tools';
 
 interface HeaderProps {
     disabled: boolean;

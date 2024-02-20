@@ -15,7 +15,6 @@ import { IServiceRate } from 'http/types';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './Dropdown.module.scss';
-import { useSocketConnect } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/hooks/useSocketConnect';
 
 interface HeaderDropdownProps {
     userData: IUser;
@@ -97,7 +96,15 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
                             ? `${user?.name} ${user?.surname}`
                             : 'Пользователь'}
                     </p>
-                    <p className={scss.user_role}>{user?.username}</p>
+                    <p
+                        style={{
+                            fontSize:
+                                userData.username.length > 20 ? '10px' : '12px',
+                        }}
+                        className={scss.user_role}
+                    >
+                        {user?.username}
+                    </p>
                 </div>
                 <ArrowSvg
                     className={visible ? scss.arrow : scss.arrow_hidden}

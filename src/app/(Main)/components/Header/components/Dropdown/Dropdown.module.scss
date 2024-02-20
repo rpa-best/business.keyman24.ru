@@ -42,15 +42,13 @@
 
 .user_name {
   max-width: 150px;
-  @include MontserratSemiBold(16px);
+  @include MontserratSemiBold(14px);
   line-height: 20px;
   color: #fff;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  @include thousendWidth {
-    font-size: 14px;
-  }
+
   @include phoneOrTablet {
     font-size: 16px;
   }

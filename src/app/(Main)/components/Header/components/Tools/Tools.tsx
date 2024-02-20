@@ -3,13 +3,13 @@
 import React from 'react';
 
 import { Organization } from 'app/(Main)/components/Header/components/Organization';
-import { NotificationsContainer } from 'app/(Main)/components/Header/components/ClientComponentsWithSvg/Notifications';
+
 import { IOrganization, IUser } from 'store/types';
 import { HeaderDropdown } from 'app/(Main)/components/Header/components/Dropdown';
 import { IServiceRate } from 'http/types';
+import { useSocketNotificationConnect } from 'hooks/useSocketNotificationConnect';
 
 import scss from 'app/(Main)/components/Header/Header.module.scss';
-import { useResizeWidth } from 'hooks/useResizeWidth';
 
 interface ToolsProps {
     disabled: boolean;
@@ -24,7 +24,7 @@ export const Tools: React.FC<ToolsProps> = ({
     user,
     organizations,
 }) => {
-    const { tabletBreak } = useResizeWidth();
+    useSocketNotificationConnect(`ws/notification/`);
 
     return (
         <div className={scss.tools_wrapper}>
@@ -33,7 +33,6 @@ export const Tools: React.FC<ToolsProps> = ({
                 disabled={disabled}
                 organizations={organizations}
             />
-            {!tabletBreak && <NotificationsContainer user={user as IUser} />}
             <HeaderDropdown subs={subs} userData={user as IUser} />
         </div>
     );

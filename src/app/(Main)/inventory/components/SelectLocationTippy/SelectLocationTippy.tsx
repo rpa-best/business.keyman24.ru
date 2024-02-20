@@ -47,7 +47,7 @@ export const SelectLocationTippy = ({
                     />
                 )}
             >
-                <div>
+                <div className={scss.tippy_filters_wrapper}>
                     <span className={scss.tippy_desc}>По локациям</span>
                     <button
                         className={scss.tippy_button}

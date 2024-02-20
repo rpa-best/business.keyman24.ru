@@ -2,7 +2,7 @@
 
 .empty {
   height: 186px;
-  width: 680px;
+  width: 610px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,10 +13,7 @@
   color: white;
   @include MontserratSemiBold(24px);
   @include laptopWidth {
-    width: 610px;
-  }
-  @include thousendWidth {
-    width: 600px;
+    width: 568px;
   }
   @include phoneOrTablet {
     font-size: 18px;
@@ -61,6 +58,10 @@
   border: 1px solid $additional-dark;
   padding: 20px;
   border-radius: 10px;
+
+  @include phoneOrTablet {
+    width: 80vw;
+  }
 
   @include thousendWidth {
     width: 100%;

@@ -14,9 +14,10 @@
 .form {
   width: 100%;
   display: flex;
-  grid-column-gap: 30px;
+  grid-column-gap: 15px;
   background: $dark-main;
   border-radius: 30px;
+  margin-top: 10px;
   @include laptopWidth {
     height: 100%;
     flex-direction: column-reverse;
@@ -31,7 +32,6 @@
 .input_name {
   padding-top: 10px;
   width: 50%;
-  min-height: 75px;
   @include laptopWidth {
     width: 100%;
   }
