@@ -9,9 +9,7 @@ export const checkAccess = async (url: string) => {
         }
     } catch (e) {
         if (e instanceof AxiosError) {
-            if (e.response?.status === 403) {
-                return false;
-            }
+            return e.response?.status !== 403;
         }
     }
 };
