@@ -87,17 +87,17 @@
 .table_header {
   @extend .table_td;
   width: 33%;
-  font-size: 17px!important;
+  font-size: 14px!important;
   min-width: 250px;
   border-bottom: none!important;
   &:first-child {
-    padding-left: 46px;
+    padding-left: 30px;
     @include thousendWidth {
-      padding-left: 38px;
+      padding-left: 20px;
     }
   }
   &:not(:first-child) {
-    padding-left: 20px;
+    padding-left: 10px;
   }
   &:last-child {
     max-width: 100%;
@@ -157,10 +157,9 @@
     min-width: 130px!important;
   }
   @include thousendWidth {
-    font-size: 15px!important;
+    font-size: 12px!important;
   }
   @include phoneOrTablet {
-    font-size: 16px!important;
     min-width: 200px!important;
   }
 }
@@ -171,42 +170,34 @@
     min-width: 130px!important;
   }
   @include thousendWidth {
-    font-size: 15px!important;
+    font-size: 11px!important;
   }
   @include phoneOrTablet {
-    font-size: 16px!important;
     min-width: 200px!important;
   }
 }
 
 .table_td {
-  @include MontserratMediumBold(16px);
-  min-height: 60px;
+  @include MontserratMediumBold(13px);
+  min-height: 50px;
   width: 33%;
   min-width: 200px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid $gray;
   background-color: inherit;
-  @include laptopWidth {
-    min-height: 65px;
-  }
   @include thousendWidth {
     min-width: 200px;
-    min-height: 60px;
-    font-size: 15px;
+    font-size: 12px;
   }
   &:first-child {
-    padding-left: 46px;
+    padding-left: 30px;
     @include thousendWidth {
-      padding-left: 38px;
+      padding-left: 20px;
     }
   }
   &:not(:first-child) {
-    padding-left: 20px;
-    @include thousendWidth {
-      padding-left: 15px;
-    }
+    padding-left: 10px;
   }
 
   &:last-child {

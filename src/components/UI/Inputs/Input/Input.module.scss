@@ -12,11 +12,11 @@
 
 .input {
   width: 100%;
-  min-height: 45px;
+  min-height: 40px;
   border-radius: 10px;
   outline: none;
   border: 2px solid transparent;
-  @include MontserratRegular(19px);
+  @include MontserratRegular(16px);
   letter-spacing: 1px;
   padding: 0 35px 0 10px;
 
@@ -24,7 +24,7 @@
   transition: .2s all ease-in-out;
 
   @include laptopWidth {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   @include phone {
@@ -85,6 +85,7 @@
 }
 
 .field_noneed {
+  width: 100%;
   height: max-content;
   margin-top: 0;
 }
@@ -102,24 +103,24 @@
   margin-top: 15px;
 }
 
-.field_with_label {
-  @extend .field;
-  height: 65px!important;
-  margin-top: 0!important;
-  justify-content: flex-start!important;
-  @include phone {
-    height: 80px!important;
-  }
-}
-
 .field {
   position: relative;
-  height: 45px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   min-width: 80px;
   width: 100%;
+}
+
+.field_with_label {
+  @extend .field;
+  height: 65px;
+  margin-top: 0;
+  justify-content: flex-start;
+  @include phone {
+    height: 80px
+  }
 }
 
 .input_label {
@@ -128,6 +129,15 @@
   font-size: 16px;
   line-height: 23px;
   text-align: left;
+  @include thousendTwoWidth {
+    font-size: 15px;
+  }
+  @include phoneOrTablet {
+    font-size: 14px;
+  }
+  @include phone {
+    font-size: 13px;
+  }
 }
 
 

@@ -21,8 +21,7 @@
 .actions_wrapper {
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
-
+  row-gap: 10px;
 }
 
 .action_button_solo {
@@ -59,7 +58,7 @@
 
 .button_wrapper {
     width: 50%;
-    margin: 20px auto 0;
+    margin: 15px auto 0;
   @include phoneOrTablet {
     width: 100%;
   }
@@ -96,6 +95,7 @@
   align-items: flex-end;
   column-gap: 10px;
   @include thousendTwoWidth {
+    width: 35%;
     flex-direction: column-reverse;
     row-gap: 10px;
   }
@@ -104,17 +104,21 @@
     margin-left: 5px;
   }
   @include smallTablet {
-    flex-direction: row-reverse;
+    width: initial;
+    flex-direction: row;
   }
   @include phone {
+    row-gap: 0;
     flex-direction: column;
   }
 }
 
 .name_input_wrapper {
   position: relative;
+  min-width: 220px;
   @include thousendTwoWidth {
     width: 100%;
+    min-width: 0;
   }
   @include smallTablet {
     width: 100%;
@@ -149,5 +153,6 @@
   @include smallTablet {
     margin-right: auto;
     margin-left: 5px;
+    row-gap: 10px;
   }
 }
