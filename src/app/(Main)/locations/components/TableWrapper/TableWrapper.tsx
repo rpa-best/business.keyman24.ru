@@ -62,7 +62,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
 
     useEffect(() => {
         const orgId = cookie.get('orgId');
-        const locationId = tableRows[0].id;
+        const locationId = tableRows[0]?.id;
         checkAccess(`business/${orgId}/location/${locationId}/org`).then(
             (d) => {
                 if (d) {
