@@ -4,22 +4,18 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import Cookies from 'universal-cookie';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-
+import { errorToastOptions } from 'config/toastConfig';
+import { useUserStore } from 'store/userStore';
 import { AttachCardProps } from 'app/(Main)/working-areas/components/AttachCard/types';
 import { SocketResponse } from 'http/types';
-import { sendActivateSession, sendCheck } from 'http/workingAreaApi';
+import { sendCheck } from 'http/workingAreaApi';
 
-import { getParamsType } from 'app/(Main)/working-areas/helpers';
 import { useModalStore } from 'store/modalVisibleStore';
 import { useSocketStore } from 'store/useSocketStore';
 
 import { SpinnerFit } from 'components/Spinner/SpinnerFit';
 
 import scss from './AttachCard.module.scss';
-import { errorToastOptions } from 'config/toastConfig';
-import { useUserStore } from 'store/userStore';
-
-const cookie = new Cookies();
 
 export const AttachCard: React.FC<AttachCardProps> = ({ areaId, session }) => {
     const router = useRouter();

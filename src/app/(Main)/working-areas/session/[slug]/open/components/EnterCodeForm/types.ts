@@ -32,4 +32,5 @@ export interface EnterCodeFormProps {
     sessionId: number;
     needWorker?: boolean;
     worker?: IWorker;
+    setWorker?: React.Dispatch<React.SetStateAction<IWorker | undefined>>;
 }

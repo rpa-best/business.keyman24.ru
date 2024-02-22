@@ -301,6 +301,7 @@ export interface IWorker {
     name: string;
     user_lc_id: number;
     image: string;
+    barcode: string;
 }
 
 export interface IPlanObj {
