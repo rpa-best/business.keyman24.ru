@@ -26,9 +26,11 @@ const BillPage = async () => {
 
     const today = new Date();
 
-    const cost = org.prime ? subs.defaultCost : subs.cost;
+    const cost = org.prime ? subs.defaultCost ?? subs.primeCost : subs.cost;
 
     const days = +(org.balance / (cost / 30)).toFixed(0);
+
+    console.log(subs);
 
     const enoughUntil = addDays(today, days);
 

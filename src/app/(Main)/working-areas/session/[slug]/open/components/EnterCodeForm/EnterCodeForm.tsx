@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { errorToastOptions, successToastConfig } from 'config/toastConfig';
 import { useFormik } from 'formik';
-import { IInventoryImage } from 'http/types';
+import { IInventoryImage, IWorker } from 'http/types';
 import { ImagesCarousel } from 'components/ImagesCarousel';
 import { sendAction } from 'app/(Main)/working-areas/session/[slug]/open/components/Key/keys.utils';
 import {
@@ -15,6 +15,7 @@ import { Button } from 'components/UI/Buttons/Button';
 import { Input } from 'components/UI/Inputs/Input';
 
 import scss from './EnterCodeFOrm.module.scss';
+import { getWorkerOnClient } from 'http/workerApi';
 
 export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     worker,
@@ -27,6 +28,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     needWorker = true,
     setConfirmed,
     confirmed,
+    setWorker,
 }) => {
     const path = usePathname();
 
@@ -51,11 +53,18 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     }
                 })
             );
+
             inventories.then(() => {
+                if (temporaryLog.length === 0) {
+                    return;
+                }
                 toast('Успешно', successToastConfig);
                 setTemporaryLog([]);
                 setConfirmed(false);
                 setImages([]);
+                if (setWorker) {
+                    setWorker(undefined);
+                }
             });
         }
     }, [confirmed]);
@@ -138,7 +147,24 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
     } = useFormik<EnterCodeFormValues>({
         initialValues: { code: '' },
         onSubmit: (values) => {
-            const responsible = values.code.startsWith('9');
+            const responsible =
+                values.code.startsWith('9') && values.code.length === 12;
+            if (type === 'inventory' && responsible) {
+                const workerId = values.code.slice(1).replace(/^0+/, '');
+                if (+workerId === worker?.id) {
+                    setConfirmed(true);
+                    return;
+                } else {
+                    setTemporaryLog([]);
+                    setImages(null);
+                }
+                getWorkerOnClient(+workerId).then((w) => {
+                    if (setWorker) {
+                        setWorker(w as IWorker);
+                    }
+                });
+                return;
+            }
             if (responsible) {
                 setTemporaryLog((log) =>
                     log.map((logItem) => ({

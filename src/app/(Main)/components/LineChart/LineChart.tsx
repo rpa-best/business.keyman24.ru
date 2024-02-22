@@ -43,7 +43,7 @@ export const options: ChartOptions<'line'> = {
         },
         x: {
             grid: {
-                color: 'white',
+                color: 'rgba(233, 233, 233, 0.3)',
             },
         },
     },

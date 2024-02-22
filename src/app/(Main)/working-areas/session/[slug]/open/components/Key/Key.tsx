@@ -24,6 +24,7 @@ import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/o
 import { CurrentSessionLogType } from 'app/(Main)/working-areas/session/[slug]/open/components/EnterCodeForm/types';
 
 import scss from './Key.module.scss';
+import { getWorkerDocs } from 'http/workerApi';
 
 export const Key: React.FC<KeyProps> = ({
     type,
@@ -36,8 +37,7 @@ export const Key: React.FC<KeyProps> = ({
     const router = useRouter();
     const params = useParams();
 
-    const itsRegisterInventory =
-        getParamsType(params.slug) === 'register_inventory';
+    const itsInventory = getParamsType(params.slug) === 'inventory';
 
     const socketStore = useSocketStore((state) => state);
 
@@ -49,12 +49,29 @@ export const Key: React.FC<KeyProps> = ({
 
     const [loading, setLoading] = useState(false);
 
+    const [responsibleWorker, setResponsibleWorker] = useState<IWorker>();
+    const [responsibleWorkerDocs, setResponsibleWorkerDocs] =
+        useState<IWorkerDocs[]>();
+
     const { worker, workerDocs, confirmed, setConfirmed, newWorker } =
         useSocketConnect({
             sessionId: currentSessionId,
             areaId: currentAreaId,
             setLoading,
         });
+
+    useEffect(() => {
+        setResponsibleWorker(worker);
+        setResponsibleWorkerDocs(workerDocs);
+    }, [worker, workerDocs]);
+
+    useEffect(() => {
+        if (responsibleWorker) {
+            getWorkerDocs(+responsibleWorker?.id).then((docs) => {
+                setResponsibleWorkerDocs(docs.results);
+            });
+        }
+    }, [responsibleWorker]);
 
     useEffect(() => {
         setTemporaryData([]);
@@ -91,9 +108,6 @@ export const Key: React.FC<KeyProps> = ({
     };
 
     const handleRowClick = async (id: number) => {
-        if (itsRegisterInventory) {
-            return;
-        }
         const workerId = sessionLogData.find((el) => el.id === id)?.worker.id;
         await onWorkerClick(workerId as number);
     };
@@ -106,7 +120,12 @@ export const Key: React.FC<KeyProps> = ({
         <>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton skipWord>Назад</BackButton>
+                <BackButton
+                    onClick={() => socketStore.closeConnection()}
+                    skipWord
+                >
+                    Назад
+                </BackButton>
             </div>
             <div className={scss.key_layout}>
                 {permissions.includes('DELETE') && (
@@ -122,22 +141,29 @@ export const Key: React.FC<KeyProps> = ({
                 <div className={scss.key_content}>
                     <div className={scss.content_wrapper}>
                         <EnterCodeForm
+                            setWorker={setResponsibleWorker}
                             temporaryLog={temporaryData}
                             confirmed={confirmed}
+                            needWorker={!itsInventory}
                             setConfirmed={setConfirmed}
                             setTemporaryLog={setTemporaryData as any}
                             setSessionLog={setSessionLogData as any}
                             type={type}
-                            worker={worker as IWorker}
+                            worker={worker || (responsibleWorker as IWorker)}
                             sessionId={currentSessionId}
                             areaId={currentAreaId}
                         />
                         <div className={scss.worker_info_wrapper}>
-                            {worker?.id ? (
+                            {worker?.id || responsibleWorker?.id ? (
                                 <WorkerInfoCard
                                     halfScreen
-                                    worker={worker as IWorker}
-                                    workerDocs={workerDocs as IWorkerDocs[]}
+                                    worker={
+                                        worker || (responsibleWorker as IWorker)
+                                    }
+                                    workerDocs={
+                                        workerDocs ||
+                                        (responsibleWorkerDocs as IWorkerDocs[])
+                                    }
                                 />
                             ) : (
                                 <div className={scss.worker_empty_wrapper}>

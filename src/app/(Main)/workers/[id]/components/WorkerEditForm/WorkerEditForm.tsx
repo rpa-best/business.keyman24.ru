@@ -116,7 +116,9 @@ export const WorkerEditForm: React.FC<IWorkerEditFormProps> = ({
 
     return (
         <form onSubmit={handleSubmit} className={scss.worker_card_layout}>
-            <h2 className={scss.worker_card_title}>Информация о работнике</h2>
+            <h2 className={scss.worker_card_title}>
+                Информация о работнике с ШК {worker.barcode}
+            </h2>
             <div className={scss.worker_content}>
                 <div className={scss.worker_card_image_wrapper}>
                     {workerImg ? (
