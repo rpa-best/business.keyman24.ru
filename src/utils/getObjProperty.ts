@@ -1,5 +1,9 @@
-export function getObjValue(obj: any, path: string) {
-    if (!path) return obj;
-    const properties = path.split('.');
-    return getObjValue(obj[properties.shift() as string], properties.join('.'));
-}
+export const getObjValue = (obj: any, path: string) => {
+    return path
+        .split('.')
+        .reduce(
+            (acc, key) =>
+                acc && acc[key] !== undefined ? acc[key] : undefined,
+            obj
+        );
+};
