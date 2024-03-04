@@ -5,8 +5,8 @@ export const CodeFormValidate = (values: EnterCodeFormValues) => {
 
     if (!values.code) {
         errors.code = 'Введите код';
-    } else if (values.code.toString().length > 12) {
-        errors.code = 'Длина не может быть больше 12';
+    } else if (values.code.toString().length > 13) {
+        errors.code = 'Длина не может быть больше 13';
     }
 
     return errors;

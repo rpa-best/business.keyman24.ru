@@ -30,6 +30,8 @@ const WorkerPage: React.FC<WorkerPage> = async ({
         workerUser = await getWorkerUser(+orgId, +id);
     }
 
+    console.log(worker);
+
     return (
         <div className={scss.children_with_table}>
             <div className={scss.page_title_with_table_back_button}>

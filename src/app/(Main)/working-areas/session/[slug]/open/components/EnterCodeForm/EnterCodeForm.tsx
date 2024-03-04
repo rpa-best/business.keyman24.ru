@@ -150,7 +150,9 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
             const responsible =
                 values.code.startsWith('9') && values.code.length === 13;
             if (type === 'inventory' && responsible) {
-                const workerId = values.code.slice(1).replace(/^0+/, '');
+                const workerId = values.code
+                    .slice(1, values.code.length - 1)
+                    .replace(/^0+/, '');
                 if (+workerId === worker?.id) {
                     setConfirmed(true);
                     return;

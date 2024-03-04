@@ -90,11 +90,11 @@ export const Key: React.FC<KeyProps> = ({
     }, [socketStore.message, type]);
 
     useEffect(() => {
-        return () => {
+        /*return () => {
             if (socketStore.socket) {
                 socketStore.closeConnection();
             }
-        };
+        };*/
     }, []);
 
     const onCloseSessionClick = async () => {
