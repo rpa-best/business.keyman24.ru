@@ -24,8 +24,6 @@ export const Tools: React.FC<ToolsProps> = ({
     user,
     organizations,
 }) => {
-    useSocketNotificationConnect(`ws/notification/`);
-
     return (
         <div className={scss.tools_wrapper}>
             <Organization
