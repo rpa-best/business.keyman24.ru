@@ -30,8 +30,6 @@ const BillPage = async () => {
 
     const days = +(org.balance / (cost / 30)).toFixed(0);
 
-    console.log(subs);
-
     const enoughUntil = addDays(today, days);
 
     return (
@@ -39,7 +37,9 @@ const BillPage = async () => {
             <div className={scss.bill_balance_actions}>
                 <p className={scss.bill_balance}>
                     Баланс:{' '}
-                    <span className={scss.balance_count}>{org.balance} ₽</span>
+                    <span className={scss.balance_count}>
+                        {org.balance.toFixed(1)} ₽
+                    </span>
                 </p>
                 <PaymentButton />
             </div>

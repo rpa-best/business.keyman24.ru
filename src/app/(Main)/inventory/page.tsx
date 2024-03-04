@@ -35,8 +35,6 @@ const InventoryPage: React.FC<InventoryPageProps> = async ({
         }
     );
 
-    console.log(inventories.results);
-
     return (
         <div className={scss.children_with_table}>
             <div className={scss.title_wrapper}>
