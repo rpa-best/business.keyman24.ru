@@ -38,10 +38,14 @@ const InventoryPage: React.FC<KeyPageProps> = async ({
 
     const inventoryStatus = inventory.status ? 'На руках' : 'На складе';
 
+    const inventoryNumber = inventory.codeNumber
+        .slice(0, inventory.codeNumber.length)
+        .replaceAll('0', '');
+
     return (
         <div className={scss.custom_children}>
             <div className={scss.custom_title_wrapper}>
-                <h1>История инвентаря {params.id}</h1>
+                <h1>История инвентаря {inventoryNumber}</h1>
                 <BackButton>Назад</BackButton>
             </div>
             <HistoryComponent

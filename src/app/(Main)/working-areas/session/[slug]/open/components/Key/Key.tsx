@@ -120,12 +120,7 @@ export const Key: React.FC<KeyProps> = ({
         <>
             <div className={scss.page_title_with_table_back_button}>
                 <h1>{areaName}</h1>
-                <BackButton
-                    onClick={() => socketStore.closeConnection()}
-                    skipWord
-                >
-                    Назад
-                </BackButton>
+                <BackButton skipWord>Назад</BackButton>
             </div>
             <div className={scss.key_layout}>
                 {permissions.includes('DELETE') && (
