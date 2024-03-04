@@ -31,9 +31,9 @@ export const SelectOrgAndIntervalTippy: React.FC<
 
     const xOffset =
         pcBreak && !tabletBreak
-            ? -20
+            ? -10
             : tabletBreak && !phoneBreak
-            ? -100
+            ? -90
             : phoneBreak
             ? -130
             : 40;

@@ -27,8 +27,6 @@ export const HeaderNavTablet: React.FC<HeaderNavTabletProps> = ({
 }) => {
     const { tabletBreak } = useResizeWidth();
 
-    useSocketNotificationConnect(`ws/notification/`);
-
     return (
         <div className={scss.header_nav_tablet}>
             <HeaderDropdown subs={subs} userData={user} />

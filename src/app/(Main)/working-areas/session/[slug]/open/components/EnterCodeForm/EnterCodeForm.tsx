@@ -78,7 +78,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         setLoading(true);
         setImages(null);
         const barcode = values.code.toString().split('');
-        while (barcode.length !== 12) {
+        while (barcode.length !== 13) {
             barcode.unshift('0');
         }
         if (worker?.id) {
@@ -148,7 +148,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
         initialValues: { code: '' },
         onSubmit: (values) => {
             const responsible =
-                values.code.startsWith('9') && values.code.length === 12;
+                values.code.startsWith('9') && values.code.length === 13;
             if (type === 'inventory' && responsible) {
                 const workerId = values.code.slice(1).replace(/^0+/, '');
                 if (+workerId === worker?.id) {
@@ -206,7 +206,7 @@ export const EnterCodeForm: React.FC<EnterCodeFormProps> = ({
                     clearable
                     onBlur={handleBlur}
                     placeholder="Укажите код"
-                    label="Введите код из 12 цифр"
+                    label="Введите код из 13 цифр"
                     type="number"
                     value={values.code}
                     name="code"

@@ -15,6 +15,7 @@ import { IServiceRate } from 'http/types';
 import { useConstructorStore } from 'store/useConstructorStore';
 
 import scss from './Dropdown.module.scss';
+import { useSocketNotificationConnect } from 'hooks/useSocketNotificationConnect';
 
 interface HeaderDropdownProps {
     userData: IUser;
@@ -25,6 +26,8 @@ export const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
     userData,
     subs,
 }) => {
+    useSocketNotificationConnect(`ws/notification/`);
+
     const opacity = useSpring(0);
     const [visible, setVisible] = useState(false);
 
