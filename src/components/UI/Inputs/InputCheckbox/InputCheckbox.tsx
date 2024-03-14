@@ -1,7 +1,7 @@
 import { InputCheckboxProps } from './InputCheckbox.types';
 
-import css from './InputCheckbox.module.scss';
 import clsx from 'clsx';
+import css from './InputCheckbox.module.scss';
 
 export const InputCheckbox = ({
     name,

@@ -21,6 +21,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { errorToastOptions } from 'config/toastConfig';
 import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
+import LeaveSvg from '/public/svg/leave.svg';
 
 import { updateOrg } from 'http/organizationApi';
 
@@ -191,6 +192,12 @@ export const Security: React.FC<SecurityProps> = ({
                     )}
                     <div className={scss.working_view_table}>
                         <Table
+                            iconProperties={{
+                                svg: LeaveSvg,
+                                condition: (item) => item.isForcibly,
+                                title: 'Принудительный выход',
+                                column: 3,
+                            }}
                             handleRowClick={handleRowClick}
                             tableData={sessionLogData}
                             setTableData={setSessionLogData}

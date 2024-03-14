@@ -5,13 +5,9 @@ import { Table } from 'components/Table';
 import { ModifiedRegisterLog } from 'app/(Main)/working-areas/session/[slug]/open/types';
 import { useParams } from 'next/navigation';
 import { getParamsType } from 'app/(Main)/working-areas/helpers';
-import Cookies from 'universal-cookie';
-import { checkAccess } from 'utils/checkAccess';
-import { toast } from 'react-toastify';
-import { warningToastConfig } from 'config/toastConfig';
-import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
+import LeaveSvg from '/public/svg/leave.svg';
 
-const cookie = new Cookies();
+import { onWorkerClick } from 'app/(Main)/working-areas/session/[slug]/helpers/onWorkerClick';
 
 interface TableRowsType
     extends Omit<ModifiedRegisterLog, 'modeName' | 'inventoryName' | 'mode'> {
@@ -47,6 +43,12 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             paginatorData={{
                 offset: 25,
                 countItems: count,
+            }}
+            iconProperties={{
+                svg: LeaveSvg,
+                condition: (item) => item.isForcibly,
+                title: 'Принудительный выход',
+                column: 3,
             }}
             handleRowClick={handleRowClick}
             tableData={tableRows}

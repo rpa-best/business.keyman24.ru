@@ -12,15 +12,21 @@ import scss from './Worker.module.scss';
 const WorkersPage = async ({
     searchParams,
 }: {
-    searchParams: { offset: string };
+    searchParams: { offset: string; not_working: string };
 }) => {
     const cookieStore = cookies();
 
     const offset = searchParams.offset ?? '0';
+    const notWorking = searchParams.not_working;
 
     const orgId = cookieStore.get('orgId')?.value as string;
 
-    const serverWorkers = await getServerWorkers(+orgId, offset, false);
+    const serverWorkers = await getServerWorkers(
+        +orgId,
+        offset,
+        false,
+        Boolean(notWorking)
+    );
 
     const modifiedWorkers: ModifiedWorkers = {
         ...serverWorkers,

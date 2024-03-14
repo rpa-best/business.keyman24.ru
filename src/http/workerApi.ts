@@ -9,12 +9,20 @@ const cookie = new Cookies();
 
 const orgId = cookie.get('orgId');
 
-export const getWorkers: T.GetWorkers = async (org, guest, format) => {
+export const getWorkers: T.GetWorkers = async (
+    org,
+    guest,
+    format,
+    not_working
+) => {
     const query = new URLSearchParams();
     org ? query.set('org', org.toString()) : '';
     if (guest !== undefined) {
         guest ? query.set('guest', 'true') : query.set('guest', 'false');
     }
+    not_working
+        ? query.set('not_working', 'true')
+        : query.set('not_working', 'false');
 
     format && query.set('format', format);
 
@@ -58,7 +66,8 @@ export const getWorkersPlan: T.GetWorkersPlan = async (query) => {
 export const getServerWorkers: T.GetServerWorkers = async (
     orgId,
     offset,
-    guest
+    guest,
+    not_working
 ) => {
     const query = new URLSearchParams();
     if (offset) {
@@ -68,6 +77,9 @@ export const getServerWorkers: T.GetServerWorkers = async (
     if (guest !== undefined) {
         guest ? query.set('guest', 'true') : query.set('guest', 'false');
     }
+    not_working
+        ? query.set('not_working', 'true')
+        : query.set('not_working', 'false');
     const res: AxiosResponse<ReturnType<T.GetWorkers>> = await $serverAuth.get(
         `business/${orgId}/worker/`,
         { params: query }
@@ -125,6 +137,7 @@ export const createTemporaryWorker: T.CreateTemporaryWorker = async (body) => {
     const formData = new FormData();
     formData.append('name', body.name);
     formData.append('desc', body.desc);
+    formData.append('guest', body.guest);
     body.image && formData.append('image', body.image);
 
     const res = await $clientAuth.post(`business/${orgId}/worker/`, formData);

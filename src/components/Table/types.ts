@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ElementType, ReactElement } from 'react';
 
 export interface TableRows extends Record<string, any> {
     id: number;
@@ -35,6 +35,12 @@ export interface TableProps {
     children: ReactElement<ColumnProps> | Array<ReactElement<ColumnProps>>;
     height?: 'max-content';
     buttonData?: { onClick: () => void; text: string };
+    iconProperties?: {
+        title: string;
+        svg: ElementType;
+        condition: (item: TableRows) => boolean;
+        column: number;
+    };
     handleRowClick?: (id: number) => void;
     handleEditClick?: (id: number) => void;
     handleDeleteClick?: (id: number) => Promise<void>;
@@ -61,6 +67,7 @@ export interface PaginatorProps {
 export interface ColumnRowProps {
     headers: IHeader[];
     item: TableRows;
+    iconProperties: TableProps['iconProperties'];
     setTableData: React.Dispatch<React.SetStateAction<TableRows[]>>;
     handleEditClick?: (id: number) => void;
     handleDeleteClick?: (id: number) => Promise<void>;

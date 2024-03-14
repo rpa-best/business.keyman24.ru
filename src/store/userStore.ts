@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import * as T from 'store/types';
-import { useRouter } from 'next/navigation';
 
 export const useUserStore = create<T.IUserStore>((set) => ({
     user: null,

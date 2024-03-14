@@ -36,6 +36,7 @@ export const Table = memo(function MemoTable({
     stopPropagation,
     errorRowIds = [],
     prefetch,
+    iconProperties,
     height,
 }: TableProps) {
     const searchParams = useSearchParams();
@@ -175,6 +176,7 @@ export const Table = memo(function MemoTable({
                                         className={rowClassName}
                                     >
                                         <Row
+                                            iconProperties={iconProperties}
                                             stopPropagation={stopPropagation}
                                             handleDeleteClick={
                                                 handleDeleteClick
