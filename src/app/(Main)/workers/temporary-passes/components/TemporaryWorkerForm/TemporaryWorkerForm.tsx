@@ -24,6 +24,7 @@ import revalidate from 'utils/revalidate';
 import { IWorker } from 'http/types';
 
 import scss from './TemporaryWorkerForm.module.scss';
+import { InputCheckbox } from 'components/UI/Inputs/InputCheckbox';
 
 interface TemporaryWorkerWithEnd extends IWorker {
     desc: string;
@@ -45,6 +46,7 @@ export const TemporaryWorkerForm: React.FC<{
             name: values.fullName,
             desc: values.description,
             image: values.photo,
+            guest: values.guest,
         })
             .then((w) => {
                 tempWorkers.push({
@@ -73,6 +75,7 @@ export const TemporaryWorkerForm: React.FC<{
         handleChange,
     } = useFormik<TemporaryWorkerFormValuesType>({
         initialValues: {
+            guest: false,
             fullName: '',
             description: '',
             photo: null,
@@ -93,87 +96,103 @@ export const TemporaryWorkerForm: React.FC<{
     }, [values.photo]);
 
     return (
-        <form
-            style={{ marginBottom: '20px' }}
-            onSubmit={handleSubmit}
-            className={scss.worker_card_layout}
-        >
-            <h2 className={scss.worker_card_title}>Информация о госте</h2>
-            <div className={scss.worker_content}>
-                <div className={scss.worker_card_image_wrapper}>
-                    {workerImg ? (
-                        <Image
-                            style={{ borderRadius: '50%' }}
-                            src={workerImg}
-                            alt="Изображение работника"
-                            fill
-                        />
-                    ) : (
-                        <AvatarSvg
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                color: '#414141',
+        <>
+            <form
+                style={{ marginBottom: '20px' }}
+                onSubmit={handleSubmit}
+                className={scss.worker_card_layout}
+            >
+                <h2 className={scss.worker_card_title}>
+                    Информация о работнике
+                </h2>
+                <div className={scss.worker_content}>
+                    <div className={scss.worker_card_image_wrapper}>
+                        {workerImg ? (
+                            <Image
+                                style={{ borderRadius: '50%' }}
+                                src={workerImg}
+                                alt="Изображение работника"
+                                fill
+                            />
+                        ) : (
+                            <AvatarSvg
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    color: '#414141',
+                                }}
+                            />
+                        )}
+                        <button
+                            onClick={() => {
+                                setVisible(true);
                             }}
-                        />
-                    )}
-                    <button
-                        onClick={() => {
-                            setVisible(true);
-                        }}
-                        type="button"
-                        className={scss.change_img_wrapper}
-                    >
-                        <EditSvg />
-                    </button>
-                </div>
-                <div className={scss.worker_card_data}>
-                    <div className={scss.worker_card_input_wrapper}>
-                        <Input
-                            autoComplete="off"
-                            onBlur={handleBlur}
-                            label="ФИО"
-                            placeholder="Введите ФИО"
-                            value={values.fullName}
-                            handleError={touched.fullName && errors.fullName}
-                            name="fullName"
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className={scss.worker_card_input_wrapper}>
-                        <Input
-                            autoComplete="off"
-                            onBlur={handleBlur}
-                            label="Описание"
-                            placeholder="Введите описание"
-                            value={values.description}
-                            handleError={
-                                touched.description && errors.description
-                            }
-                            name="description"
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className={scss.worker_card_button_wrapper}>
-                        <Button
-                            disabled={!isValid}
-                            onClick={() => {}}
-                            type="submit"
+                            type="button"
+                            className={scss.change_img_wrapper}
                         >
-                            Создать гостя
-                        </Button>
+                            <EditSvg />
+                        </button>
+                    </div>
+                    <div className={scss.worker_card_data}>
+                        <div className={scss.worker_card_input_wrapper}>
+                            <Input
+                                autoComplete="off"
+                                onBlur={handleBlur}
+                                label="ФИО"
+                                placeholder="Введите ФИО"
+                                value={values.fullName}
+                                handleError={
+                                    touched.fullName && errors.fullName
+                                }
+                                name="fullName"
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className={scss.worker_card_input_wrapper}>
+                            <Input
+                                autoComplete="off"
+                                onBlur={handleBlur}
+                                label="Описание"
+                                placeholder="Введите описание"
+                                value={values.description}
+                                handleError={
+                                    touched.description && errors.description
+                                }
+                                name="description"
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <InputCheckbox
+                            theme="dark"
+                            name="guest"
+                            label="Это гость"
+                            value={values.guest}
+                            type="checkbox"
+                            onChange={() =>
+                                setFieldValue('guest', !values.guest)
+                            }
+                        />
+                        <div className={scss.worker_card_button_wrapper}>
+                            <Button
+                                disabled={!isValid}
+                                onClick={() => {}}
+                                type="submit"
+                            >
+                                Создать работника
+                            </Button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <Modal>
-                <TemporaryWorkerChangeImg
-                    setLoading={setLoading}
-                    setWorkerImg={(photo: File) =>
-                        setFieldValue('photo', photo)
-                    }
-                />
-            </Modal>
-            {loading && <Spinner />}
-        </form>
+                <Modal>
+                    <TemporaryWorkerChangeImg
+                        setLoading={setLoading}
+                        setWorkerImg={(photo: File) =>
+                            setFieldValue('photo', photo)
+                        }
+                    />
+                </Modal>
+                {loading && <Spinner />}
+            </form>
+        </>
     );
 };

@@ -18,6 +18,7 @@ import scss from 'app/(Main)/workers/Worker.module.scss';
 import Link from 'next/link';
 import { getWorkers } from 'http/workerApi';
 import FileSaver from 'file-saver';
+import { useSearchParams } from 'next/navigation';
 
 export const CalendarContext = createContext<CalendarType | null>(null);
 
@@ -30,6 +31,7 @@ export const WorkersButton = () => {
     const [visibleButtons, setVisibleButtons] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
     const opacity = useSpring(0);
+    const params = useSearchParams();
 
     const [orgs, setOrgs] = useState<IOrganization[]>([]);
     const [setVisible] = useModalStore((state) => [state.setVisible]);
@@ -90,9 +92,22 @@ export const WorkersButton = () => {
                         </Button>
                         <Link href="workers/temporary-passes">
                             <Button onClick={() => {}} type="button">
-                                Временные пропуска
+                                Гости и работники
                             </Button>
                         </Link>
+                        {params.get('not_working') ? (
+                            <Link href="workers">
+                                <Button onClick={() => {}} type="button">
+                                    Показать работающих
+                                </Button>
+                            </Link>
+                        ) : (
+                            <Link href="workers?not_working=true">
+                                <Button onClick={() => {}} type="button">
+                                    Показать уволенных
+                                </Button>
+                            </Link>
+                        )}
                         <CalendarContext.Provider
                             value={{ setCalendarOpen, visibleButtons }}
                         >

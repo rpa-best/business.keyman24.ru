@@ -1,5 +1,4 @@
 import { IOrganization, IUser } from 'store/types';
-import { boolean } from 'zod';
 
 export interface IUserAuthRequest {
     username: string;
@@ -222,6 +221,7 @@ export interface ILocation {
     deleted: boolean;
     isActive: boolean;
     desc: string;
+    outForcibly: boolean;
     canOutWithInventory: boolean;
     timezone: string;
     name: string;
@@ -234,6 +234,7 @@ export interface IWorkingArea {
     location: ILocation;
     deleted: boolean;
     desc: string;
+    out_forcibly: boolean;
     name: string;
     type: IType;
 }
@@ -271,6 +272,7 @@ export interface CreateWorkingAreaProp {
     name: string;
     type: string;
     desc: string;
+    out_forcibly: boolean;
 }
 
 export interface ISession {
@@ -891,7 +893,8 @@ export type SendSessionAction = (
 export type GetWorkers = (
     orgId?: number,
     guest?: boolean,
-    format?: 'pdf'
+    format?: 'pdf',
+    not_working?: boolean
 ) => Promise<IResponse<IWorker>>;
 
 export type GetWorkerPlan = (
@@ -912,7 +915,8 @@ export type GetWorkersPlan = (query?: {
 export type GetServerWorkers = (
     orgId: number,
     offset?: string,
-    guest?: boolean
+    guest?: boolean,
+    not_working?: boolean
 ) => Promise<IResponse<IWorker>>;
 
 interface IQrcode {
@@ -952,6 +956,7 @@ export interface CreateTempWorkerBody {
     image: File | null;
     name: string;
     desc?: string;
+    guest?: boolean;
 }
 
 interface CreateTempWorkerResponse {

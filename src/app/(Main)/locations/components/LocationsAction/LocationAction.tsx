@@ -195,7 +195,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                         label="Можно выходить с инвентарём"
                         value={values?.canOutWithInventory}
                         type="checkbox"
-                        onChange={(v: boolean) =>
+                        onChange={() =>
                             setFieldValue(
                                 'canOutWithInventory',
                                 !values.canOutWithInventory

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { ElementType, useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 import DeleteSvg from '/public/svg/delete.svg';
@@ -8,7 +8,6 @@ import EditSvg from '/public/svg/edit.svg';
 import { ColumnRowProps } from 'components/Table/types';
 
 import scss from 'components/Table/Table.module.scss';
-import { useResizeWidth } from 'hooks/useResizeWidth';
 
 export const Row: React.FC<ColumnRowProps> = ({
     item,
@@ -16,8 +15,10 @@ export const Row: React.FC<ColumnRowProps> = ({
     handleEditClick,
     handleDeleteClick,
     setTableData,
+    iconProperties,
     stopPropagation,
 }) => {
+    const SvgElem = iconProperties?.svg as ElementType;
     const [textArr, setTextArr] = useState<string[]>([]);
 
     const handleClick = (e: MouseEvent, func: (id: number) => void) => {
@@ -28,9 +29,11 @@ export const Row: React.FC<ColumnRowProps> = ({
     const onDeleteClick = (e: MouseEvent) => {
         e.stopPropagation();
         if (handleDeleteClick) {
-            handleDeleteClick(item.id).then((r) => {
-                setTableData((d) => d.filter((el) => el.id !== item.id));
-            });
+            handleDeleteClick(item.id)
+                .then((r) => {
+                    setTableData((d) => d.filter((el) => el.id !== item.id));
+                })
+                .catch((e) => {});
         }
     };
 
@@ -58,6 +61,7 @@ export const Row: React.FC<ColumnRowProps> = ({
 
     return textArr.map((el, index) => {
         const lastElem = textArr.length - 1 === index;
+        const rightColumn = iconProperties?.column === index + 1;
         return (
             <React.Fragment key={index}>
                 <div
@@ -65,6 +69,7 @@ export const Row: React.FC<ColumnRowProps> = ({
                     className={tableTdClassName}
                 >
                     <p
+                        title={rightColumn ? iconProperties?.title : undefined}
                         className={textClass}
                         onClick={
                             stopPropagation
@@ -73,6 +78,9 @@ export const Row: React.FC<ColumnRowProps> = ({
                         }
                     >
                         {el}
+                        {iconProperties?.condition(item) && rightColumn && (
+                            <SvgElem className={scss.icon_column_svg} />
+                        )}
                     </p>
                     {lastElem && needActions && (
                         <div className={scss.actions_wrapper}>

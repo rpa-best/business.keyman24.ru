@@ -2,17 +2,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Cookies from 'universal-cookie';
+import revalidate from 'utils/revalidate';
+import { toast } from 'react-toastify';
 
 import { Table } from 'components/Table';
 import { Column } from 'components/Table/Column';
-import { deleteWorker } from 'http/workerApi';
 import { Spinner } from 'components/Spinner';
-import { NewWorkers, WorkerTableWrapperProps } from 'app/(Main)/workers/types';
+
 import { checkAccess } from 'utils/checkAccess';
-import { toast } from 'react-toastify';
+import { deleteWorker } from 'http/workerApi';
+
 import { warningToastConfig } from 'config/toastConfig';
-import Cookies from 'universal-cookie';
-import revalidate from 'utils/revalidate';
+import { NewWorkers, WorkerTableWrapperProps } from 'app/(Main)/workers/types';
 
 const cookie = new Cookies();
 

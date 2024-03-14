@@ -71,11 +71,10 @@ export const Register: React.FC<RegisterProps> = ({
     const socketStore = useSocketStore((state) => state);
 
     useEffect(() => {
-        const fetchInfo = async () => {
+        (async () => {
             const info = await getSessionInfo(currentAreaId, currentSessionId);
             setGuestCount(info.info.workerGuestNotCard);
-        };
-        fetchInfo();
+        })();
     }, [currentAreaId, currentSessionId]);
 
     const onSocketSuccess = useCallback(
@@ -105,6 +104,7 @@ export const Register: React.FC<RegisterProps> = ({
                         modeName: mode,
                         workerName: d.worker.name,
                         inventoryName: `${d?.inventory?.id} ${d?.inventory?.name}`,
+                        card: d.card,
                     };
                     setSessionLogData((log) => [newLog, ...log]);
                     revalidate(path);
@@ -154,7 +154,6 @@ export const Register: React.FC<RegisterProps> = ({
         if (!socketStore.socket) {
             router.replace(`/working-areas/session/register-${currentAreaId}`);
         }
-
     }, [currentAreaId, socketStore.socket]);
 
     useEffect(() => {
@@ -243,6 +242,8 @@ export const Register: React.FC<RegisterProps> = ({
         await onWorkerClick(workerId as number);
     };
 
+    console.log(sessionLogData);
+
     return (
         <div>
             <div className={scss.page_title_with_table_back_button}>
@@ -313,6 +314,7 @@ export const Register: React.FC<RegisterProps> = ({
                             <Column header="Работник" field="workerName" />
                             <Column header="Дата" field="date" />
                             <Column header="Тип" field="modeName" />
+                            <Column header="Карта" field="card" />
                         </Table>
                     </div>
                 </div>
@@ -326,6 +328,7 @@ export const Register: React.FC<RegisterProps> = ({
                     <Column header="Работник" field="workerName" />
                     <Column header="Дата" field="date" />
                     <Column header="Тип" field="modeName" />
+                    <Column header="Карта" field="card" />
                 </Table>
             )}
             {loading && <Spinner />}
