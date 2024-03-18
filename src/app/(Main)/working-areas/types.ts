@@ -1,7 +1,6 @@
 import {
     ILocation,
     IModifiedSession,
-    ISession,
     IType,
     IWorkingArea,
     PermissionsResponseType,

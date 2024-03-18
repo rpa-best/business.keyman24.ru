@@ -62,7 +62,7 @@ export const InputSelect: React.FC<T.IInputSelectProps> = ({
         // Фильтруем список на основе inputValue
         const filteredList = listValues.filter(
             (item) =>
-                item.name.includes(inputValue) &&
+                item.name.toLowerCase().includes(inputValue.toLowerCase()) &&
                 item.name !== prevValue.current
         );
 

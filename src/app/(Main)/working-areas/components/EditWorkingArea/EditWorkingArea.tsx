@@ -16,7 +16,6 @@ import { useNotificationStore } from 'store/notificationStore';
 import revalidate from 'utils/revalidate';
 
 import scss from './EditWorkingArea.module.scss';
-import { InputCheckbox } from 'components/UI/Inputs/InputCheckbox';
 
 export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
     formType,
@@ -42,7 +41,6 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
             location: values.location.id,
             deleted: false,
             desc: values.description,
-            out_forcibly: values.outForcibly,
         };
         if (formType === 'create') {
             createWorkingArea(body)
@@ -112,7 +110,6 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
         initialValues: {
             name: editableArea?.name ?? '',
             description: editableArea?.desc ?? '',
-            outForcibly: editableArea?.out_forcibly ?? false,
             location: editableArea?.location ?? { ...locations[0], name: '' },
             type: editableArea?.type ?? { ...types[0], name: '' },
         },
@@ -175,17 +172,7 @@ export const EditWorkingArea: React.FC<EditWorkingAreaProps> = ({
                         name="type"
                     />
                 </div>
-                <div className={scss.checkbox_wrapper}>
-                    <InputCheckbox
-                        name="outForcibly"
-                        label="Принудительный выход"
-                        value={values?.outForcibly}
-                        type="checkbox"
-                        onChange={() =>
-                            setFieldValue('outForcibly', !values.outForcibly)
-                        }
-                    />
-                </div>
+
                 <div className={scss.button_wrapper}>
                     <Button
                         onClick={() => {}}

@@ -43,6 +43,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
             name: values.location,
             can_out_with_inventory: values?.canOutWithInventory,
             timezone: timezones[values.timezone.id].utc[0],
+            out_forcibly: values.outForcibly,
         };
 
         if (formType === 'create') {
@@ -137,6 +138,7 @@ export const LocationAction: React.FC<LocationActionProps> = ({
             desc: location?.desc ?? '',
             timezone: locationTimezone,
             canOutWithInventory: location?.canOutWithInventory ?? false,
+            outForcibly: location.outForcibly ?? false,
         },
         enableReinitialize: true,
         validate: LocationsActionValidate,
@@ -200,6 +202,17 @@ export const LocationAction: React.FC<LocationActionProps> = ({
                                 'canOutWithInventory',
                                 !values.canOutWithInventory
                             )
+                        }
+                    />
+                </div>
+                <div className={scss.checkbox_wrapper}>
+                    <InputCheckbox
+                        name="outForcibly"
+                        label="Принудительный выход"
+                        value={values?.outForcibly}
+                        type="checkbox"
+                        onChange={() =>
+                            setFieldValue('outForcibly', !values.outForcibly)
                         }
                     />
                 </div>

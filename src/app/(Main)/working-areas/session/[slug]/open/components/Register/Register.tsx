@@ -242,8 +242,6 @@ export const Register: React.FC<RegisterProps> = ({
         await onWorkerClick(workerId as number);
     };
 
-    console.log(sessionLogData);
-
     return (
         <div>
             <div className={scss.page_title_with_table_back_button}>
