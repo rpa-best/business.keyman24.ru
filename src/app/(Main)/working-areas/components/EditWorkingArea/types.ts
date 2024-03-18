@@ -5,5 +5,4 @@ export interface WorkAreaValues {
     description: string;
     location: ILocation;
     type: IType;
-    outForcibly: boolean;
 }

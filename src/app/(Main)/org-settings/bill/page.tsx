@@ -38,7 +38,7 @@ const BillPage = async () => {
                 <p className={scss.bill_balance}>
                     Баланс:{' '}
                     <span className={scss.balance_count}>
-                        {org.balance.toFixed(1)} ₽
+                        {org.balance.toFixed(2)} ₽
                     </span>
                 </p>
                 <PaymentButton />

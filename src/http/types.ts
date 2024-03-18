@@ -234,7 +234,6 @@ export interface IWorkingArea {
     location: ILocation;
     deleted: boolean;
     desc: string;
-    out_forcibly: boolean;
     name: string;
     type: IType;
 }
@@ -272,7 +271,6 @@ export interface CreateWorkingAreaProp {
     name: string;
     type: string;
     desc: string;
-    out_forcibly: boolean;
 }
 
 export interface ISession {
@@ -404,6 +402,7 @@ export interface CreateLocationBody {
     desc: string;
     timezone: string;
     can_out_with_inventory: boolean;
+    out_forcibly: boolean;
 }
 
 export interface ILocationOrgResponse {

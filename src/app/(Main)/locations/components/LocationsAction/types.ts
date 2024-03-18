@@ -24,4 +24,5 @@ export interface LocationFormValues {
     desc: string;
     timezone: { name: string; id: number };
     canOutWithInventory: boolean;
+    outForcibly: boolean;
 }
