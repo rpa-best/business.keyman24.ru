@@ -14,7 +14,9 @@ import { checkAccess } from 'utils/checkAccess';
 import { deleteWorker } from 'http/workerApi';
 
 import { warningToastConfig } from 'config/toastConfig';
+import GuestWorkersSvg from '/public/svg/guestworkers.svg';
 import { NewWorkers, WorkerTableWrapperProps } from 'app/(Main)/workers/types';
+import { ConfirmModal } from 'components/ConfirmModal';
 
 const cookie = new Cookies();
 
@@ -33,10 +35,7 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
     }, [workers]);
 
     const handleDeleteClick = async (id: number) => {
-        setLoading(true);
-        return await deleteWorker(id).finally(() => {
-            setLoading(false);
-        });
+        return await deleteWorker(id);
     };
 
     const handleRowClick = (id: number) => {
@@ -77,6 +76,15 @@ export const WorkersTableWrapper: React.FC<WorkerTableWrapperProps> = ({
                         ? handleDeleteClick
                         : undefined
                 }
+                deleteConfirmProps={{
+                    text: 'Вы уверены, что хотите удалить работника?',
+                }}
+                iconProperties={{
+                    column: 1,
+                    svg: GuestWorkersSvg,
+                    condition: (item) => item.lcId,
+                    title: 'Работник с Капитал Кадров',
+                }}
                 paginatorData={{
                     offset: 25,
                     countItems: workers.count,

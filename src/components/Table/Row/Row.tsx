@@ -8,6 +8,11 @@ import EditSvg from '/public/svg/edit.svg';
 import { ColumnRowProps } from 'components/Table/types';
 
 import scss from 'components/Table/Table.module.scss';
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+import { errorToastOptions } from 'config/toastConfig';
+import { deleteWorker } from 'http/workerApi';
+import { ConfirmModal } from 'components/ConfirmModal';
 
 export const Row: React.FC<ColumnRowProps> = ({
     item,
@@ -17,6 +22,7 @@ export const Row: React.FC<ColumnRowProps> = ({
     setTableData,
     iconProperties,
     stopPropagation,
+    deleteConfirmProps,
 }) => {
     const SvgElem = iconProperties?.svg as ElementType;
     const [textArr, setTextArr] = useState<string[]>([]);
@@ -28,12 +34,40 @@ export const Row: React.FC<ColumnRowProps> = ({
 
     const onDeleteClick = (e: MouseEvent) => {
         e.stopPropagation();
+        const afterConfirm = () => {
+            setTableData((d) => d.filter((el) => el.id !== item.id));
+        };
+        const catchErrors = (e: unknown) => {
+            if (e instanceof AxiosError) {
+                toast(
+                    // @ts-ignore
+                    Object.values(e.response?.data.error)[0].name,
+                    errorToastOptions
+                );
+            }
+        };
         if (handleDeleteClick) {
-            handleDeleteClick(item.id)
-                .then((r) => {
-                    setTableData((d) => d.filter((el) => el.id !== item.id));
-                })
-                .catch((e) => {});
+            if (deleteConfirmProps) {
+                const bindedDeleteWorker = deleteWorker.bind(
+                    undefined,
+                    item.id
+                );
+                toast(
+                    <ConfirmModal
+                        afterConfirm={afterConfirm}
+                        catchErrors={catchErrors}
+                        text="Вы уверены, что хотите удалить работника?"
+                        onConfirm={bindedDeleteWorker}
+                    />,
+                    {
+                        autoClose: 10000,
+                        theme: 'light',
+                        type: 'warning',
+                    }
+                );
+                return;
+            }
+            handleDeleteClick(item.id).then(afterConfirm).catch(catchErrors);
         }
     };
 

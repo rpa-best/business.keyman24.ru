@@ -44,6 +44,7 @@ export interface TableProps {
     handleRowClick?: (id: number) => void;
     handleEditClick?: (id: number) => void;
     handleDeleteClick?: (id: number) => Promise<void>;
+    deleteConfirmProps?: { text: string };
     paginatorData?: PaginatorData;
     rowClickable?: boolean;
     prefetch?: (id: number) => void;
@@ -71,5 +72,6 @@ export interface ColumnRowProps {
     setTableData: React.Dispatch<React.SetStateAction<TableRows[]>>;
     handleEditClick?: (id: number) => void;
     handleDeleteClick?: (id: number) => Promise<void>;
+    deleteConfirmProps: TableProps['deleteConfirmProps'];
     stopPropagation?: boolean;
 }

@@ -9,6 +9,7 @@ import { Spinner } from 'components/Spinner';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { errorToastOptions } from 'config/toastConfig';
+import GuestWorkersSvg from '/public/svg/guestworkers.svg';
 
 interface TemporaryPassesTableWrapper {
     tempWorkers: IResponse<IWorker>;
@@ -30,12 +31,7 @@ export const TemporaryPassesTableWrapper: FC<TemporaryPassesTableWrapper> = ({
     const handleDeleteClick = async (id: number) => {
         setLoading(true);
         try {
-            await deleteWorker(id);
-        } catch (e) {
-            if (e instanceof AxiosError) {
-                toast(e.response?.data.error[0].name, errorToastOptions);
-            }
-            throw e;
+            return await deleteWorker(id);
         } finally {
             setLoading(false);
         }
@@ -44,6 +40,15 @@ export const TemporaryPassesTableWrapper: FC<TemporaryPassesTableWrapper> = ({
     return (
         <>
             <Table
+                iconProperties={{
+                    column: 1,
+                    svg: GuestWorkersSvg,
+                    condition: (item) => item.lcId,
+                    title: 'Работник с Капитал Кадров',
+                }}
+                deleteConfirmProps={{
+                    text: 'Вы уверены, что хотите удалить работника?',
+                }}
                 handleDeleteClick={handleDeleteClick}
                 paginatorData={{ offset: 15, countItems: tempWorkers.count }}
                 tableData={currentTableData}
