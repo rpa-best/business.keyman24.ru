@@ -38,6 +38,7 @@ export const Table = memo(function MemoTable({
     prefetch,
     iconProperties,
     height,
+    deleteConfirmProps,
 }: TableProps) {
     const searchParams = useSearchParams();
 
@@ -180,6 +181,9 @@ export const Table = memo(function MemoTable({
                                             stopPropagation={stopPropagation}
                                             handleDeleteClick={
                                                 handleDeleteClick
+                                            }
+                                            deleteConfirmProps={
+                                                deleteConfirmProps
                                             }
                                             setTableData={setTableData}
                                             handleEditClick={handleEditClick}
